@@ -24,3 +24,12 @@ void Camera::Update()
 	viewProjectionMatrix = viewMatrix * projectionMatrix;
 
 }
+
+void Camera::SetFollowTarget(Object3D* obj, const Vector3& offset) {
+	followTarget = obj;
+	followOffset = offset;
+}
+
+void Camera::SetFollowMode(bool enable) {
+	followMode = enable;
+}
