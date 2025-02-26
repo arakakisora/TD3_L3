@@ -34,7 +34,9 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("sphere.obj");
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 
-	
+	//プレイヤー
+	player = std::make_unique<Player>();
+	player->Initialize(Object3DCommon::GetInstance(),"plane.obj");
 
 }
 
@@ -51,6 +53,8 @@ void GamePlayScene::Update()
 	//カメラの更新
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
+	//プレイヤーの更新
+	player->Update();
 
 #ifdef _DEBUG
 
@@ -76,8 +80,6 @@ void GamePlayScene::Update()
 	}
 
 	
-
-	
 #endif // _DEBUG
 }
 
@@ -88,8 +90,8 @@ void GamePlayScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
-
-
+	//プレイヤー
+	player->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 
