@@ -36,7 +36,6 @@ void GamePlayScene::Initialize()
 	//プレイヤー
 	player = std::make_unique<Player>();
 	player->Initialize(Object3DCommon::GetInstance());
-
 }
 
 void GamePlayScene::Finalize()
@@ -77,6 +76,12 @@ void GamePlayScene::Update()
 
 
 	}
+
+	Transform playerTransform = player->GetPosition();
+	if (ImGui::CollapsingHeader("Player Control", ImGuiTreeNodeFlags_DefaultOpen)) {
+		ImGui::DragFloat3("Player Position", &playerTransform.translate.x, 0.01f);
+	}
+	player->SetTransform(playerTransform);
 
 	
 #endif // _DEBUG
