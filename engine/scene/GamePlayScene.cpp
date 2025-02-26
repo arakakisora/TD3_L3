@@ -27,7 +27,6 @@ void GamePlayScene::Initialize()
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
 
 
-
 	//モデルの読み込み
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
@@ -36,7 +35,7 @@ void GamePlayScene::Initialize()
 
 	//プレイヤー
 	player = std::make_unique<Player>();
-	player->Initialize(Object3DCommon::GetInstance(),"plane.obj");
+	player->Initialize(Object3DCommon::GetInstance());
 
 }
 

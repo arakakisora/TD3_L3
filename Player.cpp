@@ -1,10 +1,13 @@
 #include "Player.h"
+#include "imgui.h"
 
 //初期化
-void Player::Initialize(Object3DCommon* object3dcommon,std::string textureFilePath) {
+void Player::Initialize(Object3DCommon* object3dcommon) {
 	object3dcommon = object3dcommon;
 	object = std::make_unique<Object3D>();
 	object->Initialize(object3dcommon);
+	object->SetModel("plane.obj");
+	object->SetScale({ 0.5f,0.5f,0.5f });
 	transform.translate = { 0.0f,0.0f,0.0f };
 }
 
@@ -31,6 +34,10 @@ void Player::Update() {
 	object->SetTranslate(transform.translate);
 	
 	object->Update();
+
+#ifdef _DEBUG
+
+#endif
 }
 
 //描画

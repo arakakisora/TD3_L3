@@ -8,7 +8,7 @@ class Player
 {
 public:
 	//初期化
-	void Initialize(Object3DCommon*object3dcommon,std::string textureFilePath);
+	void Initialize(Object3DCommon*object3dcommon);
 	//更新
 	void Update();
 	//描画
