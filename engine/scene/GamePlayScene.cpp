@@ -34,6 +34,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("sphere.obj");
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 
+	map = new Map();
+	map->Initialize();
 	
 
 }
@@ -44,6 +46,8 @@ void GamePlayScene::Finalize()
 	CameraManager::GetInstans()->RemoveCamera("subcam");
 	CameraManager::GetInstans()->Finalize();
 
+	map->Finalize();
+	delete map;
 }
 
 void GamePlayScene::Update()
@@ -79,6 +83,7 @@ void GamePlayScene::Update()
 
 	
 #endif // _DEBUG
+	map->Update();
 }
 
 void GamePlayScene::Draw()
@@ -88,7 +93,7 @@ void GamePlayScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
-
+	map->Draw();
 
 
 	ParticleMnager::GetInstance()->Draw();
