@@ -11,7 +11,7 @@
 #include "ParticleEmitter.h"
 #include "ParticleMnager.h"
 
-
+#include "Map.h"
 
 class GamePlayScene :public BaseScene
 {
@@ -39,6 +39,7 @@ private:
 	std::unique_ptr<Camera> camera1;
 	std::unique_ptr<Camera> camera2;
 
+	Map* map;
 
 };
 

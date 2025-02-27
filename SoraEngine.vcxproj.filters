@@ -159,7 +159,6 @@
     <ClCompile Include="engine\camera\CameraManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-
     <ClCompile Include="engine\particle\ParticleMnager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -167,7 +166,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\particle\ParticleEmitter.cpp">
-
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -302,6 +306,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\particle\ParticleMnager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
