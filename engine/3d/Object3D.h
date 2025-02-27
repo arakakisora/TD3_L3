@@ -33,7 +33,7 @@ public:
 	//transrat
 	void SetTransform(const Transform& transform) { this->transform = transform; }
 	Transform GetTransform() { return transform; }
-
+	 
 	//スケール
 	void SetScale(const Vector3& scale) { transform.scale = scale; }
 	//回転
