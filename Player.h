@@ -3,6 +3,7 @@
 #include "Object3DCommon.h"
 #include "Input.h"
 #include "Camera.h"
+#include "Map.h"
 
 //角
 enum Corner {
@@ -30,7 +31,7 @@ public:
 	//初期化
 	void Initialize(Object3DCommon* object3dcommon);
 	//更新
-	void Update();
+	void Update(const Map& map);
 	//描画
 	void Draw();
 	//移動
@@ -43,6 +44,9 @@ public:
 	void MapLeftCollision(CollisionMapInfo& info);
 	//判定結果を反映して移動
 	void ResultMove(const CollisionMapInfo& info);
+
+	//ゴール判定bool CheckGoal(const Map& map);
+    bool CheckGoal(const Map&map);
 public:
 	const Transform& GetPosition()const { return transform; }
 	void SetTransform(const Transform& newTransform) { transform = newTransform; }

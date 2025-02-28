@@ -99,7 +99,6 @@ void Map::LoadMap(const std::string filename)
     file.close();
 }
 
-
 // 任意のサイズを指定
 void Map::DemoMap(int width, int height) {
     mapWidth = width;
@@ -113,4 +112,16 @@ void Map::DemoMap(int width, int height) {
 			mapBlock[y][x].Initialize(0, Vector3(float(x), 0.0f, float(y)));
         }
     }
+}
+
+//ゴールの座標を取得
+Vector3 Map::GetGoalPosition()const {
+    for (size_t y = 0; y < mapHeight; y++) {
+        for (size_t x = 0; x < mapWidth; x++) {
+            if (mapData[y][x] == 2) {
+                return mapBlock[y][x].GetPosition();
+            }
+        }
+    }
+    return Vector3(0.0f, 0.0f, 0.0f);//ゴールがない場合
 }

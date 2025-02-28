@@ -36,6 +36,8 @@ namespace MyMath {
 	Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
 	float Cot(float theta);
+	//
+	float Length(const Vector3& v);
 
 	//透視投影行列
 	Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearCilp, float farClip);

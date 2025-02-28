@@ -58,7 +58,7 @@ void GamePlayScene::Update()
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
 	//プレイヤーの更新
-	player->Update();
+	player->Update(*map);
 
 #ifdef _DEBUG
 

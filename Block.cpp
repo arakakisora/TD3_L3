@@ -31,6 +31,17 @@ void Block::Initialize(const int mapID, const Vector3& position) {
 		mapBlock1->SetScale(Vector3(0.3f, 0.3f, 0.3f));
 		mapBlock1->SetModel("cube.obj");
 		mapBlock1->SetLighting(true);
+    } else if (mapID == 2) {
+        //ゴール
+        
+        ModelManager::GetInstans()->LoadModel("sphere.obj");
+        mapBlock2 = new Object3D();
+        mapBlock2->Initialize(Object3DCommon::GetInstance());
+        mapBlock2->SetTranslate(position);
+        mapBlock2->SetScale(Vector3(0.3f, 0.3f, 0.3f));
+        mapBlock2->SetModel("sphere.obj");
+        mapBlock2->SetLighting(true);
+        
     }
 }
 void Block::Update()
@@ -40,6 +51,8 @@ void Block::Update()
       //  mapBlock0->Update();
     } else if (mapID == 1 && mapBlock1) {
         mapBlock1->Update();
+    } else if (mapID == 2 && mapBlock2) {
+       mapBlock2->Update();
     }
 }
 
@@ -50,6 +63,8 @@ void Block::Draw()
        // mapBlock0->Draw();
     } else if (mapID == 1 && mapBlock1) {
         mapBlock1->Draw();
+    } else if (mapID == 2 && mapBlock2) {
+        mapBlock2->Draw();
     }
 }
 
@@ -62,5 +77,8 @@ void Block::Finalize()
     } else if (mapID == 1 && mapBlock1) {
         delete mapBlock1;
         mapBlock1 = nullptr;
+    } else if (mapID == 2 && mapBlock2) {
+        delete mapBlock2;
+        mapBlock2 = nullptr;
     }
 }

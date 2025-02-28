@@ -20,12 +20,14 @@ public:
 
 	// SetPosition
 
+	const Vector3& GetPosition()const { return position; }
 
 private:
 	int mapID;
 
 	Object3D* mapBlock0;
 	Object3D* mapBlock1;
+	Object3D* mapBlock2;//ゴール(仮)
 
 	Vector3 position;
 

@@ -2,7 +2,6 @@
 #include "MyMath.h"
 #include <algorithm>
 
-
 //初期化
 void Player::Initialize(Object3DCommon* object3dcommon) {
 	object3dcommon = object3dcommon;
@@ -13,7 +12,7 @@ void Player::Initialize(Object3DCommon* object3dcommon) {
 	transform.translate = { 0.0f,0.0f,0.0f };
 }
 //更新
-void Player::Update() {
+void Player::Update(const Map& map) {
 
 	//カメラモードに入っていない間移動可能
 	if (!CamerMode) {
@@ -36,7 +35,7 @@ void Player::Update() {
 	}
 
 	//本実装移動処理
-	//Move();
+	//Move(); 
 
 	//Cキーを押してカメラモードへ
 	if (Input::GetInstans()->TriggerKey(DIK_C) && !CamerMode) {
@@ -47,14 +46,14 @@ void Player::Update() {
 		CamerMode = false;
 	}
 
+	//クリア判定
+	if (CheckGoal(map)) {
+		speed = 2;
+	}
+
 	object->SetTranslate(transform.translate);
 
 	object->Update();
-
-#ifdef _DEBUG
-
-
-#endif
 }
 //描画
 void Player::Draw() {
@@ -205,6 +204,15 @@ void Player::ResultMove(const CollisionMapInfo& info) {
 	//Mapchip実装後
 }
 
+//ゴール判定
+bool Player::CheckGoal(const Map& map) {
+	Vector3 goalPos = map.GetGoalPosition();
+	float distance = MyMath::Length(transform.translate - goalPos);
+	if (distance < 0.8f) {//ゴールに十分に近づいたら判定内
+		return true;
+	}
+	return false;
+}
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 	Vector3 offsetTable[kNumCorner] = {

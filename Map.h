@@ -1,4 +1,6 @@
 #pragma once
+#include "Vector3.h"
+
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -25,10 +27,11 @@ public:
 	// マップデータの疑似用
 	void DemoMap(int width, int height);
 
-	
+public:
+	//ゴールの座標を取得
+	Vector3 GetGoalPosition()const;
 
 private:
-	
 
 private:
 	// マップデータ

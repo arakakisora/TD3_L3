@@ -198,6 +198,10 @@ float MyMath::Cot(float theta)
 	return 1 / std::tan(theta);
 }
 
+float MyMath::Length(const Vector3& v) {
+	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
 Matrix4x4 MyMath::MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearCilp, float farClip)
 {
 
