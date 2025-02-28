@@ -92,6 +92,12 @@ namespace MyMath {
 	Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottm, float nearCip, float farCip);
 	//ビューポート変換行列
 	Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+
+
+
+	float fLerp(float a, float b, float t);
+	Vector3 Lerp(const Vector3& a, const Vector3& b, float t);
+
 	//単位行列
 	Matrix4x4 MakeIdentity4x4();
 	Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
@@ -107,6 +113,7 @@ namespace MyMath {
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 	bool IsCollision(const AABB& aabb, const Sphere& sphere);
 	bool IsCollision(const AABB& aabb, const Segment& segment);
+
 
 }
 
