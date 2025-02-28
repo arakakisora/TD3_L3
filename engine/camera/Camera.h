@@ -2,6 +2,7 @@
 #include "RenderingData.h"
 #include <WinApp.h>
 
+
 class Object3D;
 class Camera
 {

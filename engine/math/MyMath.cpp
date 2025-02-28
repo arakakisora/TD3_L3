@@ -281,6 +281,25 @@ Matrix4x4 MyMath::MakeViewportMatrix(float left, float top, float width, float h
 
 }
 
+float MyMath::fLerp(float a, float b, float t)
+{
+	float  ans;
+
+	ans = t * a + (1.0f - t) * b;
+	return ans;
+}
+
+Vector3 MyMath::Lerp(const Vector3& a, const Vector3& b, float t)
+{
+	Vector3 ans;
+
+	ans.x = t * a.x + (1.0f - t) * b.x;
+	ans.y = t * a.y + (1.0f - t) * b.y;
+	ans.z = t * a.z + (1.0f - t) * b.z;
+
+	return ans;
+}
+
 
 
 

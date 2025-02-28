@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "MyMath.h"
+#include "Object3D.h"
 
 Camera::Camera()
 {
@@ -18,6 +19,14 @@ Camera::Camera()
 
 void Camera::Update()
 {
+
+
+	if (followMode && followTarget) {
+		const Transform& targetTransform = followTarget->GetTransform();
+		Vector3 targetPosition = targetTransform.translate + followOffset;
+		transform.translate = MyMath::Lerp(transform.translate, targetPosition, interpolationRate);
+	}
+
 	projectionMatrix = MyMath::MakePerspectiveFovMatrix(fovY, aspectRatio, nearCilp, farClip);
 	worldMatrix = MyMath::MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	viewMatrix = worldMatrix.Inverse();
@@ -30,6 +39,7 @@ void Camera::SetFollowTarget(Object3D* obj, const Vector3& offset) {
 	followOffset = offset;
 }
 
+//フォローのオンオフ
 void Camera::SetFollowMode(bool enable) {
 	followMode = enable;
 }
