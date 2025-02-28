@@ -28,12 +28,12 @@ public:
 
 
 	void SetModel(Model* model) { model_ = model; }
-	void SetModel(const std::string& filepath);
-
+	void SetModel(const std::string& filepath); 
+	
 	//transrat
 	void SetTransform(const Transform& transform) { this->transform = transform; }
 	Transform GetTransform() { return transform; }
-
+	 
 	//スケール
 	void SetScale(const Vector3& scale) { transform.scale = scale; }
 	//回転

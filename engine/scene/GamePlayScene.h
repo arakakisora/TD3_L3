@@ -4,14 +4,16 @@
 #include "Model.h"
 #include"Sprite.h"
 #include "Object3D.h"
+#include "Object3DCommon.h"
 #include "Audio.h"
 #include "BaseScene.h"
 
 #include "SceneManager.h"
 #include "ParticleEmitter.h"
 #include "ParticleMnager.h"
+#include "Player.h"
 
-
+#include "Map.h"
 
 class GamePlayScene :public BaseScene
 {
@@ -38,7 +40,9 @@ public:
 private:
 	std::unique_ptr<Camera> camera1;
 	std::unique_ptr<Camera> camera2;
+	//プレイヤー
+	std::unique_ptr<Player>player;
 
-
+	Map* map;
 };
 
