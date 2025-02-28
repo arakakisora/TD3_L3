@@ -87,6 +87,13 @@ Vector3 MyMath::Normlize(const Vector3& vector)
 	return Vector3(vector.x / length, vector.y / length, vector.z / length);
 }
 
+//Add
+Vector3 MyMath::Add(const Vector3& v,float scalar){
+	return Vector3(v.x + scalar, v.y + scalar, v.z + scalar);
+}
+Vector3 MyMath::Add(const Vector3& v1, const Vector3& v2) {
+	return { v1.x + v2.x,v1.y + v2.y,v1.z + v2.z };
+}
 
 Matrix4x4 MyMath::MakeRotateXMatrix(float radian)
 
@@ -281,6 +288,28 @@ Matrix4x4 MyMath::MakeViewportMatrix(float left, float top, float width, float h
 
 }
 
+//単位行列
+Matrix4x4 MyMath::MakeIdentity4x4() {
+	Matrix4x4 result;
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			result.m[i][j] = (i == j) ? 1.0f : 0.0f;
+		}
+	}
+	return result;
+}
+
+Matrix4x4 MyMath::Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result{};
+	for (int row = 0; row < 4; ++row) {
+		for (int column = 0; column < 4; ++column) {
+			for (int i = 0; i < 4; ++i) {
+				result.m[row][column] += m1.m[row][i] * m2.m[i][column];
+			}
+		}
+	}
+	return result;
+}
 
 
 

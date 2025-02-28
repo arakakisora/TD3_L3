@@ -27,16 +27,18 @@ void GamePlayScene::Initialize()
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
 
 
-
 	//モデルの読み込み
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
 	ModelManager::GetInstans()->LoadModel("sphere.obj");
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 
+	//プレイヤー
+	player = std::make_unique<Player>();
+	player->Initialize(Object3DCommon::GetInstance());
+
 	map = new Map();
 	map->Initialize();
-	
 
 }
 
@@ -55,6 +57,8 @@ void GamePlayScene::Update()
 	//カメラの更新
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
+	//プレイヤーの更新
+	player->Update();
 
 #ifdef _DEBUG
 
@@ -79,7 +83,11 @@ void GamePlayScene::Update()
 
 	}
 
-	
+	Transform playerTransform = player->GetPosition();
+	if (ImGui::CollapsingHeader("Player Control", ImGuiTreeNodeFlags_DefaultOpen)) {
+		ImGui::DragFloat3("Player Position", &playerTransform.translate.x, 0.01f);
+	}
+	player->SetTransform(playerTransform);
 
 	
 #endif // _DEBUG
@@ -93,8 +101,11 @@ void GamePlayScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
-	map->Draw();
 
+	//プレイヤー
+	player->Draw();
+
+	map->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 
