@@ -48,7 +48,6 @@ void Input::Initialize(WinApp* winApp)
 	hr = devMouse_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	assert(SUCCEEDED(hr));
 
-
 }
 
 void Input::Update()
@@ -95,8 +94,6 @@ bool Input::TriggerKey(BYTE keyNumber)
 
 
 }
-
-
 
 bool Input::PushMouse(int buttonNumber)
 {

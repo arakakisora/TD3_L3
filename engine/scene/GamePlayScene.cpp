@@ -37,6 +37,10 @@ void GamePlayScene::Initialize()
 	player = std::make_unique<Player>();
 	player->Initialize(Object3DCommon::GetInstance());
 
+	//ポーズメニュー
+	pauseMenu = std::make_unique<PauseMenu>();
+	pauseMenu->Initialize(Object3DCommon::GetInstance());
+
 	map = new Map();
 	map->Initialize();
 
@@ -59,6 +63,16 @@ void GamePlayScene::Update()
 
 	//プレイヤーの更新
 	player->Update(*map);
+
+	//ポーズメニュー
+	if (Input::GetInstans()->TriggerKey(DIK_Q)) {
+		isPaused = !isPaused;
+	}
+
+	if (isPaused) {
+		pauseMenu->Update();
+		return;
+	}
 
 #ifdef _DEBUG
 
@@ -104,6 +118,12 @@ void GamePlayScene::Draw()
 
 	//プレイヤー
 	player->Draw();
+
+	//ポーズメニュー
+	if (isPaused) {
+		pauseMenu->Draw();
+		return;
+	}
 
 	map->Draw();
 

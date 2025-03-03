@@ -12,6 +12,7 @@
 #include "ParticleEmitter.h"
 #include "ParticleMnager.h"
 #include "Player.h"
+#include "PauseMenu.h"
 
 #include "Map.h"
 
@@ -42,7 +43,11 @@ private:
 	std::unique_ptr<Camera> camera2;
 	//プレイヤー
 	std::unique_ptr<Player>player;
+	//ポーズメニュー
+	std::unique_ptr<PauseMenu>pauseMenu;
 
 	Map* map;
+
+	bool isPaused = false;
 };
 
