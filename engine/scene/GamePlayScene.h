@@ -47,7 +47,5 @@ private:
 	std::unique_ptr<PauseMenu>pauseMenu;
 
 	Map* map;
-
-	bool isPaused = false;
 };
 

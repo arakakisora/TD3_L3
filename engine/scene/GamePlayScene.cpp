@@ -58,21 +58,25 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::Update()
 {
-	//カメラの更新
-	CameraManager::GetInstans()->GetActiveCamera()->Update();
+	//ポーズ画面が出ている間は停止
+	if (!pauseMenu->IsPaused()) {
+		//カメラの更新
+		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
-	//プレイヤーの更新
-	player->Update(*map);
+		//プレイヤーの更新
+		player->Update(*map);
+	}
+
+	//ポーズ画面が出ているときRでリトライ
+	if (pauseMenu->IsPaused()) {
+		if (Input::GetInstans()->TriggerKey(DIK_R)) {
+
+		}
+	}
 
 	//ポーズメニュー
-	if (Input::GetInstans()->TriggerKey(DIK_Q)) {
-		isPaused = !isPaused;
-	}
+	pauseMenu->Update();
 
-	if (isPaused) {
-		pauseMenu->Update();
-		return;
-	}
 
 #ifdef _DEBUG
 
@@ -103,7 +107,7 @@ void GamePlayScene::Update()
 	}
 	player->SetTransform(playerTransform);
 
-	
+
 #endif // _DEBUG
 	map->Update();
 }
@@ -120,10 +124,7 @@ void GamePlayScene::Draw()
 	player->Draw();
 
 	//ポーズメニュー
-	if (isPaused) {
-		pauseMenu->Draw();
-		return;
-	}
+	pauseMenu->Draw();
 
 	map->Draw();
 
@@ -134,7 +135,7 @@ void GamePlayScene::Draw()
 #pragma region スプライト描画
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
-	
+
 
 #pragma endregion
 }

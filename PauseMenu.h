@@ -4,11 +4,6 @@
 #include "Input.h"
 #include "Camera.h"
 
-struct MenuItem {
-	Vector2 position;//左上の座標
-	Vector2 size;//幅と高さ
-};
-
 class PauseMenu
 {
 public:
@@ -18,13 +13,25 @@ public:
 	void Update();
 	//描画
 	void Draw();
-
+public:
+	bool IsPaused()const;
 private:
 	Object3DCommon* object3dcommon_;
 	Camera* camera;
 	Transform transform;
 	Input* input;
+	//ポーズの文字のオブジェクト
 	std::unique_ptr<Object3D>object;
-	std::array<MenuItem, 4>menuItems;
+	//ポーズ画面のオブジェクト
+	std::unique_ptr<Object3D>object2;
+	//操作説明のオブジェクト
+	std::unique_ptr<Object3D>object3;
+	//ポーズ開く
+	bool isPaused_ = false;
+	//操作説明表示
+	bool isOperation_ = false;
+	//イージングタイマー
+	float easeTimer_ = 0.0f;
+	float easeTimer2_ = 0.0f;
 };
 
