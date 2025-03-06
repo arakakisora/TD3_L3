@@ -166,20 +166,18 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\particle\ParticleEmitter.cpp">
-       <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="WorldTransform.cpp">
-
-       <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Block.cpp">
-
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -322,20 +320,20 @@
     <ClInclude Include="WorldTransform.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-
-        <ClInclude Include="Map.h">
+    <ClInclude Include="Map.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Block.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-
- </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Object3d.hlsli">
       <Filter>shader</Filter>
     </None>
     <None Include="Resources\Shaders\Particle.hlsli" />
     <None Include="Resources\Shaders\Sprite.hlsli" />
+    <None Include="MapData\Map1_1.csv" />
+    <None Include="MapData\blocks.csv" />
   </ItemGroup>
 </Project>

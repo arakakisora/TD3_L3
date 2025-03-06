@@ -3,114 +3,103 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <map>
+#include <sstream>
 
-Map::Map()
+namespace {
+
+	std::map<std::string, MapChipType> mapChipTable = {
+		{"0", MapChipType::kBlank},
+		{"1", MapChipType::kBlock},
+		{"2", MapChipType::kEnemy},
+	};
+
+}
+
+void Map::ResetMapChipData()
 {
+
+	mapChipData_.data.clear();
+	mapChipData_.data.resize(kNumBlockVirtical);
+	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {
+		mapChipDataLine.resize(kNumBlockHorizontal);
+	}
+
 }
 
-Map::~Map()
+void Map::LoadMapChipCsv(const std::string& filePath)
 {
+
+	// マップチップデータをリセット
+	ResetMapChipData();
+
+	// ファイルを開く
+	std::ifstream file;
+	file.open(filePath);
+	assert(file.is_open());
+
+	// マップチップCSV
+	std::stringstream mapChipCsv;
+	// ファイルの内容を文字列ストリームにコピー
+	mapChipCsv << file.rdbuf();
+	// ファイルを閉じる
+	file.close();
+
+	// csvからマップチップデータを読み込む
+	for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
+
+		std::string line;
+		getline(mapChipCsv, line);
+
+		// 1桁分の文字列をストリームに変換して解析しやすくする
+		std::istringstream lien_stream(line);
+
+		for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
+
+			std::string word;
+			getline(lien_stream, word, ',');
+
+			if (mapChipTable.contains(word)) {
+				mapChipData_.data[y][x] = mapChipTable[word];
+			}
+		}
+	}
 }
 
-void Map::Initialize()
+MapChipType Map::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex)
 {
-    // CSVファイルからマップデータを読み込む
-    LoadMap("MapData/map2.csv");
-
-    // ブロックのリストを初期化
-    mapBlock.resize(mapHeight, vector<Block>(mapWidth));
-
-	float blockScaleX = 0.15f;
-	float blockScaleY = 0.3f;
-
-    for (int y = 0; y < mapHeight; y++) {
-        for (int x = 0; x < mapWidth; x++) {
-			mapBlock[y][x].Initialize(mapData[y][x], Vector3(float(x*blockScaleX), float(y*blockScaleY),0.0f ));
-        }
-    }
+	if (xIndex < 0 || kNumBlockHorizontal - 1 < xIndex) {
+		return MapChipType::kBlank;
+	}
+	if (yIndex < 0 || kNumBlockVirtical - 1 < yIndex) {
+		return MapChipType::kBlank;
+	}
+	return mapChipData_.data[yIndex][xIndex];
 }
 
-void Map::Update()
+Vector3 Map::GetMapChipPostionByIndex(uint32_t xIndex, uint32_t yIndex)
 {
-    // 各ブロックの更新処理
-    for (int y = 0; y < mapHeight; y++) {
-        for (int x = 0; x < mapWidth; x++) {
-            mapBlock[y][x].Update();
-        }
-    }
+	return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVirtical - 1 - yIndex), 0);
 }
 
-void Map::Draw()
+IndexSet Map::GetMapChipIndexSetByPosition(const Vector3& posotopn)
 {
-    // 各ブロックの描画処理
-    for (int y = 0; y < mapHeight; y++) {
-        for (int x = 0; x < mapWidth; x++) {
-            mapBlock[y][x].Draw();
-        }
-    }
+	IndexSet indexSet = {};
+	indexSet.xIndex = static_cast<uint32_t>((posotopn.x + kBlockWidth / 2) / kBlockWidth);
+	indexSet.yIndex = kNumBlockVirtical - 1 - static_cast<uint32_t>((posotopn.y + kBlockHeight / 2) / kBlockHeight);
+	return indexSet;
 }
 
-void Map::Finalize()
+Rect Map::GetRectByIndex(uint32_t xindex, uint32_t yIndex)
 {
-    // 各ブロックの終了処理
-    for (int y = 0; y < mapHeight; y++) {
-        for (int x = 0; x < mapWidth; x++) {
-            mapBlock[y][x].Finalize();
-        }
-    }
-}
-
-void Map::LoadMap(const std::string filename)
-{
-    // ファイルを開く
-    std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "ファイルが開けませんでした。" << std::endl;
-        return;
-    }
-
-    // マップデータを一時的に格納するためのベクトル
-    std::vector<std::string> tempMapData;
-
-    // ファイルからマップデータを読み込む
-    std::string line;
-    while (std::getline(file, line)) {
-        tempMapData.push_back(line);
-    }
-
-    // マップのサイズを設定
-    mapHeight = tempMapData.size();
-    if (mapHeight > 0) {
-        mapWidth = tempMapData[0].size();
-    } else {
-        std::cerr << "マップデータが空です。" << std::endl;
-        return;
-    }
-
-    // マップデータを初期化
-    mapData.resize(mapHeight);
-    for (size_t y = 0; y < mapHeight; y++) {
-        mapData[y].resize(mapWidth);
-        for (size_t x = 0; x < mapWidth; x++) {
-            mapData[y][x] = tempMapData[mapHeight - 1 - y][x] - '0';
-        }
-    }
-
-    file.close();
+	Vector3 center = GetMapChipPostionByIndex(xindex, yIndex);
+	Rect rect;
+	rect.left = center.x - kBlockWidth / 2.0f;
+	rect.right = center.x + kBlockWidth / 2.0f;
+	rect.bottom = center.y - kBlockHeight / 2.0f;
+	rect.top = center.y + kBlockHeight / 2.0f;
+	return rect;
 }
 
 
-// 任意のサイズを指定
-void Map::DemoMap(int width, int height) {
-    mapWidth = width;
-    mapHeight = height;
-
-    // mapBlockを指定されたサイズで初期化
-    mapBlock.resize(mapHeight, vector<Block>(mapWidth));
-
-    for (int y = 0; y < mapHeight; y++) {
-        for (int x = 0; x < mapWidth; x++) {
-			mapBlock[y][x].Initialize(0, Vector3(float(x), 0.0f, float(y)));
-        }
-    }
-}

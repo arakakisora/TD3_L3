@@ -56,6 +56,13 @@ struct Quaternion {
 	float w, x, y, z;
 };
 
+enum class MapChipType {
+
+	kBlank, // 空白
+	kBlock, // ブロック
+	kEnemy, // 敵
+
+};
 namespace MyMath {
 	//回転
 	Matrix4x4 MakeTranslateMatrix(const Vector3& translate);

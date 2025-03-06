@@ -1,43 +1,62 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "Vector3.h"
+#include <assert.h>
+#include <stdint.h>
+#include "MyMath.h"
+
+
+
+
+struct MapChipData {
+
+	std::vector<std::vector<MapChipType>> data;
+};
+
+
+struct IndexSet {
+	uint32_t xIndex;
+	uint32_t yIndex;
+};
+
+struct Rect {
+
+	float left;
+	float right;
+	float bottom;
+	float top;
+};
+
+
 using namespace std;
 class Block;
 class Map
 {
 public:
-	// コンストラクタ / デストラクタ
-	Map();
-	~Map();
+public:
 
-	// 初期化
-	void Initialize();
-	// 更新
-	void Update();
-	// 描画
-	void Draw();
-	// 終了処理
-	void Finalize();
+	void ResetMapChipData();
+	void LoadMapChipCsv(const std::string& filePath);
+	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
+	Vector3 GetMapChipPostionByIndex(uint32_t xIndex, uint32_t yIndex);
+	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; }
+	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; }
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& posotopn);
+	Rect GetRectByIndex(uint32_t xindex, uint32_t yIndex);
+	std::vector<Vector3> GetEnemyPositions();
 
-	// マップの読み込み
-	void LoadMap(const string filename);
-
-	// マップデータの疑似用
-	void DemoMap(int width, int height);
-
-	
 
 private:
-	
+	// 1ブロックのサイズ
+	static inline const float kBlockWidth = 1.0f;
+	static inline const float kBlockHeight = 1.0f;
+	// ブロック個数
+	static inline const uint32_t kNumBlockVirtical = 25;
+	static inline const uint32_t kNumBlockHorizontal = 100;
+	MapChipData mapChipData_;
 
-private:
-	// マップデータ
-	vector<vector<int>> mapData;
-	// ブロックのリスト
-	vector<vector<Block>> mapBlock;
-	// マップのサイズ
-	size_t mapWidth;
-	size_t mapHeight;
+	
 	
 
 };

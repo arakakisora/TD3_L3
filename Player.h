@@ -1,85 +1,132 @@
 #pragma once
-#include "Object3D.h"
-#include "Object3DCommon.h"
 #include "Input.h"
-#include "Camera.h"
+#include "Model.h"
 
-//角
-enum Corner {
-	kRightBottom,//右下
-	kLeftBottom,//左下
-	kRightTop,//右上
-	kLeftTop,//左上
+#include "assert.h"
+#include <algorithm>
+#include <numbers>
+#include "MyMath.h"
 
-	kNumCorner//要素数
+#include "RenderingData.h"
+
+#include "Object3D.h"
+
+enum class LRDirecion {
+	kright,
+	kLeft,
 };
-//マップ殿当たり判定情報
+
 struct CollisionMapInfo {
-	//天井衝突フラグ
-	bool ceilCollision = false;
-	//着地フラグ
-	bool onGround = false;
-	//壁接触フラグ
-	bool wallhit = false;
-	//移動量
-	Vector3 moveAmount;
+
+	bool ceiling = false; // 天井衝突
+	bool landing = false; // 着地
+	bool hitWall = false; // 壁接触
+	Vector3 move;         // 移動量
 };
-class Player
-{
+
+enum Corner {
+	kRightBottom,
+	kLeftBottom,
+	kRightTop,
+	kLeftTop,
+	kNumCorner // 要素数
+};
+
+
+class Enemy;
+class Map;
+class Player {
+
 public:
-	//初期化
-	void Initialize(Object3DCommon* object3dcommon);
-	//更新
+	// 初期化
+	void Initialize(Object3D* object3D, const Vector3& position);
+
+	~Player();
+
+	// 更新
 	void Update();
-	//描画
+
+	// 描画
 	void Draw();
-	//移動
-	void Move();
-	//マップ衝突判定
-	void MapCollision(CollisionMapInfo& info);
-	void MapTopCollision(CollisionMapInfo& info);
-	void MapBottomCollision(CollisionMapInfo& info);
-	void MapRightCollision(CollisionMapInfo& info);
-	void MapLeftCollision(CollisionMapInfo& info);
-	//判定結果を反映して移動
-	void ResultMove(const CollisionMapInfo& info);
-public:
-	const Transform& GetPosition()const { return transform; }
-	void SetTransform(const Transform& newTransform) { transform = newTransform; }
 
-	Vector3 CornerPosition(const Vector3& center, Corner corner);
+	void PrayerMove(); // 自機の動き
+	
+
+
+	
+	
+	// 当たり判定
+	void CollisionMapInfoTop(CollisionMapInfo& info);// 天井衝突
+	void CollisionMapInfoBootm(CollisionMapInfo& info);// 床衝突
+	void CollisionMapInfoRight(CollisionMapInfo& info);// 右壁衝突
+	void CollisionMapInfoLeft(CollisionMapInfo& info);// 左壁衝突
+
+	void PlayerCollisionMove(const CollisionMapInfo& inffo);// プレイヤー衝突移動
+	void CeilingCollisionMove(const CollisionMapInfo& info);// 天井衝突移動
+	void OnGroundSwitching(const CollisionMapInfo& info);// 着地判定
+	void HitWallCollisionMove(const CollisionMapInfo& info);// 壁衝突移動
+
+
+	Vector3 CornerPosition(const Vector3& centor, Corner corner);// 4つの角の位置を計算yo
+	// map衝突判定
+	void MapCollision(CollisionMapInfo& info);// マップ衝突判定
+
+	
+	//アクセッサ
+	//死ぬ系
+	bool GetIsDead_() const { return isDead_; }// 死フラグ
+	void SetIsDead_(bool isDead) { isDead_ = isDead; }// 死フラグを立てる
+	void SetDeathHeight(float height) { deathHeight_ = height; }// 落下死の高さを設定
+	//トランスフォーム
+	const Transform& GetTransform() { return object3D_->GetTransform(); }// トランスフォーム取得
+	void SetTransform(const Transform& transform) { object3D_->SetTransform(transform); }// トランスフォーム設定
+	const Vector3& GetVelocity() const { return velocity_; }// 速度取得
+	void SetMapChipField(Map* mapChipFild) { mapChipFild_ = mapChipFild; }// マップチップフィールド設定
+	
+	Vector3 GetWorldPosition() {
+
+		Vector3 worldPos;
+
+		worldPos.x = object3D_->GetWorldMatrix().m[3][0];;
+		worldPos.y = object3D_->GetWorldMatrix().m[3][1];;
+		worldPos.z = object3D_->GetWorldMatrix().m[3][2];;
+		return worldPos;
+	};
+
+	
+
+	
+
 private:
-	Object3DCommon* object3dcommon;
-	Camera* camera;
-	Transform transform;
-	Input* input;
-	std::unique_ptr<Object3D>object;
-	Vector3 velocity = {};
-	//移動速度
-	float speed = 0.05f;
 
-	//加速度
-	static inline const float kAcceleration = 0.1f;
-	//速度減衰
-	static inline const float kAttenuation = 0.5f;
-	//速度制限
-	static inline const float kLimitRunSpeed = 1.0f;
-	//重力加速度
-	static inline const float kGravityAcceleration = 0.1f;
-	//最大落下速度
-	static inline const float kLimitFallSpeed = 1.0f;
-	//ジャンプ初速
-	static inline const float kJumpAcceleration = 1.0f;
-	//減衰
-	static inline const float kAttenuationLanding = 0.5f;
-	//プレイヤーの当たり判定サイズ
-	static inline const float kWidth = 1.0f;
-	static inline const float kHeight = 1.0f;
-	//接地状態フラグ
-	bool onGround = true;
-	//着地フラグ
-	bool landing = false;
+	//objec3D
+	Object3D* object3D_ = nullptr;
+
+	
+	Vector3 velocity_ = {};                          // 速度
+	static inline const float kAccleration = 0.01f;  // 定数加速度
+	static inline const float kAttenuation = 0.2f;   // 速度減衰率
+	static inline const float kLimitRunSpeed = 1.0f; // 最大速度制限
+	
+	// ジャンプ
+	bool onGround_ = true;                                 // 接点状態フラグ
+	static inline const float kGravityAccleration = 0.05f; // 重力加速度
+	static inline const float kLimitFallSpeed = 1.0f;      // 最大落下速度
+	static inline const float kJampAcceleration = 0.5f;    // ジャンプ初速
+	// 当たり判定
+	Map* mapChipFild_ = nullptr;
+	static inline const float kWidth = 0.8f;//当たり判定の幅
+	static inline const float kHeight = 0.8f;//当たり判定の高さ
+	static inline const float kBlank = 1.0;//当たり判定の余裕
+	static inline const float kAttenuationLanding = 0.1f;//着地時の減衰率
+	static inline const float kCollisionsmallnumber = 0.1f;//当たり判定の余裕
+	static inline const float kAttenuationWall = 0.1f;//壁に当たった時の減衰率
+
+	//死んだ
+	bool isDead_ = false;
+	//落下死高さ
+	float deathHeight_; // 落下死の高さ
 	//カメラモードフラグ
 	bool CamerMode = false;
+	
 };
-

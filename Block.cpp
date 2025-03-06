@@ -28,7 +28,7 @@ void Block::Initialize(const int mapID, const Vector3& position) {
         mapBlock1 = new Object3D();
         mapBlock1->Initialize(Object3DCommon::GetInstance()); // 適切な引数を渡す
         mapBlock1->SetTranslate(position); // 座標を設定
-		mapBlock1->SetScale(Vector3(0.3f, 0.3f, 0.3f));
+		mapBlock1->SetScale(Vector3(1.0f, 1.0f, 1.0f));
 		mapBlock1->SetModel("cube.obj");
 		mapBlock1->SetLighting(true);
     }

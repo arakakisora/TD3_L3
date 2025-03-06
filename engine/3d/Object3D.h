@@ -106,7 +106,7 @@ public:
 	void SetColor(const Vector4& color) { color_ = color; }
 	Vector4 GetColor() const { return color_; }
 	
-
+	Matrix4x4 GetWorldMatrix() { return worldMatrix; }
 
 	
 
@@ -145,7 +145,7 @@ private:
 	Matrix4x4 worldViewProjectionMatrix;
 
 	//ライトのオンオフ
-	bool enableLighting = true;
+	bool enableLighting = false;
 
 	Camera* camera = nullptr;
 	//カメラforGPU
