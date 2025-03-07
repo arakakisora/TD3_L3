@@ -6,7 +6,13 @@
 #include <stdint.h>
 #include "MyMath.h"
 
+enum class MapChipType {
 
+	kBlank, // 空白
+	kBlock, // ブロック
+	
+
+};
 
 
 struct MapChipData {
@@ -38,13 +44,13 @@ public:
 
 	void ResetMapChipData();
 	void LoadMapChipCsv(const std::string& filePath);
-	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
+	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);//縦横のインデックスからマップチップの種類を取得する関数
 	Vector3 GetMapChipPostionByIndex(uint32_t xIndex, uint32_t yIndex);
 	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; }
 	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; }
-	IndexSet GetMapChipIndexSetByPosition(const Vector3& posotopn);
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& posotopn);//指定座標がマップチップの何番にあるかを取得する関数
 	Rect GetRectByIndex(uint32_t xindex, uint32_t yIndex);
-	std::vector<Vector3> GetEnemyPositions();
+	
 
 
 private:

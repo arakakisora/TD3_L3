@@ -12,7 +12,7 @@ namespace {
 	std::map<std::string, MapChipType> mapChipTable = {
 		{"0", MapChipType::kBlank},
 		{"1", MapChipType::kBlock},
-		{"2", MapChipType::kEnemy},
+		
 	};
 
 }
@@ -69,22 +69,27 @@ void Map::LoadMapChipCsv(const std::string& filePath)
 
 MapChipType Map::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex)
 {
+	// マップチップの範囲外の場合は空白を返す
 	if (xIndex < 0 || kNumBlockHorizontal - 1 < xIndex) {
 		return MapChipType::kBlank;
 	}
+	// マップチップの範囲外の場合は空白を返す
 	if (yIndex < 0 || kNumBlockVirtical - 1 < yIndex) {
 		return MapChipType::kBlank;
 	}
+	// マップチップの種類を返す
 	return mapChipData_.data[yIndex][xIndex];
 }
 
 Vector3 Map::GetMapChipPostionByIndex(uint32_t xIndex, uint32_t yIndex)
 {
+
 	return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVirtical - 1 - yIndex), 0);
 }
 
 IndexSet Map::GetMapChipIndexSetByPosition(const Vector3& posotopn)
 {
+	//指定座標がマップチップの何番にあるかを取得する関数
 	IndexSet indexSet = {};
 	indexSet.xIndex = static_cast<uint32_t>((posotopn.x + kBlockWidth / 2) / kBlockWidth);
 	indexSet.yIndex = kNumBlockVirtical - 1 - static_cast<uint32_t>((posotopn.y + kBlockHeight / 2) / kBlockHeight);
