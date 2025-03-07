@@ -30,6 +30,10 @@ private:
 	bool isPaused_ = false;
 	//操作説明表示
 	bool isOperation_ = false;
+	//ポーズを閉じる処理
+	bool isPausedClosed_ = false;
+	//操作説明を閉じる処理
+	bool isOperationClosed_ = false;
 	//イージングタイマー
 	float easeTimer_ = 0.0f;
 	float easeTimer2_ = 0.0f;

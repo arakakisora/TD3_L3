@@ -35,25 +35,36 @@ void PauseMenu::Update() {
 
 	//Qキーを押したらフラグオン(仮)
 	if (input->TriggerKey(DIK_Q)) {
-		isPaused_ = !isPaused_;
-		if (isOperation_) {
-			isOperation_ = false;
+		if (isPaused_) {
+			isPausedClosed_ = true;
+
+			if (isOperation_) {
+				isOperationClosed_ = true;
+			}
+		} else {
+			isPaused_ = true;
+			isPausedClosed_ = false;
 		}
 	}
 
 	//遷移速度
 	const float easeSpeed = 0.02f;
 
-	if (isPaused_) {
+	if (isPaused_ && !isPausedClosed_) {
 		easeTimer_ += easeSpeed;
 		if (easeTimer_ > 1.0f) {
 			easeTimer_ = 1.0f;
 		}
-	} else
+	} else if(isPausedClosed_)
 	{
 		easeTimer_ -= easeSpeed;
 		if (easeTimer_ < 0.0f) {
 			easeTimer_ = 0.0f;
+			isPaused_ = false;
+			isPausedClosed_ = false;
+			isOperation_ = false;
+			isOperationClosed_ = false;
+			easeTimer2_ = 0.0f;  
 		}
 	}
 
@@ -89,26 +100,33 @@ void PauseMenu::Update() {
 			//SceneManager::GetInstance()->ChangeScene("TITELE");
 		}
 	}
-
 	//ポーズ画面が出ているときWで操作説明を表示(仮)
 	if (isPaused_) {
 		if (input->TriggerKey(DIK_W)) {
-			isOperation_  = !isOperation_;
+			if (isOperation_) {
+				isOperationClosed_ = true;
+			}
+			else {
+				isOperation_ = true;
+				isOperationClosed_ = false;
+			}
 		}
 	}
 
 	//操作説明
-	if (isOperation_) {
+	if (isOperation_&& !isOperationClosed_) {
 		easeTimer2_ += easeSpeed;
 		if (easeTimer2_ > 1.0f) {
 			easeTimer2_ = 1.0f;
 		}
 	}
-	else
+	else if(isOperationClosed_)
 	{
 		easeTimer2_ -= easeSpeed;
 		if (easeTimer2_ < 0.0f) {
 			easeTimer2_ = 0.0f;
+			isOperation_ = false;
+			isOperationClosed_ = false;
 		}
 	}
 
