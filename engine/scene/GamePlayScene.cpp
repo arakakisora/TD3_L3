@@ -40,6 +40,8 @@ void GamePlayScene::Initialize()
 	map = new Map();
 	map->Initialize();
 
+	gameCamera_ = new GameCamera();
+	gameCamera_->Initialize(map);
 }
 
 void GamePlayScene::Finalize()
@@ -50,6 +52,7 @@ void GamePlayScene::Finalize()
 
 	map->Finalize();
 	delete map;
+	delete gameCamera_;
 }
 
 void GamePlayScene::Update()
@@ -83,12 +86,15 @@ void GamePlayScene::Update()
 
 	}
 
+
 	Transform playerTransform = player->GetPosition();
 	if (ImGui::CollapsingHeader("Player Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		ImGui::DragFloat3("Player Position", &playerTransform.translate.x, 0.01f);
 	}
 	player->SetTransform(playerTransform);
 
+	// ゲームカメラ更新処理
+	gameCamera_->Update(map);
 	
 #endif // _DEBUG
 	map->Update();
@@ -106,6 +112,9 @@ void GamePlayScene::Draw()
 	player->Draw();
 
 	map->Draw();
+
+	// ゲームカメラ
+	gameCamera_->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 

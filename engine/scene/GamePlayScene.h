@@ -7,6 +7,7 @@
 #include "Object3DCommon.h"
 #include "Audio.h"
 #include "BaseScene.h"
+#include"GameCamera.h"
 
 #include "SceneManager.h"
 #include "ParticleEmitter.h"
@@ -44,5 +45,7 @@ private:
 	std::unique_ptr<Player>player;
 
 	Map* map;
+	// ゲームカメラ
+	GameCamera* gameCamera_;
 };
 
