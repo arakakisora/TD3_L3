@@ -109,26 +109,26 @@ Rect Map::GetRectByIndex(uint32_t xindex, uint32_t yIndex)
 
 
 
-// 任意のサイズを指定
-void Map::DemoMap(int width, int height) {
-    mapWidth = width;
-    mapHeight = height;
-
-    // mapBlockを指定されたサイズで初期化
-    mapBlock.resize(mapHeight, vector<Block>(mapWidth));
-
-    for (int y = 0; y < mapHeight; y++) {
-        for (int x = 0; x < mapWidth; x++) {
-			mapBlock[y][x].Initialize(0, Vector3(float(x), 0.0f, float(y)));
-        }
-    }
-}
-
-
-Vector3 Map::GetBlockPosition(int x, int y) {
-    constexpr float blockScaleX = 0.15f;
-    constexpr float blockScaleY = 0.3f;
-    return Vector3(float(x) * blockScaleX, float(y) * blockScaleY, 0.0f);
-
-}
+//// 任意のサイズを指定
+//void Map::DemoMap(int width, int height) {
+//    mapWidth = width;
+//    mapHeight = height;
+//
+//    // mapBlockを指定されたサイズで初期化
+//    mapBlock.resize(mapHeight, vector<Block>(mapWidth));
+//
+//    for (int y = 0; y < mapHeight; y++) {
+//        for (int x = 0; x < mapWidth; x++) {
+//			mapBlock[y][x].Initialize(0, Vector3(float(x), 0.0f, float(y)));
+//        }
+//    }
+//}
+//
+//
+//Vector3 Map::GetBlockPosition(int x, int y) {
+//    constexpr float blockScaleX = 0.15f;
+//    constexpr float blockScaleY = 0.3f;
+//    return Vector3(float(x) * blockScaleX, float(y) * blockScaleY, 0.0f);
+//
+//}
 
