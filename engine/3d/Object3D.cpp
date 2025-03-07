@@ -127,8 +127,14 @@ void Object3D::SetModel(const std::string& filepath)
 {
 	//もでるを検索してセットする
 	model_ = ModelManager::GetInstans()->FindModel(filepath);
+	modelFilePath_ = filepath;  // ファイルパスを保存
 }
 
+// GetModel の実装
+std::string Object3D::GetModel() const
+{
+	return modelFilePath_;
+}
 
 
 
