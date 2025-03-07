@@ -114,3 +114,11 @@ void Map::DemoMap(int width, int height) {
         }
     }
 }
+
+
+Vector3 Map::GetBlockPosition(int x, int y) {
+    constexpr float blockScaleX = 0.15f;
+    constexpr float blockScaleY = 0.3f;
+    return Vector3(float(x) * blockScaleX, float(y) * blockScaleY, 0.0f);
+
+}
