@@ -178,6 +178,11 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Block.cpp">
+
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -326,6 +331,11 @@
     <ClInclude Include="Block.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+
+    <ClInclude Include="GameCamera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Object3d.hlsli">

@@ -39,6 +39,7 @@ public:
 	//回転
 	void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
 	//位置
+	Vector3 GetTranslate() { return transform.translate; }
 	void SetTranslate(const Vector3& transrate) { transform.translate = transrate; }
 	//カメラ
 	//void SetCamera(Camera* camera) { this->camera = camera; }
@@ -109,7 +110,7 @@ public:
 	Matrix4x4 GetWorldMatrix() { return worldMatrix; }
 
 	
-
+	std::string GetModel() const;  // 追加
 private:
 	Object3DCommon* object3DCommon_ = nullptr;
 
@@ -152,6 +153,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> cameraResource;//カメラのデータを送るためのリソース
 	CaMeraForGpu* cameraForGpu = nullptr;//カメラのデータをGPUに送るための構造体
 
+	std::string modelFilePath_;  // ファイルパスを保存(ゲームカメラで使ってるので気にしないあとで消します)
 private:
 	Vector4 color_ = { 1.0f, 1.0f, 1.0f, 1.0f }; // デフォルトは白
 

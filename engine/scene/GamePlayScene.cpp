@@ -9,7 +9,7 @@
 #include "CameraManager.h"
 #include "ParticleMnager.h"
 #include <Logger.h>
-
+ 
 void GamePlayScene::Initialize()
 {
 	//カメラの生成
@@ -41,6 +41,7 @@ void GamePlayScene::Initialize()
 	
 
 
+
 	//playerの生成	
 	player = std::make_unique<Player>();
 	object3DPlayer = new Object3D();
@@ -56,6 +57,10 @@ void GamePlayScene::Initialize()
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 	
+
+	gameCamera_ = new GameCamera();
+	gameCamera_->Initialize(map);
+
 }
 
 void GamePlayScene::Finalize()
@@ -75,7 +80,11 @@ void GamePlayScene::Finalize()
 	blockobject3D.clear();
 
 	delete map;
+
 	delete object3DPlayer;
+
+	delete gameCamera_;
+
 }
 
 void GamePlayScene::Update()
@@ -110,8 +119,10 @@ void GamePlayScene::Update()
 
 	}
 
-	
 
+
+	// ゲームカメラ更新処理
+	gameCamera_->Update(map);
 	
 #endif // _DEBUG
 	//3Dオブジェクトの更新
@@ -149,6 +160,9 @@ void GamePlayScene::Draw()
 		}
 	}
 	
+
+	// ゲームカメラ
+	gameCamera_->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 

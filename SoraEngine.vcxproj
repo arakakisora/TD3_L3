@@ -128,6 +128,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\scene\GameClearScene.cpp" />
     <ClCompile Include="engine\scene\GameOverScene.cpp" />
     <ClCompile Include="engine\base\GraphicsPipeline.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelCommon.cpp" />
@@ -223,6 +224,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\base\GraphicsPipeline.h" />
     <ClInclude Include="engine\particle\ParticleEmitter.h" />
     <ClInclude Include="engine\particle\ParticleMnager.h" />
+
+    <ClInclude Include="GameCamera.h" />
+
     <ClInclude Include="Player.h" />
     <ClInclude Include="WorldTransform.h" />
     <ClInclude Include="Map.h" />
