@@ -37,15 +37,23 @@ public:
 	/// </summary>
 	void Draw()override;
 
+	/// ブロックの生成
+	void GenerateObject3D();
+
 
 private:
 	std::unique_ptr<Camera> camera1;
 	std::unique_ptr<Camera> camera2;
 	//プレイヤー
 	std::unique_ptr<Player>player;
+	Object3D* object3DPlayer=nullptr;
 
-	Map* map;
+
+	Map* map=nullptr;
+	std::vector<std::vector<Object3D*>> blockobject3D;
+
 	// ゲームカメラ
 	GameCamera* gameCamera_;
+
 };
 

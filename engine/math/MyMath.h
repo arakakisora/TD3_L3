@@ -56,6 +56,7 @@ struct Quaternion {
 	float w, x, y, z;
 };
 
+
 namespace MyMath {
 	//回転
 	Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
