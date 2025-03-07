@@ -189,9 +189,11 @@ void GameCamera::GameCamertakeaphoto(Map* map) {
 				switch (tileType) {
 				case 0: // 何もない
 					camera->SetModel("axis.obj");
+					camera->SetColor(Vector4(1.0f,1.0f,0.0f,1.0f));
 					break;
 				case 1: // ブロック
 					camera->SetModel("cube.obj");
+					camera->SetColor(Vector4(1.0f, 0.0f, 1.0f, 1.0f));
 					break;
 				}
 				camera->SetScale(Vector3(0.3f, 0.3f, 0.3f));
