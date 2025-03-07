@@ -67,13 +67,6 @@ void GamePlayScene::Update()
 		player->Update(*map);
 	}
 
-	//ポーズ画面が出ているときRでリトライ
-	if (pauseMenu->IsPaused()) {
-		if (Input::GetInstans()->TriggerKey(DIK_R)) {
-
-		}
-	}
-
 	//ポーズメニュー
 	pauseMenu->Update();
 

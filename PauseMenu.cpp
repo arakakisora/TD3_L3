@@ -22,7 +22,7 @@ void PauseMenu::Initialize(Object3DCommon* object3dcommon) {
 	object3 = std::make_unique<Object3D>();
 	object3->Initialize(object3dcommon_);
 	object3->SetModel("plane.obj");
-	object3->SetScale({ 2.0f,1.0f,1.0f });
+	object3->SetScale({ 2.0f,2.0f,1.0f });
 	input = Input::GetInstans();
 }
 
@@ -68,6 +68,7 @@ void PauseMenu::Update() {
 		}
 	}
 
+	//////ポーズ画面//////
 	if (isPaused_) {
 		float easedValue = float(easeInOutCirc(easeTimer_));
 		transform.translate = { 0.0f,0.0f,0.0f };
@@ -93,13 +94,31 @@ void PauseMenu::Update() {
 		object2->Update();
 	}
 
+	//////各切り替え//////
+
 	//ポーズ画面が出ているときTでタイトルへ(仮)
-	if (isPaused_) {
+	if (isPaused_&&!isOperation_) {
 		if (input->TriggerKey(DIK_T)) {
 			//エラー発生中多分カメラのオンオフ????
-			//SceneManager::GetInstance()->ChangeScene("TITELE");
+			SceneManager::GetInstance()->ChangeScene("TITELE");
 		}
 	}
+
+	//ポーズ画面が出ているときEでセレクトへ(仮)
+	if (isPaused_&&!isOperation_) {
+		if (input->TriggerKey(DIK_E)) {
+			//まだ未実装
+			//SceneManager::GetInstance()->ChangeScene("SELECT");
+		}
+	}
+
+	//ポーズ画面が出ているときRでリトライ(仮)
+	if (isPaused_ && !isOperation_) {
+		if (input->TriggerKey(DIK_R)) {
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+		}
+	}
+
 	//ポーズ画面が出ているときWで操作説明を表示(仮)
 	if (isPaused_) {
 		if (input->TriggerKey(DIK_W)) {
@@ -113,7 +132,17 @@ void PauseMenu::Update() {
 		}
 	}
 
-	//操作説明
+
+	//////タイトル//////
+
+
+	//////セレクト //////
+
+
+	//////リトライ//////
+
+
+	//////操作説明///////
 	if (isOperation_&& !isOperationClosed_) {
 		easeTimer2_ += easeSpeed;
 		if (easeTimer2_ > 1.0f) {

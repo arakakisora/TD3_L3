@@ -29,9 +29,7 @@ public:
 	void Draw()override;
 
 public:
-
-	
-
-
+	std::unique_ptr<Camera> camera1;
+	std::unique_ptr<Camera> camera2;
 };
 
