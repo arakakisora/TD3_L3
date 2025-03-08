@@ -13,13 +13,16 @@
 
 #include "Map.h"
 
+struct GameCameraPosition
+{
+	uint32_t X, Y;
+};
 
 // ゲームカメラ
-class GameCamera {
+class GameCamera
+{
 public:
-	// 描画範囲 (例: 2×2)
-	static inline const uint32_t kRenderWidth = 2;
-	static inline const uint32_t kRenderHeight = 2;
+
 	/// <summary>
 	/// シーンの初期化
 	/// </summary>
@@ -31,21 +34,30 @@ public:
 	/// <summary>
 	/// シーンの更新
 	/// </summary>
-	void Update();
+	void Update(Map* map);
 	/// <summary>
 	/// シーンの描画
 	/// </summary>
 	void Draw();
 
-
-	void move();
-
-	void GameCamertakeaphoto();
-	void GameCameraphoto(vector<std::vector<Object3D*>>& blockobject3D);
+	// ゲームカメラの移動処理
+	void GameCameraMove();
+	// 写真を撮って貼る処理
+	void GameCamertakeaphoto(Map* map);
+	void UpdateGridSize(uint32_t size, bool vertical);
+	void UpdateCameraPositions(Map* map);
 private:
-	Map* map_;
 	// ゲームカメラ
 	std::vector<std::unique_ptr<Object3D>> gamecameras_;
-	uint32_t xIndex = 0;
-	uint32_t yIndex = 0;
+	// ゲームカメラ座標
+	Vector3 cameraposition_;
+	// 要素数
+	static uint32_t camesize_;
+	// コピーしたマップチップ番号を保存する変数
+	uint32_t copiedTile = -1;
+	// ゲームカメラの配置
+	uint32_t cols_; // 横
+	uint32_t rows_; // 盾
+	// 縦長か、横長かの判定チェック
+	bool isVertical_;
 };
