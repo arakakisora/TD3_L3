@@ -57,9 +57,9 @@ void GamePlayScene::Initialize()
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 	
-
-	/*gameCamera_ = new GameCamera();
-	gameCamera_->Initialize(map);*/
+	// ゲームカメラの生成
+	gameCamera_ = new GameCamera();
+	gameCamera_->Initialize(map);
 
 }
 
@@ -83,7 +83,7 @@ void GamePlayScene::Finalize()
 
 	delete object3DPlayer;
 
-	/*delete gameCamera_;*/
+	delete gameCamera_;
 
 }
 
@@ -118,13 +118,13 @@ void GamePlayScene::Update()
 
 
 	}
-
-
-
-	//// ゲームカメラ更新処理
-	//gameCamera_->Update(map);
 	
 #endif // _DEBUG
+	
+	// ゲームカメラ更新処理
+	gameCamera_->Update();
+	gameCamera_->GameCameraphoto(blockobject3D);
+	
 	//3Dオブジェクトの更新
 	for (std::vector<Object3D*>& objext3dLine : blockobject3D)
 	{
