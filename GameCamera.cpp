@@ -5,7 +5,10 @@
 
 void GameCamera::Initialize(Map* map) {
     this->map_ = map;
-
+    // 開始番号を設定
+    xIndex = 7;
+    yIndex = 16;
+    sixe = { 1.0f,1.0f,-1.0f };
     // ゲームカメラのオブジェクト数をレンダリング範囲分だけ確保
     gamecameras_.resize(kRenderWidth * kRenderHeight);
     // 各オブジェクトを生成 & 初期化
@@ -14,11 +17,11 @@ void GameCamera::Initialize(Map* map) {
             uint32_t index = y * kRenderWidth + x; // 2D を 1D インデックスに変換
             gamecameras_[index] = std::make_unique<Object3D>();
             gamecameras_[index]->Initialize(Object3DCommon::GetInstance());
-            // 位置設定
-            Vector3 position(x * 1.0f, y * 1.0f, 0.0f); // X, Y を配置
+            // マップのチップ座標に基づいて配置
+            position = map_->GetMapChipPostionByIndex(xIndex + x, yIndex + y);
             gamecameras_[index]->SetTranslate(position);
             // スケール設定
-            gamecameras_[index]->SetScale(Vector3(1.0f, 1.0f, 1.0f));
+            gamecameras_[index]->SetScale(sixe);
             // モデル設定
             gamecameras_[index]->SetModel("cube.obj");
             // ライティング有効化
@@ -55,36 +58,38 @@ void GameCamera::Draw() {
 void GameCamera::move() {
     // キー入力でマップのインデックスを変更
     if (Input::GetInstans()->TriggerKey(DIK_W)) {
-        if (yIndex > 0) { // 範囲チェック
+        // マップチップ内に動くよう制限
+        if (yIndex > 1) {
             yIndex--;
         }
     }
     if (Input::GetInstans()->TriggerKey(DIK_S)) {
-        if (yIndex < map_->GetMapWidth() - 1) { // 範囲チェック
+        // マップチップ内に動くよう制限
+        if (yIndex < map_->GetMapHeight() - kRenderHeight) {
             yIndex++;
         }
     }
     if (Input::GetInstans()->TriggerKey(DIK_A)) {
-        if (xIndex > 0) { // 範囲チェック
+        // マップチップ内に動くよう制限
+        if (xIndex > 0) {
             xIndex--;
         }
     }
     if (Input::GetInstans()->TriggerKey(DIK_D)) {
-        if (xIndex < map_->GetMapWidth() - 1) { // 範囲チェック
+        // マップチップ内に動くよう制限
+        if (xIndex < map_->GetMapWidth() - kRenderWidth) {
             xIndex++;
         }
     }
 
     // 新しいマップチップの位置を取得
-    Vector3 newPos = map_->GetMapChipPostionByIndex(xIndex, yIndex);
-
-    // gamecameras_ のすべてのオブジェクトを移動
+    position = map_->GetMapChipPostionByIndex(xIndex, yIndex);
+    // 各カメラの位置を更新
     for (uint32_t y = 0; y < kRenderHeight; ++y) {
         for (uint32_t x = 0; x < kRenderWidth; ++x) {
-            uint32_t index = y * kRenderWidth + x; // 2D を 1D インデックスに変換
-            Vector3 offset(x * 1.0f, y * 1.0f, 0.0f);  // x, y ごとにずらす
-            Vector3 adjustedPos = newPos + offset; // ずらした位置を設定
-            // カメラに新しい位置を設定
+            uint32_t index = y * kRenderWidth + x;
+            Vector3 offset(x * sixe.x, y * sixe.y, sixe.z);
+            Vector3 adjustedPos = position + offset;
             gamecameras_[index]->SetTranslate(adjustedPos);
         }
     }

@@ -46,6 +46,10 @@ private:
 	Map* map_;
 	// ゲームカメラ
 	std::vector<std::unique_ptr<Object3D>> gamecameras_;
+	// スタート開始番号
 	uint32_t xIndex = 0;
 	uint32_t yIndex = 0;
+	// 座標
+	Vector3 position;
+	Vector3 sixe;
 };
