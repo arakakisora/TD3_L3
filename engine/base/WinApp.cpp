@@ -1,4 +1,6 @@
 #include "WinApp.h"
+#ifdef _DEBUG
+#endif // _DEBUG
 #include "imgui.h"
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"

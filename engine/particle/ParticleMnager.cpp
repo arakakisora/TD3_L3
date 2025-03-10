@@ -4,8 +4,9 @@
 #include "CameraManager.h"
 #include <MyMath.h>
 #include <numbers>
+#ifdef _DEBUG
 #include <imgui.h>
-
+#endif // _DEBUG
 
 //シングルトンインスタンスの取得
 
