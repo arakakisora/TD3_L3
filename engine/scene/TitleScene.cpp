@@ -4,8 +4,9 @@
 #include "Input.h"
 #include "SceneManager.h"
 #include "ImGuiManager.h"
+#ifdef _DEBUG
 #include <imgui.h>
-
+#endif // _DEBUG
 
 void TitleScene::Initialize()
 {
@@ -26,7 +27,7 @@ void TitleScene::Update()
 		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		
 	}
-
+#ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Text("titleScene %d");
@@ -38,6 +39,7 @@ void TitleScene::Update()
 
 
 	}
+#endif // _DEBUG
 
 }
 

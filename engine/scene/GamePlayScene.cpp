@@ -3,7 +3,9 @@
 #include "Object3DCommon.h"
 #include "SpriteCommon.h"
 #include "ImGuiManager.h"
+#ifdef _DEBUG
 #include "imgui.h"
+#endif // _DEBUG
 #include "Input.h"
 #include "TitleScene.h"
 #include "CameraManager.h"
