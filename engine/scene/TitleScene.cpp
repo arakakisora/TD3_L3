@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "ImGuiManager.h"
 #include "CameraManager.h"
+#include "MyMath.h"
 #include <imgui.h>
 
 
@@ -23,7 +24,6 @@ void TitleScene::Initialize()
 
 	// デフォルトカメラを設定
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
-	
 }
 
 void TitleScene::Finalize()
@@ -38,12 +38,22 @@ void TitleScene::Update()
 	//カメラの更新
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
-	if (Input::GetInstans()->TriggerKey(DIK_SPACE)) {
+	if (Input::GetInstans()->TriggerKey(DIK_SPACE)) {//taintAimibia
 
-		
+		//シーン遷移フラグをオン
+		isSceneChange_ = true;
+
 		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		
 	}
+
+    //シーン遷移演出
+	if (isSceneChange_) {
+		int ai;
+		int patocon;
+		
+	}
+
 
 	if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -52,9 +62,7 @@ void TitleScene::Update()
 		{
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		}
-		
-
-
+	
 	}
 
 }
@@ -66,5 +74,4 @@ void TitleScene::Draw()
 
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
-
 }

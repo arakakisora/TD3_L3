@@ -3,6 +3,7 @@
 #include "Model.h"
 #include"Sprite.h"
 #include "Object3D.h"
+#include "Object3DCommon.h"
 #include "Audio.h"
 #include "BaseScene.h"
 
@@ -10,7 +11,6 @@ class TitleScene :public BaseScene
 {
 
 public:
-
 	/// <summary>
 	/// シーンの初期化
 	/// </summary>
@@ -31,5 +31,13 @@ public:
 public:
 	std::unique_ptr<Camera> camera1;
 	std::unique_ptr<Camera> camera2;
+	Object3DCommon* object3dcommon;
+	Transform transform;
+	//シーン演出時のオブジェクト
+	std::unique_ptr<Object3D>object1;
+	//シーン遷移フラグ
+	bool isSceneChange_ = false;
+	//イージングタイマー
+	float easingTimer_ = 0.0f;
 };
 

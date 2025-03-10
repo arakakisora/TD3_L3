@@ -26,7 +26,6 @@ void GamePlayScene::Initialize()
 	// デフォルトカメラを設定
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
 
-
 	//モデルの読み込み
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
@@ -43,7 +42,6 @@ void GamePlayScene::Initialize()
 
 	map = new Map();
 	map->Initialize();
-
 }
 
 void GamePlayScene::Finalize()
@@ -91,7 +89,6 @@ void GamePlayScene::Update()
 			CameraManager::GetInstans()->GetActiveCamera()->SetRotate(cameraTransform.rotate);
 		}
 
-
 	}
 
 	Transform playerTransform = player->GetPosition();
@@ -112,7 +109,6 @@ void GamePlayScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
-
 	//プレイヤー
 	player->Draw();
 
@@ -128,7 +124,6 @@ void GamePlayScene::Draw()
 #pragma region スプライト描画
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
-
 
 #pragma endregion
 }

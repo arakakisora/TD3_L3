@@ -1,11 +1,6 @@
 #include "PauseMenu.h"
+#include "MyMath.h"
 #include <SceneManager.h>
-
-double easeInOutCirc(double x) {
-	return (x < 0.5)
-		? (1 - std::sqrt(1 - std::pow(2 * x, 2))) / 2
-		: (std::sqrt(1 - std::pow(-2 * x + 2, 2)) + 1) / 2;
-}
 
 //初期化
 void PauseMenu::Initialize(Object3DCommon* object3dcommon) {
@@ -70,7 +65,7 @@ void PauseMenu::Update() {
 
 	//////ポーズ画面//////
 	if (isPaused_) {
-		float easedValue = float(easeInOutCirc(easeTimer_));
+		float easedValue = float(MyMath::easeInOutCirc(easeTimer_));
 		transform.translate = { 0.0f,0.0f,0.0f };
 		transform.translate.z = 5.0f + (-6.0f * easedValue);
 
@@ -160,7 +155,7 @@ void PauseMenu::Update() {
 	}
 
 	if (isOperation_) {
-		float operationEasedValue = float(easeInOutCirc(easeTimer2_));
+		float operationEasedValue = float(MyMath::easeInOutCirc(easeTimer2_));
 		Transform operationTransform;
 		operationTransform.translate = { 0.0f,0.0f,6.0f + (-8.0f * operationEasedValue) };
 

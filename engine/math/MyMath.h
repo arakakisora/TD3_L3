@@ -11,9 +11,11 @@
 #include <vector>
 #include <string>
 
-
-
 namespace MyMath {
+	//イージング
+	double easeInOutCirc(double x);
+	double easeOutExpo(double x);
+
 	//回転
 	Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 	//拡大

@@ -1,6 +1,16 @@
 #include "MyMath.h"
 
+//イージング
+double MyMath::easeInOutCirc(double x) {
+	return (x < 0.5)
+		? (1 - std::sqrt(1 - std::pow(2 * x, 2))) / 2
+		: (std::sqrt(1 - std::pow(-2 * x + 2, 2)) + 1) / 2;
+}
 
+
+double MyMath::easeOutExpo(double x) {
+	return(x == 1.0) ? 1.0 : 1.0 - std::pow(2.0, -10.0 * x);
+}
 
 Matrix4x4 MyMath::MakeTranslateMatrix(const Vector3& translate)
 

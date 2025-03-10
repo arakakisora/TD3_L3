@@ -19,7 +19,6 @@
 class GamePlayScene :public BaseScene
 {
 public:
-
 	/// <summary>
 	/// シーンの初期化
 	/// </summary>
@@ -36,7 +35,6 @@ public:
 	/// シーンの描画
 	/// </summary>
 	void Draw()override;
-
 
 private:
 	std::unique_ptr<Camera> camera1;
