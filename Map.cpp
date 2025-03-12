@@ -3,9 +3,10 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include <fstream>
 #include <map>
 #include <sstream>
+
+#include "Object3DCommon.h"
 
 namespace {
 
@@ -15,6 +16,94 @@ namespace {
 		
 	};
 
+}
+
+void Map::Initialize()
+{
+	GenerateObject3D();
+
+}
+
+void Map::Finalize()
+{
+
+	//マップの更新
+	for (std::vector<Object3D*>& objext3dLine : blockobject3D)
+	{
+		for (Object3D* obj : objext3dLine)
+		{
+			delete obj;
+		}
+	}
+	blockobject3D.clear();
+
+
+}
+
+void Map::Update()
+{
+
+	//3Dオブジェクトの更新
+	for (std::vector<Object3D*>& objext3dLine : blockobject3D)
+	{
+		for (Object3D* obj : objext3dLine)
+		{
+			if (!obj)
+				continue;
+			obj->Update();
+		}
+	}
+
+
+}
+
+void Map::Draw()
+{
+
+	for (std::vector<Object3D*>& objext3dLine : blockobject3D)
+	{
+		for (Object3D* obj : objext3dLine)
+		{
+			if (!obj) {
+				continue;
+			}
+			obj->Draw();
+		}
+	}
+
+}
+
+void Map::GenerateObject3D()
+{
+	// 要素数
+	uint32_t numBlokVirtical = this->GetNumBlockVirtical();     // 縦
+	uint32_t numBlokHorizontal = this->GetNumBlockHorizontal(); // 横
+
+
+	blockobject3D.resize(numBlokVirtical);
+
+	for (uint32_t i = 0; i < numBlokVirtical; ++i)
+	{
+		blockobject3D[i].resize(numBlokHorizontal);
+
+	}
+	// キューブ生成
+	for (uint32_t i = 0; i < numBlokVirtical; ++i) {
+		for (uint32_t j = 0; j < numBlokHorizontal; ++j) {
+
+			if (this->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+
+
+				Object3D* object3D_ = new Object3D();
+				object3D_->Initialize(Object3DCommon::GetInstance());
+				object3D_->SetModel("cube.obj");
+				blockobject3D[i][j] = object3D_;
+				blockobject3D[i][j]->SetTranslate(this->GetMapChipPostionByIndex(j, i));
+
+
+			}
+		}
+	}
 }
 
 void Map::ResetMapChipData()

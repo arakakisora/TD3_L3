@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include "MyMath.h"
+#include "Object3D.h"
 
 enum class MapChipType {
 
@@ -42,6 +43,17 @@ class Map
 public:
 public:
 
+	void Initialize();
+
+	void Finalize();
+	
+	void Update();
+
+	void Draw();
+
+	/// ブロックの生成
+	void GenerateObject3D();
+
 	void ResetMapChipData();
 	void LoadMapChipCsv(const std::string& filePath);
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);//縦横のインデックスからマップチップの種類を取得する関数
@@ -62,35 +74,10 @@ private:
 	static inline const uint32_t kNumBlockHorizontal = 100;
 	MapChipData mapChipData_;
 
-	
+	std::vector<std::vector<Object3D*>> blockobject3D;
 	
 public:
-	//// getter
-	//Vector3 GetBlockPosition(int x, int y);
-	//const vector<vector<int>>& GetMapData() const { return mapData; }
-	//const vector<vector<Block>>& GetMapBlock() const { return mapBlock; }
-	//size_t GetMapWidth() const { return mapWidth; }
-	//size_t GetMapHeight() const { return mapHeight; }
-	//Block* GetBlock(int x, int y) {
-	//	if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) {
-	//		return &mapBlock[mapHeight - 1 - y][x];
-	//	}
-	//	return nullptr;
-	//}
-	//// setter
-	//void SetMapData(int x, int y, int value)
-	//{
-	//	// 範囲チェック
-	//	if (y >= 0 && y < mapHeight && x >= 0 && x < mapWidth) { // ここは変更なし
-	//		// 既存ブロックのリソース解放
-	//		mapBlock[y][x].Finalize();
-	//		// mapDataの更新
-	//		mapData[y][x] = value;  // マップデータを更新
-	//		// mapBlockの見た目を更新
-	//		Vector3 blockPosition = GetBlockPosition(x, y);  // x と y の順番を修正
-	//		mapBlock[y][x].Initialize(value, blockPosition);  // ブロックを再初期化
-	//	}
-	//}
+	
 
 };
 
