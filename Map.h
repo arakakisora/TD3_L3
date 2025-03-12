@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include "MyMath.h"
+#include "Object3D.h"
 
 enum class MapChipType {
 
@@ -42,6 +43,17 @@ class Map
 public:
 public:
 
+	void Initialize();
+
+	void Finalize();
+	
+	void Update();
+
+	void Draw();
+
+	/// ブロックの生成
+	void GenerateObject3D();
+
 	void ResetMapChipData();
 	void LoadMapChipCsv(const std::string& filePath);
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);//縦横のインデックスからマップチップの種類を取得する関数
@@ -62,12 +74,13 @@ private:
 	static inline const uint32_t kNumBlockHorizontal = 100;
 	MapChipData mapChipData_;
 
+	std::vector<std::vector<Object3D*>> blockobject3D;
 	
-	
-public:
+
 	// getter
 	uint32_t GetMapWidth() const { return kNumBlockHorizontal; }
 	uint32_t GetMapHeight() const { return kNumBlockVirtical; }
+
 
 	void SetMapData(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType);
 

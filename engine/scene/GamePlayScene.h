@@ -37,8 +37,7 @@ public:
 	/// </summary>
 	void Draw()override;
 
-	/// ブロックの生成
-	void GenerateObject3D();
+	
 
 
 private:
@@ -50,7 +49,7 @@ private:
 
 
 	Map* map=nullptr;
-	std::vector<std::vector<Object3D*>> blockobject3D;
+	
 
 	// ゲームカメラ
 	GameCamera* gameCamera_;

@@ -38,7 +38,8 @@ void GamePlayScene::Initialize()
 
 	map = new Map;
 	map->LoadMapChipCsv("MapData/blocks.csv");
-	GenerateObject3D();
+	map->Initialize();
+	
 
 	
 
@@ -71,16 +72,8 @@ void GamePlayScene::Finalize()
 	CameraManager::GetInstans()->RemoveCamera("subcam");
 	CameraManager::GetInstans()->Finalize();
 
-	//マップの更新
-	for (std::vector<Object3D*>& objext3dLine : blockobject3D)
-	{
-		for (Object3D* obj : objext3dLine)
-		{
-			delete obj;
-		}
-	}
-	blockobject3D.clear();
-
+	
+	map->Finalize();
 	delete map;
 
 	delete object3DPlayer;
@@ -93,6 +86,7 @@ void GamePlayScene::Update()
 {
 	//カメラの更新
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
+	map->Update();
 
 
 	////プレイヤーの更新
@@ -123,20 +117,11 @@ void GamePlayScene::Update()
 	
 #endif // _DEBUG
 	
+
 	// ゲームカメラ更新処理
 	gameCamera_->Update();
 	gameCamera_->GameCameraphoto(blockobject3D);
 	
-	//3Dオブジェクトの更新
-	for (std::vector<Object3D*>& objext3dLine : blockobject3D)
-	{
-		for (Object3D* obj : objext3dLine)
-		{
-			if (!obj)
-				continue;
-			obj->Update();
-		}
-	}
 	
 }
 
@@ -147,20 +132,12 @@ void GamePlayScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
+	map->Draw();
 
 	////プレイヤー
 	player->Draw();
 
-	for (std::vector<Object3D*>& objext3dLine : blockobject3D)
-	{
-		for (Object3D* obj : objext3dLine)
-		{
-			if (!obj) {
-				continue;
-			}
-			obj->Draw();
-		}
-	}
+	
 	
 
 	// ゲームカメラ
@@ -178,41 +155,7 @@ void GamePlayScene::Draw()
 #pragma endregion
 }
 
-void GamePlayScene::GenerateObject3D()
-{
-	// 要素数
-	uint32_t numBlokVirtical = map->GetNumBlockVirtical();     // 縦
-	uint32_t numBlokHorizontal = map->GetNumBlockHorizontal(); // 横
 
-
-	blockobject3D.resize(numBlokVirtical);
-
-	for (uint32_t i = 0; i < numBlokVirtical; ++i)
-	{
-		blockobject3D[i].resize(numBlokHorizontal);
-
-	}
-	// キューブ生成
-	for (uint32_t i = 0; i < numBlokVirtical; ++i) {
-		for (uint32_t j = 0; j < numBlokHorizontal; ++j) {
-
-			if (map->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
-
-
-				Object3D* object3D_ = new Object3D();
-				object3D_->Initialize(Object3DCommon::GetInstance());
-				object3D_->SetModel("cube.obj");
-				blockobject3D[i][j] = object3D_;
-				blockobject3D[i][j]->SetTranslate(map->GetMapChipPostionByIndex(j, i));
-
-
-			}
-		}
-	}
-
-
-
-}
 
 
 
