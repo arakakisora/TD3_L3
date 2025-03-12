@@ -4,9 +4,9 @@
 #include <cassert>
 #include "Input.h"
 #include "Logger.h"
-#ifdef DEBUG_
+
 #include <imgui.h>
-#endif // DEBUG_
+
 #include "Object3DCommon.h"
 
 
@@ -31,7 +31,7 @@ Player::~Player()
 
 void Player::Update() {
 
-#ifdef DEBUG_
+#ifdef _DEBUG
 
 	if (ImGui::CollapsingHeader("Player", ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -52,9 +52,9 @@ void Player::Update() {
 	}
 
 	//Cキーを押してカメラモードへ
-	if (Input::GetInstans()->TriggerKey(DIK_C) && !CamerMode) {
+	if (Input::GetInstance()->TriggerKey(DIK_C) && !CamerMode) {
 		CamerMode = true;
-	} else if (Input::GetInstans()->TriggerKey(DIK_C) && CamerMode)
+	} else if (Input::GetInstance()->TriggerKey(DIK_C) && CamerMode)
 	{
 		CamerMode = false;
 	}
@@ -86,12 +86,14 @@ void Player::Draw() {
 void Player::PrayerMove() {
 
 	if (onGround_) {
+#ifdef _DEBUG
+
 		// 移動入力
 		// 左右移動操作
-		if (Input::GetInstans()->PushKey(DIK_RIGHT) || Input::GetInstans()->PushKey(DIK_LEFT)) {
+		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 			// 左右加速
 			Vector3 accceleration = {};
-			if (Input::GetInstans()->PushKey(DIK_RIGHT)) {
+			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
 
 				if (velocity_.x < 0.0f) {
 					velocity_.x *= (1.0f - kAttenuation);
@@ -100,7 +102,45 @@ void Player::PrayerMove() {
 
 				accceleration.x += kAccleration;
 
-			} else if (Input::GetInstans()->PushKey(DIK_LEFT)) {
+			} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+
+				if (velocity_.x > 0.0f) {
+					velocity_.x *= (1.0f - kAttenuation);
+				}
+
+				accceleration.x -= kAccleration;
+			}
+			velocity_.x += accceleration.x;
+			velocity_.y += accceleration.y;
+			velocity_.z += accceleration.z;
+
+			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
+
+		} else {
+
+			velocity_.x *= (1.0f - kAttenuation);
+			velocity_.y *= (1.0f - kAttenuation);
+			velocity_.z *= (1.0f - kAttenuation);
+		}
+#endif // _DEBUG
+
+
+		//コントローラー操作
+		// 移動入力
+		// 左右移動操作
+		if (Input::GetInstance()->GetGamePadStickX() > 0|| Input::GetInstance()->GetGamePadStickX() < 0) {
+			// 左右加速
+			Vector3 accceleration = {};
+			if (Input::GetInstance()->GetGamePadStickX()>0) {
+
+				if (velocity_.x < 0.0f) {
+					velocity_.x *= (1.0f - kAttenuation);
+				}
+
+
+				accceleration.x += kAccleration;
+
+			} else if (Input::GetInstance()->GetGamePadStickX() < 0) {
 
 				if (velocity_.x > 0.0f) {
 					velocity_.x *= (1.0f - kAttenuation);
@@ -121,7 +161,8 @@ void Player::PrayerMove() {
 			velocity_.z *= (1.0f - kAttenuation);
 		}
 
-		if (Input::GetInstans()->PushKey(DIK_UP)) {
+
+		if (Input::GetInstance()->PushKey(DIK_UP)) {
 
 			velocity_.x += 0;
 			velocity_.y += kJampAcceleration;
