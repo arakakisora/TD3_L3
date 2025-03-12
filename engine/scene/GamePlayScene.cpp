@@ -120,7 +120,7 @@ void GamePlayScene::Update()
 
 	// ゲームカメラ更新処理
 	gameCamera_->Update();
-	gameCamera_->GameCameraphoto(blockobject3D);
+	gameCamera_->GameCameraphoto(map->GetBlockObject3D());
 	
 	
 }

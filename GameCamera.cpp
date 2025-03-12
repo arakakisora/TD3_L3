@@ -25,7 +25,7 @@ void GameCamera::Initialize(Map* map) {
             // モデル設定
             gamecameras_[index]->SetModel("cube.obj");
             // ライティング有効化
-            gamecameras_[index]->SetLighting(true);
+            gamecameras_[index]->SetLighting(false);
         }
     }
 }
