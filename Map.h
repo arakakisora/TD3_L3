@@ -76,8 +76,12 @@ private:
 
 	std::vector<std::vector<Object3D*>> blockobject3D;
 	
-public:
-	
+
+	// getter
+	uint32_t GetMapWidth() const { return kNumBlockHorizontal; }
+	uint32_t GetMapHeight() const { return kNumBlockVirtical; }
+
+
+	void SetMapData(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType);
 
 };
-

@@ -54,7 +54,7 @@
     <LibraryPath>$(ProjectDir)Lib;$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)..\generated\obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\generated\outputs\$(Configuration)\</OutDir>
-    <IncludePath>$(IncludePath);$(SolutionDir)DirectXTex;$(SolutionDir)imgui</IncludePath>
+    <IncludePath>$(IncludePath);$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(SolutionDir)externals\imgui</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -224,9 +224,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\base\GraphicsPipeline.h" />
     <ClInclude Include="engine\particle\ParticleEmitter.h" />
     <ClInclude Include="engine\particle\ParticleMnager.h" />
-
     <ClInclude Include="GameCamera.h" />
-
     <ClInclude Include="Player.h" />
     <ClInclude Include="WorldTransform.h" />
     <ClInclude Include="Map.h" />
