@@ -8,7 +8,7 @@ void GameCamera::Initialize(Map* map) {
     // 開始番号を設定
     xIndex = 7;
     yIndex = 16;
-    sixe = { 1.0f,1.0f,-1.0f };
+    size = { 1.0f,1.0f,-1.0f };
     // ゲームカメラのオブジェクト数をレンダリング範囲分だけ確保
     gamecameras_.resize(kRenderWidth * kRenderHeight);
     // 各オブジェクトを生成 & 初期化
@@ -21,7 +21,7 @@ void GameCamera::Initialize(Map* map) {
             position = map_->GetMapChipPostionByIndex(xIndex + x, yIndex + y);
             gamecameras_[index]->SetTranslate(position);
             // スケール設定
-            gamecameras_[index]->SetScale(sixe);
+            gamecameras_[index]->SetScale(size);
             // モデル設定
             gamecameras_[index]->SetModel("cube.obj");
             // ライティング有効化
@@ -88,7 +88,7 @@ void GameCamera::move() {
     for (uint32_t y = 0; y < kRenderHeight; ++y) {
         for (uint32_t x = 0; x < kRenderWidth; ++x) {
             uint32_t index = y * kRenderWidth + x;
-            Vector3 offset(x * sixe.x, y * sixe.y, sixe.z);
+            Vector3 offset(x * size.x, y * size.y, size.z);
             Vector3 adjustedPos = position + offset;
             gamecameras_[index]->SetTranslate(adjustedPos);
         }

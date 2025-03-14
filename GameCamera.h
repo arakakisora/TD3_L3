@@ -51,5 +51,5 @@ private:
 	uint32_t yIndex = 0;
 	// 座標
 	Vector3 position;
-	Vector3 sixe;
+	Vector3 size;
 };
