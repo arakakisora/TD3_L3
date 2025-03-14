@@ -10,10 +10,14 @@
 
 enum class MapChipType {
 
-	kBlank, // 空白
-	kBlock, // ブロック
-	
-
+	kBlank,				// 空白				No.0
+	kPlayer,			// Player初期位置		No.1
+	kBlock,				// コピー不可			No.2
+	kCopyBlock,			// コピー可能			No.3
+	kGoalUp,			// ゴール上			No.4
+	kGoalDown,			// ゴール下			No.5
+	kFallBlock,			// 重力の影響受		No.6
+	kFixedTimeBlock,	// 貼り付け後一定時間有	No.7
 };
 
 
