@@ -86,6 +86,11 @@ void GamePlayScene::Update()
 {
 	//カメラの更新
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
+	
+	// ゲームカメラ更新処理
+	gameCamera_->Update();
+	gameCamera_->GameCameraphoto(map->GetBlockObject3D());
+
 	map->Update();
 
 
@@ -118,9 +123,7 @@ void GamePlayScene::Update()
 #endif // _DEBUG
 	
 
-	// ゲームカメラ更新処理
-	gameCamera_->Update();
-	gameCamera_->GameCameraphoto(map->GetBlockObject3D());
+
 	
 	
 }
@@ -132,7 +135,8 @@ void GamePlayScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
-	map->Draw();
+	// ゲームカメラ
+	gameCamera_->Draw();
 
 	////プレイヤー
 	player->Draw();
@@ -140,8 +144,7 @@ void GamePlayScene::Draw()
 	
 	
 
-	// ゲームカメラ
-	gameCamera_->Draw();
+	map->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 
