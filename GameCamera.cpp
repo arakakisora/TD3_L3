@@ -59,6 +59,10 @@ void GameCamera::move() {
     // キー入力でマップのインデックスを変更
     if (Input::GetInstance()->TriggerKey(DIK_W)) {
         // マップチップ内に動くよう制限
+
+
+
+
         if (yIndex > 1) {
             yIndex--;
         }
