@@ -57,25 +57,29 @@ void GameCamera::Draw() {
 
 void GameCamera::move() {
     // キー入力でマップのインデックスを変更
-    if (Input::GetInstans()->TriggerKey(DIK_W)) {
+    if (Input::GetInstance()->TriggerKey(DIK_W)) {
         // マップチップ内に動くよう制限
+
+
+
+
         if (yIndex > 1) {
             yIndex--;
         }
     }
-    if (Input::GetInstans()->TriggerKey(DIK_S)) {
+    if (Input::GetInstance()->TriggerKey(DIK_S)) {
         // マップチップ内に動くよう制限
         if (yIndex < map_->GetMapHeight() - kRenderHeight) {
             yIndex++;
         }
     }
-    if (Input::GetInstans()->TriggerKey(DIK_A)) {
+    if (Input::GetInstance()->TriggerKey(DIK_A)) {
         // マップチップ内に動くよう制限
         if (xIndex > 0) {
             xIndex--;
         }
     }
-    if (Input::GetInstans()->TriggerKey(DIK_D)) {
+    if (Input::GetInstance()->TriggerKey(DIK_D)) {
         // マップチップ内に動くよう制限
         if (xIndex < map_->GetMapWidth() - kRenderWidth) {
             xIndex++;
@@ -106,7 +110,7 @@ void GameCamera::GameCamertakeaphoto() {
         MapChipType mapChipType = map_->GetMapChipTypeByIndex(currentXIndex, currentYIndex);
 
         // SPACEキーでの撮影処理
-        if (Input::GetInstans()->TriggerKey(DIK_SPACE)) {
+        if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
             // 現在位置に基づいてモデルを変更
             switch (mapChipType) {
             case MapChipType::kBlank:
@@ -133,7 +137,7 @@ void GameCamera::GameCameraphoto(std::vector<std::vector<Object3D*>>& blockobjec
         MapChipType mapChipType = map_->GetMapChipTypeByIndex(currentXIndex, currentYIndex);
 
         // ENTERキーでの貼り付け
-        if (Input::GetInstans()->TriggerKey(DIK_RETURN)) {
+        if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
             // 現在のカメラモデルを取得
             const std::string& currentModel = camera->GetModel();
 

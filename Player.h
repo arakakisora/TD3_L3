@@ -53,7 +53,7 @@ public:
 	
 
 
-	
+	void CalculateCollisionBounds(CollisionMapInfo& info);
 	
 	// 当たり判定
 	void CollisionMapInfoTop(CollisionMapInfo& info);// 天井衝突
@@ -63,7 +63,7 @@ public:
 
 	void PlayerCollisionMove(const CollisionMapInfo& inffo);// プレイヤー衝突移動
 	void CeilingCollisionMove(const CollisionMapInfo& info);// 天井衝突移動
-	void OnGroundSwitching(const CollisionMapInfo& info);// 着地判定
+	void OnGroundSwitching( CollisionMapInfo& info);// 着地判定
 	void HitWallCollisionMove(const CollisionMapInfo& info);// 壁衝突移動
 
 
@@ -104,23 +104,23 @@ private:
 
 	
 	Vector3 velocity_ = {};                          // 速度
-	static inline const float kAccleration = 0.01f;  // 定数加速度
+	static inline const float kAccleration = 0.05f;  // 定数加速度
 	static inline const float kAttenuation = 0.2f;   // 速度減衰率
 	static inline const float kLimitRunSpeed = 1.0f; // 最大速度制限
 	
 	// ジャンプ
 	bool onGround_ = true;                                 // 接点状態フラグ
 	static inline const float kGravityAccleration = 0.05f; // 重力加速度
-	static inline const float kLimitFallSpeed = 1.0f;      // 最大落下速度
+	static inline const float kLimitFallSpeed = 2.0f;      // 最大落下速度
 	static inline const float kJampAcceleration = 0.5f;    // ジャンプ初速
 	// 当たり判定
 	Map* mapChipFild_ = nullptr;
 	static inline const float kWidth = 0.8f;//当たり判定の幅
 	static inline const float kHeight = 0.8f;//当たり判定の高さ
-	static inline const float kBlank = 1.0;//当たり判定の余裕
+	static inline const float kBlank = 2.0;//当たり判定の余裕
 	static inline const float kAttenuationLanding = 0.1f;//着地時の減衰率
 	static inline const float kCollisionsmallnumber = 0.1f;//当たり判定の余裕
-	static inline const float kAttenuationWall = 0.1f;//壁に当たった時の減衰率
+	static inline const float kAttenuationWall = 1.0f;//壁に当たった時の減衰率
 
 	//死んだ
 	bool isDead_ = false;
