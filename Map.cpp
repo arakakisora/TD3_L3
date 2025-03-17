@@ -12,10 +12,22 @@ namespace {
 
 	std::map<std::string, MapChipType> mapChipTable = {
 		{"0", MapChipType::kBlank},
-		{"1", MapChipType::kBlock},
-		
+		{"1", MapChipType::kPlayer},
+		{"2", MapChipType::kNCopyBlock},
+		{"3",MapChipType::kCopyBlock},
+		{"4", MapChipType::kGoalUp},
+		{"5", MapChipType::kGoalDown},
+		{"6", MapChipType::kFallBlock}
+		{"7", MapChipType::kFixedTimeBlock},
 	};
-
+	/*０：空
+１：プレイヤーの初期位置
+２：コピー不可能ブロック
+３：コピー可能ブロック
+４：ゴール（上）
+５：ゴール（下）
+６：重力の影響を受けるブロック（FallBlock）
+７：一定時間経過したら消えるブロック（FixedTime）*/
 }
 
 void Map::Initialize()
