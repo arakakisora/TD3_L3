@@ -2,65 +2,68 @@
 #include "Object3D.h"
 #include "Object3DCommon.h"
 #include "ModelManager.h"
+
+
 Block::Block()
 {
 }
 
 Block::~Block()
 {
+	Finalize();
 }
 
-void Block::Initialize(const int mapID, const Vector3& position) {
-    this->mapID = mapID;
-    this->position = position; // 座標を設定
+void Block::Initialize(MapChipType type, const Vector3& position) {
+	this->type = type;
+	object3D = new Object3D();
+	object3D->Initialize(Object3DCommon::GetInstance());
+	object3D->SetTranslate(position);
 
-    // mapIDに応じて異なるオブジェクトを初期化
-    if (mapID == 0) {
-		//ModelManager::GetInstans()->LoadModel("cube.obj");
-  //      mapBlock0 = new Object3D();
-  //      mapBlock0->Initialize(Object3DCommon::GetInstance()); // 適切な引数を渡す
-  //      mapBlock0->SetTranslate(position); // 座標を設定
-		//mapBlock0->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-		//mapBlock0->SetModel("cube.obj");
-		//mapBlock0->SetLighting(true);
-    } else if (mapID == 1) {
-        ModelManager::GetInstans()->LoadModel("cube.obj");
-        mapBlock1 = new Object3D();
-        mapBlock1->Initialize(Object3DCommon::GetInstance()); // 適切な引数を渡す
-        mapBlock1->SetTranslate(position); // 座標を設定
-		mapBlock1->SetScale(Vector3(1.0f, 1.0f, 1.0f));
-		mapBlock1->SetModel("cube.obj");
-		mapBlock1->SetLighting(true);
-    }
-}
-void Block::Update()
-{
-    // mapIDに応じて異なるオブジェクトを更新
-    if (mapID == 0 && mapBlock0) {
-      //  mapBlock0->Update();
-    } else if (mapID == 1 && mapBlock1) {
-        mapBlock1->Update();
-    }
+	switch ((type))
+	{
+	case MapChipType::kNCopyBlock:		// コピー不可能 No.2
+		// モデル指定
+		object3D->SetModel("axis.obj");
+		
+		break;
+
+	case MapChipType::kCopyBlock:		// コピー可能 No.3
+		// モデル指定
+		object3D->SetModel("cube.obj");
+
+		break;
+
+	default:
+		break;
+	}
 }
 
-void Block::Draw()
-{
-    // mapIDに応じて異なるオブジェクトを描画
-    if (mapID == 0 && mapBlock0) {
-       // mapBlock0->Draw();
-    } else if (mapID == 1 && mapBlock1) {
-        mapBlock1->Draw();
-    }
+void Block::Update() {
+	if (MapChipType::kCopyBlock == type) {
+		object3D->Update();
+	} else if (MapChipType::kNCopyBlock == type) {
+		object3D->Update();
+	}
 }
 
-void Block::Finalize()
-{
-    // mapIDに応じて異なるオブジェクトを終了処理
-    if (mapID == 0 && mapBlock0) {
-       // delete mapBlock0;
-       // mapBlock0 = nullptr;
-    } else if (mapID == 1 && mapBlock1) {
-        delete mapBlock1;
-        mapBlock1 = nullptr;
-    }
+
+void Block::Draw() {
+	if (MapChipType::kCopyBlock == type) {
+		object3D->Draw();
+	} else if (MapChipType::kNCopyBlock == type) {
+		object3D->Draw();
+	}
+}
+
+void Block::Finalize() {
+	if (object3D) {
+		delete object3D;
+		object3D = nullptr;
+	}
+}
+
+Block* Block::CreateBlock(MapChipType type, const Vector3& position) {
+	Block* block = new Block();
+	block->Initialize(type, position);
+	return block;
 }
