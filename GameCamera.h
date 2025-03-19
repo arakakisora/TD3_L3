@@ -41,7 +41,7 @@ public:
 	void move();
 
 	void GameCamertakeaphoto();
-	void GameCameraphoto(vector<std::vector<Object3D*>>& blockobject3D);
+	void GameCameraphoto(vector<std::vector<Block*>>& blockobject3D);
 private:
 	Map* map_;
 	// ゲームカメラ

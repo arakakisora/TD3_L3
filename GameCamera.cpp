@@ -124,7 +124,7 @@ void GameCamera::GameCamertakeaphoto() {
     }
 }
 
-void GameCamera::GameCameraphoto(std::vector<std::vector<Object3D*>>& blockobject3D) {
+void GameCamera::GameCameraphoto(std::vector<std::vector<Block*>>& blockGrid) {
     for (auto& camera : gamecameras_) {
         // 現在のカメラ位置を取得
         Vector3 cameraPos = camera->GetTranslate();
@@ -141,30 +141,24 @@ void GameCamera::GameCameraphoto(std::vector<std::vector<Object3D*>>& blockobjec
             // 現在のカメラモデルを取得
             const std::string& currentModel = camera->GetModel();
 
-            // モデルに基づいてマップデータを変更
             if (currentModel == "axis.obj") {
                 // 空白（削除）
                 map_->SetMapData(currentXIndex, currentYIndex, MapChipType::kBlank);
 
-                // その位置にある Object3D のモデルを空白に変更
-                if (blockobject3D[currentYIndex][currentXIndex]) {
-                    delete blockobject3D[currentYIndex][currentXIndex]; // メモリ解放
-                    blockobject3D[currentYIndex][currentXIndex] = nullptr;
+                // その位置にある Block を削除
+                if (blockGrid[currentYIndex][currentXIndex]) {
+                    delete blockGrid[currentYIndex][currentXIndex]; // メモリ解放
+                    blockGrid[currentYIndex][currentXIndex] = nullptr;
                 }
             } else if (currentModel == "cube.obj") {
                 // ブロック（追加）
                 map_->SetMapData(currentXIndex, currentYIndex, MapChipType::kCopyBlock);
 
-                // その位置に Object3D が存在しない場合は生成
-                if (!blockobject3D[currentYIndex][currentXIndex]) {
-                    Object3D* newObject = new Object3D();
-                    newObject->Initialize(Object3DCommon::GetInstance());
-                    newObject->SetModel("cube.obj");
-                    newObject->SetTranslate(map_->GetMapChipPostionByIndex(currentXIndex, currentYIndex));
-                    blockobject3D[currentYIndex][currentXIndex] = newObject;
-                } else {
-                    // 既存のオブジェクトがあればモデルを更新
-                    blockobject3D[currentYIndex][currentXIndex]->SetModel("cube.obj");
+                // その位置に Block が存在しない場合は生成
+                if (!blockGrid[currentYIndex][currentXIndex]) {
+                    Block* newBlock = Block::CreateBlock(MapChipType::kCopyBlock,
+                        map_->GetMapChipPostionByIndex(currentXIndex, currentYIndex));
+                    blockGrid[currentYIndex][currentXIndex] = newBlock;
                 }
             }
         }
