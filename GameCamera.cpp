@@ -112,7 +112,7 @@ void GameCamera::GameCamertakeaphoto() {
             case MapChipType::kBlank:
                 camera->SetModel("axis.obj");
                 break;
-            case MapChipType::kBlock:
+            case MapChipType::kCopyBlock:
                 camera->SetModel("cube.obj");
                 break;
             }
@@ -149,7 +149,7 @@ void GameCamera::GameCameraphoto(std::vector<std::vector<Object3D*>>& blockobjec
                 }
             } else if (currentModel == "cube.obj") {
                 // ブロック（追加）
-                map_->SetMapData(currentXIndex, currentYIndex, MapChipType::kBlock);
+                map_->SetMapData(currentXIndex, currentYIndex, MapChipType::kCopyBlock);
 
                 // その位置に Object3D が存在しない場合は生成
                 if (!blockobject3D[currentYIndex][currentXIndex]) {

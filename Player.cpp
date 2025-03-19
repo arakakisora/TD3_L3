@@ -212,13 +212,13 @@ void Player::OnGroundSwitching(const CollisionMapInfo& info) {
 			IndexSet indexSet;
 			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom] + Vector3(0, -kCollisionsmallnumber, 0));
 			mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-			if (mapChipType == MapChipType::kBlock) {
+			if (mapChipType == MapChipType::kCopyBlock) {
 				hit = true;
 			}
 			// 右点の判定
 			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom] + Vector3(0, -kCollisionsmallnumber, 0));
 			mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-			if (mapChipType == MapChipType::kBlock) {
+			if (mapChipType == MapChipType::kCopyBlock) {
 				hit = true;
 			}
 
@@ -274,7 +274,7 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 	IndexSet indexSet;
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 	mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	}
 	// 右点の判定
@@ -282,7 +282,7 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 	mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	}
 	// hit
@@ -321,13 +321,13 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 	IndexSet indexSet;
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	}
 	// 右点の判定
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	}
 
@@ -367,7 +367,7 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 	IndexSet indexSet;
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightTop] + Vector3(+kCollisionsmallnumber, 0, 0));
 	mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	}
 
@@ -375,7 +375,7 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom] + Vector3(+kCollisionsmallnumber, 0, 0));
 	mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	}
 	// hit
@@ -415,7 +415,7 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 	IndexSet indexSet;
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop] + Vector3(-kCollisionsmallnumber, 0, 0));
 	mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	}
 
@@ -423,7 +423,7 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom] + Vector3(-kCollisionsmallnumber, 0, 0));
 	mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	}
 	// hit
