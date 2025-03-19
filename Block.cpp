@@ -38,6 +38,11 @@ void Block::Initialize(MapChipType type, const Vector3& position) {
 		object3D->SetModel("cube.obj");
 
 		break;
+	case MapChipType::kFallBlock:       // 落下ブロック
+		//モデル指定
+		object3D->SetModel("cube.obj");
+
+		break;
 
 	default:
 		break;
@@ -57,6 +62,8 @@ void Block::Update() {
 
 	} else if (MapChipType::kNCopyBlock == type) {
 		object3D->Update();
+	} else if (MapChipType::kFallBlock == type) {
+		object3D->Update();
 	}
 }
 
@@ -66,6 +73,8 @@ void Block::Draw() {
 	if (MapChipType::kCopyBlock == type) {
 		object3D->Draw();
 	} else if (MapChipType::kNCopyBlock == type) {
+		object3D->Draw();
+	} else if (MapChipType::kFallBlock == type) {
 		object3D->Draw();
 	}
 }

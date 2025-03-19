@@ -8,8 +8,6 @@
 
 #include "Object3DCommon.h"
 
-
-
 void Map::Initialize() {
     GenerateObject3D();
 }

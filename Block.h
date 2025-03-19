@@ -6,8 +6,8 @@
 #include <fstream>
 #include <sstream>
 
-
-
+class Map;
+struct MapChipData;
 
 enum class MapChipType {
 
@@ -57,7 +57,6 @@ public:
 	// 描画
 	void Draw();
 
-
 	// 終了処理
 	void Finalize();
 
@@ -69,7 +68,7 @@ private:
 	int mapID;
 	MapChipType type;
 	Object3D* object3D;
-
+	Map* map;
 
 	Vector3 position;
 
