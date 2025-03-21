@@ -11,7 +11,7 @@
 #include "CameraManager.h"
 #include "ParticleMnager.h"
 #include <Logger.h>
-
+ 
 void GamePlayScene::Initialize()
 {
 	//カメラの生成
@@ -28,7 +28,6 @@ void GamePlayScene::Initialize()
 	// デフォルトカメラを設定
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
 
-
 	//モデルの読み込み
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
@@ -39,9 +38,9 @@ void GamePlayScene::Initialize()
 	map = new Map;
 	map->LoadMapChipCsv("MapData/blocks.csv");
 	map->Initialize();
+	
 
-
-
+	
 
 
 
@@ -51,7 +50,7 @@ void GamePlayScene::Initialize()
 	Vector3 playerPostion = map->GetMapChipPostionByIndex(6, 10);
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 	object3DPlayer->SetModel("cube.obj");
-	object3DPlayer->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	object3DPlayer->SetScale(Vector3{1.0f,1.0f,1.0f });
 	player->SetMapChipField(map);
 	player->Initialize(object3DPlayer, playerPostion);
 	player->SetDeathHeight(0.0f);
@@ -59,9 +58,9 @@ void GamePlayScene::Initialize()
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
-
+	
 	// ゲームカメラの生成
-	gameCamera_ = new GameCamera();
+	gameCamera_ = new ObjectCamera();
 	gameCamera_->Initialize(map);
 
 }
@@ -72,7 +71,7 @@ void GamePlayScene::Finalize()
 	CameraManager::GetInstans()->RemoveCamera("subcam");
 	CameraManager::GetInstans()->Finalize();
 
-
+	
 	map->Finalize();
 	delete map;
 
@@ -86,10 +85,9 @@ void GamePlayScene::Update()
 {
 	//カメラの更新
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
-
+	
 	// ゲームカメラ更新処理
 	gameCamera_->Update();
-	gameCamera_->GameCameraphoto(map->GetBlockObject3D());
 
 	map->Update();
 
@@ -119,13 +117,13 @@ void GamePlayScene::Update()
 
 
 	}
-
+	
 #endif // _DEBUG
+	
 
 
-
-
-
+	
+	
 }
 
 void GamePlayScene::Draw()
@@ -141,8 +139,8 @@ void GamePlayScene::Draw()
 	////プレイヤー
 	player->Draw();
 
-
-
+	
+	
 
 	map->Draw();
 
@@ -153,7 +151,7 @@ void GamePlayScene::Draw()
 #pragma region スプライト描画
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
-
+	
 
 #pragma endregion
 }
