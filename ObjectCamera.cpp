@@ -59,62 +59,6 @@ void ObjectCamera::Update() {
             }
         }
     }
-    // ImGuiウィンドウの開始
-    ImGui::Begin("Model Map Editor");
-
-    // modelMapの各要素に対してUIを作成
-    for (auto& pair : mapChipTypemodelMap) {
-        // マップチップタイプとモデル名のペア
-        MapChipType mapChipType = pair.first;
-        std::string& modelName = pair.second;
-
-        // MapChipTypeに基づくラベル表示
-        const char* chipTypeLabel = nullptr;
-        switch (mapChipType) {
-        case MapChipType::kBlank: chipTypeLabel = "Blank"; break;
-        case MapChipType::kCopyBlock: chipTypeLabel = "CopyBlock"; break;
-            // 他のMapChipTypeに対応するラベルを追加
-        default: chipTypeLabel = "Unknown"; break;
-        }
-
-        // ドロップダウンリストを作成して、モデル名を選択できるようにする
-        std::vector<std::string> modelChoices = { "axis.obj", "cube.obj", "sphere.obj" }; // 例: モデルの選択肢
-        int selectedIndex = -1;
-
-        // 現在のモデル名のインデックスを選択肢から探す
-        for (int i = 0; i < modelChoices.size(); ++i) {
-            if (modelChoices[i] == modelName) {
-                selectedIndex = i;
-                break;
-            }
-        }
-
-        // ドロップダウンメニューを表示
-        if (ImGui::BeginCombo(chipTypeLabel, modelName.c_str())) {
-            for (int i = 0; i < modelChoices.size(); ++i) {
-                // 選択肢を表示
-                bool isSelected = (selectedIndex == i);
-                if (ImGui::Selectable(modelChoices[i].c_str(), isSelected)) {
-                    // モデルが選択されたときに、modelNameを更新
-                    modelName = modelChoices[i];
-                }
-
-                // 最初の選択肢を表示状態にする
-                if (isSelected) {
-                    ImGui::SetItemDefaultFocus();
-                }
-            }
-            ImGui::EndCombo();
-        }
-    }
-
-    // 変更を保存するボタン
-    if (ImGui::Button("Save Changes")) {
-        // モデルの変更を保存する処理（必要に応じて）
-        // 例えば、ゲームシーンに反映したり、ファイルに保存したり
-    }
-
-    ImGui::End();
 }
 
 void ObjectCamera::Draw() {
