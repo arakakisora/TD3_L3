@@ -71,6 +71,9 @@ void Block::Update() {
 		//下にブロックがあるか
 		if (belowIndex < map->GetNumBlockVirtical() &&
 			map->GetMapChipTypeByIndex(index.xIndex, belowIndex) == MapChipType::kBlank) {
+			if (!isFalling) {
+				map->SetMapData(index.xIndex, index.yIndex, MapChipType::kBlank);
+			}
 			isFalling = true;
 		}
 
@@ -79,12 +82,15 @@ void Block::Update() {
 			velocity += gravity; 
 			position.y -= velocity; 
 
+			IndexSet newIndex = map->GetMapChipIndexSetByPosition(position);
+
 			//下にブロックがあるか
 			if (belowIndex < map->GetNumBlockVirtical() &&
 				map->GetMapChipTypeByIndex(index.xIndex, belowIndex) != MapChipType::kBlank) {
 				isFalling = false;
 				velocity = 0.0f;
-				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y; // 位置補正
+				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
+				map->SetMapData(index.xIndex, index.yIndex, MapChipType::kFallBlock);
 			}
 
 			object3D->SetTranslate(position);
