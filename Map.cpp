@@ -151,3 +151,47 @@ void Map::SetMapData(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType) 
         mapChipData_.data[yIndex][xIndex] = mapChipType;
     }
 }
+
+void Map::GenerateObjectAt(uint32_t x, uint32_t y, MapChipType mapChipType) {
+    // 範囲チェック
+    if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
+        return; // 範囲外なら処理をしない
+    }
+
+    // 現在のマップチップのタイプを取得
+    MapChipType currentMapChipType = this->GetMapChipTypeByIndex(x, y);
+
+    // 現在のマップチップタイプと引数で渡された mapChipType が同じなら処理をスルー
+    if (currentMapChipType == mapChipType) {
+        return; // タイプが変わらない場合、処理をスルー
+    }
+
+    // オブジェクトがすでに存在している場合は削除
+    if (blockobject3D[y][x] != nullptr) {
+        delete blockobject3D[y][x];  // オブジェクトを削除
+        blockobject3D[y][x] = nullptr; // ポインタを nullptr に設定
+    }
+
+    // オブジェクト生成
+    Vector3 position = this->GetMapChipPostionByIndex(x, y); // 座標を取得
+    blockobject3D[y][x] = Block::CreateBlock(mapChipType, position);
+
+    // マップデータを更新（オブジェクトのタイプに基づいてマップデータも更新）
+    SetMapData(x, y, mapChipType);
+}
+
+void Map::RemoveObjectAt(uint32_t x, uint32_t y) {
+    // 範囲チェック
+    if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
+        return; // 範囲外なら処理をしない
+    }
+
+    // その位置にある Block を削除
+    if (blockobject3D[y][x]) {
+        delete blockobject3D[y][x]; // メモリ解放
+        blockobject3D[y][x] = nullptr;
+    }
+
+    // マップデータを更新(削除を反映）
+    SetMapData(x, y, MapChipType::kBlank);
+}

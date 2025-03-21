@@ -55,4 +55,6 @@ public:
     uint32_t GetMapHeight() const { return kNumBlockVirtical; }
     std::vector<std::vector<Block*>>& GetBlockObject3D() { return blockobject3D; }
     void SetMapData(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType);
+    void GenerateObjectAt(uint32_t x, uint32_t y, MapChipType mapChipType);
+    void RemoveObjectAt(uint32_t x, uint32_t y);
 };
