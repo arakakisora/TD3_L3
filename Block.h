@@ -51,7 +51,7 @@ public:
 	~Block();
 
 	// 初期化
-	void Initialize(MapChipType type, const Vector3& position);
+	void Initialize(MapChipType type, const Vector3& position,Map* map);
 	// 更新
 	void Update();
 	// 描画
@@ -62,7 +62,7 @@ public:
 
 	// SetPosition
 
-	static Block* CreateBlock(MapChipType type, const Vector3& position);
+	static Block* CreateBlock(MapChipType type, const Vector3& position,Map*map);
 
 private:
 	int mapID;
@@ -70,6 +70,8 @@ private:
 	Object3D* object3D;
 	Map* map;
 
-	Vector3 position = { 0.0f,0.0f,0.0f };
+	float velocity = 0.0f;
+	bool isFalling = false;
+	static constexpr float gravity = 0.02f;
 };
 

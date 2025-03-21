@@ -157,7 +157,7 @@ void GameCamera::GameCameraphoto(std::vector<std::vector<Block*>>& blockGrid) {
                 // その位置に Block が存在しない場合は生成
                 if (!blockGrid[currentYIndex][currentXIndex]) {
                     Block* newBlock = Block::CreateBlock(MapChipType::kCopyBlock,
-                        map_->GetMapChipPostionByIndex(currentXIndex, currentYIndex));
+                        map_->GetMapChipPostionByIndex(currentXIndex, currentYIndex),map_);
                     blockGrid[currentYIndex][currentXIndex] = newBlock;
                 }
             }

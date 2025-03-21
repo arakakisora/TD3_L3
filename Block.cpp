@@ -14,8 +14,9 @@ Block::~Block()
 	Finalize();
 }
 
-void Block::Initialize(MapChipType type, const Vector3& position) {
+void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 	this->type = type;
+	this->map = map;
 	object3D = new Object3D();
 	object3D->Initialize(Object3DCommon::GetInstance());
 	object3D->SetTranslate(position);
@@ -51,7 +52,6 @@ void Block::Initialize(MapChipType type, const Vector3& position) {
 }
 
 void Block::Update() {
-
 	/*else if (MapChipType::マップチップタイプ == type) {
 	* モデルの更新なのでこれは絶対に必要
 		object3D->Update();
@@ -65,16 +65,29 @@ void Block::Update() {
 	} else if (MapChipType::kNCopyBlock == type) {
 		object3D->Update();
 	} else if (MapChipType::kFallBlock == type) {
-		//現在のインデックスを取得
+		Vector3 position = object3D->GetTranslate();
 		IndexSet index = map->GetMapChipIndexSetByPosition(position);
-		//下のインデックス
 		uint32_t belowIndex = index.yIndex + 1;
-		//下に何もないなら落下
-		if (belowIndex < map->GetMapHeight() && map->GetMapChipTypeByIndex(index.xIndex, belowIndex)
-			== MapChipType::kBlank) {
-			position.y -= 9.8 * 0.016f; 
+		//下にブロックがあるか
+		if (belowIndex < map->GetNumBlockVirtical() &&
+			map->GetMapChipTypeByIndex(index.xIndex, belowIndex) == MapChipType::kBlank) {
+			isFalling = true;
+		}
+
+		//落下
+		if (isFalling) {
+			velocity += gravity; 
+			position.y -= velocity; 
+
+			//下にブロックがあるか
+			if (belowIndex < map->GetNumBlockVirtical() &&
+				map->GetMapChipTypeByIndex(index.xIndex, belowIndex) != MapChipType::kBlank) {
+				isFalling = false;
+				velocity = 0.0f;
+				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y; // 位置補正
+			}
+
 			object3D->SetTranslate(position);
-		
 		}
 		object3D->Update();
 	}
@@ -101,8 +114,8 @@ void Block::Finalize() {
 	}
 }
 
-Block* Block::CreateBlock(MapChipType type, const Vector3& position) {
+Block* Block::CreateBlock(MapChipType type, const Vector3& position,Map*map) {
 	Block* block = new Block();
-	block->Initialize(type, position);
+	block->Initialize(type, position,map);
 	return block;
 }
