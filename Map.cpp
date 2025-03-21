@@ -172,7 +172,7 @@ void Map::GenerateObjectAt(uint32_t x, uint32_t y, MapChipType mapChipType) {
 
     // オブジェクト生成
     Vector3 position = this->GetMapChipPostionByIndex(x, y); // 座標を取得
-    blockobject3D[y][x] = Block::CreateBlock(mapChipType, position);
+    blockobject3D[y][x] = Block::CreateBlock(mapChipType, position,this);
 
     // マップデータを更新（オブジェクトのタイプに基づいてマップデータも更新）
     SetMapData(x, y, mapChipType);
