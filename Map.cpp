@@ -8,8 +8,6 @@
 
 #include "Object3DCommon.h"
 
-
-
 void Map::Initialize() {
     GenerateObject3D();
 }
@@ -62,7 +60,7 @@ void Map::GenerateObject3D() {
         for (uint32_t j = 0; j < numBlokHorizontal; ++j) {
             MapChipType type = this->GetMapChipTypeByIndex(j, i);
             if (type != MapChipType::kBlank) {
-                blockobject3D[i][j] = Block::CreateBlock(type, this->GetMapChipPostionByIndex(j, i));
+                blockobject3D[i][j] = Block::CreateBlock(type, this->GetMapChipPostionByIndex(j, i),this);
             }
         }
     }

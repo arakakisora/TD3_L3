@@ -2,12 +2,12 @@
 #include <iostream>
 #include <vector>
 
+#include "Block.h"
 #include "Vector3.h"
 #include <assert.h>
 #include <stdint.h>
 #include "MyMath.h"
 #include "Object3D.h"
-#include "Block.h"
 
 using namespace std;
 struct MapChipData {

@@ -70,6 +70,9 @@ namespace MyMath {
 	Vector3 Add(const Vector3& v,float scalar);
 	Vector3 Add(const Vector3& v1, const Vector3& v2);
 
+	//subtraction
+	Vector3 Subtraction(const Vector3& v, float scalar);
+
 	//回転X
 	Matrix4x4 MakeRotateXMatrix(float radian);
 	//回転Y

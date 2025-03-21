@@ -6,8 +6,8 @@
 #include <fstream>
 #include <sstream>
 
-
-
+class Map;
+struct MapChipData;
 
 enum class MapChipType {
 
@@ -51,27 +51,27 @@ public:
 	~Block();
 
 	// 初期化
-	void Initialize(MapChipType type, const Vector3& position);
+	void Initialize(MapChipType type, const Vector3& position,Map* map);
 	// 更新
 	void Update();
 	// 描画
 	void Draw();
-
 
 	// 終了処理
 	void Finalize();
 
 	// SetPosition
 
-	static Block* CreateBlock(MapChipType type, const Vector3& position);
+	static Block* CreateBlock(MapChipType type, const Vector3& position,Map*map);
 
 private:
 	int mapID;
 	MapChipType type;
 	Object3D* object3D;
+	Map* map;
 
-
-	Vector3 position;
-
+	float velocity = 0.0f;
+	bool isFalling = false;
+	static constexpr float gravity = 0.02f;
 };
 
