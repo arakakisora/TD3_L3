@@ -70,7 +70,6 @@ private:
 	Object3D* object3D;
 	Map* map;
 
-	Vector3 position;
-
+	Vector3 position = { 0.0f,0.0f,0.0f };
 };
 

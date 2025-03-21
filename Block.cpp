@@ -2,6 +2,7 @@
 #include "Object3D.h"
 #include "Object3DCommon.h"
 #include "ModelManager.h"
+#include "Map.h"
 
 
 Block::Block()
@@ -50,6 +51,7 @@ void Block::Initialize(MapChipType type, const Vector3& position) {
 }
 
 void Block::Update() {
+
 	/*else if (MapChipType::マップチップタイプ == type) {
 	* モデルの更新なのでこれは絶対に必要
 		object3D->Update();
@@ -63,6 +65,17 @@ void Block::Update() {
 	} else if (MapChipType::kNCopyBlock == type) {
 		object3D->Update();
 	} else if (MapChipType::kFallBlock == type) {
+		//現在のインデックスを取得
+		IndexSet index = map->GetMapChipIndexSetByPosition(position);
+		//下のインデックス
+		uint32_t belowIndex = index.yIndex + 1;
+		//下に何もないなら落下
+		if (belowIndex < map->GetMapHeight() && map->GetMapChipTypeByIndex(index.xIndex, belowIndex)
+			== MapChipType::kBlank) {
+			position.y -= 9.8 * 0.016f; 
+			object3D->SetTranslate(position);
+		
+		}
 		object3D->Update();
 	}
 }
