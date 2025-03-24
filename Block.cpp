@@ -90,7 +90,8 @@ void Block::Update() {
 				isFalling = false;
 				velocity = 0.0f;
 				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
-				map->SetMapData(index.xIndex, index.yIndex, MapChipType::kFallBlock);
+				map->RemoveObjectAt(index.xIndex, index.yIndex);  
+				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock); 
 			}
 
 			object3D->SetTranslate(position);
