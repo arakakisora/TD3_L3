@@ -42,7 +42,7 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 		break;
 	case MapChipType::kFallBlock:       // 落下ブロック
 		//モデル指定
-		object3D->SetModel("cube.obj");
+		object3D->SetModel("fallblock.obj");
 
 		break;
 
