@@ -37,7 +37,7 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 
 	case MapChipType::kCopyBlock:		// コピー可能 No.3
 		// モデル指定
-		object3D->SetModel("cube.obj");
+		object3D->SetModel("block.obj");
 
 		break;
 	case MapChipType::kFallBlock:       // 落下ブロック
