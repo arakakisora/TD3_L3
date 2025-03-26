@@ -20,6 +20,8 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 	object3D = new Object3D();
 	object3D->Initialize(Object3DCommon::GetInstance());
 	object3D->SetTranslate(position);
+	velocity = 0.0f;
+	//isFalling = false;
 
 	switch ((type))
 	{
@@ -46,11 +48,10 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 
 		break;
 
-	default:
-		break;
+	
 	}
 }
-
+//int cos sin 
 void Block::Update() {
 	/*else if (MapChipType::マップチップタイプ == type) {
 	* モデルの更新なのでこれは絶対に必要
@@ -90,14 +91,15 @@ void Block::Update() {
 				isFalling = false;
 				velocity = 0.0f;
 				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
-				map->SetMapData(index.xIndex, index.yIndex, MapChipType::kFallBlock);
+				map->RemoveObjectAt(index.xIndex, index.yIndex);  
+				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock); 
 			}
 
 			object3D->SetTranslate(position);
 		}
 		object3D->Update();
 	}
-}
+};
 
 
 void Block::Draw() {
@@ -118,6 +120,10 @@ void Block::Finalize() {
 		delete object3D;
 		object3D = nullptr;
 	}
+}
+
+void Block::SetFalling(bool falling) {
+	isFalling = falling;
 }
 
 Block* Block::CreateBlock(MapChipType type, const Vector3& position,Map*map) {

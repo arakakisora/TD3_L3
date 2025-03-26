@@ -62,6 +62,9 @@ public:
 
 	// SetPosition
 
+	//落下フラグセット
+	void SetFalling(bool falling);
+
 	static Block* CreateBlock(MapChipType type, const Vector3& position,Map*map);
 
 private:
