@@ -35,6 +35,7 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 	ModelManager::GetInstans()->LoadModel("cube.obj");
 	ModelManager::GetInstans()->LoadModel("block.obj");
+	ModelManager::GetInstans()->LoadModel("fallblock.obj");
 
 	map = new Map;
 	map->LoadMapChipCsv("MapData/blocks.csv");
