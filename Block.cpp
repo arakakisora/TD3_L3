@@ -51,7 +51,7 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 	
 	}
 }
-
+//int cos sin 
 void Block::Update() {
 	/*else if (MapChipType::マップチップタイプ == type) {
 	* モデルの更新なのでこれは絶対に必要
@@ -93,7 +93,7 @@ void Block::Update() {
 				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
 				map->RemoveObjectAt(index.xIndex, index.yIndex);  
 				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock); 
-			}//int agasuto 
+			}
 
 			object3D->SetTranslate(position);
 		}
