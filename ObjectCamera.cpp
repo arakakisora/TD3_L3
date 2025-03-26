@@ -173,7 +173,6 @@ void ObjectCamera::GameCameraphoto() {
     }
 }
 
-
 void ObjectCamera::HandleMapChip(uint32_t currentXIndex, uint32_t currentYIndex, MapChipType mapChipType) {
     // マップチップタイプに対応する処理を関数ポインタで定義
     std::unordered_map<MapChipType, std::function<void(uint32_t, uint32_t)>> actions = {

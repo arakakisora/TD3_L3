@@ -20,7 +20,7 @@ struct ModelAndTexture {
 // マップチップタイプごとの対応するモデルを管理するマップ
 static std::map<MapChipType, std::string> mapChipTypemodelMap = {
 	{MapChipType::kBlank, "axis.obj"},
-	{MapChipType::kCopyBlock, "cube.obj"},
+	{MapChipType::kCopyBlock, "block.obj"},
 	{MapChipType::kFallBlock,"cube.obj"},
 	// 他のマップチップタイプに対しても設定可能
 };

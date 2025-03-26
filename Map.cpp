@@ -46,8 +46,8 @@ void Map::Draw() {
 
 void Map::GenerateObject3D() {
     // 要素数
-    uint32_t numBlokVirtical = this->GetNumBlockVirtical();     // 縦
-    uint32_t numBlokHorizontal = this->GetNumBlockHorizontal(); // 横
+    uint32_t numBlokVirtical = this->GetNumBlockVirtical();     //縦
+    uint32_t numBlokHorizontal = this->GetNumBlockHorizontal(); //横
 
     blockobject3D.resize(numBlokVirtical);
 

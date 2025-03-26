@@ -20,6 +20,8 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 	object3D = new Object3D();
 	object3D->Initialize(Object3DCommon::GetInstance());
 	object3D->SetTranslate(position);
+	velocity = 0.0f;
+	//isFalling = false;
 
 	switch ((type))
 	{
@@ -37,7 +39,7 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 
 	case MapChipType::kCopyBlock:		// コピー可能 No.3
 		// モデル指定
-		object3D->SetModel("cube.obj");
+		object3D->SetModel("block.obj");
 
 		break;
 	case MapChipType::kFallBlock:       // 落下ブロック
@@ -46,8 +48,7 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 
 		break;
 
-	default:
-		break;
+	
 	}
 }
 
@@ -92,13 +93,13 @@ void Block::Update() {
 				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
 				map->RemoveObjectAt(index.xIndex, index.yIndex);  
 				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock); 
-			}
+			}//int agasuto 
 
 			object3D->SetTranslate(position);
 		}
 		object3D->Update();
 	}
-}
+};
 
 
 void Block::Draw() {
@@ -119,6 +120,10 @@ void Block::Finalize() {
 		delete object3D;
 		object3D = nullptr;
 	}
+}
+
+void Block::SetFalling(bool falling) {
+	isFalling = falling;
 }
 
 Block* Block::CreateBlock(MapChipType type, const Vector3& position,Map*map) {
