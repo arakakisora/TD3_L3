@@ -21,6 +21,7 @@ struct ModelAndTexture {
 static std::map<MapChipType, std::string> mapChipTypemodelMap = {
 	{MapChipType::kBlank, "axis.obj"},
 	{MapChipType::kCopyBlock, "cube.obj"},
+	{MapChipType::kFixedTimeBlock, "Timer.obj"},	// No.7
 	// 他のマップチップタイプに対しても設定可能
 };
 

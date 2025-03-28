@@ -34,7 +34,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("sphere.obj");
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 	ModelManager::GetInstans()->LoadModel("cube.obj");
-
+	ModelManager::GetInstans()->LoadModel("Timer.obj");
+	ModelManager::GetInstans()->LoadModel("Player.obj");
 	map = new Map;
 	map->LoadMapChipCsv("MapData/blocks.csv");
 	map->Initialize();
@@ -49,7 +50,7 @@ void GamePlayScene::Initialize()
 	object3DPlayer = new Object3D();
 	Vector3 playerPostion = map->GetMapChipPostionByIndex(6, 10);
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
-	object3DPlayer->SetModel("cube.obj");
+	object3DPlayer->SetModel("Player.obj");
 	object3DPlayer->SetScale(Vector3{1.0f,1.0f,1.0f });
 	player->SetMapChipField(map);
 	player->Initialize(object3DPlayer, playerPostion);

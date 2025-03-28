@@ -234,7 +234,8 @@ void ObjectCamera::HandleMapChip(uint32_t currentXIndex, uint32_t currentYIndex,
     // マップチップタイプに対応する処理を関数ポインタで定義
     std::unordered_map<MapChipType, std::function<void(uint32_t, uint32_t)>> actions = {
         { MapChipType::kBlank, [this](uint32_t x, uint32_t y) { map_->RemoveObjectAt(x, y); } },
-        { MapChipType::kCopyBlock, [this](uint32_t x, uint32_t y) { map_->GenerateObjectAt(x, y, MapChipType::kCopyBlock); } }
+        { MapChipType::kCopyBlock, [this](uint32_t x, uint32_t y) { map_->GenerateObjectAt(x, y, MapChipType::kCopyBlock); } },
+		{ MapChipType::kFixedTimeBlock, [this](uint32_t x, uint32_t y) { map_->GenerateObjectAt(x, y, MapChipType::kFixedTimeBlock); } },
         // 必要な処理を追加していく
     };
 
