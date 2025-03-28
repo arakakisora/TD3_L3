@@ -43,7 +43,7 @@ void Map::Update() {
 		for (uint32_t x = 0; x < mapChipData_.data[y].size(); ++x) {
 			// マップチップタイプを取得
 			MapChipType mapChipType = mapChipData_.data[y][x];
-
+			 
 			// マップチップタイプを番号として表示
 			ImGui::Text("%d", static_cast<int>(mapChipType));
 
