@@ -14,7 +14,7 @@ Block::~Block()
 	Finalize();
 }
 
-void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
+void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 	this->type = type;
 	this->map = map;
 	object3D = new Object3D();
@@ -31,43 +31,46 @@ void Block::Initialize(MapChipType type, const Vector3& position,Map*map) {
 			//　もし、ブロックようにクラスを作ったのであればここに初期化
 			// 
 		//	break;
-	case MapChipType::kNCopyBlock:		// コピー不可能 No.2
+	case MapChipType::kNCopyBlock:				// No.2 コピー不可能 
 		// モデル指定
 		object3D->SetModel("axis.obj");
-
 		break;
 
-	case MapChipType::kCopyBlock:		// コピー可能 No.3
+	case MapChipType::kCopyBlock:				// No.3 コピー可能 
 		// モデル指定
 		object3D->SetModel("block.obj");
 		break;
-	case MapChipType::kGoalUp:		// ゴール上 No.4
-		// モデル指定
-		//object3D->SetModel("Goal.obj");
-		break;
-	case MapChipType::kGoalDown:		// ゴール下 No.5
+
+	case MapChipType::kGoalUp:					// No.4 ゴール上 
 		// モデル指定
 		//object3D->SetModel("Goal.obj");
 		break;
 
-	case MapChipType::kFixedTimeBlock:		// 一定時間経過したら消えるブロック No.7
+	case MapChipType::kGoalDown:				// No.5 ゴール下 
+		// モデル指定
+		//object3D->SetModel("Goal.obj");
+		break;
+
+	case MapChipType::kFallBlock:				// No.6 落下ブロック
+		//モデル指定
+		object3D->SetModel("fallblock.obj");
+		break;
+
+	case MapChipType::kFixedTimeBlock:			// No.7 一定時間経過したら消えるブロック 
 		// モデル指定
 		object3D->SetModel("Timer.obj");
 		break;
-	case MapChipType::kPutFixedTimeBlock:		// 貼り付け後一定時間 No.8
+
+	case MapChipType::kPutFixedTimeBlock:		// No.8 貼り付け後一定時間 
 		// モデル指定
 		//object3D->SetModel("Timer.obj");
 		break;
-	case MapChipType::kFallBlock:       // 落下ブロック
-		//モデル指定
-		object3D->SetModel("fallblock.obj");
 
-		break;
-
-	
 	}
 }
-//int cos sin 
+
+
+
 void Block::Update() {
 	/*else if (MapChipType::マップチップタイプ == type) {
 	* モデルの更新なのでこれは絶対に必要
@@ -78,16 +81,19 @@ void Block::Update() {
 	}*/
 	if (MapChipType::kCopyBlock == type) {
 		object3D->Update();
-
-	} else if (MapChipType::kNCopyBlock == type) {
+	} 
+	else if (MapChipType::kNCopyBlock == type) {
 		object3D->Update();
-	} else if (MapChipType::kFixedTimeBlock == type) {
+	} 
+	else if (MapChipType::kFixedTimeBlock == type) {
 		object3D->Update();
 		FixedTimeBlock();
-	} else if (MapChipType::kPutFixedTimeBlock == type) {
+	} 
+	else if (MapChipType::kPutFixedTimeBlock == type) {
 		object3D->Update();
 		PutFixedTimeBlock();
-	} else if (MapChipType::kFallBlock == type) {
+	}
+	else if (MapChipType::kFallBlock == type) {
 		Vector3 position = object3D->GetTranslate();
 		IndexSet index = map->GetMapChipIndexSetByPosition(position);
 		uint32_t belowIndex = index.yIndex + 1;
@@ -102,8 +108,8 @@ void Block::Update() {
 
 		//落下
 		if (isFalling) {
-			velocity += gravity; 
-			position.y -= velocity; 
+			velocity += gravity;
+			position.y -= velocity;
 
 			IndexSet newIndex = map->GetMapChipIndexSetByPosition(position);
 
@@ -113,8 +119,8 @@ void Block::Update() {
 				isFalling = false;
 				velocity = 0.0f;
 				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
-				map->RemoveObjectAt(index.xIndex, index.yIndex);  
-				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock); 
+				map->RemoveObjectAt(index.xIndex, index.yIndex);
+				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock);
 			}
 
 			object3D->SetTranslate(position);
@@ -128,13 +134,17 @@ void Block::Draw() {
 	// Drawはelse ifを追加してDrawかくだけ
 	if (MapChipType::kCopyBlock == type) {
 		object3D->Draw();
-	} else if (MapChipType::kNCopyBlock == type) {
+	} 
+	else if (MapChipType::kNCopyBlock == type) {
 		object3D->Draw();
-	} else if (MapChipType::kFixedTimeBlock == type) {
+	} 
+	else if (MapChipType::kFixedTimeBlock == type) {
 		object3D->Draw();
-	} else if (MapChipType::kPutFixedTimeBlock == type) {
+	} 
+	else if (MapChipType::kPutFixedTimeBlock == type) {
 		object3D->Draw();
-	} else if (MapChipType::kFallBlock == type) {
+	} 
+	else if (MapChipType::kFallBlock == type) {
 		object3D->Draw();
 	}
 }
@@ -152,9 +162,9 @@ void Block::SetFalling(bool falling) {
 	isFalling = falling;
 }
 
-Block* Block::CreateBlock(MapChipType type, const Vector3& position,Map*map) {
+Block* Block::CreateBlock(MapChipType type, const Vector3& position, Map* map) {
 	Block* block = new Block();
-	block->Initialize(type, position,map);
+	block->Initialize(type, position, map);
 	return block;
 }
 
