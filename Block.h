@@ -53,7 +53,7 @@ public:
 	~Block();
 
 	// 初期化
-	void Initialize(MapChipType type, const Vector3& position,Map* map);
+	void Initialize(MapChipType type, const Vector3& position, Map* map);
 	// 更新
 	void Update();
 	// 描画
@@ -72,7 +72,7 @@ public:
 	//落下フラグセット
 	void SetFalling(bool falling);
 
-	static Block* CreateBlock(MapChipType type, const Vector3& position,Map*map);
+	static Block* CreateBlock(MapChipType type, const Vector3& position, Map* map);
 
 private:
 	int mapID;
@@ -83,10 +83,13 @@ private:
 	Vector3 position;
 
 private:	// 各ブロック用の変数
-	
+	// 一定時間経過後に消えるブロックの貼り付け前（FixedTime）No.7
+
 	// 一定時間経過後に消えるブロックの貼り付け後（PutFixedTime）No.8
 	bool isFixedTimeBlockPut = false;
+	const int kFixedTime = 60 * 5; // 5秒
 
+	// FallBlock用の変数
 	float velocity = 0.0f;
 	bool isFalling = false;
 	static constexpr float gravity = 0.02f;
