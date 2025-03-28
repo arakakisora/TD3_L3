@@ -5,35 +5,62 @@
 #include <iostream>
 #include <map>
 #include <sstream>
-
+#include <imgui.h>
 #include "Object3DCommon.h"
 
 void Map::Initialize() {
-    GenerateObject3D();
+	GenerateObject3D();
 }
 
 void Map::Finalize() {
-    // マップの更新
-    for (std::vector<Block*>& blockLine : blockobject3D) {
-        for (Block* block : blockLine) {
-            delete block;
-        }
-    }
-    blockobject3D.clear();
+	// マップの更新
+	for (std::vector<Block*>& blockLine : blockobject3D) {
+		for (Block* block : blockLine) {
+			delete block;
+		}
+	}
+	blockobject3D.clear();
 }
 
 void Map::Update() {
-    // 3Dオブジェクトの更新
-    for (std::vector<Block*>& blockLine : blockobject3D) {
-        for (Block* block : blockLine) {
-            if (!block)
-                continue;
-            block->Update();
-        }
-    }
+	// 3Dオブジェクトの更新
+	for (std::vector<Block*>& blockLine : blockobject3D) {
+		for (Block* block : blockLine) {
+			if (!block)
+				continue;
+			block->Update();
+		}
+	}
+
+	// ImGuiウィンドウの開始
+	ImGui::Begin("Map Chip Data");
+
+	// マップチップデータの表示
+#ifdef _DEBUG
+	for (uint32_t y = 0; y < mapChipData_.data.size(); ++y) {
+		for (uint32_t x = 0; x < mapChipData_.data[y].size(); ++x) {
+			// マップチップタイプを取得
+			MapChipType mapChipType = mapChipData_.data[y][x];
+			 
+			// マップチップタイプを番号として表示
+			ImGui::Text("%d", static_cast<int>(mapChipType));
+
+			// 同じ行に表示するためのスペースを追加
+			if (x < mapChipData_.data[y].size() - 1) {
+				ImGui::SameLine();
+			}
+		}
+	}
+
+	// ImGuiウィンドウの終了
+	ImGui::End();
+#endif // _DEBUG
 }
 
+
+
 void Map::Draw() {
+
     for (std::vector<Block*>& blockLine : blockobject3D) {
         for (Block* block : blockLine) {
 			if (!block) { // ブロックが存在しない場合はスキップ
@@ -67,90 +94,91 @@ void Map::GenerateObject3D() {
 }
 
 void Map::ResetMapChipData() {
-    mapChipData_.data.clear();
-    mapChipData_.data.resize(kNumBlockVirtical);
-    for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {
-        mapChipDataLine.resize(kNumBlockHorizontal);
-    }
+	mapChipData_.data.clear();
+	mapChipData_.data.resize(kNumBlockVirtical);
+	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {
+		mapChipDataLine.resize(kNumBlockHorizontal);
+	}
 }
 
 void Map::LoadMapChipCsv(const std::string& filePath) {
-    // マップチップデータをリセット
-    ResetMapChipData();
+	// マップチップデータをリセット
+	ResetMapChipData();
 
-    // ファイルを開く
-    std::ifstream file;
-    file.open(filePath);
-    assert(file.is_open());
+	// ファイルを開く
+	std::ifstream file;
+	file.open(filePath);
+	assert(file.is_open());
 
-    // マップチップCSV
-    std::stringstream mapChipCsv;
-    // ファイルの内容を文字列ストリームにコピー
-    mapChipCsv << file.rdbuf();
-    // ファイルを閉じる
-    file.close();
+	// マップチップCSV
+	std::stringstream mapChipCsv;
+	// ファイルの内容を文字列ストリームにコピー
+	mapChipCsv << file.rdbuf();
+	// ファイルを閉じる
+	file.close();
 
-    // csvからマップチップデータを読み込む
-    for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
-        std::string line;
-        getline(mapChipCsv, line);
+	// csvからマップチップデータを読み込む
+	for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
+		std::string line;
+		getline(mapChipCsv, line);
 
-        // 1桁分の文字列をストリームに変換して解析しやすくする
-        std::istringstream line_stream(line);
+		// 1桁分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
 
-        for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
-            std::string word;
-            getline(line_stream, word, ',');
+		for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
+			std::string word;
+			getline(line_stream, word, ',');
 
-            if (mapChipTable.contains(word)) {
-                mapChipData_.data[y][x] = mapChipTable[word];
-            }
-        }
-    }
+			if (mapChipTable.contains(word)) {
+				mapChipData_.data[y][x] = mapChipTable[word];
+			}
+		}
+	}
 }
 
 MapChipType Map::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {
-    // マップチップの範囲外の場合は空白を返す
-    if (xIndex < 0 || kNumBlockHorizontal - 1 < xIndex) {
-        return MapChipType::kBlank;
-    }
-    // マップチップの範囲外の場合は空白を返す
-    if (yIndex < 0 || kNumBlockVirtical - 1 < yIndex) {
-        return MapChipType::kBlank;
-    }
-    // マップチップの種類を返す
-    return mapChipData_.data[yIndex][xIndex];
+	// マップチップの範囲外の場合は空白を返す
+	if (xIndex < 0 || kNumBlockHorizontal - 1 < xIndex) {
+		return MapChipType::kBlank;
+	}
+	// マップチップの範囲外の場合は空白を返す
+	if (yIndex < 0 || kNumBlockVirtical - 1 < yIndex) {
+		return MapChipType::kBlank;
+	}
+	// マップチップの種類を返す
+	return mapChipData_.data[yIndex][xIndex];
 }
 
 Vector3 Map::GetMapChipPostionByIndex(uint32_t xIndex, uint32_t yIndex) {
-    return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVirtical - 1 - yIndex), 0);
+	return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVirtical - 1 - yIndex), 0);
 }
 
 IndexSet Map::GetMapChipIndexSetByPosition(const Vector3& posotopn) {
-    // 指定座標がマップチップの何番にあるかを取得する関数
-    IndexSet indexSet = {};
-    indexSet.xIndex = static_cast<uint32_t>((posotopn.x + kBlockWidth / 2) / kBlockWidth);
-    indexSet.yIndex = kNumBlockVirtical - 1 - static_cast<uint32_t>((posotopn.y + kBlockHeight / 2) / kBlockHeight);
-    return indexSet;
+	// 指定座標がマップチップの何番にあるかを取得する関数
+	IndexSet indexSet = {};
+	indexSet.xIndex = static_cast<uint32_t>((posotopn.x + kBlockWidth / 2) / kBlockWidth);
+	indexSet.yIndex = kNumBlockVirtical - 1 - static_cast<uint32_t>((posotopn.y + kBlockHeight / 2) / kBlockHeight);
+	return indexSet;
 }
 
 Rect Map::GetRectByIndex(uint32_t xindex, uint32_t yIndex) {
-    Vector3 center = GetMapChipPostionByIndex(xindex, yIndex);
-    Rect rect;
-    rect.left = center.x - kBlockWidth / 2.0f;
-    rect.right = center.x + kBlockWidth / 2.0f;
-    rect.bottom = center.y - kBlockHeight / 2.0f;
-    rect.top = center.y + kBlockHeight / 2.0f;
-    return rect;
+	Vector3 center = GetMapChipPostionByIndex(xindex, yIndex);
+	Rect rect;
+	rect.left = center.x - kBlockWidth / 2.0f;
+	rect.right = center.x + kBlockWidth / 2.0f;
+	rect.bottom = center.y - kBlockHeight / 2.0f;
+	rect.top = center.y + kBlockHeight / 2.0f;
+	return rect;
 }
 
 void Map::SetMapData(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType) {
-    if (xIndex < kNumBlockHorizontal && yIndex < kNumBlockVirtical) {
-        mapChipData_.data[yIndex][xIndex] = mapChipType;
-    }
+	if (xIndex < kNumBlockHorizontal && yIndex < kNumBlockVirtical) {
+		mapChipData_.data[yIndex][xIndex] = mapChipType;
+	}
 }
 
 void Map::GenerateObjectAt(uint32_t x, uint32_t y, MapChipType mapChipType) {
+
     // 範囲チェック
     if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
         return; // 範囲外なら処理をしない
@@ -179,17 +207,17 @@ void Map::GenerateObjectAt(uint32_t x, uint32_t y, MapChipType mapChipType) {
 }
 
 void Map::RemoveObjectAt(uint32_t x, uint32_t y) {
-    // 範囲チェック
-    if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
-        return; // 範囲外なら処理をしない
-    }
+	// 範囲チェック
+	if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
+		return; // 範囲外なら処理をしない
+	}
 
-    // その位置にある Block を削除
-    if (blockobject3D[y][x]) {
-        delete blockobject3D[y][x]; // メモリ解放
-        blockobject3D[y][x] = nullptr;
-    }
+	// その位置にある Block を削除
+	if (blockobject3D[y][x]) {
+		delete blockobject3D[y][x]; // メモリ解放
+		blockobject3D[y][x] = nullptr;
+	}
 
-    // マップデータを更新(削除を反映）
-    SetMapData(x, y, MapChipType::kBlank);
+	// マップデータを更新(削除を反映）
+	SetMapData(x, y, MapChipType::kBlank);
 }

@@ -11,14 +11,15 @@ struct MapChipData;
 
 enum class MapChipType {
 
-	kBlank,      	// 空白				No.0
-	kPlayer,        // Player初期位置		No.1
-	kNCopyBlock,    // コピー不可			No.2
-	kCopyBlock,    	// コピー可能			No.3
-	kGoalUp,       	// ゴール上			No.4
-	kGoalDown,		// ゴール下			No.5
-	kFallBlock,		// 重力の影響受		No.6
-	kFixedTimeBlock,// 貼り付け後一定時間有	No.7
+	kBlank,			 	// 空白				No.0
+	kPlayer,		    // Player初期位置		No.1
+	kNCopyBlock,		// コピー不可			No.2
+	kCopyBlock,    		// コピー可能			No.3
+	kGoalUp,       		// ゴール上			No.4
+	kGoalDown,			// ゴール下			No.5
+	kFallBlock,			// 重力の影響受		No.6
+	kFixedTimeBlock,	// 貼り付け前一定時間	No.7
+	kPutFixedTimeBlock,	// 貼り付け後一定時間　	No.8
 };
 
 namespace {
@@ -32,6 +33,7 @@ namespace {
 		{"5", MapChipType::kGoalDown},
 		{"6", MapChipType::kFallBlock},
 		{"7", MapChipType::kFixedTimeBlock },
+		{"8",MapChipType::kPutFixedTimeBlock},
 
 		/*０：空
 	１：プレイヤーの初期位置
@@ -60,6 +62,11 @@ public:
 	// 終了処理
 	void Finalize();
 
+	static Block* CreateBlock(MapChipType type, const Vector3& position);
+	// 一定時間経過後に消えるブロックの貼り付け前（FixedTime）
+	void FixedTimeBlock();
+	// 一定時間経過後に消えるブロックの貼り付け後（PutFixedTime）
+	void PutFixedTimeBlock();
 	// SetPosition
 
 	//落下フラグセット
@@ -72,6 +79,13 @@ private:
 	MapChipType type;
 	Object3D* object3D;
 	Map* map;
+
+	Vector3 position;
+
+private:	// 各ブロック用の変数
+	
+	// 一定時間経過後に消えるブロックの貼り付け後（PutFixedTime）No.8
+	bool isFixedTimeBlockPut = false;
 
 	float velocity = 0.0f;
 	bool isFalling = false;
