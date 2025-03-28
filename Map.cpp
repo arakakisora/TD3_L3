@@ -36,7 +36,7 @@ void Map::Update() {
 void Map::Draw() {
     for (std::vector<Block*>& blockLine : blockobject3D) {
         for (Block* block : blockLine) {
-            if (!block) {
+			if (!block) { // ブロックが存在しない場合はスキップ
                 continue;
             }
             block->Draw();
