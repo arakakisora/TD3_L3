@@ -8,8 +8,6 @@
 #include <imgui.h>
 #include "Object3DCommon.h"
 
-
-
 void Map::Initialize() {
 	GenerateObject3D();
 }
@@ -62,36 +60,37 @@ void Map::Update() {
 
 
 void Map::Draw() {
-	for (std::vector<Block*>& blockLine : blockobject3D) {
-		for (Block* block : blockLine) {
-			if (!block) {
-				continue;
-			}
-			block->Draw();
-		}
-	}
+
+    for (std::vector<Block*>& blockLine : blockobject3D) {
+        for (Block* block : blockLine) {
+			if (!block) { // ブロックが存在しない場合はスキップ
+                continue;
+            }
+            block->Draw();
+        }
+    }
 }
 
 void Map::GenerateObject3D() {
-	// 要素数監視
-	uint32_t numBlokVirtical = this->GetNumBlockVirtical();     // 縦
-	uint32_t numBlokHorizontal = this->GetNumBlockHorizontal(); // 横
+    // 要素数
+    uint32_t numBlokVirtical = this->GetNumBlockVirtical();     //縦
+    uint32_t numBlokHorizontal = this->GetNumBlockHorizontal(); //横
 
-	blockobject3D.resize(numBlokVirtical);
+    blockobject3D.resize(numBlokVirtical);
 
-	for (uint32_t i = 0; i < numBlokVirtical; ++i) {
-		blockobject3D[i].resize(numBlokHorizontal);
-	}
+    for (uint32_t i = 0; i < numBlokVirtical; ++i) {
+        blockobject3D[i].resize(numBlokHorizontal);
+    }
 
-	// キューブ生成
-	for (uint32_t i = 0; i < numBlokVirtical; ++i) {
-		for (uint32_t j = 0; j < numBlokHorizontal; ++j) {
-			MapChipType type = this->GetMapChipTypeByIndex(j, i);
-			if (type != MapChipType::kBlank) {
-				blockobject3D[i][j] = Block::CreateBlock(type, this->GetMapChipPostionByIndex(j, i));
-			}
-		}
-	}
+    // キューブ生成
+    for (uint32_t i = 0; i < numBlokVirtical; ++i) {
+        for (uint32_t j = 0; j < numBlokHorizontal; ++j) {
+            MapChipType type = this->GetMapChipTypeByIndex(j, i);
+            if (type != MapChipType::kBlank) {
+                blockobject3D[i][j] = Block::CreateBlock(type, this->GetMapChipPostionByIndex(j, i),this);
+            }
+        }
+    }
 }
 
 void Map::ResetMapChipData() {
@@ -179,31 +178,32 @@ void Map::SetMapData(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType) 
 }
 
 void Map::GenerateObjectAt(uint32_t x, uint32_t y, MapChipType mapChipType) {
-	// 範囲チェック
-	if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
-		return; // 範囲外なら処理をしない
-	}
 
-	// 現在のマップチップのタイプを取得
-	MapChipType currentMapChipType = this->GetMapChipTypeByIndex(x, y);
+    // 範囲チェック
+    if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
+        return; // 範囲外なら処理をしない
+    }
 
-	// 現在のマップチップタイプと引数で渡された mapChipType が同じなら処理をスルー
-	if (currentMapChipType == mapChipType) {
-		return; // タイプが変わらない場合、処理をスルー
-	}
+    // 現在のマップチップのタイプを取得
+    MapChipType currentMapChipType = this->GetMapChipTypeByIndex(x, y);
 
-	// オブジェクトがすでに存在している場合は削除
-	if (blockobject3D[y][x] != nullptr) {
-		delete blockobject3D[y][x];  // オブジェクトを削除
-		blockobject3D[y][x] = nullptr; // ポインタを nullptr に設定
-	}
+    // 現在のマップチップタイプと引数で渡された mapChipType が同じなら処理をスルー
+    if (currentMapChipType == mapChipType) {
+        return; // タイプが変わらない場合、処理をスルー
+    }
 
-	// オブジェクト生成
-	Vector3 position = this->GetMapChipPostionByIndex(x, y); // 座標を取得
-	blockobject3D[y][x] = Block::CreateBlock(mapChipType, position);
+    // オブジェクトがすでに存在している場合は削除
+    if (blockobject3D[y][x] != nullptr) {
+        delete blockobject3D[y][x];  // オブジェクトを削除
+        blockobject3D[y][x] = nullptr; // ポインタを nullptr に設定
+    }
 
-	// マップデータを更新（オブジェクトのタイプに基づいてマップデータも更新）
-	SetMapData(x, y, mapChipType);
+    // オブジェクト生成
+    Vector3 position = this->GetMapChipPostionByIndex(x, y); // 座標を取得
+    blockobject3D[y][x] = Block::CreateBlock(mapChipType, position,this);
+
+    // マップデータを更新（オブジェクトのタイプに基づいてマップデータも更新）
+    SetMapData(x, y, mapChipType);
 }
 
 void Map::RemoveObjectAt(uint32_t x, uint32_t y) {
