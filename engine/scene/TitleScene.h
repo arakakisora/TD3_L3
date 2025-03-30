@@ -29,9 +29,8 @@ public:
 	void Draw()override;
 
 public:
-
-	
-
-
+	std::unique_ptr<Object3D> titileobject_;
+	std::unique_ptr<Object3D> uIbject_start_;
+	std::unique_ptr<Object3D> uIbject_A_;
 };
 

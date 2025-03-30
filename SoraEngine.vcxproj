@@ -149,6 +149,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\particle\ParticleMnager.cpp" />
     <ClCompile Include="ObjectCamera.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
     <ClCompile Include="Map.cpp" />
   </ItemGroup>
@@ -226,6 +227,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\particle\ParticleMnager.h" />
     <ClInclude Include="ObjectCamera.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="StageSelectScene.h" />
     <ClInclude Include="WorldTransform.h" />
     <ClInclude Include="Map.h" />
   </ItemGroup>

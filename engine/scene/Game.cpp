@@ -14,10 +14,11 @@ void Game::Initialize()
 
 	//シーンの変更
 	//"TITELE"
+	//"STAGESELECTSCENE"
 	//"GAMEPLAY"
 	//GAMEOVER
 	//"GAMECLEAR"
-	SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+	SceneManager::GetInstance()->ChangeScene("TITELE");
 
 }
 
