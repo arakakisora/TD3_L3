@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 
 #include "Camera.h"	
 #include "Model.h"
@@ -15,6 +16,8 @@
 #include "Player.h"
 
 #include "Map.h"
+
+#include "PhotoCamera.h"
 
 class GamePlayScene :public BaseScene
 {
@@ -50,9 +53,11 @@ private:
 
 	Map* map=nullptr;
 	
-
+	// @ 消すAlso delete the ones in the CPP file.
 	// ゲームカメラ
-	ObjectCamera* gameCamera_;
+	//ObjectCamera* gameCamera_;
+
+	PhotoCamera* photoCamera;
 
 };
 
