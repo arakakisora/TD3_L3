@@ -16,7 +16,11 @@ public:
 	void Finalize();
 	// カメラの移動
 	void Move();
+	// マップデータのコピー
+	void Copy();
 
+	// imguiの描画
+	void DrawImGui();
 
 private:
 	Map* map;
@@ -28,7 +32,7 @@ private:
 	// カメラのオブジェクト
 	unique_ptr<Object3D> object3D;
 
-
+	vector<vector<MapChipType>> copyData;
 
 };
 
