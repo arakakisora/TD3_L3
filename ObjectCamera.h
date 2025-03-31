@@ -22,7 +22,7 @@ static std::map<MapChipType, std::string> mapChipTypemodelMap = {
 	{MapChipType::kBlank, "axis.obj"},
 
 	{MapChipType::kFixedTimeBlock, "Timer.obj"},	// No.7
-
+	{MapChipType::kNCopyBlock,"ncopyblock.obj"},
 	{MapChipType::kCopyBlock, "block.obj"},
 	{MapChipType::kFallBlock,"fallblock.obj"},
 
