@@ -286,6 +286,7 @@ void StageSelectScene::Update()
 	for (auto& obj : selectObjects_) {
 		obj->Update();
 	}
+
 	// UI
 	uIController_->Update();
 }
