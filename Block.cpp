@@ -33,7 +33,7 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 		//	break;
 	case MapChipType::kNCopyBlock:				// No.2 コピー不可能 
 		// モデル指定
-		object3D->SetModel("axis.obj");
+		object3D->SetModel("ncopyblock.obj");
 		break;
 
 	case MapChipType::kCopyBlock:				// No.3 コピー可能 
