@@ -7,8 +7,8 @@
 void ObjectCamera::Initialize(Map* map) {
     this->map_ = map;
     // 開始番号を設定
-    xIndex = 7;
-    yIndex = 16;
+    xIndex = 5;
+    yIndex = 5;
     size = { 1.0f,1.0f,-1.0f };
 
     // ゲームカメラのオブジェクト数をレンダリング範囲分だけ確保

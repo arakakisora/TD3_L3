@@ -4,9 +4,9 @@
 #include <cassert>
 #include "Input.h"
 #include "Logger.h"
-
+#ifdef _DEBUG
 #include <imgui.h>
-
+#endif // _DEBUG
 #include "Object3DCommon.h"
 
 

@@ -16,7 +16,7 @@ void GamePlayScene::Initialize()
 {
 	//カメラの生成
 	camera1 = std::make_unique<Camera>();
-	camera1->SetTranslate({ 0,0,-30, });//カメラの位置
+	camera1->SetTranslate({ 12,17,-31 });//カメラの位置
 	CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 	//カメラの生成
@@ -43,7 +43,7 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
 
 	map = new Map;
-	map->LoadMapChipCsv("MapData/blocks.csv");
+	map->LoadMapChipCsv("MapData/mapp1.csv");
 	map->Initialize();
 	
 
@@ -64,7 +64,7 @@ void GamePlayScene::Initialize()
 
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
-	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(false);
 	
 	// ゲームカメラの生成
 	gameCamera_ = new ObjectCamera();
