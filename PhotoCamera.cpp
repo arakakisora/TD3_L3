@@ -13,8 +13,8 @@ void PhotoCamera::Initialize()
 	object3D->SetModel("axis.obj");
 	// @値を後に調整する
 	object3D->SetScale(Vector3{ 1.0f,1.0f,1.0f });
-	postion = Vector2{ 8,13 };
-	object3D->SetTranslate(Vector3(postion.x, postion.y, 0));
+	position = Vector2{ 8,13 };
+	object3D->SetTranslate(Vector3(position.x, position.y, 0));
 	object3D->SetRotate(Vector3{ 0,0,0 });
 
 
@@ -35,7 +35,6 @@ void PhotoCamera::Update(Map* map)
 
 	// フォトカメラのコピー / スペースキーを押したら
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		std::cout << "Space key pressed. Calling Copy() method." << std::endl; // デバッグ用
 		Copy();
 	}
 #ifdef _DEBUG
@@ -55,6 +54,11 @@ void PhotoCamera::Draw()
 {
 	// フォトカメラの枠モデルの描画
 	object3D->Draw();
+
+	// コピーしたマップデータの描画
+	for (auto& block : blocks) {
+		block->Draw();
+	}
 }
 
 void PhotoCamera::Finalize()
@@ -67,44 +71,46 @@ void PhotoCamera::Move()
 	// @範囲外に移動しないようにする
 	// @カメラの移動方法をコントローラー操作に変更する
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-		postion.y++;
+		position.y++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
-		postion.y--;
+		position.y--;
 	} else if (Input::GetInstance()->TriggerKey(DIK_D)) {
-		postion.x++;
+		position.x++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_A)) {
-		postion.x--;
+		position.x--;
 	}
 	// フォトカメラの配置を変更させる
-	object3D->SetTranslate(Vector3(postion.x, postion.y, 0));
+	object3D->SetTranslate(Vector3(position.x, position.y, 0));
 }
 
-void PhotoCamera::Copy()
-{
+void PhotoCamera::Copy() {
+	// マップデータが読み込めていないときはコピー不可
+	if (!map) return;
 
+	// カメラの位置からマップチップのインデックスを取得
+	IndexSet indexSet = map->GetMapChipIndexSetByPosition(Vector3(position.x, position.y, 0));
 
-	// デバッグ用のログを追加
-	std::cout << "Copy() method called." << std::endl;
-	std::cout << "postion: (" << postion.x << ", " << postion.y << ")" << std::endl;
+	// 2x2 のマップチップ番号をコピー
+	copyData.clear();
+	blocks.clear();
+	for (uint32_t y = 0; y < 2; ++y) {
+		vector<MapChipType> row;
+		for (uint32_t x = 0; x < 2; ++x) {
+			MapChipType type = map->GetMapChipTypeByIndex(indexSet.xIndex + x, indexSet.yIndex + y);
+			row.push_back(type);
 
-	// @現状カメラの範囲の大きさは２Ｘ２にしているが動的に変更ができるようにする
-	// コピー先の2x2の範囲を確保
-	copyData = vector<vector<MapChipType>>(2, vector<MapChipType>(2));
-
-	// フォトカメラの位置から2x2の範囲のデータをコピー
-	for (int y = 0; y < 2; y++) {
-		for (int x = 0; x < 2; x++) {
-			int mapY = static_cast<int>(postion.y) + y;
-			int mapX = static_cast<int>(postion.x) + x;
-			if (mapY >= 0 && mapY < mapData.data.size() && mapX >= 0 && mapX < mapData.data[0].size()) {
-				copyData[y][x] = mapData.data[mapY][mapX];
-				std::cout << "copyData[" << y << "][" << x << "] = " << static_cast<int>(copyData[y][x]) << std::endl; // デバッグ用
-			} else {
-				std::cout << "Out of bounds: mapY = " << mapY << ", mapX = " << mapX << std::endl; // デバッグ用
+			// コピーしたマップチップを基にブロックのインスタンスを生成する
+			if (type != MapChipType::kBlank) {
+				// 直接座標を設定
+				Vector3 blockPosition = Vector3(position.x + x, position.y + y, -5.0F);
+				unique_ptr<Block> block = make_unique<Block>();
+				block->CreateBlock(type, blockPosition, map);
+				blocks.push_back(move(block));
 			}
-		}
-	}
 
+		}
+		copyData.push_back(row);
+	}
 
 
 }
@@ -113,11 +119,17 @@ void PhotoCamera::DrawImGui()
 {
 	// ImGuiの描画コードを追加
 	ImGui::Begin("PhotoCamera Data");
-	ImGui::Text("Copied Map Data:");
+
+	// コピーしたマップチップタイプを表示
 	for (int y = 0; y < 2; y++) {
 		for (int x = 0; x < 2; x++) {
-			// マップチップタイプを取得
-			MapChipType mapChipType = mapData.data[y][x];
+			// もしコピーデータが空の場合は処理をスキップ
+			if (copyData.empty()) {
+				break;
+			}
+
+			// コピーしたマップチップタイプを取得
+			MapChipType mapChipType = copyData[y][x];
 
 			// マップチップタイプを番号として表示
 			ImGui::Text("%d", static_cast<int>(mapChipType));
@@ -126,5 +138,20 @@ void PhotoCamera::DrawImGui()
 			}
 		}
 	}
+
+	// 生成されたブロックの座標を表示
+	ImGui::Separator();
+	ImGui::Text("Generated Blocks:");
+	if (!blocks.empty()) {
+		for (const auto& block : blocks) {
+			Vector3 position = block->GetPosition();
+			ImGui::Text("Block Position: (%.2f, %.2f, %.2f)", position.x, position.y, position.z);
+		}
+	} else {
+		ImGui::Text("No blocks generated.");
+	}
+
 	ImGui::End();
 }
+
+

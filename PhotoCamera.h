@@ -26,13 +26,15 @@ private:
 	Map* map;
 	MapChipData mapData;
 	// カメラの位置
-	Vector2 postion;
+	Vector2 position;
 	// カメラのサイズ
 	Vector2 rangeSize;
 	// カメラのオブジェクト
 	unique_ptr<Object3D> object3D;
-
+	// コピーしたマップデータ
 	vector<vector<MapChipType>> copyData;
+	// コピーしたマップデータの描画用Blockクラス
+	vector<unique_ptr<Block>> blocks;
 
 };
 

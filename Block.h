@@ -74,6 +74,11 @@ public:
 
 	static Block* CreateBlock(MapChipType type, const Vector3& position, Map* map);
 
+	// 
+	Vector3 GetPosition() {
+		return position;
+	}
+
 private:
 	int mapID;
 	MapChipType type;
