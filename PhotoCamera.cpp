@@ -26,16 +26,38 @@ void PhotoCamera::Update(Map* map)
 	// mapDataを受け取る
 	mapData.data = this->map->GetMap();
 
+	// フォトカメラの移動
+	Move();
 	// フォトカメラの枠モデルの更新
 	object3D->Update();
 
-	// フォトカメラの移動
-	Move();
 
 
 	// フォトカメラのコピー / スペースキーを押したら
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		Copy();
+		for (uint32_t y = 0; y < 2; ++y) {
+			for (uint32_t x = 0; x < 2; ++x) {
+				MapChipType type = mapData.data[static_cast<int>(position.y) - y][static_cast<int>(position.x) + x];
+				if (type != MapChipType::kBlank) {
+					// ブロックのインスタンスを生成する
+					blockPosition = Vector3(position.x, position.y, -1.0F);
+					Block* block = new Block();
+					block = block->CreateBlock(type, blockPosition, map);
+					blocks.push_back(block);
+				}
+			}
+		}
+	}
+	// フォトカメラのペースト / Pキーを押したら
+	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+		Paste();
+	}
+	
+
+	// 生成されたブロックの更新
+	for (auto& block : blocks) {
+		block->Update();
 	}
 #ifdef _DEBUG
 	// ImGuiの描画
@@ -55,7 +77,7 @@ void PhotoCamera::Draw()
 	// フォトカメラの枠モデルの描画
 	object3D->Draw();
 
-	// コピーしたマップデータの描画
+	// 生成されたブロックの描画
 	for (auto& block : blocks) {
 		block->Draw();
 	}
@@ -63,7 +85,12 @@ void PhotoCamera::Draw()
 
 void PhotoCamera::Finalize()
 {
-
+	// 生成されたブロックの終了処理
+	for (auto& block : blocks) {
+		block->Finalize();
+		delete block;
+	}
+	blocks.clear();
 }
 
 void PhotoCamera::Move()
@@ -81,6 +108,15 @@ void PhotoCamera::Move()
 	}
 	// フォトカメラの配置を変更させる
 	object3D->SetTranslate(Vector3(position.x, position.y, 0));
+
+	// ブロックの位置を更新
+	for (size_t i = 0; i < blocks.size(); ++i) {
+		uint32_t x = static_cast<uint32_t>(i % 2);
+		uint32_t y = static_cast<uint32_t>(i / 2);
+		Vector3 blockPosition = Vector3(position.x + x, position.y + y, -1.0F);
+		blocks[i]->SetObject3DPosiition(blockPosition);
+	}
+
 }
 
 void PhotoCamera::Copy() {
@@ -88,7 +124,6 @@ void PhotoCamera::Copy() {
 	if (!map) return;
 
 	// カメラの位置からマップチップのインデックスを取得
-	IndexSet indexSet = map->GetMapChipIndexSetByPosition(Vector3(position.x, position.y, 0));
 
 	// 2x2 のマップチップ番号をコピー
 	copyData.clear();
@@ -96,29 +131,50 @@ void PhotoCamera::Copy() {
 	for (uint32_t y = 0; y < 2; ++y) {
 		vector<MapChipType> row;
 		for (uint32_t x = 0; x < 2; ++x) {
-			MapChipType type = map->GetMapChipTypeByIndex(indexSet.xIndex + x, indexSet.yIndex + y);
+			MapChipType type = mapData.data[static_cast<int>(position.y) - y][static_cast<int>(position.x) + x];
 			row.push_back(type);
 
 			// コピーしたマップチップを基にブロックのインスタンスを生成する
-			if (type != MapChipType::kBlank) {
-				// 直接座標を設定
-				Vector3 blockPosition = Vector3(position.x + x, position.y + y, -5.0F);
-				unique_ptr<Block> block = make_unique<Block>();
-				block->CreateBlock(type, blockPosition, map);
-				blocks.push_back(move(block));
-			}
-
+			//if (type != MapChipType::kBlank) {
+			//	// 直接座標を設定
+			//	blockPosition = Vector3(position.x + x, position.y + y, -1.0F);
+			//	Block* block = new Block();
+			//	block = block->CreateBlock(type, blockPosition, map);
+			//	
+			//	blocks.push_back(block);
+			//}
 		}
 		copyData.push_back(row);
 	}
-
-
 }
+
+void PhotoCamera::Paste()
+{
+	// マップデータが読み込めていないときはペースト不可
+	if (!map) return;
+
+	// コピーデータをマップデータにペースト
+	for (uint32_t y = 0; y < 2; ++y) {
+		for (uint32_t x = 0; x < 2; ++x) {
+			MapChipType type = copyData[y][x];
+			int positionX = static_cast<int>(position.x) + x;
+			int positionY = static_cast<int>(position.y) + y;
+			mapData.data[positionY][positionX] = type;
+			// 変更したマップデータをマップにセット
+			map->SetMap(mapData.data);
+		}
+	}
+}
+
 
 void PhotoCamera::DrawImGui()
 {
 	// ImGuiの描画コードを追加
 	ImGui::Begin("PhotoCamera Data");
+
+	// カメラの現在位置を表示
+	ImGui::Text("Camera Position: (%.2f, %.2f)", position.x, position.y);
+	ImGui::Separator();
 
 	// コピーしたマップチップタイプを表示
 	for (int y = 0; y < 2; y++) {
@@ -133,6 +189,24 @@ void PhotoCamera::DrawImGui()
 
 			// マップチップタイプを番号として表示
 			ImGui::Text("%d", static_cast<int>(mapChipType));
+			ImGui::SameLine();
+
+			// マップチップタイプの名前を表示
+			std::string mapChipName;
+			switch (mapChipType) {
+			case MapChipType::kBlank: mapChipName = "Blank"; break;
+			case MapChipType::kPlayer: mapChipName = "Player"; break;
+			case MapChipType::kNCopyBlock: mapChipName = "NCopyBlock"; break;
+			case MapChipType::kCopyBlock: mapChipName = "CopyBlock"; break;
+			case MapChipType::kGoalUp: mapChipName = "GoalUp"; break;
+			case MapChipType::kGoalDown: mapChipName = "GoalDown"; break;
+			case MapChipType::kFallBlock: mapChipName = "FallBlock"; break;
+			case MapChipType::kFixedTimeBlock: mapChipName = "FixedTimeBlock"; break;
+			case MapChipType::kPutFixedTimeBlock: mapChipName = "PutFixedTimeBlock"; break;
+			default: mapChipName = "Unknown"; break;
+			}
+			ImGui::Text("%s", mapChipName.c_str());
+
 			if (x < 1) {
 				ImGui::SameLine();
 			}
@@ -144,7 +218,7 @@ void PhotoCamera::DrawImGui()
 	ImGui::Text("Generated Blocks:");
 	if (!blocks.empty()) {
 		for (const auto& block : blocks) {
-			Vector3 position = block->GetPosition();
+			Vector3 position = blockPosition;
 			ImGui::Text("Block Position: (%.2f, %.2f, %.2f)", position.x, position.y, position.z);
 		}
 	} else {
@@ -153,5 +227,3 @@ void PhotoCamera::DrawImGui()
 
 	ImGui::End();
 }
-
-

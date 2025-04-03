@@ -19,9 +19,22 @@ public:
 	// マップデータのコピー
 	void Copy();
 
+	// コピーしたマップデータの貼り付け 
+	void Paste();
+
 	// imguiの描画
 	void DrawImGui();
 
+public:	// Setter / Getter
+	// 変更したマップデータをmapにセット
+	//void SetMap(Map* map) { this->map = map; }
+
+	// カメラの位置を取得
+	Vector2 GetPosition() { return position; }
+	// カメラのサイズを取得
+	Vector2 GetRangeSize() { return rangeSize; }
+	// カメラのオブジェクトを取得
+	Object3D* GetObject3D() { return object3D.get(); }
 private:
 	Map* map;
 	MapChipData mapData;
@@ -34,7 +47,8 @@ private:
 	// コピーしたマップデータ
 	vector<vector<MapChipType>> copyData;
 	// コピーしたマップデータの描画用Blockクラス
-	vector<unique_ptr<Block>> blocks;
-
+	vector<Block*> blocks;
+	
+	Vector3 blockPosition;
 };
 

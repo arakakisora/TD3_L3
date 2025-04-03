@@ -54,7 +54,7 @@ public: // Getter
     IndexSet GetMapChipIndexSetByPosition(const Vector3& posotopn);
     Rect GetRectByIndex(uint32_t xindex, uint32_t yIndex);
 
-private:
+private:    // ブロック関連
     static inline const float kBlockWidth = 1.0f;
     static inline const float kBlockHeight = 1.0f;
     static inline const uint32_t kNumBlockVirtical = 25;
@@ -73,4 +73,5 @@ public:
 public: // 新設 Setter / Getter
     std::vector<std::vector<MapChipType>> GetMap() const { return mapChipData_.data; }
 	void SetMap(std::vector<std::vector<MapChipType>> map) { mapChipData_.data = map; }
+	void SetMap(const MapChipData& map) { mapChipData_ = map; }
 };

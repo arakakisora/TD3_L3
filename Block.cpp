@@ -168,6 +168,11 @@ Block* Block::CreateBlock(MapChipType type, const Vector3& position, Map* map) {
 	return block;
 }
 
+void Block::SetObject3DPosiition(const Vector3& position)
+{
+	object3D->SetTranslate(position);
+}
+
 void Block::FixedTimeBlock()
 {
 
