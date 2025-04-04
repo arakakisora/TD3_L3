@@ -48,7 +48,10 @@ private:
 	vector<vector<MapChipType>> copyData;
 	// コピーしたマップデータの描画用Blockクラス
 	vector<Block*> blocks;
-	
+	// コピーしたマップデータの描画用Blockクラスの位置
 	Vector3 blockPosition;
+
+	// Y軸の座標変換用
+	int photo_ConvertY = ((int)Map::kNumBlockVirtical - (int)position.y) - 1;
 };
 

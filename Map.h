@@ -28,6 +28,11 @@ struct Rect {
 
 class Map {
 public:
+    static inline const float kBlockWidth = 1.0f;
+    static inline const float kBlockHeight = 1.0f;
+    static inline const uint32_t kNumBlockVirtical = 25;
+    static inline const uint32_t kNumBlockHorizontal = 100;
+public:
 	// 初期化
     void Initialize();
 	// 終了処理
@@ -55,10 +60,7 @@ public: // Getter
     Rect GetRectByIndex(uint32_t xindex, uint32_t yIndex);
 
 private:    // ブロック関連
-    static inline const float kBlockWidth = 1.0f;
-    static inline const float kBlockHeight = 1.0f;
-    static inline const uint32_t kNumBlockVirtical = 25;
-    static inline const uint32_t kNumBlockHorizontal = 100;
+   
     MapChipData mapChipData_;
     std::vector<std::vector<Block*>> blockobject3D;
 
