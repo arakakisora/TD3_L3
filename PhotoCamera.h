@@ -53,5 +53,7 @@ private:
 
 	// Y軸の座標変換用
 	int photo_ConvertY = ((int)Map::kNumBlockVirtical - (int)position.y) - 1;
+	// MapThipTypeのマップデータ
+	MapChipType mapChipType;
 };
 

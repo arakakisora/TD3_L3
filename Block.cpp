@@ -158,6 +158,12 @@ void Block::Finalize() {
 	}
 }
 
+Block* Block::CreateBlock(MapChipType type, const Vector3& position)
+{
+	return nullptr;
+}
+
+
 void Block::SetFalling(bool falling) {
 	isFalling = falling;
 }
