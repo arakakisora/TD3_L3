@@ -195,6 +195,11 @@ void PhotoCamera::Move()
 void PhotoCamera::Copy() {
 	// マップデータが読み込めていないときはコピー不可
 	if (!map) return;
+	for (auto& block : blocks) {
+		block->Finalize();
+		delete block;
+	}
+	blocks.clear();
 
 	// 2x2 のマップチップ番号をコピー
 	copyData.clear();
