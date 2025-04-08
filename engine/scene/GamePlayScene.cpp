@@ -46,10 +46,6 @@ void GamePlayScene::Initialize()
 	map->Initialize();
 
 
-
-
-
-
 	//playerの生成	
 	player = std::make_unique<Player>();
 	object3DPlayer = new Object3D();

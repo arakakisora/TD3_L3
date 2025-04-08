@@ -72,6 +72,7 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 
 
 void Block::Update() {
+
 	/*else if (MapChipType::マップチップタイプ == type) {
 	* モデルの更新なのでこれは絶対に必要
 		object3D->Update();

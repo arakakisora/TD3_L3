@@ -31,13 +31,8 @@ void PhotoCamera::Update(Map* map)
 	// フォトカメラの移動
 	Move();
 
-	// 座標変換
-
 	// フォトカメラの枠モデルの更新
 	object3D->Update();
-
-
-	// 座標変換
 
 	// フォトカメラのコピー / スペースキーを押したら
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
@@ -82,7 +77,7 @@ void PhotoCamera::Update(Map* map)
 
 
 	// 変更したmapDataをmapにセット / mapクラスに送り返し更新させる
-	this->map->SetMap(mapData.data);
+	this->map->SetMap(mapData);
 
 
 
@@ -242,12 +237,19 @@ void PhotoCamera::Paste()
 		for (uint32_t x = 0; x < 2; ++x) {
 			MapChipType type = copyData[y][x];
 			int positionX = static_cast<int>(position.x) + x;
-			int positionY = static_cast<int>(position.y) + y;
+			int positionY = static_cast<int>(Map::kNumBlockVirtical - position.y - 1) + y;
+
+			// マップの範囲外をチェック
+			if (positionX < 0 || positionY < 0 || positionX >= mapData.data[0].size() || positionY >= mapData.data.size()) {
+				continue;
+			}
+
 			mapData.data[positionY][positionX] = type;
-			// 変更したマップデータをマップにセット
-			map->SetMap(mapData.data);
 		}
 	}
+
+	// 変更したマップデータをマップにセット
+	map->SetMap(mapData);
 }
 
 

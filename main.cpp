@@ -2,11 +2,6 @@
 
 
 
-
-
-
-
-
 #include "Game.h"
 #include "Framework.h"
 
@@ -19,7 +14,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 	//出力ウィンドウへの文字出力
 	OutputDebugStringA("HEllo,DIrectX!\n");
-
 
 #pragma region 基盤システム初期化
 	

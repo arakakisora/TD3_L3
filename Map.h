@@ -42,12 +42,15 @@ public:
 	// 描画
     void Draw();
 	// 3Dオブジェクト生成
-    void GenerateObject3D();
+    void GenerateStageBlock();
 	// マップチップデータのリセット
     void ResetMapChipData();
 	// マップチップデータの読み込み
     void LoadMapChipCsv(const std::string& filePath);
     
+    // 変更されたマップデータのブロック生成
+	void GenerateChangeStageBlock(const MapChipData& mapChipData);
+
 public: // Getter
 	// マップチップの種類を取得
     MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
@@ -59,9 +62,15 @@ public: // Getter
     IndexSet GetMapChipIndexSetByPosition(const Vector3& posotopn);
     Rect GetRectByIndex(uint32_t xindex, uint32_t yIndex);
 
-private:    // ブロック関連
-   
+private: // ブロック関連
+
+   // マップチップデータ
     MapChipData mapChipData_;
+
+	// 受け取ったマップチップデータ
+    MapChipData mapChipDataNext_;
+
+    // ブロックのオブジェクト
     std::vector<std::vector<Block*>> blockobject3D;
 
 public:
@@ -74,6 +83,6 @@ public:
 
 public: // 新設 Setter / Getter
     std::vector<std::vector<MapChipType>> GetMap() const { return mapChipData_.data; }
-	void SetMap(std::vector<std::vector<MapChipType>> map) { mapChipData_.data = map; }
-	void SetMap(const MapChipData& map) { mapChipData_ = map; }
+	//void SetMap(std::vector<std::vector<MapChipType>> map) { mapChipData_.data = map; }
+	void SetMap(const MapChipData& map) { mapChipDataNext_ = map; }
 };
