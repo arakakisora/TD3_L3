@@ -7,8 +7,8 @@
 void ObjectCamera::Initialize(Map* map) {
     this->map_ = map;
     // 開始番号を設定
-    xIndex = 7;
-    yIndex = 16;
+    xIndex = 5;
+    yIndex = 5;
     size = { 1.0f,1.0f,-1.0f };
 
     // ゲームカメラのオブジェクト数をレンダリング範囲分だけ確保
@@ -125,6 +125,11 @@ void ObjectCamera::GameCamertakeaphoto() {
             // 現在位置のマップチップタイプを一度だけ取得
             MapChipType mapChipType = map_->GetMapChipTypeByIndex(currentXIndex, currentYIndex);
 
+            //コピペ不可能ブロックの場合スキップ
+            if (mapChipType == MapChipType::kNCopyBlock) {
+                continue;
+            }
+
             // SPACEキーでの撮影処理
             if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
                 // マップチップタイプに基づくモデル設定
@@ -165,6 +170,20 @@ void ObjectCamera::GameCameraphoto() {
                  // モデルがマップに存在する場合
                 if (mapChipIter != mapChipTypemodelMap.end()) {
                     MapChipType mapChipType = mapChipIter->first;
+
+                    //現在のマップチップ取得
+                    MapChipType existingType = map_->GetMapChipTypeByIndex(currentXIndex, currentYIndex);
+
+                    //kNCopyBlockを消せない
+                    if (existingType == MapChipType::kNCopyBlock) {
+                        continue;
+                    }
+
+                    //コピペ不可能ブロックの場合スキップ
+                    if (mapChipType == MapChipType::kNCopyBlock) {
+                        continue;
+                    }
+
                     // 生成、削除
                     HandleMapChip(currentXIndex, currentYIndex,mapChipType);
                 }

@@ -5,7 +5,9 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#ifdef _DEBUG
 #include <imgui.h>
+#endif // _DEBUG
 #include "Object3DCommon.h"
 
 void Map::Initialize() {
@@ -35,13 +37,12 @@ void Map::Update() {
 		}
 	}
 
-	
 
+#ifdef _DEBUG
 	// ImGuiウィンドウの開始
 	ImGui::Begin("Map Chip Data");
 
 	// マップチップデータの表示
-#ifdef _DEBUG
 	for (uint32_t y = 0; y < mapChipData_.data.size(); ++y) {
 		for (uint32_t x = 0; x < mapChipData_.data[y].size(); ++x) {
 			// マップチップタイプを取得

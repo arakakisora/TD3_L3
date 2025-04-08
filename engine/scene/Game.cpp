@@ -14,6 +14,7 @@ void Game::Initialize()
 
 	//シーンの変更
 	//"TITELE"
+	//"STAGESELECTSCENE"
 	//"GAMEPLAY"
 	//GAMEOVER
 	//"GAMECLEAR"

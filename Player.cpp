@@ -4,9 +4,9 @@
 #include <cassert>
 #include "Input.h"
 #include "Logger.h"
-
+#ifdef _DEBUG
 #include <imgui.h>
-
+#endif // _DEBUG
 #include "Object3DCommon.h"
 
 
@@ -220,6 +220,8 @@ void Player::OnGroundSwitching( CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kFallBlock) {
 				hit = true;
+			}else if(mapChipType == MapChipType::kNCopyBlock){
+				hit = true;
 			}
 			// 右点の判定
 			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom] + Vector3(0, -kCollisionsmallnumber, 0));
@@ -227,6 +229,8 @@ void Player::OnGroundSwitching( CollisionMapInfo& info) {
 			if (mapChipType == MapChipType::kCopyBlock) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kFallBlock) {
+				hit = true;
+			} else if (mapChipType == MapChipType::kNCopyBlock) {
 				hit = true;
 			}
 
@@ -275,6 +279,8 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kFallBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kNCopyBlock) {
+		hit = true;
 	}
 	// 右点の判定
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
@@ -282,6 +288,8 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kFallBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
 	}
 
@@ -338,6 +346,8 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kFallBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kNCopyBlock) {
+		hit = true;
 	}
 	// 右点の判定
 	//   左点の判定
@@ -347,6 +357,8 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kFallBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
 	}
 	// hit
@@ -392,6 +404,8 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kFallBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kNCopyBlock) {
+		hit = true;
 	}
 
 	// 右下点の判定
@@ -401,6 +415,8 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kFallBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
 	}
 	// hit
@@ -444,6 +460,8 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kFallBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kNCopyBlock) {
+		hit = true;
 	}
 
 	// hidari下点の判定
@@ -453,6 +471,8 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 	if (mapChipType == MapChipType::kCopyBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kFallBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
 	}
 	// hit
