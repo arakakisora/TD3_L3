@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -148,6 +148,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\particle\ParticleEmitter.cpp" />
     <ClCompile Include="engine\particle\ParticleMnager.cpp" />
     <ClCompile Include="ObjectCamera.cpp" />
+    <ClCompile Include="PhotoCamera.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
@@ -226,6 +227,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\particle\ParticleEmitter.h" />
     <ClInclude Include="engine\particle\ParticleMnager.h" />
     <ClInclude Include="ObjectCamera.h" />
+    <ClInclude Include="PhotoCamera.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StageSelectScene.h" />
     <ClInclude Include="WorldTransform.h" />

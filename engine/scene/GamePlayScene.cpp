@@ -11,7 +11,7 @@
 #include "CameraManager.h"
 #include "ParticleMnager.h"
 #include <Logger.h>
- 
+
 void GamePlayScene::Initialize()
 {
 	//カメラの生成
@@ -21,7 +21,7 @@ void GamePlayScene::Initialize()
 
 	//カメラの生成
 	camera2 = std::make_unique<Camera>();
-	camera2->SetTranslate({ 0,6,-20, });//カメラの位置
+	camera2->SetTranslate({ 0,16.0f,-20, });//カメラの位置
 	camera2->SetRotate({ 0.3f,0,0 });//カメラの向き
 	CameraManager::GetInstans()->AddCamera("subcam", camera2.get());
 
@@ -45,10 +45,6 @@ void GamePlayScene::Initialize()
 	map = new Map;
 	map->LoadMapChipCsv("MapData/mapp1.csv");
 	map->Initialize();
-	
-
-	
-
 
 
 	//playerの生成	
@@ -57,19 +53,23 @@ void GamePlayScene::Initialize()
 	Vector3 playerPostion = map->GetMapChipPostionByIndex(6, 10);
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 	object3DPlayer->SetModel("Player.obj");
-	object3DPlayer->SetScale(Vector3{1.0f,1.0f,1.0f });
+	object3DPlayer->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	player->SetMapChipField(map);
 	player->Initialize(object3DPlayer, playerPostion);
 	player->SetDeathHeight(0.0f);
 
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
+
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(false);
 	
-	// ゲームカメラの生成
-	gameCamera_ = new ObjectCamera();
-	gameCamera_->Initialize(map);
 
+
+	// ゲームカメラの生成
+	//gameCamera_ = new ObjectCamera();
+	//gameCamera_->Initialize(map);
+	photoCamera = new PhotoCamera;
+	photoCamera->Initialize();
 }
 
 void GamePlayScene::Finalize()
@@ -78,24 +78,25 @@ void GamePlayScene::Finalize()
 	CameraManager::GetInstans()->RemoveCamera("subcam");
 	CameraManager::GetInstans()->Finalize();
 
-	
+
 	map->Finalize();
 	delete map;
 
 	delete object3DPlayer;
 
-	delete gameCamera_;
-
+	//delete gameCamera_;
+	photoCamera->Finalize();
+	delete photoCamera;
 }
 
 void GamePlayScene::Update()
 {
 	//カメラの更新
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
-	
-	// ゲームカメラ更新処理
-	gameCamera_->Update();
 
+	// ゲームカメラ更新処理
+	//gameCamera_->Update();
+	photoCamera->Update(map);
 	map->Update();
 
 
@@ -124,13 +125,13 @@ void GamePlayScene::Update()
 
 
 	}
-	
+
 #endif // _DEBUG
-	
 
 
-	
-	
+
+
+
 }
 
 void GamePlayScene::Draw()
@@ -141,13 +142,13 @@ void GamePlayScene::Draw()
 	Object3DCommon::GetInstance()->CommonDraw();
 
 	// ゲームカメラ
-	gameCamera_->Draw();
-
+	//gameCamera_->Draw();
+	photoCamera->Draw();
 	////プレイヤー
 	player->Draw();
 
-	
-	
+
+
 
 	map->Draw();
 
@@ -158,7 +159,7 @@ void GamePlayScene::Draw()
 #pragma region スプライト描画
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
-	
+
 
 #pragma endregion
 }

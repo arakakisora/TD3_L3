@@ -74,6 +74,11 @@ public:
 
 	static Block* CreateBlock(MapChipType type, const Vector3& position, Map* map);
 
+	// 
+	Vector3 GetPosition() {
+		return position;
+	}
+
 private:
 	int mapID;
 	MapChipType type;
@@ -82,6 +87,11 @@ private:
 
 	Vector3 position;
 
+    public:
+		// ブロックの位置を設定
+        void SetPosition(const Vector3& position) { this->position = position; }
+		// ブロックの座標を取得し直接モデルの座標にする
+		void SetObject3DPosiition(const Vector3& position);
 private:	// 各ブロック用の変数
 	// 一定時間経過後に消えるブロックの貼り付け前（FixedTime）No.7
 

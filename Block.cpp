@@ -72,6 +72,7 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 
 
 void Block::Update() {
+
 	/*else if (MapChipType::マップチップタイプ == type) {
 	* モデルの更新なのでこれは絶対に必要
 		object3D->Update();
@@ -158,6 +159,12 @@ void Block::Finalize() {
 	}
 }
 
+Block* Block::CreateBlock(MapChipType type, const Vector3& position)
+{
+	return nullptr;
+}
+
+
 void Block::SetFalling(bool falling) {
 	isFalling = falling;
 }
@@ -166,6 +173,11 @@ Block* Block::CreateBlock(MapChipType type, const Vector3& position, Map* map) {
 	Block* block = new Block();
 	block->Initialize(type, position, map);
 	return block;
+}
+
+void Block::SetObject3DPosiition(const Vector3& position)
+{
+	object3D->SetTranslate(position);
 }
 
 void Block::FixedTimeBlock()

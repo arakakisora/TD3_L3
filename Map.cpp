@@ -11,7 +11,9 @@
 #include "Object3DCommon.h"
 
 void Map::Initialize() {
-	GenerateObject3D();
+	GenerateStageBlock();
+	// マップチップデータ変更検出用
+	mapChipDataNext_ = mapChipData_;
 }
 
 void Map::Finalize() {
@@ -25,6 +27,7 @@ void Map::Finalize() {
 }
 
 void Map::Update() {
+	GenerateChangeStageBlock(mapChipDataNext_);
 	// 3Dオブジェクトの更新
 	for (std::vector<Block*>& blockLine : blockobject3D) {
 		for (Block* block : blockLine) {
@@ -33,6 +36,7 @@ void Map::Update() {
 			block->Update();
 		}
 	}
+
 
 #ifdef _DEBUG
 	// ImGuiウィンドウの開始
@@ -73,7 +77,7 @@ void Map::Draw() {
     }
 }
 
-void Map::GenerateObject3D() {
+void Map::GenerateStageBlock() {
     // 要素数
     uint32_t numBlokVirtical = this->GetNumBlockVirtical();     //縦
     uint32_t numBlokHorizontal = this->GetNumBlockHorizontal(); //横
@@ -94,6 +98,27 @@ void Map::GenerateObject3D() {
         }
     }
 }
+
+void Map::GenerateChangeStageBlock(const MapChipData& mapChipData)
+{
+	// マップチップデータの変更を検出
+	for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
+		for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
+			if (mapChipData.data[y][x] != mapChipData_.data[y][x]) {
+				// マップチップデータが変更された場合、3Dオブジェクトを再生成
+				if (blockobject3D[y][x] != nullptr) {
+					delete blockobject3D[y][x]; // メモリ解放
+					blockobject3D[y][x] = nullptr; // ポインタを nullptr に設定
+				}
+				// 新しいマップチップデータに基づいてオブジェクトを生成
+				blockobject3D[y][x] = Block::CreateBlock(mapChipData.data[y][x], GetMapChipPostionByIndex(x, y), this);
+			}
+		}
+	}
+	// 変更されたマップチップデータをおおもとにする
+	mapChipData_ = mapChipData;
+}
+
 
 void Map::ResetMapChipData() {
 	mapChipData_.data.clear();
@@ -137,6 +162,7 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 		}
 	}
 }
+
 
 MapChipType Map::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {
 	// マップチップの範囲外の場合は空白を返す
