@@ -49,6 +49,8 @@ void PhotoCamera::Update(Map* map)
 					Block* block = new Block();
 					block->Initialize(mapChipType, blockPosition, this->map);
 					//block->SetPosition(blockPosition);
+				
+					block->SetDuringCopy(true);
 					blocks.push_back(block);
 				} else if (mapChipType == MapChipType::kBlank) {
 					// コピーしたマップデータの描画用Blockクラスのマップチップタイプが空白のとき
@@ -200,6 +202,7 @@ void PhotoCamera::Copy() {
 		delete block;
 	}
 	blocks.clear();
+
 
 	// 2x2 のマップチップ番号をコピー
 	copyData.clear();

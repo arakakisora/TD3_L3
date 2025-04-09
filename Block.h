@@ -71,7 +71,8 @@ public:
 
 	//落下フラグセット
 	void SetFalling(bool falling);
-
+	//コピー中フラグセット
+	void SetDuringCopy(bool isCopying) { this->isDuringCopy = isCopying; }
 	static Block* CreateBlock(MapChipType type, const Vector3& position, Map* map);
 
 	// 
@@ -102,6 +103,8 @@ private:	// 各ブロック用の変数
 	// FallBlock用の変数
 	float velocity = 0.0f;
 	bool isFalling = false;
+	//コピー中か
+	bool isDuringCopy = false;
 	static constexpr float gravity = 0.02f;
 };
 

@@ -21,7 +21,7 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 	object3D->Initialize(Object3DCommon::GetInstance());
 	object3D->SetTranslate(position);
 	velocity = 0.0f;
-	//isFalling = false;
+	isFalling = false;
 
 	switch ((type))
 	{
@@ -95,6 +95,12 @@ void Block::Update() {
 		PutFixedTimeBlock();
 	}
 	else if (MapChipType::kFallBlock == type) {
+		//コピー中の場合スキップ
+		if (isDuringCopy) {
+			object3D->Update();
+			return;
+		}
+
 		Vector3 position = object3D->GetTranslate();
 		IndexSet index = map->GetMapChipIndexSetByPosition(position);
 		uint32_t belowIndex = index.yIndex + 1;
@@ -122,6 +128,7 @@ void Block::Update() {
 				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
 				map->RemoveObjectAt(index.xIndex, index.yIndex);
 				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock);
+				SetDuringCopy(false);
 			}
 
 			object3D->SetTranslate(position);

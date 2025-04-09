@@ -43,7 +43,7 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
 
 	map = new Map;
-	map->LoadMapChipCsv("MapData/mapp1.csv");
+	map->LoadMapChipCsv("MapData/blocks.csv");
 	map->Initialize();
 
 
