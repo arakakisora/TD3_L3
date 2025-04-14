@@ -28,43 +28,46 @@ void PhotoCamera::Update(Map* map)
 	// mapDataを受け取る
 	mapData.data = this->map->GetMap();
 
-	// フォトカメラの移動
-	Move();
 
-	// フォトカメラの枠モデルの更新
-	object3D->Update();
+	if (CamerMode) {
+		// フォトカメラの移動
+		Move();
 
-	// フォトカメラのコピー / スペースキーを押したら
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		Copy();
-		for (uint32_t y = 0; y < 2; ++y) {
-			for (uint32_t x = 0; x < 2; ++x) {
-				// コピーしたマップデータの描画用Blockクラスの位置
-				Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
-				// コピーしたマップデータの描画用Blockクラスのマップチップタイプ
-				MapChipType mapChipType = copyData[y][x];
-				// コピーしたマップデータの描画用Blockクラスのマップチップタイプが空白でないとき
-				if (mapChipType != MapChipType::kBlank) {
-					// ブロックのインスタンスを生成する
-					Block* block = new Block();
-					block->Initialize(mapChipType, blockPosition, this->map);
-					//block->SetPosition(blockPosition);
-					blocks.push_back(block);
-				} else if (mapChipType == MapChipType::kBlank) {
-					// コピーしたマップデータの描画用Blockクラスのマップチップタイプが空白のとき
-					// ブロックのインスタンスを生成する
-					Block* block = new Block();
-					block->Initialize(MapChipType::kBlank, blockPosition, this->map);
-					blocks.push_back(block);
+
+		// フォトカメラのコピー / スペースキーを押したら
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			Copy();
+			for (uint32_t y = 0; y < 2; ++y) {
+				for (uint32_t x = 0; x < 2; ++x) {
+					// コピーしたマップデータの描画用Blockクラスの位置
+					Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
+					// コピーしたマップデータの描画用Blockクラスのマップチップタイプ
+					MapChipType mapChipType = copyData[y][x];
+					// コピーしたマップデータの描画用Blockクラスのマップチップタイプが空白でないとき
+					if (mapChipType != MapChipType::kBlank) {
+						// ブロックのインスタンスを生成する
+						Block* block = new Block();
+						block->Initialize(mapChipType, blockPosition, this->map);
+						//block->SetPosition(blockPosition);
+						blocks.push_back(block);
+					} else if (mapChipType == MapChipType::kBlank) {
+						// コピーしたマップデータの描画用Blockクラスのマップチップタイプが空白のとき
+						// ブロックのインスタンスを生成する
+						Block* block = new Block();
+						block->Initialize(MapChipType::kBlank, blockPosition, this->map);
+						blocks.push_back(block);
+					}
 				}
 			}
 		}
-	}
-	// フォトカメラのペースト / Pキーを押したら
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
-		Paste();
+		// フォトカメラのペースト / Pキーを押したら
+		if (Input::GetInstance()->TriggerKey(DIK_P)) {
+			Paste();
+		}
 	}
 
+	// フォトカメラの枠モデルの更新
+	object3D->Update();
 
 	// 生成されたブロックの更新
 	for (auto& block : blocks) {
@@ -85,12 +88,13 @@ void PhotoCamera::Update(Map* map)
 
 void PhotoCamera::Draw()
 {
-	// フォトカメラの枠モデルの描画
-	object3D->Draw();
-
-	// 生成されたブロックの描画
-	for (auto& block : blocks) {
-		block->Draw();
+	if (CamerMode) {
+		// フォトカメラの枠モデルの描画
+		object3D->Draw();
+		// 生成されたブロックの描画
+		for (auto& block : blocks) {
+			block->Draw();
+		}
 	}
 }
 
