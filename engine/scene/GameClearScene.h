@@ -82,6 +82,6 @@ private:
 	std::vector<Vector3> velocity_;
 
 
-	uint32_t Selectindex = 0;
+	uint32_t Selectindex = 1;
 
 };

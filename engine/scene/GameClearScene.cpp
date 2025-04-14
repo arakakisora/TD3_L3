@@ -46,8 +46,6 @@ void GameClearScene::Initialize()
 
 	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Nextstage.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Stageselect.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_NextstageHet.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_StageselectHet.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/ArroUP.png");
 	
 	// 作成してリストに追加
