@@ -63,8 +63,12 @@ public: // Getter
     Rect GetRectByIndex(uint32_t xindex, uint32_t yIndex);
 
 public: //カメラに使用する
+    // 読み込んだカメラの範囲をフォトカメラに渡すためのもの
 	uint32_t GetkameraSizeX() const { return kameraSizeX; }
 	uint32_t GetkameraSizeY() const { return kameraSizeY; }
+
+	// フォトカメラのシャッター回数を取得
+	uint32_t GetShutterCount() const { return photoCameraCount; }
 
 private: // ブロック関連
 

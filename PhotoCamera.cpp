@@ -28,6 +28,8 @@ void PhotoCamera::Update(Map* map)
 	// フォトカメラの範囲
 	cameraSizeX = this->map->GetkameraSizeX();
 	cameraSizeY = this->map->GetkameraSizeY();
+	// フォトカメラのシャッター回数
+	shutterLimitCountMax = this->map->GetShutterCount();
 
 	// mapDataを受け取る
 	mapData.data = this->map->GetMap();
@@ -66,6 +68,11 @@ void PhotoCamera::Update(Map* map)
 		}
 		// フォトカメラのペースト / Pキーを押したら
 		if (Input::GetInstance()->TriggerKey(DIK_P)) {
+			// シャッター上限に達していったら使用不可
+			if (shutterCount >= shutterLimitCountMax) {
+				// シャッター上限に達しているのでペースト不可
+				return;
+			}
 			Paste();
 		}
 	}
@@ -183,6 +190,7 @@ void PhotoCamera::Copy() {
 		}
 		copyData.push_back(row);
 	}
+	
 }
 
 
@@ -212,6 +220,8 @@ void PhotoCamera::Paste()
 
 	// 変更したマップデータをマップにセット
 	map->SetMap(mapData);
+	// シャッターの回数をプラス
+	shutterCount++;
 }
 
 
