@@ -344,7 +344,7 @@ void StageSelectScene::moveChangeScene() {
 			// シーン変更（必要に応じてシーン変更を実行）
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 
-			/*
+			/* 以前のコード
 			// ステージによってシーン遷移
 			if (currentIndex_ == 0) {                                  // Stage_01
 				// シーン変更（必要に応じてシーン変更を実行）

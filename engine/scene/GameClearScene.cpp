@@ -88,6 +88,19 @@ void GameClearScene::Update()
 		SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 	}
 
+	//次のステージへ(リターンは仮)
+	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+		uint32_t nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
+
+		if (nextStage < MaxStageIndex_) {
+			SceneManager::GetInstance()->SetStageIndex(nextStage);
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+		} else {
+			//最終ステージをクリアしたら(仮)
+			SceneManager::GetInstance()->ChangeScene("TITLE");
+		}
+	}
+
 }
 
 void GameClearScene::Draw()

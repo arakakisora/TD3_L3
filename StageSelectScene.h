@@ -88,6 +88,5 @@ public:
 	Vector3 FollowTargetposition;
 	int frameCounter_ = 0;  // フレームカウンター
 
-
 	std::unique_ptr<Sprite> uIController_;
 };
