@@ -6,6 +6,7 @@
 #include "Audio.h"
 #include "BaseScene.h"
 #include <cmath>
+#include "ParticleMnager.h"
 
 class StageSelectScene :public BaseScene
 {

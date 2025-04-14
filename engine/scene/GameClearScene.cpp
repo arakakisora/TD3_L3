@@ -70,7 +70,7 @@ void GameClearScene::Initialize()
 	ArroTextUI_ = std::make_unique<Sprite>();
 
 	ArroTextUI_->Initialize(SpriteCommon::GetInstance(), "Resources/ArroUP.png");
-	ArroTextUI_->SetPosition(Vector2(0.0f, 0.0f));
+	ArroTextUI_->SetPosition(Vector2(830.0f, 575.0f));
 	ArroTextUI_->SetSize({ 50.0f, 50.0f });
 	ArroTextUI_->SetRotation(0.0f);
 	ArroTextUI_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -133,14 +133,14 @@ void GameClearScene::Draw()
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
 
+	if (allObjectsFinished) {
+		// UIの描画
+		for (std::unique_ptr<Sprite>& UI : TextUI_) {
+			UI->Draw();
+		}
 
-	// UIの描画
-	for (std::unique_ptr<Sprite>& UI : TextUI_) {
-		UI->Draw();
+		ArroTextUI_->Draw();
 	}
-
-	ArroTextUI_->Draw();
-
 #pragma endregion
 
 }
