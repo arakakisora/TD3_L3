@@ -65,6 +65,9 @@ private:
 	std::vector<std::unique_ptr<Object3D>> Cleartext_;
 	// 最大テキスト数
 	uint32_t MaxtextIndex_ = 3;
+	// 	UI
+	std::vector<std::unique_ptr<Sprite>> TextUI_;
+	std::unique_ptr<Sprite> ArroTextUI_;
 
 	float elapsedTime = 0.0f; // 経過時間
 	const float animationDuration = 1.0f; // アニメーション時間
@@ -74,11 +77,11 @@ private:
 
 	float objecttime_[3];
 	float startDelay[3];
-	bool fige = false;
+	bool Changefige = false;
 	// 速度を格納するための配列（各オブジェクトの速度を管理）
 	std::vector<Vector3> velocity_;
 
-	float elapsedTime_;
-	float	elapsedFrames_ = 0;
-	float jumpEndTime_[3] = { 0.0f };
+
+	uint32_t Selectindex = 0;
+
 };

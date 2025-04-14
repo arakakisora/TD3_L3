@@ -9,11 +9,12 @@
 #include "SceneManager.h"
 #include "CameraManager.h"
 #include <ModelManager.h>
+#include <TextureManager.h>
 
 void GameClearScene::Initialize()
 {
 	CameraManager::GetInstans()->Initialize();
-
+	
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_01.obj");
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_02.obj");
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_03.obj");
@@ -42,6 +43,41 @@ void GameClearScene::Initialize()
 		velocity_[i] = Vector3(0.0f, 0.0f, 0.0f); // 初期速度はゼロに設定（x, y, z）
 	}
 
+
+	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Nextstage.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Stageselect.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_NextstageHet.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_StageselectHet.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/ArroUP.png");
+	
+	// 作成してリストに追加
+	for (uint32_t i = 0; i < 2; ++i) {
+		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
+	
+		if (i == 0) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_Stageselect.png");
+			newSprite->SetPosition(Vector2(340.0f, 495.0f));
+			newSprite->SetSize({ 250.0f, 70.0f });
+		} else if (i == 1) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_Nextstage.png");
+			newSprite->SetPosition(Vector2(750.0f, 500.0f));
+			newSprite->SetSize({ 224.0f, 50.0f });
+		}
+		newSprite->SetRotation(0.0f);
+		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+
+		TextUI_.push_back(std::move(newSprite));
+	}
+
+	ArroTextUI_ = std::make_unique<Sprite>();
+
+	ArroTextUI_->Initialize(SpriteCommon::GetInstance(), "Resources/ArroUP.png");
+	ArroTextUI_->SetPosition(Vector2(0.0f, 0.0f));
+	ArroTextUI_->SetSize({ 50.0f, 50.0f });
+	ArroTextUI_->SetRotation(0.0f);
+	ArroTextUI_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+
+
 }
 
 void GameClearScene::Finalize()
@@ -54,19 +90,6 @@ void GameClearScene::Update()
 
 #ifdef _DEBUG
 
-	if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		ImGui::Text("gameClearScene");
-		if (ImGui::Button("TitleScene"))
-		{
-			SceneManager::GetInstance()->ChangeScene("TITELE");
-		}
-
-
-		//ImGui::Checkbox("start", &fige);
-
-	}
-
 #endif // _DEBUG
 
 
@@ -75,17 +98,46 @@ void GameClearScene::Update()
 		Text->Update();
 	}
 
+	// UIの更新
+	for (std::unique_ptr<Sprite>& UI : TextUI_) {
+		UI->Update();
+	}
+
+	ArroTextUI_->Update();
+
 	// 移動開始
 	EasingMove();	
 
 	if (allObjectsFinished) {
-		fige = true;
+		Changefige = true;
 		// ジャンプの処理
-		StartJump();
+		//StartJump();
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-		SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+	// (右に移動)
+	if (Input::GetInstance()->TriggerKey(DIK_D)) {
+		Selectindex = 1;
+	}
+
+	// (左に移動)
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+		Selectindex = 0;
+	}
+
+	// ステージセレクトの場合
+	if(Selectindex == 0){
+		ArroTextUI_->SetPosition(Vector2(430.0f, 575.0f));
+		if (Changefige) {
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+			}
+		}
+	}
+
+	// 次のステージの場合
+	if (Selectindex == 1) {
+		ArroTextUI_->SetPosition(Vector2(830.0f, 575.0f));
+
 	}
 
 }
@@ -108,6 +160,14 @@ void GameClearScene::Draw()
 #pragma region スプライト描画
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
+
+
+	// UIの描画
+	for (std::unique_ptr<Sprite>& UI : TextUI_) {
+		UI->Draw();
+	}
+
+	ArroTextUI_->Draw();
 
 #pragma endregion
 
