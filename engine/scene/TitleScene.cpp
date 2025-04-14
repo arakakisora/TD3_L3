@@ -51,7 +51,7 @@ void TitleScene::Update()
 {
 
 	// Aボタンが押されたときに開始
-	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A) || Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		// シーン切り替え
 		SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 	}
