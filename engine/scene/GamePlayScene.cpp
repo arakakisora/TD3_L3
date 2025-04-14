@@ -41,6 +41,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("block.obj");
 	ModelManager::GetInstans()->LoadModel("fallblock.obj");
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
+	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
+	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
 
 	map = new Map;
 	map->LoadMapChipCsv("MapData/mapp1.csv");
