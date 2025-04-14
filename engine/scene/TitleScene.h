@@ -32,5 +32,8 @@ public:
 	std::unique_ptr<Object3D> titileobject_;
 	std::unique_ptr<Object3D> uIbject_start_;
 	std::unique_ptr<Object3D> uIbject_A_;
+
+	uint32_t time = 0;
+	bool timehige = false;
 };
 
