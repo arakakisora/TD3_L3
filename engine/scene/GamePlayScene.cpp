@@ -56,7 +56,7 @@ void GamePlayScene::Initialize()
 	map = new Map;
 	map->LoadMapChipCsv(stagePath);
 	map->Initialize();
-
+	
 
 	//playerの生成	
 	player = std::make_unique<Player>();
@@ -108,11 +108,14 @@ void GamePlayScene::Update()
 	// ゲームカメラ更新処理
 	//gameCamera_->Update();
 	photoCamera->Update(map);
+	
 	map->Update();
 
 
 	////プレイヤーの更新
 	player->Update();
+	//mode切り替え
+	photoCamera->SetcameraMode(player->GetcamerMode());
 
 #ifdef _DEBUG
 

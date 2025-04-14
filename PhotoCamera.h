@@ -35,6 +35,8 @@ public:	// Setter / Getter
 	Vector2 GetRangeSize() { return rangeSize; }
 	// カメラのオブジェクトを取得
 	Object3D* GetObject3D() { return object3D.get(); }
+
+	void SetcameraMode(bool mode) { CamerMode = mode; } // カメラモードを設定
 private:
 	Map* map;
 	MapChipData mapData;
@@ -55,5 +57,7 @@ private:
 	int photo_ConvertY = ((int)Map::kNumBlockVirtical - (int)position.y) - 1;
 	// MapThipTypeのマップデータ
 	MapChipType mapChipType;
+
+	bool CamerMode = false;
 };
 

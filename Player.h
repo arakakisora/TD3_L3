@@ -82,6 +82,8 @@ public:
 	void SetTransform(const Transform& transform) { object3D_->SetTransform(transform); }// トランスフォーム設定
 	const Vector3& GetVelocity() const { return velocity_; }// 速度取得
 	void SetMapChipField(Map* mapChipFild) { mapChipFild_ = mapChipFild; }// マップチップフィールド設定
+
+	bool GetcamerMode() { return CamerMode; }// カメラモード取得
 	
 	Vector3 GetWorldPosition() {
 
@@ -93,9 +95,6 @@ public:
 		return worldPos;
 	};
 
-	
-
-	
 
 private:
 
