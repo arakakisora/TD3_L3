@@ -63,7 +63,7 @@ void GameClearScene::Update()
 		}
 
 
-		ImGui::Checkbox("start", &fige);
+		//ImGui::Checkbox("start", &fige);
 
 	}
 
@@ -75,14 +75,17 @@ void GameClearScene::Update()
 		Text->Update();
 	}
 
-	if (fige) {
-		// 移動開始
-		EasingMove();
-	}
+	// 移動開始
+	EasingMove();	
 
 	if (allObjectsFinished) {
+		fige = true;
 		// ジャンプの処理
 		StartJump();
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 	}
 
 }

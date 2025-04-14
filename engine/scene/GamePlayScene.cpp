@@ -47,7 +47,7 @@ void GamePlayScene::Initialize()
 	map = new Map;
 	map->LoadMapChipCsv("MapData/mapp1.csv");
 	map->Initialize();
-
+	
 
 	//playerの生成	
 	player = std::make_unique<Player>();
