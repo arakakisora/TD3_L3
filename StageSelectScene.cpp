@@ -152,15 +152,17 @@ void StageSelectScene::Update()
 	// UI
 	uIController_->Update();
 
-	// タイトルへ
-	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)) {
-		titlefige_ = true;
-	}
-	
-	if (titlefige_) {
-		SceneManager::GetInstance()->ChangeScene("TITELE");
-	}
+	// ステージを決定していないなら
+	if (!easingsceneFlag_ && !easingmoveFlag_) {
+		// タイトルへシーン遷移
+		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)) {
+			titlefige_ = true;
+		}
 
+		if (titlefige_) {
+			SceneManager::GetInstance()->ChangeScene("TITELE");
+		}
+	}
 }
 
 void StageSelectScene::Draw() {
