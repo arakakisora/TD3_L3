@@ -90,7 +90,8 @@ public:
 	int frameCounter_ = 0;  // フレームカウンター
 
 	std::unique_ptr<Sprite> uIController_;
-
+	std::unique_ptr<Sprite> uITitle_;
+	std::unique_ptr<Sprite> uIX_;
 
 	bool titlefige_ =false;
 };
