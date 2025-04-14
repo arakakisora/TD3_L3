@@ -50,11 +50,11 @@ public:
 	void Draw();
 
 	void PrayerMove(); // 自機の動き
-	
+
 
 
 	void CalculateCollisionBounds(CollisionMapInfo& info);
-	
+
 	// 当たり判定
 	void CollisionMapInfoTop(CollisionMapInfo& info);// 天井衝突
 	void CollisionMapInfoBootm(CollisionMapInfo& info);// 床衝突
@@ -63,7 +63,7 @@ public:
 
 	void PlayerCollisionMove(const CollisionMapInfo& inffo);// プレイヤー衝突移動
 	void CeilingCollisionMove(const CollisionMapInfo& info);// 天井衝突移動
-	void OnGroundSwitching( CollisionMapInfo& info);// 着地判定
+	void OnGroundSwitching(CollisionMapInfo& info);// 着地判定
 	void HitWallCollisionMove(const CollisionMapInfo& info);// 壁衝突移動
 
 
@@ -71,7 +71,7 @@ public:
 	// map衝突判定
 	void MapCollision(CollisionMapInfo& info);// マップ衝突判定
 
-	
+
 	//アクセッサ
 	//死ぬ系
 	bool GetIsDead_() const { return isDead_; }// 死フラグ
@@ -84,7 +84,7 @@ public:
 	void SetMapChipField(Map* mapChipFild) { mapChipFild_ = mapChipFild; }// マップチップフィールド設定
 
 	bool GetcamerMode() { return CamerMode; }// カメラモード取得
-	
+
 	Vector3 GetWorldPosition() {
 
 		Vector3 worldPos;
@@ -101,12 +101,12 @@ private:
 	//objec3D
 	Object3D* object3D_ = nullptr;
 
-	
+
 	Vector3 velocity_ = {};                          // 速度
 	static inline const float kAccleration = 0.05f;  // 定数加速度
 	static inline const float kAttenuation = 0.2f;   // 速度減衰率
 	static inline const float kLimitRunSpeed = 1.0f; // 最大速度制限
-	
+
 	// ジャンプ
 	bool onGround_ = true;                                 // 接点状態フラグ
 	static inline const float kGravityAccleration = 0.05f; // 重力加速度
@@ -127,5 +127,6 @@ private:
 	float deathHeight_; // 落下死の高さ
 	//カメラモードフラグ
 	bool CamerMode = false;
-	
+	// クリアシーン移動フラグ
+	bool CheckGoal = false;
 };
