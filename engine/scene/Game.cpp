@@ -19,7 +19,7 @@ void Game::Initialize()
 	//GAMEOVER
 	//"GAMECLEAR"
 
-	SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+	SceneManager::GetInstance()->ChangeScene("TITELE");
 
 
 }
