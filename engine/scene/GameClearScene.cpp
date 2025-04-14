@@ -108,34 +108,8 @@ void GameClearScene::Update()
 
 	if (allObjectsFinished) {
 		Changefige = true;
-		// ジャンプの処理
-		//StartJump();
-	}
-
-	// (右に移動)
-	if (Input::GetInstance()->TriggerKey(DIK_D)) {
-		Selectindex = 1;
-	}
-
-	// (左に移動)
-	if (Input::GetInstance()->TriggerKey(DIK_A)) {
-		Selectindex = 0;
-	}
-
-	// ステージセレクトの場合
-	if(Selectindex == 0){
-		ArroTextUI_->SetPosition(Vector2(430.0f, 575.0f));
-		if (Changefige) {
-			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
-			}
-		}
-	}
-
-	// 次のステージの場合
-	if (Selectindex == 1) {
-		ArroTextUI_->SetPosition(Vector2(830.0f, 575.0f));
-
+		// コントローラー操作
+		ControllerUpdate();
 	}
 
 }
@@ -259,5 +233,54 @@ void GameClearScene::StartJump() {
 
 			Cleartext_[i]->SetTranslate(pos);
 		}
+	}
+}
+void GameClearScene::ControllerUpdate() {
+
+	//// (右に移動)
+	//if (Input::GetInstance()->TriggerKey(DIK_D)) {
+	//	Selectindex = 1;
+	//}
+
+	//// (左に移動)
+	//if (Input::GetInstance()->TriggerKey(DIK_A)) {
+	//	Selectindex = 0;
+	//}
+
+	// 長押し対応用の遅延時間
+	static float holdDelay_ = 0.1f; // 0.1秒（調整可能）
+	static float holdTimer_ = 0.0f; // 長押し判定用のタイマー
+
+	// 長押し時の処理継続
+	bool continueMove = (holdTimer_ > holdDelay_);
+
+	// 右スティックのX軸入力を取得
+	float rightStickX = Input::GetInstance()->GetGamePadStickX(); // 右スティックのX軸入力
+
+	// スティックのしきい値（デッドゾーンを超えたときのみ反応）
+	const float stickThreshold = 0.5f;
+
+	// 入力方向によってSelectIndexを変更
+	if (rightStickX > stickThreshold || (continueMove && rightStickX > stickThreshold)) {
+		Selectindex = 1; // 右
+	} else if (rightStickX < -stickThreshold || (continueMove && rightStickX < -stickThreshold)) {
+		Selectindex = 0; // 左
+	}
+
+
+	// ステージセレクトの場合
+	if (Selectindex == 0) {
+		ArroTextUI_->SetPosition(Vector2(430.0f, 575.0f));
+		if (Changefige) {
+			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+			}
+		}
+	}
+
+	// 次のステージの場合
+	if (Selectindex == 1) {
+		ArroTextUI_->SetPosition(Vector2(830.0f, 575.0f));
+
 	}
 }

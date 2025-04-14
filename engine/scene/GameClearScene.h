@@ -60,6 +60,8 @@ public:
 		}
 	}
 
+	void ControllerUpdate();
+
 private:
 	// テキストオブジェクト
 	std::vector<std::unique_ptr<Object3D>> Cleartext_;
