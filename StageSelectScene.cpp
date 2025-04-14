@@ -29,14 +29,14 @@ void StageSelectScene::Initialize()
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
 	Player_->SetModel("Player.obj");
-	Player_->SetTranslate(Vector3(0.0f, -2.0f, 0.0f));	
+	Player_->SetTranslate(Vector3(0.0f, -2.0f, 0.0f));
 	Player_->SetRotate({ 0,  -90.0f * (DirectX::XM_PI / 180.0f) , 180.0f * (DirectX::XM_PI / 180.0f) });
 	Player_->SetLighting(false);
 
 	// 作成してでリストに追加
 	for (uint32_t i = 0; i < MaxSelectIndex_; ++i) {
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
-		newObject->Initialize(Object3DCommon::GetInstance());	
+		newObject->Initialize(Object3DCommon::GetInstance());
 		newObject->SetModel("StageSelect/Stage02.obj");
 		newObject->SetTranslate(Vector3(7.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 		newObject->SetLighting(false);
@@ -78,7 +78,7 @@ void StageSelectScene::Initialize()
 	// コントローラ操作のUI
 	uIController_ = std::make_unique <Sprite>();
 	uIController_->Initialize(SpriteCommon::GetInstance(), "Resources/StageSelect/controllerUI.png");
-	uIController_->SetPosition(Vector2( 15.0f,610.0f ));
+	uIController_->SetPosition(Vector2(15.0f, 610.0f));
 	uIController_->SetSize({ 340.0f, 100.0f });
 	uIController_->SetRotation(0.0f);
 	uIController_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -160,7 +160,7 @@ void StageSelectScene::Draw() {
 
 
 	Player_->Draw();
-	
+
 	for (std::unique_ptr<Object3D>& stage : stageObjects_) {
 		stage->Draw();
 	}
@@ -201,7 +201,7 @@ void StageSelectScene::move() {
 
 	// (右に移動)
 	if ((rightStickX > stickThreshold || (continueMove && rightStickX > stickThreshold))
-		&& currentIndex_ < MaxSelectIndex_ - 1 && !easingmoveFlag_ && !easingsceneFlag_|| Input::GetInstance()->TriggerKey(DIK_D)) {
+		&& currentIndex_ < MaxSelectIndex_ - 1 && !easingmoveFlag_ && !easingsceneFlag_ || Input::GetInstance()->TriggerKey(DIK_D)) {
 
 		currentIndex_++;
 		easingmoveFlag_ = true;
@@ -339,7 +339,12 @@ void StageSelectScene::moveChangeScene() {
 		// イージング完了
 		if (easingProgress_ >= 0.8f) {
 			easingsceneFlag_ = false;  // イージング完了後、フラグをリセット
-			
+
+			SceneManager::GetInstance()->SetStageIndex(currentIndex_);
+			// シーン変更（必要に応じてシーン変更を実行）
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+
+			/*
 			// ステージによってシーン遷移
 			if (currentIndex_ == 0) {                                  // Stage_01
 				// シーン変更（必要に応じてシーン変更を実行）
@@ -348,6 +353,7 @@ void StageSelectScene::moveChangeScene() {
 				// シーン変更（必要に応じてシーン変更を実行）
 				SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 			}
+			*/
 		}
 	}
 }
