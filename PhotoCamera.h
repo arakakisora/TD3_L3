@@ -59,5 +59,9 @@ private:
 	MapChipType mapChipType;
 
 	bool CamerMode = false;
+
+	// カメラサイズ
+	uint32_t cameraSizeX = 2;
+	uint32_t cameraSizeY = 2;
 };
 

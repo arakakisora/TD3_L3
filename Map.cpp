@@ -9,6 +9,7 @@
 #include <imgui.h>
 #endif // _DEBUG
 #include "Object3DCommon.h"
+#include <algorithm>
 
 void Map::Initialize() {
 	GenerateStageBlock();
@@ -136,17 +137,17 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 	std::ifstream file(filePath);
 	assert(file.is_open());
 
-	// メタ情報格納用
+	// メタ情報の初期化（念のため）
 	photoCameraCount = 0;
-	frameWidth = 0;
-	frameHeight = 0;
+	kameraSizeX = 2; // ← デフォルト値（最小2x2）を明示しておくと安全
+	kameraSizeY = 2;
 
 	std::string line;
 	uint32_t currentMapY = 0;
 
 	while (std::getline(file, line)) {
-		// コメント行をスキップ
-		if (line.find("//") == 0 || line.empty()) {
+		// コメント行や空行をスキップ
+		if (line.empty() || line.find("//") == 0) {
 			continue;
 		}
 
@@ -154,16 +155,21 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 		std::string firstWord;
 		getline(lineStream, firstWord, ',');
 
+		// メタ情報の処理
 		if (firstWord == "SHUTTER") {
 			std::string value;
 			getline(lineStream, value, ',');
 			photoCameraCount = std::stoi(value);
+
 		} else if (firstWord == "FRAMESIZE") {
 			std::string valueX, valueY;
 			getline(lineStream, valueX, ',');
 			getline(lineStream, valueY, ',');
-			frameWidth = std::stoi(valueX);
-			frameHeight = std::stoi(valueY);
+
+			// 安全性のためバリデーション（オプション）
+			kameraSizeX = (std::max)(1, std::stoi(valueX));
+			kameraSizeY = (std::max)(1, std::stoi(valueY));
+
 		} else {
 			// マップデータとして処理
 			if (currentMapY >= kNumBlockVirtical) continue;
@@ -182,10 +188,8 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 	}
 
 	file.close();
-
-	// 取得したメタ情報を必要に応じて使用
-	// 例: this->shutterCount_ = shutterCount;
 }
+
 
 
 MapChipType Map::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {

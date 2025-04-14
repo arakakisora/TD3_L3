@@ -25,6 +25,10 @@ void PhotoCamera::Update(Map* map)
 {
 
 	this->map = map;
+	// フォトカメラの範囲
+	cameraSizeX = this->map->GetkameraSizeX();
+	cameraSizeY = this->map->GetkameraSizeY();
+
 	// mapDataを受け取る
 	mapData.data = this->map->GetMap();
 
@@ -37,8 +41,8 @@ void PhotoCamera::Update(Map* map)
 		// フォトカメラのコピー / スペースキーを押したら
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			Copy();
-			for (uint32_t y = 0; y < 2; ++y) {
-				for (uint32_t x = 0; x < 2; ++x) {
+			for (uint32_t y = 0; y < cameraSizeY; ++y) {
+				for (uint32_t x = 0; x < cameraSizeX; ++x) {
 					// コピーしたマップデータの描画用Blockクラスの位置
 					Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
 					// コピーしたマップデータの描画用Blockクラスのマップチップタイプ
@@ -132,11 +136,12 @@ void PhotoCamera::Move()
 
 	// photo_ConvertYの代わりにposition.yをそのまま使用
 	for (size_t i = 0; i < blocks.size(); ++i) {
-		uint32_t x = static_cast<uint32_t>(i % 2);
-		uint32_t y = static_cast<uint32_t>(i / 2);
+		uint32_t x = static_cast<uint32_t>(i % cameraSizeX);
+		uint32_t y = static_cast<uint32_t>(i / cameraSizeX);
 		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
 		blocks[i]->SetObject3DPosiition(blockPosition);
 	}
+
 }
 
 
@@ -157,9 +162,9 @@ void PhotoCamera::Copy() {
 	copyData.clear();
 	blocks.clear();
 
-	for (uint32_t y = 0; y < 2; y++) {
+	for (uint32_t y = 0; y < cameraSizeY; y++) {
 		vector<MapChipType> row;
-		for (uint32_t x = 0; x < 2; x++) {
+		for (uint32_t x = 0; x < cameraSizeX; x++) {
 			// マップの座標変換を適切に行う
 			int targetX = static_cast<int>(position.x) + x;
 			int targetY = static_cast<int>(Map::kNumBlockVirtical - position.y - 1) + y;
@@ -190,8 +195,8 @@ void PhotoCamera::Paste()
 	if (!map) return;
 
 	// コピーデータをマップデータにペースト
-	for (uint32_t y = 0; y < 2; ++y) {
-		for (uint32_t x = 0; x < 2; ++x) {
+	for (uint32_t y = 0; y < cameraSizeY; ++y) {
+		for (uint32_t x = 0; x < cameraSizeX; ++x) {
 			MapChipType type = copyData[y][x];
 			int positionX = static_cast<int>(position.x) + x;
 			int positionY = static_cast<int>(Map::kNumBlockVirtical - position.y - 1) + y;
