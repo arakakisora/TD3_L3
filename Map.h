@@ -64,7 +64,7 @@ public: // Getter
 
 private: // ブロック関連
 
-   // マップチップデータ
+    // マップチップデータ
     MapChipData mapChipData_;
 
 	// 受け取ったマップチップデータ
@@ -73,6 +73,13 @@ private: // ブロック関連
     // ブロックのオブジェクト
     std::vector<std::vector<Block*>> blockobject3D;
 
+private: // マップデータの読み込み用
+    // フォトカメラの使用回数
+    uint32_t photoCameraCount = 0;
+    // フレームの大きさ
+	uint32_t frameWidth = 0;
+	uint32_t frameHeight = 0;
+	
 public:
     uint32_t GetMapWidth() const { return kNumBlockHorizontal; }
     uint32_t GetMapHeight() const { return kNumBlockVirtical; }

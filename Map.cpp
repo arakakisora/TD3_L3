@@ -47,7 +47,7 @@ void Map::Update() {
 		for (uint32_t x = 0; x < mapChipData_.data[y].size(); ++x) {
 			// マップチップタイプを取得
 			MapChipType mapChipType = mapChipData_.data[y][x];
-			 
+
 			// マップチップタイプを番号として表示
 			ImGui::Text("%d", static_cast<int>(mapChipType));
 
@@ -67,36 +67,36 @@ void Map::Update() {
 
 void Map::Draw() {
 
-    for (std::vector<Block*>& blockLine : blockobject3D) {
-        for (Block* block : blockLine) {
+	for (std::vector<Block*>& blockLine : blockobject3D) {
+		for (Block* block : blockLine) {
 			if (!block) { // ブロックが存在しない場合はスキップ
-                continue;
-            }
-            block->Draw();
-        }
-    }
+				continue;
+			}
+			block->Draw();
+		}
+	}
 }
 
 void Map::GenerateStageBlock() {
-    // 要素数
-    uint32_t numBlokVirtical = this->GetNumBlockVirtical();     //縦
-    uint32_t numBlokHorizontal = this->GetNumBlockHorizontal(); //横
+	// 要素数
+	uint32_t numBlokVirtical = this->GetNumBlockVirtical();     //縦
+	uint32_t numBlokHorizontal = this->GetNumBlockHorizontal(); //横
 
-    blockobject3D.resize(numBlokVirtical);
+	blockobject3D.resize(numBlokVirtical);
 
-    for (uint32_t i = 0; i < numBlokVirtical; ++i) {
-        blockobject3D[i].resize(numBlokHorizontal);
-    }
+	for (uint32_t i = 0; i < numBlokVirtical; ++i) {
+		blockobject3D[i].resize(numBlokHorizontal);
+	}
 
-    // キューブ生成
-    for (uint32_t i = 0; i < numBlokVirtical; ++i) {
-        for (uint32_t j = 0; j < numBlokHorizontal; ++j) {
-            MapChipType type = this->GetMapChipTypeByIndex(j, i);
-            if (type != MapChipType::kBlank) {
-                blockobject3D[i][j] = Block::CreateBlock(type, this->GetMapChipPostionByIndex(j, i),this);
-            }
-        }
-    }
+	// キューブ生成
+	for (uint32_t i = 0; i < numBlokVirtical; ++i) {
+		for (uint32_t j = 0; j < numBlokHorizontal; ++j) {
+			MapChipType type = this->GetMapChipTypeByIndex(j, i);
+			if (type != MapChipType::kBlank) {
+				blockobject3D[i][j] = Block::CreateBlock(type, this->GetMapChipPostionByIndex(j, i), this);
+			}
+		}
+	}
 }
 
 void Map::GenerateChangeStageBlock(const MapChipData& mapChipData)
@@ -133,34 +133,58 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 	ResetMapChipData();
 
 	// ファイルを開く
-	std::ifstream file;
-	file.open(filePath);
+	std::ifstream file(filePath);
 	assert(file.is_open());
 
-	// マップチップCSV
-	std::stringstream mapChipCsv;
-	// ファイルの内容を文字列ストリームにコピー
-	mapChipCsv << file.rdbuf();
-	// ファイルを閉じる
-	file.close();
+	// メタ情報格納用
+	photoCameraCount = 0;
+	frameWidth = 0;
+	frameHeight = 0;
 
-	// csvからマップチップデータを読み込む
-	for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
-		std::string line;
-		getline(mapChipCsv, line);
+	std::string line;
+	uint32_t currentMapY = 0;
 
-		// 1桁分の文字列をストリームに変換して解析しやすくする
-		std::istringstream line_stream(line);
+	while (std::getline(file, line)) {
+		// コメント行をスキップ
+		if (line.find("//") == 0 || line.empty()) {
+			continue;
+		}
 
-		for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
-			std::string word;
-			getline(line_stream, word, ',');
+		std::istringstream lineStream(line);
+		std::string firstWord;
+		getline(lineStream, firstWord, ',');
 
-			if (mapChipTable.contains(word)) {
-				mapChipData_.data[y][x] = mapChipTable[word];
+		if (firstWord == "SHUTTER") {
+			std::string value;
+			getline(lineStream, value, ',');
+			photoCameraCount = std::stoi(value);
+		} else if (firstWord == "FRAMESIZE") {
+			std::string valueX, valueY;
+			getline(lineStream, valueX, ',');
+			getline(lineStream, valueY, ',');
+			frameWidth = std::stoi(valueX);
+			frameHeight = std::stoi(valueY);
+		} else {
+			// マップデータとして処理
+			if (currentMapY >= kNumBlockVirtical) continue;
+
+			std::istringstream mapLineStream(line);
+			for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
+				std::string word;
+				if (!std::getline(mapLineStream, word, ',')) break;
+
+				if (mapChipTable.contains(word)) {
+					mapChipData_.data[currentMapY][x] = mapChipTable[word];
+				}
 			}
+			++currentMapY;
 		}
 	}
+
+	file.close();
+
+	// 取得したメタ情報を必要に応じて使用
+	// 例: this->shutterCount_ = shutterCount;
 }
 
 
@@ -207,31 +231,31 @@ void Map::SetMapData(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType) 
 
 void Map::GenerateObjectAt(uint32_t x, uint32_t y, MapChipType mapChipType) {
 
-    // 範囲チェック
-    if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
-        return; // 範囲外なら処理をしない
-    }
+	// 範囲チェック
+	if (x >= this->GetNumBlockHorizontal() || y >= this->GetNumBlockVirtical()) {
+		return; // 範囲外なら処理をしない
+	}
 
-    // 現在のマップチップのタイプを取得
-    MapChipType currentMapChipType = this->GetMapChipTypeByIndex(x, y);
+	// 現在のマップチップのタイプを取得
+	MapChipType currentMapChipType = this->GetMapChipTypeByIndex(x, y);
 
-    // 現在のマップチップタイプと引数で渡された mapChipType が同じなら処理をスルー
-    if (currentMapChipType == mapChipType) {
-        return; // タイプが変わらない場合、処理をスルー
-    }
+	// 現在のマップチップタイプと引数で渡された mapChipType が同じなら処理をスルー
+	if (currentMapChipType == mapChipType) {
+		return; // タイプが変わらない場合、処理をスルー
+	}
 
-    // オブジェクトがすでに存在している場合は削除
-    if (blockobject3D[y][x] != nullptr) {
-        delete blockobject3D[y][x];  // オブジェクトを削除
-        blockobject3D[y][x] = nullptr; // ポインタを nullptr に設定
-    }
+	// オブジェクトがすでに存在している場合は削除
+	if (blockobject3D[y][x] != nullptr) {
+		delete blockobject3D[y][x];  // オブジェクトを削除
+		blockobject3D[y][x] = nullptr; // ポインタを nullptr に設定
+	}
 
-    // オブジェクト生成
-    Vector3 position = this->GetMapChipPostionByIndex(x, y); // 座標を取得
-    blockobject3D[y][x] = Block::CreateBlock(mapChipType, position,this);
+	// オブジェクト生成
+	Vector3 position = this->GetMapChipPostionByIndex(x, y); // 座標を取得
+	blockobject3D[y][x] = Block::CreateBlock(mapChipType, position, this);
 
-    // マップデータを更新（オブジェクトのタイプに基づいてマップデータも更新）
-    SetMapData(x, y, mapChipType);
+	// マップデータを更新（オブジェクトのタイプに基づいてマップデータも更新）
+	SetMapData(x, y, mapChipType);
 }
 
 void Map::RemoveObjectAt(uint32_t x, uint32_t y) {

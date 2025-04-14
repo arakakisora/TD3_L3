@@ -113,34 +113,7 @@ void PhotoCamera::Finalize()
 	}
 }
 
-//void PhotoCamera::Move()
-//{
-//	// @範囲外に移動しないようにする
-//	// @カメラの移動方法をコントローラー操作に変更する
-//	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-//		position.y++;
-//	} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
-//		position.y--;
-//	} else if (Input::GetInstance()->TriggerKey(DIK_D)) {
-//		position.x++;
-//	} else if (Input::GetInstance()->TriggerKey(DIK_A)) {
-//		position.x--;
-//	}
-//	// フォトカメラの配置を変更させる
-//	object3D->SetTranslate(Vector3(position.x, position.y, 0));
-//	// 座標変換
-//	photo_ConvertY = ((int)Map::kNumBlockVirtical - (int)position.y) - 1;
-//
-//	// ブロックの位置を更新
-//	for (size_t i = 0; i < blocks.size(); ++i) {
-//		uint32_t x = static_cast<uint32_t>(i % 2);
-//		uint32_t y = static_cast<uint32_t>(i / 2);
-//		Vector3 blockPosition = Vector3(position.x + x, position.y + y, -1.0F);
-//		blocks[i]->SetObject3DPosiition(blockPosition);
-//
-//	}
-//
-//}
+
 
 void PhotoCamera::Move()
 {
@@ -169,32 +142,7 @@ void PhotoCamera::Move()
 
 
 
-//void PhotoCamera::Copy() {
-//	// マップデータが読み込めていないときはコピー不可
-//	if (!map) return;
-//
-//	// 2x2 のマップチップ番号をコピー
-//	copyData.clear();
-//	blocks.clear();
-//
-//	for (uint32_t y = 0; y < 2; y++) {
-//		vector<MapChipType> row;
-//		for (uint32_t x = 0; x < 2; x++) {
-//			// **修正**: `photo_ConvertY` を使わず `position.y` をそのまま使用
-//			int targetX = static_cast<int>(position.x) + x;
-//			int targetY = static_cast<int>(position.y) + y;  // ここを修正
-//
-//			// マップの範囲外をチェック
-//			if (targetX < 0 || targetY < 0 || targetX >= mapData.data[0].size() || targetY >= mapData.data.size()) {
-//				row.push_back(MapChipType::kBlank);
-//			} else {
-//				MapChipType type = mapData.data[targetY][targetX];
-//				row.push_back(type);
-//			}
-//		}
-//		copyData.push_back(row);
-//	}
-//}
+
 
 void PhotoCamera::Copy() {
 	// マップデータが読み込めていないときはコピー不可
