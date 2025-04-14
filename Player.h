@@ -95,9 +95,6 @@ public:
 		return worldPos;
 	};
 
-	
-
-	
 
 private:
 

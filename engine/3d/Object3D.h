@@ -38,6 +38,7 @@ public:
 	void SetScale(const Vector3& scale) { transform.scale = scale; }
 	//回転
 	void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
+	Vector3 GetRotate() const { return transform.rotate; }
 	//位置
 	Vector3 GetTranslate() { return transform.translate; }
 	void SetTranslate(const Vector3& transrate) { transform.translate = transrate; }
