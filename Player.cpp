@@ -14,6 +14,7 @@
 
 void Player::Initialize(Object3D* object3D, const Vector3& position) {
 
+
 	// モデルの初期化
 	object3D_ = object3D;
 	// プレイヤーの初期位置
@@ -43,8 +44,28 @@ void Player::Update() {
 		ImGui::DragFloat3("*PlayerTransrate", &transform.translate.x, 0.01f);
 		object3D_->SetTransform(transform);
 
+		//カメラフラグ
+		ImGui::Text("CameraMode %d",CamerMode);
+
+
+
 	}
 #endif // DEBUG_
+
+
+
+#ifdef _DEBUG
+
+	//Cキーを押してカメラモードへ
+	if (Input::GetInstance()->TriggerKey(DIK_C) && !CamerMode) {
+		CamerMode = true;
+	} else if (Input::GetInstance()->TriggerKey(DIK_C) && CamerMode)
+	{
+		CamerMode = false;
+	}
+#endif // _DEBUG
+
+
 
 	if (!CamerMode) {
 
@@ -53,9 +74,11 @@ void Player::Update() {
 	}
 
 	//Cキーを押してカメラモードへ
-	if (Input::GetInstance()->TriggerKey(DIK_C) && !CamerMode) {
+	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && !CamerMode)
+	{
 		CamerMode = true;
-	} else if (Input::GetInstance()->TriggerKey(DIK_C) && CamerMode)
+
+	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && CamerMode)
 	{
 		CamerMode = false;
 	}
@@ -193,7 +216,7 @@ void Player::CeilingCollisionMove(const CollisionMapInfo& info) {
 }
 
 // 地面に当たった？
-void Player::OnGroundSwitching( CollisionMapInfo& info) {
+void Player::OnGroundSwitching(CollisionMapInfo& info) {
 
 	if (onGround_) {
 		if (velocity_.y > 0.0f) {
@@ -221,7 +244,7 @@ void Player::OnGroundSwitching( CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kFallBlock) {
 				hit = true;
-			}else if(mapChipType == MapChipType::kNCopyBlock){
+			} else if (mapChipType == MapChipType::kNCopyBlock) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kGoalUp) {
 				SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
@@ -240,7 +263,7 @@ void Player::OnGroundSwitching( CollisionMapInfo& info) {
 				SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 			}
 
-			
+
 
 			if (!hit) {
 
@@ -447,7 +470,7 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		Logger::Log("hit hitwall\n");
 
 		Vector3 position = object3D_->GetTransform().translate;
-		indexSet = mapChipFild_->GetMapChipIndexSetByPosition(position + Vector3(-kWidth / 2.0f , 0 , 0));
+		indexSet = mapChipFild_->GetMapChipIndexSetByPosition(position + Vector3(-kWidth / 2.0f, 0, 0));
 		// めり込み先ブロックの範囲矩形
 		Rect rect = mapChipFild_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.x = std::max(0.0f, rect.left - position.x - (kWidth / 2.0f + kBlank));
