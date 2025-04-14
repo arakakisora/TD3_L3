@@ -23,7 +23,10 @@ public:
 
 	void ChangeScene(const std::string &sceneName);
 	
-
+	//ステージindexセッター
+	void SetStageIndex(int index) { stageIndex_ = index; }
+	//ステージindexゲッター
+	int GetStageIndex()const { return stageIndex_; }
 private:
 
 	SceneManager() = default;
@@ -31,13 +34,11 @@ private:
 	SceneManager(SceneManager&) = delete;
 	SceneManager& operator=(SceneManager&) = delete;
 
-	
-
 private:
 	static SceneManager* instance_;
 	BaseScene* currentScene = nullptr;
 	BaseScene* nextScene = nullptr;
 	AbstractSceneFactory* sceneFactory = nullptr;
-
+	int stageIndex_ = 0;
 };
 
