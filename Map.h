@@ -51,6 +51,9 @@ public:
     // 変更されたマップデータのブロック生成
 	void GenerateChangeStageBlock(const MapChipData& mapChipData);
 
+
+    //プレイヤーの初期位置をマップデータからプレイヤー変数へ渡す
+    void MapDataToPlayerInitPosition();
 public: // Getter
 	// マップチップの種類を取得
     MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
@@ -70,6 +73,10 @@ public: //カメラに使用する
 	// フォトカメラのシャッター回数を取得
 	uint32_t GetShutterCount() const { return photoCameraCount; }
 
+	// プレイヤーの初期位置を取得
+	uint32_t GetPlayerStartX() const { return playerStartX; }
+	uint32_t GetPlayerStartY() const { return playerStartY; }
+
 private: // ブロック関連
 
     // マップチップデータ
@@ -87,6 +94,10 @@ private: // マップデータの読み込み用
     // フレームの大きさ
 	uint32_t kameraSizeX = 0;
 	uint32_t kameraSizeY = 0;
+
+    //プレイヤーの初期位置のマップ番号を記録する変数
+	uint32_t playerStartX = 0;
+	uint32_t playerStartY = 0;
 	
 public:
     uint32_t GetMapWidth() const { return kNumBlockHorizontal; }
