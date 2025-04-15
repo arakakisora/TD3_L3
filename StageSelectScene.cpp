@@ -29,14 +29,14 @@ void StageSelectScene::Initialize()
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
 	Player_->SetModel("Player.obj");
-	Player_->SetTranslate(Vector3(0.0f, -2.0f, 0.0f));
+	Player_->SetTranslate(Vector3(0.0f, -2.0f, 0.0f));	
 	Player_->SetRotate({ 0,  -90.0f * (DirectX::XM_PI / 180.0f) , 180.0f * (DirectX::XM_PI / 180.0f) });
 	Player_->SetLighting(false);
 
 	// 作成してでリストに追加
 	for (uint32_t i = 0; i < MaxSelectIndex_; ++i) {
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
-		newObject->Initialize(Object3DCommon::GetInstance());
+		newObject->Initialize(Object3DCommon::GetInstance());	
 		newObject->SetModel("StageSelect/Stage02.obj");
 		newObject->SetTranslate(Vector3(7.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 		newObject->SetLighting(false);
@@ -74,14 +74,31 @@ void StageSelectScene::Initialize()
 	easingDuration_ = 2.0f;  // イージングの期間（秒）
 
 	TextureManager::GetInstance()->LoadTexture("Resources/StageSelect/controllerUI.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Title.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_X.png");
 
 	// コントローラ操作のUI
 	uIController_ = std::make_unique <Sprite>();
 	uIController_->Initialize(SpriteCommon::GetInstance(), "Resources/StageSelect/controllerUI.png");
-	uIController_->SetPosition(Vector2(15.0f, 610.0f));
+	uIController_->SetPosition(Vector2( 15.0f,610.0f ));
 	uIController_->SetSize({ 340.0f, 100.0f });
 	uIController_->SetRotation(0.0f);
 	uIController_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+
+	uITitle_ = std::make_unique <Sprite>();
+	uITitle_->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_Title.png");
+	uITitle_->SetPosition(Vector2(-50.0f, -10.0f));
+	uITitle_->SetSize({ 336.0f, 70.0f });
+	uITitle_->SetRotation(0.0f);
+	uITitle_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	
+	uIX_ = std::make_unique <Sprite>();
+	uIX_->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_X.png");
+	uIX_->SetPosition(Vector2(230.0f, 15.0f));
+	uIX_->SetSize({ 30.0f, 30.0f });
+	uIX_->SetRotation(0.0f);
+	uIX_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+
 }
 
 void StageSelectScene::Finalize()
@@ -151,6 +168,20 @@ void StageSelectScene::Update()
 
 	// UI
 	uIController_->Update();
+	uITitle_->Update();
+	uIX_->Update();
+
+	// ステージを決定していないなら
+	if (!easingsceneFlag_ && !easingmoveFlag_) {
+		// タイトルへシーン遷移
+		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)) {
+			titlefige_ = true;
+		}
+
+		if (titlefige_) {
+			SceneManager::GetInstance()->ChangeScene("TITELE");
+		}
+	}
 }
 
 void StageSelectScene::Draw() {
@@ -160,7 +191,7 @@ void StageSelectScene::Draw() {
 
 
 	Player_->Draw();
-
+	
 	for (std::unique_ptr<Object3D>& stage : stageObjects_) {
 		stage->Draw();
 	}
@@ -178,6 +209,8 @@ void StageSelectScene::Draw() {
 
 	// UI
 	uIController_->Draw();
+	uITitle_->Draw();
+	uIX_->Draw();
 
 #pragma endregion
 
@@ -201,7 +234,7 @@ void StageSelectScene::move() {
 
 	// (右に移動)
 	if ((rightStickX > stickThreshold || (continueMove && rightStickX > stickThreshold))
-		&& currentIndex_ < MaxSelectIndex_ - 1 && !easingmoveFlag_ && !easingsceneFlag_ || Input::GetInstance()->TriggerKey(DIK_D)) {
+		&& currentIndex_ < MaxSelectIndex_ - 1 && !easingmoveFlag_ && !easingsceneFlag_|| Input::GetInstance()->TriggerKey(DIK_D)) {
 
 		currentIndex_++;
 		easingmoveFlag_ = true;
@@ -340,11 +373,15 @@ void StageSelectScene::moveChangeScene() {
 		if (easingProgress_ >= 0.8f) {
 			easingsceneFlag_ = false;  // イージング完了後、フラグをリセット
 
+
 			SceneManager::GetInstance()->SetStageIndex(currentIndex_);
 			// シーン変更（必要に応じてシーン変更を実行）
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 
 			/* 以前のコード
+
+			
+
 			// ステージによってシーン遷移
 			if (currentIndex_ == 0) {                                  // Stage_01
 				// シーン変更（必要に応じてシーン変更を実行）
@@ -353,7 +390,7 @@ void StageSelectScene::moveChangeScene() {
 				// シーン変更（必要に応じてシーン変更を実行）
 				SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 			}
-			*/
+      
 		}
 	}
 }

@@ -127,5 +127,6 @@ private:
 	float deathHeight_; // 落下死の高さ
 	//カメラモードフラグ
 	bool CamerMode = false;
-	
+	// クリアシーン移動フラグ
+	bool CheckGoal = false;
 };

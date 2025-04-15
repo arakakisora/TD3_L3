@@ -13,6 +13,8 @@
 
 void TitleScene::Initialize()
 {
+	CameraManager::GetInstans()->Initialize();
+
 
 	ModelManager::GetInstans()->LoadModel("Text_Title.obj");
 	ModelManager::GetInstans()->LoadModel("UI_Title_Stsrt.obj");
@@ -49,13 +51,21 @@ void TitleScene::Finalize()
 
 void TitleScene::Update()
 {
+	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
-	// Aボタンが押されたときに開始
-	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A) || Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		// シーン切り替え
-		SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+	if (time <= 20) {
+		time++;
+	} else {
+		timehige = true;
 	}
-
+	
+	if (timehige) {
+		// Aボタンが押されたときに開始
+		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A) || Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			// シーン切り替え
+			SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+		}
+	}
 
 #ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
