@@ -1,5 +1,5 @@
 // カメラのシャッター回数
-SHUTTER,3,
+SHUTTER,2,
 // 枠の大きさ(X,Y)
 FRAMESIZE,2,2,
 // マップデータ
