@@ -229,6 +229,8 @@ void PhotoCamera::Paste()
 {
 	// マップデータが読み込めていないときはペースト不可
 	if (!map) return;
+	// コピーデータがないときはペースト不可
+	if (copyData.empty()) return;
 
 	// コピーデータをマップデータにペースト
 	for (uint32_t y = 0; y < cameraSizeY; ++y) {
