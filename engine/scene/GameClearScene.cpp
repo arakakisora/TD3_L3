@@ -95,12 +95,8 @@ void GameClearScene::Update()
 		if (nextStage < MaxStageIndex_) {
 			SceneManager::GetInstance()->SetStageIndex(nextStage);
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
-		} else {
-			//最終ステージをクリアしたら(仮)
-			SceneManager::GetInstance()->ChangeScene("TITLE");
 		}
 	}
-
 }
 
 void GameClearScene::Draw()
