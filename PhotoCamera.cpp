@@ -25,6 +25,12 @@ void PhotoCamera::Update(Map* map)
 {
 
 	this->map = map;
+	// フォトカメラの範囲
+	cameraSizeX = this->map->GetkameraSizeX();
+	cameraSizeY = this->map->GetkameraSizeY();
+	// フォトカメラのシャッター回数
+	shutterLimitCountMax = this->map->GetShutterCount();
+
 	// mapDataを受け取る
 	mapData.data = this->map->GetMap();
 
@@ -44,8 +50,8 @@ void PhotoCamera::Update(Map* map)
 		{
 
 			Copy();
-			for (uint32_t y = 0; y < 2; ++y) {
-				for (uint32_t x = 0; x < 2; ++x) {
+			for (uint32_t y = 0; y < cameraSizeY; ++y) {
+				for (uint32_t x = 0; x < cameraSizeX; ++x) {
 					// コピーしたマップデータの描画用Blockクラスの位置
 					Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
 					// コピーしたマップデータの描画用Blockクラスのマップチップタイプ
@@ -68,12 +74,21 @@ void PhotoCamera::Update(Map* map)
 			}
 		}
 		// フォトカメラのペースト / Pキーを押したら
+
 		if (
 #ifdef _DEBUG
 			Input::GetInstance()->TriggerKey(DIK_P) ||
 #endif // _DEBUG
 
 			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {//RB
+
+	
+			// シャッター上限に達していったら使用不可
+			if (shutterCount >= shutterLimitCountMax) {
+				// シャッター上限に達しているのでペースト不可
+				return;
+			}
+
 			Paste();
 		}
 	}
@@ -125,34 +140,7 @@ void PhotoCamera::Finalize()
 	}
 }
 
-//void PhotoCamera::Move()
-//{
-//	// @範囲外に移動しないようにする
-//	// @カメラの移動方法をコントローラー操作に変更する
-//	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-//		position.y++;
-//	} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
-//		position.y--;
-//	} else if (Input::GetInstance()->TriggerKey(DIK_D)) {
-//		position.x++;
-//	} else if (Input::GetInstance()->TriggerKey(DIK_A)) {
-//		position.x--;
-//	}
-//	// フォトカメラの配置を変更させる
-//	object3D->SetTranslate(Vector3(position.x, position.y, 0));
-//	// 座標変換
-//	photo_ConvertY = ((int)Map::kNumBlockVirtical - (int)position.y) - 1;
-//
-//	// ブロックの位置を更新
-//	for (size_t i = 0; i < blocks.size(); ++i) {
-//		uint32_t x = static_cast<uint32_t>(i % 2);
-//		uint32_t y = static_cast<uint32_t>(i / 2);
-//		Vector3 blockPosition = Vector3(position.x + x, position.y + y, -1.0F);
-//		blocks[i]->SetObject3DPosiition(blockPosition);
-//
-//	}
-//
-//}
+
 
 void PhotoCamera::Move()
 {
@@ -183,42 +171,18 @@ void PhotoCamera::Move()
 
 	// photo_ConvertYの代わりにposition.yをそのまま使用
 	for (size_t i = 0; i < blocks.size(); ++i) {
-		uint32_t x = static_cast<uint32_t>(i % 2);
-		uint32_t y = static_cast<uint32_t>(i / 2);
+		uint32_t x = static_cast<uint32_t>(i % cameraSizeX);
+		uint32_t y = static_cast<uint32_t>(i / cameraSizeX);
 		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
 		blocks[i]->SetObject3DPosiition(blockPosition);
 	}
+
 }
 
 
 
 
-//void PhotoCamera::Copy() {
-//	// マップデータが読み込めていないときはコピー不可
-//	if (!map) return;
-//
-//	// 2x2 のマップチップ番号をコピー
-//	copyData.clear();
-//	blocks.clear();
-//
-//	for (uint32_t y = 0; y < 2; y++) {
-//		vector<MapChipType> row;
-//		for (uint32_t x = 0; x < 2; x++) {
-//			// **修正**: `photo_ConvertY` を使わず `position.y` をそのまま使用
-//			int targetX = static_cast<int>(position.x) + x;
-//			int targetY = static_cast<int>(position.y) + y;  // ここを修正
-//
-//			// マップの範囲外をチェック
-//			if (targetX < 0 || targetY < 0 || targetX >= mapData.data[0].size() || targetY >= mapData.data.size()) {
-//				row.push_back(MapChipType::kBlank);
-//			} else {
-//				MapChipType type = mapData.data[targetY][targetX];
-//				row.push_back(type);
-//			}
-//		}
-//		copyData.push_back(row);
-//	}
-//}
+
 
 void PhotoCamera::Copy() {
 	// マップデータが読み込めていないときはコピー不可
@@ -233,9 +197,9 @@ void PhotoCamera::Copy() {
 	copyData.clear();
 	blocks.clear();
 
-	for (uint32_t y = 0; y < 2; y++) {
+	for (uint32_t y = 0; y < cameraSizeY; y++) {
 		vector<MapChipType> row;
-		for (uint32_t x = 0; x < 2; x++) {
+		for (uint32_t x = 0; x < cameraSizeX; x++) {
 			// マップの座標変換を適切に行う
 			int targetX = static_cast<int>(position.x) + x;
 			int targetY = static_cast<int>(Map::kNumBlockVirtical - position.y - 1) + y;
@@ -254,6 +218,7 @@ void PhotoCamera::Copy() {
 		}
 		copyData.push_back(row);
 	}
+	
 }
 
 
@@ -266,8 +231,8 @@ void PhotoCamera::Paste()
 	if (!map) return;
 
 	// コピーデータをマップデータにペースト
-	for (uint32_t y = 0; y < 2; ++y) {
-		for (uint32_t x = 0; x < 2; ++x) {
+	for (uint32_t y = 0; y < cameraSizeY; ++y) {
+		for (uint32_t x = 0; x < cameraSizeX; ++x) {
 			MapChipType type = copyData[y][x];
 			int positionX = static_cast<int>(position.x) + x;
 			int positionY = static_cast<int>(Map::kNumBlockVirtical - position.y - 1) + y;
@@ -283,6 +248,8 @@ void PhotoCamera::Paste()
 
 	// 変更したマップデータをマップにセット
 	map->SetMap(mapData);
+	// シャッターの回数をプラス
+	shutterCount++;
 }
 
 

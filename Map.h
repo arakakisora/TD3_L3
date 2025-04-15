@@ -62,9 +62,17 @@ public: // Getter
     IndexSet GetMapChipIndexSetByPosition(const Vector3& posotopn);
     Rect GetRectByIndex(uint32_t xindex, uint32_t yIndex);
 
+public: //カメラに使用する
+    // 読み込んだカメラの範囲をフォトカメラに渡すためのもの
+	uint32_t GetkameraSizeX() const { return kameraSizeX; }
+	uint32_t GetkameraSizeY() const { return kameraSizeY; }
+
+	// フォトカメラのシャッター回数を取得
+	uint32_t GetShutterCount() const { return photoCameraCount; }
+
 private: // ブロック関連
 
-   // マップチップデータ
+    // マップチップデータ
     MapChipData mapChipData_;
 
 	// 受け取ったマップチップデータ
@@ -73,6 +81,13 @@ private: // ブロック関連
     // ブロックのオブジェクト
     std::vector<std::vector<Block*>> blockobject3D;
 
+private: // マップデータの読み込み用
+    // フォトカメラの使用回数
+    uint32_t photoCameraCount = 0;
+    // フレームの大きさ
+	uint32_t kameraSizeX = 0;
+	uint32_t kameraSizeY = 0;
+	
 public:
     uint32_t GetMapWidth() const { return kNumBlockHorizontal; }
     uint32_t GetMapHeight() const { return kNumBlockVirtical; }
