@@ -65,7 +65,7 @@ void GameClearScene::Update()
 
 		//ImGui::Checkbox("start", &fige);
 
-	}
+	}  
 
 #endif // _DEBUG
 
