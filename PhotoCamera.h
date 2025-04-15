@@ -59,5 +59,16 @@ private:
 	MapChipType mapChipType;
 
 	bool CamerMode = false;
+
+	// カメラサイズ
+	uint32_t cameraSizeX = 2;
+	uint32_t cameraSizeY = 2;
+
+	// シャッター回数上限
+	uint32_t shutterLimitCountMax = 0;
+	// シャッター回数
+	uint32_t shutterCount = 0;
+
+
 };
 
