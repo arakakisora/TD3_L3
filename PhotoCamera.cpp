@@ -82,7 +82,7 @@ void PhotoCamera::Update(Map* map)
 
 			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {//RB
 
-	
+
 			// シャッター上限に達していったら使用不可
 			if (shutterCount >= shutterLimitCountMax) {
 				// シャッター上限に達しているのでペースト不可
@@ -218,7 +218,7 @@ void PhotoCamera::Copy() {
 		}
 		copyData.push_back(row);
 	}
-	
+
 }
 
 
@@ -265,6 +265,14 @@ void PhotoCamera::DrawImGui()
 	ImGui::Text("Camera ConvertY: %d", photo_ConvertY);
 	ImGui::Separator();
 
+	// カメラのサイズを表示
+	ImGui::Text("Camera Size: (%d, %d)", cameraSizeX, cameraSizeY);
+	// カメラのシャッター回数を表示
+	ImGui::Text("Shutter Count: %d / %d", shutterCount, shutterLimitCountMax);
+	// カメラのモードを表示
+	ImGui::Text("Camera Mode: %s", CamerMode ? "On" : "Off");
+	ImGui::Separator();
+
 	// コピーしたマップチップタイプを表示
 	if (!copyData.empty()) {
 		for (int y = 0; y < 2; y++) {
@@ -299,18 +307,6 @@ void PhotoCamera::DrawImGui()
 		}
 	} else {
 		ImGui::Text("No map chip data copied.");
-	}
-
-	// 生成されたブロックの座標を表示
-	ImGui::Separator();
-	ImGui::Text("Generated Blocks:");
-	if (!blocks.empty()) {
-		for (const auto& block : blocks) {
-			Vector3 position = block->GetPosition();
-			ImGui::Text("Block Position: (%.2f, %.2f, %.2f)", position.x, position.y, position.z);
-		}
-	} else {
-		ImGui::Text("No blocks generated.");
 	}
 
 	ImGui::End();
