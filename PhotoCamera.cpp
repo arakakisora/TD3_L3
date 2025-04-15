@@ -41,7 +41,14 @@ void PhotoCamera::Update(Map* map)
 
 
 		// フォトカメラのコピー / スペースキーを押したら
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		if (
+#ifdef _DEBUG
+			Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+#endif // DEBUG
+			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER)
+			)//LB
+		{
+
 			Copy();
 			for (uint32_t y = 0; y < cameraSizeY; ++y) {
 				for (uint32_t x = 0; x < cameraSizeX; ++x) {
@@ -67,12 +74,21 @@ void PhotoCamera::Update(Map* map)
 			}
 		}
 		// フォトカメラのペースト / Pキーを押したら
-		if (Input::GetInstance()->TriggerKey(DIK_P)) {
+
+		if (
+#ifdef _DEBUG
+			Input::GetInstance()->TriggerKey(DIK_P) ||
+#endif // _DEBUG
+
+			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {//RB
+
+	
 			// シャッター上限に達していったら使用不可
 			if (shutterCount >= shutterLimitCountMax) {
 				// シャッター上限に達しているのでペースト不可
 				return;
 			}
+
 			Paste();
 		}
 	}
@@ -128,6 +144,7 @@ void PhotoCamera::Finalize()
 
 void PhotoCamera::Move()
 {
+#ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
 		position.y++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
@@ -135,6 +152,17 @@ void PhotoCamera::Move()
 	} else if (Input::GetInstance()->TriggerKey(DIK_D)) {
 		position.x++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_A)) {
+		position.x--;
+	}
+#endif // _DEBUG
+
+	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_UP)) {
+		position.y++;
+	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
+		position.y--;
+	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_RIGHT)) {
+		position.x++;
+	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_LEFT)) {
 		position.x--;
 	}
 

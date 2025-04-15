@@ -73,14 +73,9 @@ void Player::Update() {
 
 	}
 
-	//Cキーを押してカメラモードへ
-	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && !CamerMode)
-	{
-		CamerMode = true;
-
-	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && CamerMode)
-	{
-		CamerMode = false;
+	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B)) {
+		CamerMode = !CamerMode;
+		
 	}
 
 
