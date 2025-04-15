@@ -18,7 +18,9 @@ void Game::Initialize()
 	//"GAMEPLAY"
 	//GAMEOVER
 	//"GAMECLEAR"
-	SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+
+	SceneManager::GetInstance()->ChangeScene("TITELE");
+
 
 }
 

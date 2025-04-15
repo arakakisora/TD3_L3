@@ -43,12 +43,12 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 
 	case MapChipType::kGoalUp:					// No.4 ゴール上 
 		// モデル指定
-		//object3D->SetModel("Goal.obj");
+		object3D->SetModel("GoreFag.obj");
 		break;
 
 	case MapChipType::kGoalDown:				// No.5 ゴール下 
 		// モデル指定
-		//object3D->SetModel("Goal.obj");
+		object3D->SetModel("GoalBase.obj");
 		break;
 
 	case MapChipType::kFallBlock:				// No.6 落下ブロック
@@ -83,9 +83,14 @@ void Block::Update() {
 	if (MapChipType::kCopyBlock == type) {
 		object3D->Update();
 	} 
+	else if (MapChipType::kGoalUp == type) {
+		object3D->Update();
+	} else if (MapChipType::kGoalDown == type) {
+		object3D->Update();
+	}
 	else if (MapChipType::kNCopyBlock == type) {
 		object3D->Update();
-	} 
+	}
 	else if (MapChipType::kFixedTimeBlock == type) {
 		object3D->Update();
 		FixedTimeBlock();
@@ -134,6 +139,12 @@ void Block::Update() {
 void Block::Draw() {
 	// Drawはelse ifを追加してDrawかくだけ
 	if (MapChipType::kCopyBlock == type) {
+		object3D->Draw();
+	} 
+	else if (MapChipType::kGoalUp == type) {
+		object3D->Draw();
+	}
+	else if (MapChipType::kGoalDown == type) {
 		object3D->Draw();
 	} 
 	else if (MapChipType::kNCopyBlock == type) {

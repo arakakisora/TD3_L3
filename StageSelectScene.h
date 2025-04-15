@@ -6,6 +6,7 @@
 #include "Audio.h"
 #include "BaseScene.h"
 #include <cmath>
+#include "ParticleMnager.h"
 
 class StageSelectScene :public BaseScene
 {
@@ -68,8 +69,10 @@ public:
 	std::unique_ptr<Camera> camera_;
 	// メインオブジェクト
 	Object3D* Player_;
-	// ステージ選択オブジェクト
-	std::vector<std::unique_ptr<Object3D>> selectObjects_;
+	// ステージ選択オブジェクトのリスト
+	std::vector<std::unique_ptr<Object3D>> stageObjects_;
+	// テキストオブジェクトのリスト
+	std::vector<std::unique_ptr<Object3D>> textoObjects_;
 	// 最大ステージ数
 	uint32_t MaxSelectIndex_ = 2;
 	// 現在のステージ
@@ -85,7 +88,10 @@ public:
 
 	Vector3 FollowTargetposition;
 	int frameCounter_ = 0;  // フレームカウンター
-	
 
 	std::unique_ptr<Sprite> uIController_;
+	std::unique_ptr<Sprite> uITitle_;
+	std::unique_ptr<Sprite> uIX_;
+
+	bool titlefige_ =false;
 };

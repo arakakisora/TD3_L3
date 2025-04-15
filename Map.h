@@ -95,7 +95,8 @@ public:
     void SetMapData(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType);
     void GenerateObjectAt(uint32_t x, uint32_t y, MapChipType mapChipType);
     void RemoveObjectAt(uint32_t x, uint32_t y);
-
+    //ゴールの座標を取得
+    Vector3 GetGoalPosition()const;
 public: // 新設 Setter / Getter
     std::vector<std::vector<MapChipType>> GetMap() const { return mapChipData_.data; }
 	//void SetMap(std::vector<std::vector<MapChipType>> map) { mapChipData_.data = map; }

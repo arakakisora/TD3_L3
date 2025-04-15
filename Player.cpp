@@ -8,6 +8,7 @@
 #include <imgui.h>
 #endif // _DEBUG
 #include "Object3DCommon.h"
+#include <SceneManager.h>
 
 
 
@@ -97,8 +98,10 @@ void Player::Update() {
 	//PrayerTurn();
 	object3D_->Update();
 
-
-
+	// ゴールフラグがたったらクリアシーンに移動
+	if(CheckGoal){
+		SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
+	}
 }
 
 void Player::Draw() {
@@ -245,7 +248,10 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kNCopyBlock) {
 				hit = true;
+			} else if (mapChipType == MapChipType::kGoalUp) {
+				CheckGoal = true;
 			}
+
 			// 右点の判定
 			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom] + Vector3(0, -kCollisionsmallnumber, 0));
 			mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -255,6 +261,8 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kNCopyBlock) {
 				hit = true;
+			} else if (mapChipType == MapChipType::kGoalUp) {
+				CheckGoal = true;
 			}
 
 
@@ -304,6 +312,8 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
 	}
 	// 右点の判定
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
@@ -314,6 +324,8 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
 	}
 
 	// hit
@@ -371,6 +383,8 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	}else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
 	}
 	// 右点の判定
 	//   左点の判定
@@ -383,7 +397,10 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
 	}
+
 	// hit
 	if (hit) {
 
@@ -429,6 +446,8 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
 	}
 
 	// 右下点の判定
@@ -441,7 +460,10 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
 	}
+
 	// hit
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
@@ -485,6 +507,8 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
 	}
 
 	// hidari下点の判定
@@ -497,6 +521,8 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kGoalUp) {	
+		CheckGoal = true;
 	}
 	// hit
 	if (hit) {
@@ -512,10 +538,6 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		info.hitWall = true;
 	}
 }
-
-
-
-
 
 
 

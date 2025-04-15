@@ -41,11 +41,22 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("block.obj");
 	ModelManager::GetInstans()->LoadModel("fallblock.obj");
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
+	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
+	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
+
+	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+
+	std::string stagePath;
+	switch (stageIndex) {
+	case 0: stagePath = "MapData/mapp1.csv"; break;
+	case 1: stagePath = "MapData/mapp2.csv"; break;
+	case 2: stagePath = "MapData/mapp3.csv"; break;
+	}
 
 	map = new Map;
-	map->LoadMapChipCsv("MapData/mapp1.csv");
+	map->LoadMapChipCsv(stagePath);
 	map->Initialize();
-
+	
 
 	//playerの生成	
 	player = std::make_unique<Player>();

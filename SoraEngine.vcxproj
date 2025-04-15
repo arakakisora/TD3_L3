@@ -244,6 +244,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <None Include="MapData\blocks.csv" />
     <None Include="MapData\Map1_1.csv" />
+    <None Include="MapData\mapp1.csv" />
+    <None Include="MapData\mapp2.csv" />
+    <None Include="MapData\mapp3.csv" />
+    <None Include="MapData\mapp4.csv" />
+    <None Include="MapData\mapp5.csv" />
     <None Include="Resources\Shaders\Object3d.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
