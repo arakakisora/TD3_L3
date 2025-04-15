@@ -385,6 +385,7 @@ void StageSelectScene::moveChangeScene() {
 				// シーン変更（必要に応じてシーン変更を実行）
 				SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 			}
+			*/
 		}
 	}
 }
