@@ -130,16 +130,6 @@ void GameClearScene::Update()
 		// コントローラー操作
 		ControllerUpdate();
 	}
-
-	//次のステージへ(リターンは仮)
-	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
-		uint32_t nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
-
-		if (nextStage < MaxStageIndex_) {
-			SceneManager::GetInstance()->SetStageIndex(nextStage);
-			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
-		}
-	}
 }
 
 void GameClearScene::Draw()
@@ -320,5 +310,15 @@ void GameClearScene::ControllerUpdate() {
 	// 次のステージの場合
 	if (Selectindex == 2) {
 		ArroTextUI_->SetPosition(Vector2(890.0f, 575.0f));
+		if (Changefige) {
+			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+				uint32_t nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
+
+				if (nextStage < MaxStageIndex_) {
+					SceneManager::GetInstance()->SetStageIndex(nextStage);
+					SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+				}
+			}
+		}
 	}
 }
