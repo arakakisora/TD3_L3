@@ -49,8 +49,6 @@ void TitleScene::Update()
 
     //シーン遷移演出
 	if (isSceneChange_) {
-		int ai;
-		int patocon;
 		
 	}
 
