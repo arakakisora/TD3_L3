@@ -92,6 +92,18 @@ void GameClearScene::Update()
 
 #ifdef _DEBUG
 
+	if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::Text("gameClearScene");
+		if (ImGui::Button("TitleScene"))
+		{
+			SceneManager::GetInstance()->ChangeScene("TITELE");
+		}
+
+
+		//ImGui::Checkbox("start", &fige);
+
+	}
 #endif // _DEBUG
 
 
@@ -114,6 +126,19 @@ void GameClearScene::Update()
 		Changefige = true;
 		// コントローラー操作
 		ControllerUpdate();
+	}
+
+	//次のステージへ(リターンは仮)
+	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+		uint32_t nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
+
+		if (nextStage < MaxStageIndex_) {
+			SceneManager::GetInstance()->SetStageIndex(nextStage);
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+		} else {
+			//最終ステージをクリアしたら(仮)
+			SceneManager::GetInstance()->ChangeScene("TITLE");
+		}
 	}
 
 }

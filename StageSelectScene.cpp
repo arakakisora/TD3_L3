@@ -372,7 +372,11 @@ void StageSelectScene::moveChangeScene() {
 		// イージング完了
 		if (easingProgress_ >= 0.8f) {
 			easingsceneFlag_ = false;  // イージング完了後、フラグをリセット
-			
+
+			SceneManager::GetInstance()->SetStageIndex(currentIndex_);
+			// シーン変更（必要に応じてシーン変更を実行）
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+			/*
 			// ステージによってシーン遷移
 			if (currentIndex_ == 0) {                                  // Stage_01
 				// シーン変更（必要に応じてシーン変更を実行）

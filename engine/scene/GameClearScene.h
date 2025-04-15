@@ -83,7 +83,9 @@ private:
 	// 速度を格納するための配列（各オブジェクトの速度を管理）
 	std::vector<Vector3> velocity_;
 
-
+	float elapsedTime_;
+	float	elapsedFrames_ = 0;
+	float jumpEndTime_[3] = { 0.0f };
+	uint32_t MaxStageIndex_ = 3;
 	uint32_t Selectindex = 2;
-
 };
