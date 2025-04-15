@@ -24,6 +24,7 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("Player.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-1.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-2.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-3.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Stage02.obj");
 
 	Player_ = new Object3D();
@@ -50,6 +51,8 @@ void StageSelectScene::Initialize()
 			newObject->SetModel("StageSelect/Text_1-1.obj");
 		} else if (i == 1) {
 			newObject->SetModel("StageSelect/Text_1-2.obj");
+		} else if (i == 2) {
+			newObject->SetModel("StageSelect/Text_1-3.obj");
 		} else {
 			newObject->SetModel("StageSelect/Text_1-1.obj");
 		}
