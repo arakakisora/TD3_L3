@@ -35,10 +35,11 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 	ModelManager::GetInstans()->LoadModel("cube.obj");
 
-	ModelManager::GetInstans()->LoadModel("Timer.obj");
 	ModelManager::GetInstans()->LoadModel("Player.obj");
 
+	// ブロック関連モデル
 	ModelManager::GetInstans()->LoadModel("block.obj");
+	ModelManager::GetInstans()->LoadModel("Timer.obj");
 	ModelManager::GetInstans()->LoadModel("fallblock.obj");
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
 	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
@@ -61,7 +62,7 @@ void GamePlayScene::Initialize()
 	//playerの生成	
 	player = std::make_unique<Player>();
 	object3DPlayer = new Object3D();
-	Vector3 playerPostion = map->GetMapChipPostionByIndex(6, 10);
+	Vector3 playerPostion = Vector3((float)map->GetPlayerStartX(), (float)map->GetPlayerStartY(), 0.0f);
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 	object3DPlayer->SetModel("Player.obj");
 	object3DPlayer->SetScale(Vector3{ 1.0f,1.0f,1.0f });
