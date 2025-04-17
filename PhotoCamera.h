@@ -72,5 +72,13 @@ private:
 	uint32_t shutterCount = 0;
 
 
+
+	//イージング用
+	Vector2 currentPos; // 実際に描画される位置（イージング用）
+	Vector2 targetPos;  // 入力で更新されるターゲット位置
+	float moveTimer = 1.0f;     // イージング用時間 [0〜1]
+	float moveSpeed = 0.1f;     // 1フレームごとの t 増加量
+	bool isMoving = false;      // 現在移動中かどうか
+
 };
 
