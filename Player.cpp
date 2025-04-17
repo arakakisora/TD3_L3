@@ -45,7 +45,7 @@ void Player::Update() {
 		object3D_->SetTransform(transform);
 
 		//カメラフラグ
-		ImGui::Text("CameraMode %d",CamerMode);
+		ImGui::Text("CameraMode %d", CamerMode);
 
 
 
@@ -58,43 +58,39 @@ void Player::Update() {
 
 	//Cキーを押してカメラモードへ
 	if (Input::GetInstance()->TriggerKey(DIK_C) && !CamerMode) {
-		CamerMode = true;
-	} else if (Input::GetInstance()->TriggerKey(DIK_C) && CamerMode)
-	{
-		CamerMode = false;
+		CamerMode = !CamerMode;
 	}
 #endif // _DEBUG
 
 
+	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && onGround_) {
+		CamerMode = !CamerMode;
+	}
 
 	if (!CamerMode) {
 
 		PrayerMove();
+		// 衝突判定を初期化
+		CollisionMapInfo collisionMapInfo;
+		// 移動量に速度の値をコピー
+		collisionMapInfo.move = velocity_;
+		// マップ衝突チェック
+		MapCollision(collisionMapInfo);
+		// 移動
+		CeilingCollisionMove(collisionMapInfo);// 天井衝突移動
+		OnGroundSwitching(collisionMapInfo);// 着地判定
+		HitWallCollisionMove(collisionMapInfo);// 壁衝突移動
+		PlayerCollisionMove(collisionMapInfo);// プレイヤー衝突移動
 
 	}
 
-	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B)) {
-		CamerMode = !CamerMode;
-		
-	}
 
 
-	// 衝突判定を初期化
-	CollisionMapInfo collisionMapInfo;
-	// 移動量に速度の値をコピー
-	collisionMapInfo.move = velocity_;
-	// マップ衝突チェック
-	MapCollision(collisionMapInfo);
-	// 移動
-	CeilingCollisionMove(collisionMapInfo);// 天井衝突移動
-	OnGroundSwitching(collisionMapInfo);// 着地判定
-	HitWallCollisionMove(collisionMapInfo);// 壁衝突移動
-	PlayerCollisionMove(collisionMapInfo);// プレイヤー衝突移動
 	//PrayerTurn();
 	object3D_->Update();
 
 	// ゴールフラグがたったらクリアシーンに移動
-	if(CheckGoal){
+	if (CheckGoal) {
 		SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	}
 }
@@ -105,6 +101,7 @@ void Player::Draw() {
 }
 
 void Player::PrayerMove() {
+#ifdef _DEBUG
 
 	// 左右移動操作（キーボード）
 	if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
@@ -128,6 +125,8 @@ void Player::PrayerMove() {
 		// X軸の減速処理（Y軸には影響を与えない）
 		velocity_.x *= (1.0f - kAttenuation);
 	}
+#endif // _DEBUG
+
 
 	// コントローラー操作（左右移動）
 	if (Input::GetInstance()->GetGamePadStickX() > 0 || Input::GetInstance()->GetGamePadStickX() < 0) {
@@ -152,10 +151,16 @@ void Player::PrayerMove() {
 
 	// ジャンプ処理
 	if (onGround_) {
-		if (Input::GetInstance()->PushKey(DIK_UP) || Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+		if (
+#ifdef _DEBUG
+			Input::GetInstance()->PushKey(DIK_UP) ||
+#endif // _DEBUG
+			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A))
+		{
 			velocity_.y = kJampAcceleration; // += ではなく = にすることで、ジャンプの初速を一定にする
 		}
-	} else {
+	} else
+	{
 		// 重力適用
 		velocity_.y += -kGravityAccleration;
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
@@ -378,7 +383,7 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
-	}else if (mapChipType == MapChipType::kGoalUp) {
+	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
 	}
 	// 右点の判定
@@ -516,7 +521,7 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
-	} else if (mapChipType == MapChipType::kGoalUp) {	
+	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
 	}
 	// hit
