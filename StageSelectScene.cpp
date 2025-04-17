@@ -24,7 +24,11 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("Player.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-1.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-2.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-3.obj");
+	
+	ModelManager::GetInstans()->LoadModel("StageSelect/Stage01.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Stage02.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/Stage03.obj");
 
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
@@ -36,8 +40,16 @@ void StageSelectScene::Initialize()
 	// 作成してでリストに追加
 	for (uint32_t i = 0; i < MaxSelectIndex_; ++i) {
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
-		newObject->Initialize(Object3DCommon::GetInstance());	
-		newObject->SetModel("StageSelect/Stage02.obj");
+		newObject->Initialize(Object3DCommon::GetInstance());
+		if (i == 0) {
+			newObject->SetModel("StageSelect/Stage01.obj");
+		} else if (i == 1) {
+			newObject->SetModel("StageSelect/Stage02.obj");
+		} else if (i == 2) {
+			newObject->SetModel("StageSelect/Stage03.obj");
+		} else {
+			newObject->SetModel("StageSelect/Stage01.obj");
+		}
 		newObject->SetTranslate(Vector3(7.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 		newObject->SetLighting(false);
 		stageObjects_.push_back(std::move(newObject));
@@ -50,6 +62,8 @@ void StageSelectScene::Initialize()
 			newObject->SetModel("StageSelect/Text_1-1.obj");
 		} else if (i == 1) {
 			newObject->SetModel("StageSelect/Text_1-2.obj");
+		} else if (i == 2) {
+			newObject->SetModel("StageSelect/Text_1-3.obj");
 		} else {
 			newObject->SetModel("StageSelect/Text_1-1.obj");
 		}
