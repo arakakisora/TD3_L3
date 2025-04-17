@@ -79,7 +79,6 @@ void PhotoCamera::Update(Map* map)
 #ifdef _DEBUG
 			Input::GetInstance()->TriggerKey(DIK_P) ||
 #endif // _DEBUG
-
 			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {//RB
 
 
@@ -156,6 +155,7 @@ void PhotoCamera::Move()
 	}
 #endif // _DEBUG
 
+	// ゲームパッドの十字キー移動
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_UP)) {
 		position.y++;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
@@ -165,6 +165,9 @@ void PhotoCamera::Move()
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_LEFT)) {
 		position.x--;
 	}
+	// スティック移動
+	stickMove();
+
 
 	// フォトカメラの配置を変更させる
 	object3D->SetTranslate(Vector3(position.x, position.y, 0));
@@ -310,4 +313,43 @@ void PhotoCamera::DrawImGui()
 	}
 
 	ImGui::End();
+}
+
+void PhotoCamera::stickMove()
+{
+
+	// スティック操作でマス単位で動かす
+	static bool stickMovedX = false;
+	static bool stickMovedY = false;
+
+	float stickX = Input::GetInstance()->GetGamePadStickX();
+	float stickY = Input::GetInstance()->GetGamePadStickY();
+
+	// スティックのしきい値（デッドゾーン）
+	const float threshold = 0.5f;
+
+	if (!stickMovedX) {
+		if (stickX > threshold) {
+			position.x += 1.0f;
+			stickMovedX = true;
+		} else if (stickX < -threshold) {
+			position.x -= 1.0f;
+			stickMovedX = true;
+		}
+	} else if (std::abs(stickX) < threshold) {
+		stickMovedX = false; // ニュートラルに戻ったらリセット
+	}
+
+	if (!stickMovedY) {
+		if (stickY > threshold) {
+			position.y += 1.0f;
+			stickMovedY = true;
+		} else if (stickY < -threshold) {
+			position.y -= 1.0f;
+			stickMovedY = true;
+		}
+	} else if (std::abs(stickY) < threshold) {
+		stickMovedY = false;
+	}
+
 }

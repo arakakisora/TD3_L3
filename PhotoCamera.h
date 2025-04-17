@@ -25,6 +25,8 @@ public:
 	// imguiの描画
 	void DrawImGui();
 
+	void stickMove(); // スティック移動
+
 public:	// Setter / Getter
 	// 変更したマップデータをmapにセット
 	//void SetMap(Map* map) { this->map = map; }
