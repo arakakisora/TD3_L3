@@ -2,16 +2,19 @@
 #include "Object3D.h"
 #include "Map.h"
 #include "Block.h"
+#include "Sprite.h"
 using namespace std;
 class PhotoCamera
 {
 public:
 	// 初期化
-	void Initialize();
+	void Initialize(Map* map);
 	// 更新
 	void Update(Map* map);
-	// 描画
-	void Draw();
+	// 描画 / 3DObject
+	void Draw3DObject();
+	// 描画 / Sprite
+	void DrawSprite();
 	// 終了処理
 	void Finalize();
 	// カメラの移動
@@ -24,8 +27,6 @@ public:
 
 	// imguiの描画
 	void DrawImGui();
-
-	void stickMove(); // スティック移動
 
 public:	// Setter / Getter
 	// 変更したマップデータをmapにセット
@@ -71,6 +72,9 @@ private:
 	// シャッター回数
 	uint32_t shutterCount = 0;
 
+	// 残りシャッター枚数のリソースデータ
+	vector<unique_ptr<Sprite>>shutterRests_;
+	// 残り枚数表示指数
 
 };
 

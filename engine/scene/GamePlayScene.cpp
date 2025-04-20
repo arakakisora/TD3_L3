@@ -57,7 +57,7 @@ void GamePlayScene::Initialize()
 	map = new Map;
 	map->LoadMapChipCsv(stagePath);
 	map->Initialize();
-	
+
 
 	//playerの生成	
 	player = std::make_unique<Player>();
@@ -74,14 +74,14 @@ void GamePlayScene::Initialize()
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
 
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(false);
-	
+
 
 
 	// ゲームカメラの生成
 	//gameCamera_ = new ObjectCamera();
 	//gameCamera_->Initialize(map);
 	photoCamera = new PhotoCamera;
-	photoCamera->Initialize();
+	photoCamera->Initialize(map);
 }
 
 void GamePlayScene::Finalize()
@@ -109,7 +109,7 @@ void GamePlayScene::Update()
 	// ゲームカメラ更新処理
 	//gameCamera_->Update();
 	photoCamera->Update(map);
-	
+
 	map->Update();
 
 
@@ -158,7 +158,7 @@ void GamePlayScene::Draw()
 
 	// ゲームカメラ
 	//gameCamera_->Draw();
-	photoCamera->Draw();
+	photoCamera->Draw3DObject();
 	////プレイヤー
 	player->Draw();
 
@@ -175,6 +175,7 @@ void GamePlayScene::Draw()
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
 
+	photoCamera->DrawSprite();
 
 #pragma endregion
 }
