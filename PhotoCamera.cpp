@@ -5,6 +5,7 @@
 #include <iostream>
 #include "TextureManager.h"
 #include "SpriteCommon.h"
+#include "Easing.h"
 // MAPクラスとのループキャストに注意
 void PhotoCamera::Initialize(Map* map)
 {
@@ -34,6 +35,13 @@ void PhotoCamera::Initialize(Map* map)
 		shutter_->setColor({ 1.0f,1.0f,1.0f,1.0f });
 		shutterRests_.push_back(move(shutter_));
 	}
+
+	currentPos = targetPos = position;
+	moveTimer = 1.0f;
+	isMoving = false;
+
+
+
 
 }
 
@@ -178,30 +186,54 @@ void PhotoCamera::Finalize()
 
 void PhotoCamera::Move()
 {
+
+	Vector2 input = { 0, 0 };
+
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-		position.y++;
+		input.y++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
-		position.y--;
+		input.y--;
 	} else if (Input::GetInstance()->TriggerKey(DIK_D)) {
-		position.x++;
+		input.x++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_A)) {
-		position.x--;
+		input.x--;
 	}
 #endif // _DEBUG
 
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_UP)) {
-		position.y++;
+		input.y++;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
-		position.y--;
+		input.y--;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_RIGHT)) {
-		position.x++;
+		input.x++;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_LEFT)) {
-		position.x--;
+		input.x--;
 	}
 
-	// フォトカメラの配置を変更させる
-	object3D->SetTranslate(Vector3(position.x, position.y, 0));
+	// 十字キー・キーボードでも targetPos 更新
+	if ((input.x != 0 || input.y != 0) && !isMoving) {
+		targetPos.x += input.x;
+		targetPos.y += input.y;
+		moveTimer = 0.0f;
+		isMoving = true;
+	}
+
+	// イージング補間
+	if (isMoving) {
+		moveTimer += moveSpeed;
+		if (moveTimer >= 1.0f) {
+			moveTimer = 1.0f;
+			isMoving = false;
+			currentPos = targetPos;
+		} else {
+			currentPos = Easing::EaseLerp(currentPos, targetPos, moveTimer, Easing::EaseOutQuad);
+		}
+	}
+
+
+	// イージング結果を object3D に反映
+	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, 0));
 
 	// photo_ConvertYの代わりにposition.yをそのまま使用
 	for (size_t i = 0; i < blocks.size(); ++i) {
@@ -210,6 +242,7 @@ void PhotoCamera::Move()
 		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
 		blocks[i]->SetObject3DPosiition(blockPosition);
 	}
+	position = targetPos;
 
 }
 
@@ -290,6 +323,12 @@ void PhotoCamera::DrawImGui()
 	ImGui::Text("Camera ConvertY: %d", photo_ConvertY);
 	ImGui::Separator();
 
+	//イージング用
+	ImGui::DragFloat("Move Speed", &moveSpeed, 0.01f, 0.0f, 1.0f);
+	//movetimer
+	ImGui::DragFloat("Move Timer", &moveTimer, 0.01f, 0.0f, 1.0f);
+
+
 	// カメラのサイズを表示
 	ImGui::Text("Camera Size: (%d, %d)", cameraSizeX, cameraSizeY);
 	// カメラのシャッター回数を表示
@@ -350,5 +389,41 @@ void PhotoCamera::DrawImGui()
 	ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f), "Usage");
 
 	ImGui::End();
+
+	static int stickCoolTimeX = 0;
+	static int stickCoolTimeY = 0;
+
+	float stickX = Input::GetInstance()->GetGamePadStickX();
+	float stickY = Input::GetInstance()->GetGamePadStickY();
+
+	const float threshold = 0.5f;
+	const int maxCoolTime = 10;
+
+	if (std::abs(stickX) > threshold) {
+		if (stickCoolTimeX <= 0 && !isMoving) {
+			targetPos.x += (stickX > 0) ? 1 : -1;
+			moveTimer = 0.0f;
+			isMoving = true;
+			stickCoolTimeX = maxCoolTime;
+		} else {
+			stickCoolTimeX--;
+		}
+	} else {
+		stickCoolTimeX = 0;
+	}
+
+	if (std::abs(stickY) > threshold) {
+		if (stickCoolTimeY <= 0 && !isMoving) {
+			targetPos.y += (stickY > 0) ? 1 : -1;
+			moveTimer = 0.0f;
+			isMoving = true;
+			stickCoolTimeY = maxCoolTime;
+		} else {
+			stickCoolTimeY--;
+		}
+	} else {
+		stickCoolTimeY = 0;
+	}
+
 
 }
