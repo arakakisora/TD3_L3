@@ -3,6 +3,7 @@
 #include "Input.h"
 #include <imgui.h>
 #include <iostream>
+#include "Easing.h"
 // MAPクラスとのループキャストに注意
 void PhotoCamera::Initialize()
 {
@@ -16,6 +17,12 @@ void PhotoCamera::Initialize()
 	position = Vector2{ 2,13 };
 	object3D->SetTranslate(Vector3(position.x, position.y - 1, 0));
 	object3D->SetRotate(Vector3{ 0,0,0 });
+
+	//イージング用
+	currentPos = targetPos = position;
+	moveTimer = 1.0f;
+	isMoving = false;
+
 
 	// 座標変換
 
@@ -143,34 +150,58 @@ void PhotoCamera::Finalize()
 
 void PhotoCamera::Move()
 {
+
+	Vector2 input = { 0, 0 };
+
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-		position.y++;
+		input.y++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
-		position.y--;
+		input.y--;
 	} else if (Input::GetInstance()->TriggerKey(DIK_D)) {
-		position.x++;
+		input.x++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_A)) {
-		position.x--;
+		input.x--;
 	}
 #endif // _DEBUG
 
 	// ゲームパッドの十字キー移動
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_UP)) {
-		position.y++;
+		input.y++;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
-		position.y--;
+		input.y--;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_RIGHT)) {
-		position.x++;
+		input.x++;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_LEFT)) {
-		position.x--;
+		input.x--;
 	}
 	// スティック移動
 	stickMove();
 
 
-	// フォトカメラの配置を変更させる
-	object3D->SetTranslate(Vector3(position.x, position.y, 0));
+	// 十字キー・キーボードでも targetPos 更新
+	if ((input.x != 0 || input.y != 0) && !isMoving) {
+		targetPos.x += input.x;
+		targetPos.y += input.y;
+		moveTimer = 0.0f;
+		isMoving = true;
+	}
+
+	// イージング補間
+	if (isMoving) {
+		moveTimer += moveSpeed;
+		if (moveTimer >= 1.0f) {
+			moveTimer = 1.0f;
+			isMoving = false;
+			currentPos = targetPos;
+		} else {
+			currentPos = Easing::EaseLerp(currentPos, targetPos, moveTimer, Easing::EaseOutQuad);
+		}
+	}
+
+
+	// イージング結果を object3D に反映
+	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, 0));
 
 	// photo_ConvertYの代わりにposition.yをそのまま使用
 	for (size_t i = 0; i < blocks.size(); ++i) {
@@ -179,6 +210,7 @@ void PhotoCamera::Move()
 		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
 		blocks[i]->SetObject3DPosiition(blockPosition);
 	}
+	position = targetPos;
 
 }
 
@@ -268,6 +300,12 @@ void PhotoCamera::DrawImGui()
 	ImGui::Text("Camera ConvertY: %d", photo_ConvertY);
 	ImGui::Separator();
 
+	//イージング用
+	ImGui::DragFloat("Move Speed", &moveSpeed, 0.01f, 0.0f, 1.0f);
+	//movetimer
+	ImGui::DragFloat("Move Timer", &moveTimer, 0.01f, 0.0f, 1.0f);
+
+
 	// カメラのサイズを表示
 	ImGui::Text("Camera Size: (%d, %d)", cameraSizeX, cameraSizeY);
 	// カメラのシャッター回数を表示
@@ -318,38 +356,39 @@ void PhotoCamera::DrawImGui()
 void PhotoCamera::stickMove()
 {
 
-	// スティック操作でマス単位で動かす
-	static bool stickMovedX = false;
-	static bool stickMovedY = false;
+	static int stickCoolTimeX = 0;
+	static int stickCoolTimeY = 0;
 
 	float stickX = Input::GetInstance()->GetGamePadStickX();
 	float stickY = Input::GetInstance()->GetGamePadStickY();
 
-	// スティックのしきい値（デッドゾーン）
 	const float threshold = 0.5f;
+	const int maxCoolTime = 10;
 
-	if (!stickMovedX) {
-		if (stickX > threshold) {
-			position.x += 1.0f;
-			stickMovedX = true;
-		} else if (stickX < -threshold) {
-			position.x -= 1.0f;
-			stickMovedX = true;
+	if (std::abs(stickX) > threshold) {
+		if (stickCoolTimeX <= 0 && !isMoving) {
+			targetPos.x += (stickX > 0) ? 1 : -1;
+			moveTimer = 0.0f;
+			isMoving = true;
+			stickCoolTimeX = maxCoolTime;
+		} else {
+			stickCoolTimeX--;
 		}
-	} else if (std::abs(stickX) < threshold) {
-		stickMovedX = false; // ニュートラルに戻ったらリセット
+	} else {
+		stickCoolTimeX = 0;
 	}
 
-	if (!stickMovedY) {
-		if (stickY > threshold) {
-			position.y += 1.0f;
-			stickMovedY = true;
-		} else if (stickY < -threshold) {
-			position.y -= 1.0f;
-			stickMovedY = true;
+	if (std::abs(stickY) > threshold) {
+		if (stickCoolTimeY <= 0 && !isMoving) {
+			targetPos.y += (stickY > 0) ? 1 : -1;
+			moveTimer = 0.0f;
+			isMoving = true;
+			stickCoolTimeY = maxCoolTime;
+		} else {
+			stickCoolTimeY--;
 		}
-	} else if (std::abs(stickY) < threshold) {
-		stickMovedY = false;
+	} else {
+		stickCoolTimeY = 0;
 	}
 
 }
