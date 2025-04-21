@@ -111,6 +111,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BitmapFont.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="engine\camera\CameraManager.cpp" />
@@ -186,6 +187,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitmapFont.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="engine\camera\CameraManager.h" />
