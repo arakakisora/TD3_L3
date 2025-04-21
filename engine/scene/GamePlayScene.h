@@ -59,5 +59,8 @@ private:
 
 	PhotoCamera* photoCamera;
 
+	// 天球モデル
+	unique_ptr<Object3D> skydome_ = nullptr;
+	float skydomerotate;
 };
 
