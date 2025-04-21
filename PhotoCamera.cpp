@@ -210,6 +210,7 @@ void PhotoCamera::Move()
 		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
 		blocks[i]->SetObject3DPosiition(blockPosition);
 	}
+	position = targetPos;
 
 }
 
