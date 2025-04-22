@@ -91,6 +91,11 @@ void GamePlayScene::Initialize()
 	//gameCamera_->Initialize(map);
 	photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
+
+	// ビットマップフォント
+	bitmapFont = make_unique<BitmapFont>();
+	bitmapFont->Initialize((uint32_t)1);
+
 }
 
 void GamePlayScene::Finalize()
@@ -124,6 +129,9 @@ void GamePlayScene::Update()
 	//gameCamera_->Update();
 	photoCamera->Update(map);
 
+	// ビットマップフォントの更新処理
+	bitmapFont->Update();
+	
 	map->Update();
 
 
@@ -191,9 +199,11 @@ void GamePlayScene::Draw()
 #pragma region スプライト描画
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
-
+	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
 
+	// ビットマップフォントのスプライト描画
+	bitmapFont->Draw();
 #pragma endregion
 }
 

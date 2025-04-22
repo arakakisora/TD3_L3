@@ -18,7 +18,7 @@
 #include "Map.h"
 
 #include "PhotoCamera.h"
-
+#include "BitmapFont.h"
 class GamePlayScene :public BaseScene
 {
 public:
@@ -62,5 +62,8 @@ private:
 	// 天球モデル
 	unique_ptr<Object3D> skydome_ = nullptr;
 	float skydomerotate;
+
+	// ビットマップフォント
+	unique_ptr<BitmapFont>bitmapFont = nullptr;
 };
 
