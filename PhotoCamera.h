@@ -3,6 +3,8 @@
 #include "Map.h"
 #include "Block.h"
 #include "Sprite.h"
+#include "BitmapFont.h"
+#include <memory>
 using namespace std;
 class PhotoCamera
 {
@@ -74,7 +76,8 @@ private:
 
 	// 残りシャッター枚数のリソースデータ
 	vector<unique_ptr<Sprite>>shutterRests_;
-	// 残り枚数表示指数
+	// ビットマップフォント
+	unique_ptr<BitmapFont>bitmapFont = nullptr;
 
 
 	//イージング用

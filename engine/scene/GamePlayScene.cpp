@@ -46,6 +46,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
 	// 天球モデル
 	ModelManager::GetInstans()->LoadModel("backPlane.obj");
+	// フォトカメラフレーム
+	ModelManager::GetInstans()->LoadModel("Frame.obj");
 
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
@@ -91,6 +93,9 @@ void GamePlayScene::Initialize()
 	//gameCamera_->Initialize(map);
 	photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
+
+	
+
 }
 
 void GamePlayScene::Finalize()
@@ -124,6 +129,8 @@ void GamePlayScene::Update()
 	//gameCamera_->Update();
 	photoCamera->Update(map);
 
+	
+	
 	map->Update();
 
 
@@ -191,7 +198,7 @@ void GamePlayScene::Draw()
 #pragma region スプライト描画
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
-
+	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
 
 #pragma endregion
