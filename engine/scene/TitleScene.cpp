@@ -30,7 +30,7 @@ void TitleScene::Initialize()
 	// startの生成
 	uIbject_start_ = std::make_unique<Object3D>();
 	uIbject_start_->Initialize(Object3DCommon::GetInstance());
-	uIbject_start_->SetTranslate(Vector3(0.22f, -0.5f, 0.0f));
+	uIbject_start_->SetTranslate(Vector3(-0.53f, -0.5f, 0.0f));
 	uIbject_start_->SetScale(Vector3(0.3f, 0.3f, 0.3f));
 	uIbject_start_->SetModel("UI_Title_Stsrt.obj");
 	uIbject_start_->SetLighting(false);
@@ -139,7 +139,7 @@ void TitleScene::Update()
 
 	// UI更新処理
 	uIbject_start_->Update();
-	uIbject_A_->Update();
+	
 }
 
 void TitleScene::Draw()
@@ -152,7 +152,7 @@ void TitleScene::Draw()
 
 	// UI描画処理
 	uIbject_start_->Draw();
-	uIbject_A_->Draw();
+	
 
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
