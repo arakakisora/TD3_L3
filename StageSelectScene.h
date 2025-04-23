@@ -91,9 +91,7 @@ public:
 	Vector3 FollowTargetposition;
 	int frameCounter_ = 0;  // フレームカウンター
 
-	std::unique_ptr<Sprite> uIController_;
-	std::unique_ptr<Sprite> uITitle_;
-	std::unique_ptr<Sprite> uIX_;
+	std::vector<std::unique_ptr<Sprite>> xboxui;
 
 	bool titlefige_ =false;
 
