@@ -30,7 +30,7 @@ void TitleScene::Initialize()
 	// startの生成
 	uIbject_start_ = std::make_unique<Object3D>();
 	uIbject_start_->Initialize(Object3DCommon::GetInstance());
-	uIbject_start_->SetTranslate(Vector3(-0.1f, -0.5f, 0.0f));
+	uIbject_start_->SetTranslate(Vector3(0.22f, -0.5f, 0.0f));
 	uIbject_start_->SetScale(Vector3(0.3f, 0.3f, 0.3f));
 	uIbject_start_->SetModel("UI_Title_Stsrt.obj");
 	uIbject_start_->SetLighting(false);
@@ -38,7 +38,7 @@ void TitleScene::Initialize()
 	// Aの生成
 	uIbject_A_ = std::make_unique<Object3D>();
 	uIbject_A_->Initialize(Object3DCommon::GetInstance());
-	uIbject_A_->SetTranslate(Vector3(-0.1f, -0.5f, 0.0f));
+	uIbject_A_->SetTranslate(Vector3(-0.43f, -0.5f, 0.0f));
 	uIbject_A_->SetScale(Vector3(0.3f, 0.3f, 0.3f));
 	uIbject_A_->SetModel("UI_Title_A.obj");
 	uIbject_A_->SetLighting(false);
@@ -58,7 +58,7 @@ void TitleScene::Update()
 	} else {
 		timehige = true;
 	}
-	
+				
 	if (timehige) {
 		// Aボタンが押されたときに開始
 		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A) || Input::GetInstance()->TriggerKey(DIK_SPACE)) {
@@ -76,10 +76,39 @@ void TitleScene::Update()
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		}
 
+		Transform S = uIbject_start_->GetTransform();
+		if (ImGui::DragFloat3("STransform", &S.translate.x, 0.01f)) {
+			uIbject_start_->SetTransform(S);
+		}
 
+		Transform A = uIbject_A_->GetTransform();
+		if (ImGui::DragFloat3("ATransform", &A.translate.x, 0.01f)) {
+			uIbject_A_->SetTransform(A);
+		}
 
 	}
 #endif // _DEBUG
+
+	//タイトルの動き
+	float yoffset = std::sinf(timer * 0.05f) * 0.1f;
+	Transform trans = titileobject_->GetTransform();
+	trans.translate = Vector3(0.0f, 0.5f + yoffset, 0.0f);
+	trans.rotate.y += 0.01f;
+	titileobject_->SetTransform(trans);
+
+	float scale = 0.3f + std::sinf(timer * 0.07f) * 0.03f; 
+
+	//スタートの動き
+	Transform startTrans = uIbject_start_->GetTransform();
+	startTrans.scale = Vector3(scale, scale, scale); 
+	uIbject_start_->SetTransform(startTrans);
+
+	//Aの動き
+	Transform ATrans = uIbject_A_->GetTransform();
+	ATrans.scale = Vector3(scale, scale, scale);
+	uIbject_A_->SetTransform(ATrans);
+
+	timer++;
 
 	// タイトル更新処理
 	titileobject_->Update();

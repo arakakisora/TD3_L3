@@ -106,6 +106,10 @@ public:
 	void SetLighting(bool enable) { enableLighting = enable; }
 	
 	void SetColor(const Vector4& color) { color_ = color; }
+	//チュートリアルテキストフラグ
+	void SetIsTutorialActive(bool flag) { isTutorialActive = flag; }
+	bool GetIsTutorialActive() const { return isTutorialActive; }
+
 	Vector4 GetColor() const { return color_; }
 	
 	Matrix4x4 GetWorldMatrix() { return worldMatrix; }
@@ -155,6 +159,9 @@ private:
 	CaMeraForGpu* cameraForGpu = nullptr;//カメラのデータをGPUに送るための構造体
 
 	std::string modelFilePath_;  // ファイルパスを保存(ゲームカメラで使ってるので気にしないあとで消します)
+    //チュートリアルテキストのフラグ
+	bool isTutorialActive = true;
+
 private:
 	Vector4 color_ = { 1.0f, 1.0f, 1.0f, 1.0f }; // デフォルトは白
 

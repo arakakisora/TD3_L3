@@ -21,6 +21,11 @@ void PhotoCamera::Initialize(Map* map)
 	position = Vector2{ 2,13 };
 	object3D->SetTranslate(Vector3(position.x, position.y - 1, 0));
 	object3D->SetRotate(Vector3{ 0,0,0 });
+  
+	initialPos = position;
+	
+	isFirstCopied = false;
+	isFirstPasted = false;
 
 	// 残りシャッター枚数表示画像
 	TextureManager::GetInstance()->LoadTexture("Resources/shutter.png");
@@ -44,8 +49,6 @@ void PhotoCamera::Initialize(Map* map)
 	// ビットマップフォント
 	bitmapFont = make_unique<BitmapFont>();
 	bitmapFont->Initialize();
-
-
 }
 
 void PhotoCamera::Update(Map* map)
@@ -289,9 +292,9 @@ void PhotoCamera::Copy() {
 		}
 		copyData.push_back(row);
 	}
-
+	//初回コピーがしたか
+	isFirstCopied = true;
 }
-
 
 void PhotoCamera::Paste()
 {
@@ -320,6 +323,8 @@ void PhotoCamera::Paste()
 	map->SetMap(mapData);
 	// シャッターの回数をプラス
 	shutterCount++;
+	//初回ペーストしたか
+	isFirstPasted = true;
 }
 
 void PhotoCamera::DrawImGui()
