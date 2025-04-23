@@ -20,15 +20,31 @@ void StageSelectScene::Initialize()
 	camera_->SetTranslate({ 0,0,-50, });//カメラの位置
 	CameraManager::GetInstans()->AddCamera("maincam", camera_.get());
 
+	TextureManager::GetInstance()->LoadTexture("Resources/StageSelect/controllerUI.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Title.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_X.png");
+
+	//モデルの読み込み				
+	ModelManager::GetInstans()->LoadModel("axis.obj");
+	ModelManager::GetInstans()->LoadModel("plane.obj");
+	ModelManager::GetInstans()->LoadModel("sphere.obj");
+	ModelManager::GetInstans()->LoadModel("terrain.obj");
 
 	ModelManager::GetInstans()->LoadModel("Player.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-1.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-2.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-3.obj");
-	
+
 	ModelManager::GetInstans()->LoadModel("StageSelect/Stage01.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Stage02.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Stage03.obj");
+
+	ModelManager::GetInstans()->LoadModel("Pause.obj");
+
+	ModelManager::GetInstans()->LoadModel("StageSelect/title.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
+
 
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
@@ -87,9 +103,6 @@ void StageSelectScene::Initialize()
 	endPos_ = stageObjects_.at(1)->GetTranslate();  // 移動終了位置（例えば2番目のオブジェクトへ）
 	easingDuration_ = 2.0f;  // イージングの期間（秒）
 
-	TextureManager::GetInstance()->LoadTexture("Resources/StageSelect/controllerUI.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Title.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_X.png");
 
 	// コントローラ操作のUI
 	uIController_ = std::make_unique <Sprite>();
@@ -113,6 +126,10 @@ void StageSelectScene::Initialize()
 	uIX_->SetRotation(0.0f);
 	uIX_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 
+	//ポーズメニュー
+	pauseMenu = std::make_unique<PauseMenu>();
+	pauseMenu->Initialize(Object3DCommon::GetInstance(), false);
+	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 }
 
 void StageSelectScene::Finalize()
@@ -129,21 +146,59 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
-	//カメラの更新
-	CameraManager::GetInstans()->GetActiveCamera()->Update();
+	//ポーズ画面が出ている間は停止
+	if (!pauseMenu->IsPaused()) {
+		//カメラの更新
+		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
-	// 移動処理			
-	move();
+		// 移動処理			
+		move();
 
-	// 10フレーム経過するまでシーン遷移禁止
-	if (frameCounter_ < 10) {
-		frameCounter_++;
-	} else
-	{
-		frameCounter_ = 10;
-		// シーン遷移
-		moveChangeScene();
+		// 10フレーム経過するまでシーン遷移禁止
+		if (frameCounter_ < 10) {
+			frameCounter_++;
+		} else
+		{
+			frameCounter_ = 10;
+			// シーン遷移
+			moveChangeScene();
+		}
+
+		Player_->Update();
+
+	} else {
+		// ▼ カメラを引く処理をここにも追加 ▼
+		FollowTargetposition.z = -30.0f;
+		Camera* activeCam = CameraManager::GetInstans()->GetActiveCamera();
+		if (activeCam == CameraManager::GetInstans()->GetCamera("maincam")) {
+			activeCam->SetFollowTarget(Player_, FollowTargetposition);
+		}
+
+		Player_->Update();
+
+		// ←ポーズ中でもカメラだけ更新
+		CameraManager::GetInstans()->GetActiveCamera()->Update();
 	}
+	
+	if (!easingsceneFlag_ && !easingmoveFlag_) {
+		// ポーズ
+		pauseMenu->Update();
+	}
+
+	for (std::unique_ptr<Object3D>& stage : stageObjects_) {
+		stage->Update();
+	}
+
+	for (std::unique_ptr<Object3D>& text : textoObjects_) {
+		text->Update();
+	}
+
+
+	// UI
+	uIController_->Update();
+	uITitle_->Update();
+	uIX_->Update();
+
 
 #ifdef _DEBUG
 
@@ -169,21 +224,6 @@ void StageSelectScene::Update()
 	}
 
 #endif // _DEBUG
-
-	Player_->Update();
-
-	for (std::unique_ptr<Object3D>& stage : stageObjects_) {
-		stage->Update();
-	}
-
-	for (std::unique_ptr<Object3D>& text : textoObjects_) {
-		text->Update();
-	}
-
-	// UI
-	uIController_->Update();
-	uITitle_->Update();
-	uIX_->Update();
 
 	// ステージを決定していないなら
 	if (!easingsceneFlag_ && !easingmoveFlag_) {
@@ -213,6 +253,10 @@ void StageSelectScene::Draw() {
 	for (std::unique_ptr<Object3D>& text : textoObjects_) {
 		text->Draw();
 	}
+
+
+	//ポーズメニュー
+	pauseMenu->Draw();
 
 #pragma endregion
 
