@@ -2,65 +2,225 @@
 #include "Object3D.h"
 #include "Object3DCommon.h"
 #include "ModelManager.h"
+#include "Map.h"
+#include <imgui.h>
+
+
 Block::Block()
 {
 }
 
 Block::~Block()
 {
+	Finalize();
 }
 
-void Block::Initialize(const int mapID, const Vector3& position) {
-    this->mapID = mapID;
-    this->position = position; // 座標を設定
+void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
+	this->type = type;
+	this->map = map;
+	object3D = new Object3D();
+	object3D->Initialize(Object3DCommon::GetInstance());
+	object3D->SetTranslate(position);
+	velocity = 0.0f;
+	//isFalling = false;
 
-    // mapIDに応じて異なるオブジェクトを初期化
-    if (mapID == 0) {
-		//ModelManager::GetInstans()->LoadModel("cube.obj");
-  //      mapBlock0 = new Object3D();
-  //      mapBlock0->Initialize(Object3DCommon::GetInstance()); // 適切な引数を渡す
-  //      mapBlock0->SetTranslate(position); // 座標を設定
-		//mapBlock0->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-		//mapBlock0->SetModel("cube.obj");
-		//mapBlock0->SetLighting(true);
-    } else if (mapID == 1) {
-        ModelManager::GetInstans()->LoadModel("cube.obj");
-        mapBlock1 = new Object3D();
-        mapBlock1->Initialize(Object3DCommon::GetInstance()); // 適切な引数を渡す
-        mapBlock1->SetTranslate(position); // 座標を設定
-		mapBlock1->SetScale(Vector3(1.0f, 1.0f, 1.0f));
-		mapBlock1->SetModel("cube.obj");
-		mapBlock1->SetLighting(true);
-    }
+	switch ((type))
+	{
+		//case MapChipType::ここにマップチップタイプ:		// コピー不可能 No.2
+		//	// モデル指定
+		//	object3D->SetModel("使用したいモデル.obj");
+			//　もし、ブロックようにクラスを作ったのであればここに初期化
+			// 
+		//	break;
+	case MapChipType::kNCopyBlock:				// No.2 コピー不可能 
+		// モデル指定
+		object3D->SetModel("ncopyblock.obj");
+		break;
+
+	case MapChipType::kCopyBlock:				// No.3 コピー可能 
+		// モデル指定
+		object3D->SetModel("block.obj");
+		break;
+
+	case MapChipType::kGoalUp:					// No.4 ゴール上 
+		// モデル指定
+		object3D->SetModel("GoreFag.obj");
+		break;
+
+	case MapChipType::kGoalDown:				// No.5 ゴール下 
+		// モデル指定
+		object3D->SetModel("GoalBase.obj");
+		break;
+
+	case MapChipType::kFallBlock:				// No.6 落下ブロック
+		//モデル指定
+		object3D->SetModel("fallblock.obj");
+		break;
+
+	case MapChipType::kFixedTimeBlock:			// No.7 一定時間経過したら消えるブロック 
+		// モデル指定
+		object3D->SetModel("Timer.obj");
+		break;
+
+	case MapChipType::kPutFixedTimeBlock:		// No.8 貼り付け後一定時間 
+		// モデル指定
+		//object3D->SetModel("Timer.obj");
+		break;
+
+	}
+	
+	object3D->SetLighting(true);
+	object3D->SetDirectionalLightEnable(true);
+	object3D->SetDirectionalLightDirection({ 0.88f, -1.90f, 4.0f });
 }
-void Block::Update()
+
+
+
+void Block::Update() {
+
+	/*else if (MapChipType::マップチップタイプ == type) {
+	* モデルの更新なのでこれは絶対に必要
+		object3D->Update();
+		作ったブロックの更新処理
+		ブロッククラス内で作ればそれを呼ぶだけでいい
+		追加する場合はkNCopyBlockの部分を参考に
+	}*/
+	if (MapChipType::kCopyBlock == type) {
+		object3D->Update();
+	} 
+	else if (MapChipType::kGoalUp == type) {
+		object3D->Update();
+	} else if (MapChipType::kGoalDown == type) {
+		object3D->Update();
+	}
+	else if (MapChipType::kNCopyBlock == type) {
+		object3D->Update();
+	}
+	else if (MapChipType::kFixedTimeBlock == type) {
+		object3D->Update();
+		FixedTimeBlock();
+	} 
+	else if (MapChipType::kPutFixedTimeBlock == type) {
+		object3D->Update();
+		PutFixedTimeBlock();
+	}
+	else if (MapChipType::kFallBlock == type) {
+		Vector3 position = object3D->GetTranslate();
+		IndexSet index = map->GetMapChipIndexSetByPosition(position);
+		uint32_t belowIndex = index.yIndex + 1;
+		//下にブロックがあるか
+		if (belowIndex < map->GetNumBlockVirtical() &&
+			map->GetMapChipTypeByIndex(index.xIndex, belowIndex) == MapChipType::kBlank) {
+			if (!isFalling) {
+				map->SetMapData(index.xIndex, index.yIndex, MapChipType::kBlank);
+			}
+			isFalling = true;
+		}
+
+		//落下
+		if (isFalling) {
+			velocity += gravity;
+			position.y -= velocity;
+
+			IndexSet newIndex = map->GetMapChipIndexSetByPosition(position);
+
+			//下にブロックがあるか
+			if (belowIndex < map->GetNumBlockVirtical() &&
+				map->GetMapChipTypeByIndex(index.xIndex, belowIndex) != MapChipType::kBlank) {
+				isFalling = false;
+				velocity = 0.0f;
+				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
+				map->RemoveObjectAt(index.xIndex, index.yIndex);
+				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock);
+			}
+
+			object3D->SetTranslate(position);
+		}
+		object3D->Update();
+	}
+
+#ifdef _DEBUG
+
+	if (ImGui::CollapsingHeader("Blokc", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		
+		DirectionalLight directionalLight = object3D->GetDirectionalLight();
+		if (ImGui::DragFloat3("Blokc Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
+			object3D->SetDirectionalLightDirection(directionalLight.direction);
+		}
+
+
+
+	}
+#endif // DEBUG_
+
+};
+
+
+void Block::Draw() {
+	// Drawはelse ifを追加してDrawかくだけ
+	if (MapChipType::kCopyBlock == type) {
+		object3D->Draw();
+	} 
+	else if (MapChipType::kGoalUp == type) {
+		object3D->Draw();
+	}
+	else if (MapChipType::kGoalDown == type) {
+		object3D->Draw();
+	} 
+	else if (MapChipType::kNCopyBlock == type) {
+		object3D->Draw();
+	} 
+	else if (MapChipType::kFixedTimeBlock == type) {
+		object3D->Draw();
+	} 
+	else if (MapChipType::kPutFixedTimeBlock == type) {
+		object3D->Draw();
+	} 
+	else if (MapChipType::kFallBlock == type) {
+		object3D->Draw();
+	}
+}
+
+void Block::Finalize() {
+	// 別のクラスを作った場合はそのクラスの終了処理を呼ぶ
+	// モデルの解放はこの変数しか使用しないようになっているので追加でかく必要は無し
+	if (object3D) {
+		delete object3D;
+		object3D = nullptr;
+	}
+}
+
+Block* Block::CreateBlock(MapChipType type, const Vector3& position)
 {
-    // mapIDに応じて異なるオブジェクトを更新
-    if (mapID == 0 && mapBlock0) {
-      //  mapBlock0->Update();
-    } else if (mapID == 1 && mapBlock1) {
-        mapBlock1->Update();
-    }
+	return nullptr;
 }
 
-void Block::Draw()
-{
-    // mapIDに応じて異なるオブジェクトを描画
-    if (mapID == 0 && mapBlock0) {
-       // mapBlock0->Draw();
-    } else if (mapID == 1 && mapBlock1) {
-        mapBlock1->Draw();
-    }
+
+void Block::SetFalling(bool falling) {
+	isFalling = falling;
 }
 
-void Block::Finalize()
+Block* Block::CreateBlock(MapChipType type, const Vector3& position, Map* map) {
+	Block* block = new Block();
+	block->Initialize(type, position, map);
+	return block;
+}
+
+void Block::SetObject3DPosiition(const Vector3& position)
 {
-    // mapIDに応じて異なるオブジェクトを終了処理
-    if (mapID == 0 && mapBlock0) {
-       // delete mapBlock0;
-       // mapBlock0 = nullptr;
-    } else if (mapID == 1 && mapBlock1) {
-        delete mapBlock1;
-        mapBlock1 = nullptr;
-    }
+	object3D->SetTranslate(position);
+}
+
+void Block::FixedTimeBlock()
+{
+
+
+}
+
+void Block::PutFixedTimeBlock()
+{
+	if (isFixedTimeBlockPut) {
+
+	}
 }

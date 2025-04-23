@@ -38,6 +38,7 @@ public:
 	void SetScale(const Vector3& scale) { transform.scale = scale; }
 	//回転
 	void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
+	Vector3 GetRotate() const { return transform.rotate; }
 	//位置
 	Vector3 GetTranslate() { return transform.translate; }
 	void SetTranslate(const Vector3& transrate) { transform.translate = transrate; }
@@ -105,6 +106,10 @@ public:
 	void SetLighting(bool enable) { enableLighting = enable; }
 	
 	void SetColor(const Vector4& color) { color_ = color; }
+	//チュートリアルテキストフラグ
+	void SetIsTutorialActive(bool flag) { isTutorialActive = flag; }
+	bool GetIsTutorialActive() const { return isTutorialActive; }
+
 	Vector4 GetColor() const { return color_; }
 	
 	Matrix4x4 GetWorldMatrix() { return worldMatrix; }
@@ -154,6 +159,9 @@ private:
 	CaMeraForGpu* cameraForGpu = nullptr;//カメラのデータをGPUに送るための構造体
 
 	std::string modelFilePath_;  // ファイルパスを保存(ゲームカメラで使ってるので気にしないあとで消します)
+    //チュートリアルテキストのフラグ
+	bool isTutorialActive = true;
+
 private:
 	Vector4 color_ = { 1.0f, 1.0f, 1.0f, 1.0f }; // デフォルトは白
 

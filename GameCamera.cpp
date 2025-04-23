@@ -8,7 +8,7 @@ void GameCamera::Initialize(Map* map) {
     // 開始番号を設定
     xIndex = 7;
     yIndex = 16;
-    sixe = { 1.0f,1.0f,-1.0f };
+    size = { 1.0f,1.0f,-1.0f };
     // ゲームカメラのオブジェクト数をレンダリング範囲分だけ確保
     gamecameras_.resize(kRenderWidth * kRenderHeight);
     // 各オブジェクトを生成 & 初期化
@@ -21,11 +21,11 @@ void GameCamera::Initialize(Map* map) {
             position = map_->GetMapChipPostionByIndex(xIndex + x, yIndex + y);
             gamecameras_[index]->SetTranslate(position);
             // スケール設定
-            gamecameras_[index]->SetScale(sixe);
+            gamecameras_[index]->SetScale(size);
             // モデル設定
             gamecameras_[index]->SetModel("cube.obj");
             // ライティング有効化
-            gamecameras_[index]->SetLighting(true);
+            gamecameras_[index]->SetLighting(false);
         }
     }
 }
@@ -57,25 +57,29 @@ void GameCamera::Draw() {
 
 void GameCamera::move() {
     // キー入力でマップのインデックスを変更
-    if (Input::GetInstans()->TriggerKey(DIK_W)) {
+    if (Input::GetInstance()->TriggerKey(DIK_W)) {
         // マップチップ内に動くよう制限
+
+
+
+
         if (yIndex > 1) {
             yIndex--;
         }
     }
-    if (Input::GetInstans()->TriggerKey(DIK_S)) {
+    if (Input::GetInstance()->TriggerKey(DIK_S)) {
         // マップチップ内に動くよう制限
         if (yIndex < map_->GetMapHeight() - kRenderHeight) {
             yIndex++;
         }
     }
-    if (Input::GetInstans()->TriggerKey(DIK_A)) {
+    if (Input::GetInstance()->TriggerKey(DIK_A)) {
         // マップチップ内に動くよう制限
         if (xIndex > 0) {
             xIndex--;
         }
     }
-    if (Input::GetInstans()->TriggerKey(DIK_D)) {
+    if (Input::GetInstance()->TriggerKey(DIK_D)) {
         // マップチップ内に動くよう制限
         if (xIndex < map_->GetMapWidth() - kRenderWidth) {
             xIndex++;
@@ -88,7 +92,7 @@ void GameCamera::move() {
     for (uint32_t y = 0; y < kRenderHeight; ++y) {
         for (uint32_t x = 0; x < kRenderWidth; ++x) {
             uint32_t index = y * kRenderWidth + x;
-            Vector3 offset(x * sixe.x, y * sixe.y, sixe.z);
+            Vector3 offset(x * size.x, y * size.y, size.z);
             Vector3 adjustedPos = position + offset;
             gamecameras_[index]->SetTranslate(adjustedPos);
         }
@@ -106,13 +110,13 @@ void GameCamera::GameCamertakeaphoto() {
         MapChipType mapChipType = map_->GetMapChipTypeByIndex(currentXIndex, currentYIndex);
 
         // SPACEキーでの撮影処理
-        if (Input::GetInstans()->TriggerKey(DIK_SPACE)) {
+        if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
             // 現在位置に基づいてモデルを変更
             switch (mapChipType) {
             case MapChipType::kBlank:
                 camera->SetModel("axis.obj");
                 break;
-            case MapChipType::kBlock:
+            case MapChipType::kCopyBlock:
                 camera->SetModel("cube.obj");
                 break;
             }
@@ -120,7 +124,7 @@ void GameCamera::GameCamertakeaphoto() {
     }
 }
 
-void GameCamera::GameCameraphoto(std::vector<std::vector<Object3D*>>& blockobject3D) {
+void GameCamera::GameCameraphoto(std::vector<std::vector<Block*>>& blockGrid) {
     for (auto& camera : gamecameras_) {
         // 現在のカメラ位置を取得
         Vector3 cameraPos = camera->GetTranslate();
@@ -133,34 +137,28 @@ void GameCamera::GameCameraphoto(std::vector<std::vector<Object3D*>>& blockobjec
         MapChipType mapChipType = map_->GetMapChipTypeByIndex(currentXIndex, currentYIndex);
 
         // ENTERキーでの貼り付け
-        if (Input::GetInstans()->TriggerKey(DIK_RETURN)) {
+        if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
             // 現在のカメラモデルを取得
             const std::string& currentModel = camera->GetModel();
 
-            // モデルに基づいてマップデータを変更
             if (currentModel == "axis.obj") {
                 // 空白（削除）
                 map_->SetMapData(currentXIndex, currentYIndex, MapChipType::kBlank);
 
-                // その位置にある Object3D のモデルを空白に変更
-                if (blockobject3D[currentYIndex][currentXIndex]) {
-                    delete blockobject3D[currentYIndex][currentXIndex]; // メモリ解放
-                    blockobject3D[currentYIndex][currentXIndex] = nullptr;
+                // その位置にある Block を削除
+                if (blockGrid[currentYIndex][currentXIndex]) {
+                    delete blockGrid[currentYIndex][currentXIndex]; // メモリ解放
+                    blockGrid[currentYIndex][currentXIndex] = nullptr;
                 }
             } else if (currentModel == "cube.obj") {
                 // ブロック（追加）
-                map_->SetMapData(currentXIndex, currentYIndex, MapChipType::kBlock);
+                map_->SetMapData(currentXIndex, currentYIndex, MapChipType::kCopyBlock);
 
-                // その位置に Object3D が存在しない場合は生成
-                if (!blockobject3D[currentYIndex][currentXIndex]) {
-                    Object3D* newObject = new Object3D();
-                    newObject->Initialize(Object3DCommon::GetInstance());
-                    newObject->SetModel("cube.obj");
-                    newObject->SetTranslate(map_->GetMapChipPostionByIndex(currentXIndex, currentYIndex));
-                    blockobject3D[currentYIndex][currentXIndex] = newObject;
-                } else {
-                    // 既存のオブジェクトがあればモデルを更新
-                    blockobject3D[currentYIndex][currentXIndex]->SetModel("cube.obj");
+                // その位置に Block が存在しない場合は生成
+                if (!blockGrid[currentYIndex][currentXIndex]) {
+                    Block* newBlock = Block::CreateBlock(MapChipType::kCopyBlock,
+                        map_->GetMapChipPostionByIndex(currentXIndex, currentYIndex),map_);
+                    blockGrid[currentYIndex][currentXIndex] = newBlock;
                 }
             }
         }

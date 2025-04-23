@@ -21,7 +21,7 @@ void Framework::Initialize()
 	//テクスチャマネージャの初期化
 	TextureManager::GetInstance()->Initialize(dxCommon.get(), srvManager.get());
 	//Input初期化
-	Input::GetInstans()->Initialize(winApp.get());
+	Input::GetInstance()->Initialize(winApp.get());
 	//Audio初期化
 	Audio::GetInstance()->Initialize();
 	//パーティクル
@@ -71,7 +71,7 @@ void Framework::Finalize()
 	imGuiMnager.reset();
 #endif // _DEBUG
 
-	Input::GetInstans()->Finalize();
+	Input::GetInstance()->Finalize();
 	SpriteCommon::GetInstance()->Finalize();
 	Object3DCommon::GetInstance()->Finalize();
 	SceneManager::GetInstance()->Finalize();
@@ -85,7 +85,7 @@ void Framework::Update()
 		endRequst_ = true;
 	}
 
-	Input::GetInstans()->Update();
+	Input::GetInstance()->Update();
 	ParticleMnager::GetInstance()->Update();
 	SceneManager::GetInstance()->Update();
 	

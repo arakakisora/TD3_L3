@@ -7,7 +7,12 @@
 #include "WinApp.h"
 #include <Vector2.h>
 #include <array>
+#include <Xinput.h>
 template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+
+#include <Xinput.h>
+#pragma comment(lib, "Xinput.lib")
 class Input
 {
 	static Input* instance;
@@ -24,7 +29,7 @@ public: // インナークラス
 	};
 public:
 	//シングルトンインスタンスの取得
-	static Input* GetInstans();
+	static Input* GetInstance();
 	//終了
 	void Finalize();
 
@@ -59,7 +64,16 @@ public:
 	//	return mouse.lZ;
 	//};
 
+	//ボタンの入力状態
+	bool PushGamePadButton(WORD button);
+	bool TriggerGamePadButton(WORD button);
+	//スティックとトリガーの値取得
+	float GetGamePadStickX(bool righ = false);
+	float GetGamePadStickY(bool righ = false);
+	BYTE GetGamePadTrigger(bool righ = false);
 
+	//// バイブレーション制御
+	//void SetVibration(float leftMotor, float rightMotor);
 
 private:
 	ComPtr<IDirectInput8>directInput = nullptr;
@@ -73,6 +87,10 @@ private:
 	DIMOUSESTATE2 preMouse;
 	Vector2 mousePos;
 
+	//ゲームパッド
+	XINPUT_STATE state_; // 現在のゲームパッド状態
+	XINPUT_STATE prevState_; // 前回のゲームパッド状態
+	bool gamepadConnected_ = false; // ゲームパッドが接続されているか
 
 };
 

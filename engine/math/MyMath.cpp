@@ -100,6 +100,11 @@ Vector3 MyMath::Add(const Vector3& v1, const Vector3& v2) {
 	return { v1.x + v2.x,v1.y + v2.y,v1.z + v2.z };
 }
 
+//subtraction
+Vector3 MyMath::Subtraction(const Vector3& v, float scalar) {
+	return Vector3(v.x - scalar, v.y - scalar, v.z - scalar);
+}
+
 Matrix4x4 MyMath::MakeRotateXMatrix(float radian)
 
 {

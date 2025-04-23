@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -111,7 +111,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BitmapFont.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Easing.cpp" />
     <ClCompile Include="engine\camera\CameraManager.cpp" />
     <ClCompile Include="engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\BaseScene.cpp" />
@@ -128,7 +130,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\scene\GameClearScene.cpp" />
     <ClCompile Include="engine\scene\GameOverScene.cpp" />
     <ClCompile Include="engine\base\GraphicsPipeline.cpp" />
-    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelCommon.cpp" />
@@ -148,7 +149,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\scene\TitleScene.cpp" />
     <ClCompile Include="engine\particle\ParticleEmitter.cpp" />
     <ClCompile Include="engine\particle\ParticleMnager.cpp" />
+    <ClCompile Include="ObjectCamera.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
+    <ClCompile Include="PhotoCamera.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
     <ClCompile Include="Map.cpp" />
   </ItemGroup>
@@ -183,7 +188,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitmapFont.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="engine\camera\CameraManager.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\BaseScene.h" />
@@ -224,8 +231,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\base\GraphicsPipeline.h" />
     <ClInclude Include="engine\particle\ParticleEmitter.h" />
     <ClInclude Include="engine\particle\ParticleMnager.h" />
-    <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="ObjectCamera.h" />
+    <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="PhotoCamera.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="StageSelectScene.h" />
     <ClInclude Include="WorldTransform.h" />
     <ClInclude Include="Map.h" />
   </ItemGroup>
@@ -240,6 +250,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <None Include="MapData\blocks.csv" />
     <None Include="MapData\Map1_1.csv" />
+    <None Include="MapData\mapp1.csv" />
+    <None Include="MapData\mapp2.csv" />
+    <None Include="MapData\mapp3.csv" />
+    <None Include="MapData\mapp4.csv" />
+    <None Include="MapData\mapp5.csv" />
     <None Include="Resources\Shaders\Object3d.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

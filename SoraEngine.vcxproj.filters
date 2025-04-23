@@ -178,11 +178,24 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Block.cpp">
-
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameCamera.cpp">
-
+    <ClCompile Include="ObjectCamera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelectScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PhotoCamera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Easing.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BitmapFont.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -331,11 +344,24 @@
     <ClInclude Include="Block.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-
-    <ClInclude Include="GameCamera.h">
+    <ClInclude Include="ObjectCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-
+    <ClInclude Include="StageSelectScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PhotoCamera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapFont.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Object3d.hlsli">
@@ -345,5 +371,10 @@
     <None Include="Resources\Shaders\Sprite.hlsli" />
     <None Include="MapData\Map1_1.csv" />
     <None Include="MapData\blocks.csv" />
+    <None Include="MapData\mapp1.csv" />
+    <None Include="MapData\mapp2.csv" />
+    <None Include="MapData\mapp3.csv" />
+    <None Include="MapData\mapp4.csv" />
+    <None Include="MapData\mapp5.csv" />
   </ItemGroup>
 </Project>
