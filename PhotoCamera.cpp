@@ -145,7 +145,6 @@ void PhotoCamera::Update(Map* map)
 	this->map->SetMap(mapData);
 
 
-
 }
 
 void PhotoCamera::Draw3DObject()
@@ -285,7 +284,10 @@ void PhotoCamera::Copy() {
 				row.push_back(MapChipType::kBlank);
 			} else if (type == MapChipType::kBlank) {
 				row.push_back(MapChipType::kBlank);
-			} else {
+			} else if (type == MapChipType::kNCopyBlock) {
+				row.push_back(MapChipType::kBlank);
+			}
+			else {
 				type = mapData.data[targetY][targetX];
 				row.push_back(type);
 			}
@@ -302,11 +304,16 @@ void PhotoCamera::Paste()
 	if (!map) return;
 	// コピーデータがないときはペースト不可
 	if (copyData.empty()) return;
-
+	//貼り付けたか
+	bool ispasted = false;
 	// コピーデータをマップデータにペースト
 	for (uint32_t y = 0; y < cameraSizeY; ++y) {
 		for (uint32_t x = 0; x < cameraSizeX; ++x) {
 			MapChipType type = copyData[y][x];
+
+			if (type == MapChipType::kNCopyBlock) {
+				continue;
+			}
 			int positionX = static_cast<int>(position.x) + x;
 			int positionY = static_cast<int>(Map::kNumBlockVirtical - position.y - 1) + y;
 
@@ -316,15 +323,18 @@ void PhotoCamera::Paste()
 			}
 
 			mapData.data[positionY][positionX] = type;
+			ispasted = true;
 		}
 	}
 
-	// 変更したマップデータをマップにセット
-	map->SetMap(mapData);
-	// シャッターの回数をプラス
-	shutterCount++;
-	//初回ペーストしたか
-	isFirstPasted = true;
+	if (ispasted) {
+		// 変更したマップデータをマップにセット
+		map->SetMap(mapData);
+		// シャッターの回数をプラス
+		shutterCount++;
+		//初回ペーストしたか
+		isFirstPasted = true;
+	}
 }
 
 void PhotoCamera::DrawImGui()
