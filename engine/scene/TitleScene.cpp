@@ -51,6 +51,10 @@ void TitleScene::Initialize()
 	uIbject_A_->SetScale(Vector3(0.3f, 0.3f, 0.3f));
 	uIbject_A_->SetModel("UI_Title_A.obj");
 	uIbject_A_->SetLighting(false);
+
+	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.StartFadeIn();
+
 }
 
 void TitleScene::Finalize()
@@ -60,6 +64,8 @@ void TitleScene::Finalize()
 
 void TitleScene::Update()
 {
+	// フェード更新
+	fadeManager_.Update();
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
 	skydome_->Update();
 	if (time <= 20) {
@@ -67,14 +73,35 @@ void TitleScene::Update()
 	} else {
 		timehige = true;
 	}
-				
 	if (timehige) {
+
+
 		// Aボタンが押されたときに開始
-		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A) || Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		if (!fadeManager_.IsFading()) {
+			if (
+#ifdef _DEBUG
+				Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+#endif // _DEBUG
+				Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A))
+			{
+				fadeManager_.StartFadeOut();
+
+			}
+		}
+
+		if (fadeManager_.IsFadeOutFinished()) {
 			// シーン切り替え
 			SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 		}
+
 	}
+
+
+
+
+
+
+
 
 #ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
@@ -129,6 +156,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
@@ -143,4 +171,8 @@ void TitleScene::Draw()
 
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
+
+	// フェード描画
+	fadeManager_.Draw();
+
 }
