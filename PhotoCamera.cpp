@@ -284,10 +284,13 @@ void PhotoCamera::Copy() {
 				row.push_back(MapChipType::kBlank);
 			} else if (type == MapChipType::kBlank) {
 				row.push_back(MapChipType::kBlank);
+			} else if (type == MapChipType::kGoalUp) {
+				row.push_back(MapChipType::kBlank);
+			} else if (type == MapChipType::kGoalDown) {
+				row.push_back(MapChipType::kBlank);
 			} else if (type == MapChipType::kNCopyBlock) {
 				row.push_back(MapChipType::kBlank);
-			}
-			else {
+			} else {
 				type = mapData.data[targetY][targetX];
 				row.push_back(type);
 			}
