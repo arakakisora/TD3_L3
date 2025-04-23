@@ -16,9 +16,9 @@
 void GamePlayScene::Initialize()
 {
 	//カメラの生成
-	camera1 = std::make_unique<Camera>();
-	camera1->SetTranslate({ 12,17,-31 });//カメラの位置
-	CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
+camera1 = std::make_unique<Camera>();
+camera1->SetTranslate({ 12,17,-31 });//カメラの位置
+CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 	//カメラの生成
 	camera2 = std::make_unique<Camera>();
@@ -36,7 +36,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 	ModelManager::GetInstans()->LoadModel("cube.obj");
 
-	ModelManager::GetInstans()->LoadModel("Player.obj");
+	//ModelManager::GetInstans()->LoadModel("Player.obj");
+	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
 
 	// ブロック関連モデル
 	ModelManager::GetInstans()->LoadModel("block.obj");
@@ -60,6 +61,14 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial7.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial8.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial9.obj");
+
+	// ポーズテキスト
+	ModelManager::GetInstans()->LoadModel("Pause.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/title.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/StageSelect.obj");
+
 
 	//操作説明UI
 
@@ -113,8 +122,13 @@ void GamePlayScene::Initialize()
 	object3DPlayer = new Object3D();
 	Vector3 playerPostion = Vector3((float)map->GetPlayerStartX(), (float)map->GetPlayerStartY(), 0.0f);
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
-	object3DPlayer->SetModel("Player.obj");
-	object3DPlayer->SetScale(Vector3{ 0.1f,0.1f,0.1f });
+
+	object3DPlayer->SetModel("playercharacter.obj");
+	object3DPlayer->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	object3DPlayer->SetLighting(true);
+	object3DPlayer->SetDirectionalLightEnable(true);
+	object3DPlayer->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
+
 	player->SetMapChipField(map);
 	player->Initialize(object3DPlayer, playerPostion);
 	player->SetDeathHeight(0.0f);
@@ -293,7 +307,10 @@ void GamePlayScene::Initialize()
 	photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
 
-	
+	//ポーズメニュー
+	pauseMenu = std::make_unique<PauseMenu>();
+	pauseMenu->Initialize(Object3DCommon::GetInstance(), true);
+	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
 }
 
@@ -315,101 +332,107 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::Update()
 {
-	//カメラの更新
-	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
-	// 天球の更新
-	skydomerotate+=0.0f;
-	skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
-	skydome_->Update();
+	//ポーズ画面が出ている間は停止
+	if (!pauseMenu->IsPaused()) {
 
-	// ゲームカメラ更新処理
-	//gameCamera_->Update();
-	photoCamera->Update(map);
+		//カメラの更新
+		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
-	map->Update();
-	////プレイヤーの更新
-	player->Update();
+		// 天球の更新
+		skydomerotate += 0.0f;
+		skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
+		skydome_->Update();
 
-	//チュートリアル表示制御//map1
-	if (SceneManager::GetInstance()->GetStageIndex() == 0) { 
-		/*
+		// ゲームカメラ更新処理
+		//gameCamera_->Update();
+		photoCamera->Update(map);
 
-		if (!tutorial1_2) {
-			tutorialTexts[1]->SetIsTutorialActive(true);
-			tutorialTexts[2]->SetIsTutorialActive(true);
-			tutorial1_2 = true;
-		}
+		map->Update();
+		////プレイヤーの更新
+		player->Update();
 
-		if(photoCamera->HasStarted()&&!turorial3_4){
-		   tutorialTexts[1]->SetIsTutorialActive(false);
-		   tutorialTexts[2]->SetIsTutorialActive(false);
-		   tutorialTexts[3]->SetIsTutorialActive(true);
-		   tutorialTexts[4]->SetIsTutorialActive(true);
-		   tutorial3_4 = true;
-		   }
+		//チュートリアル表示制御//map1
+		if (SceneManager::GetInstance()->GetStageIndex() == 0) {
+			/*
 
-		if (photoCamera->HasMoved() && !tutorial5) {
-			tutorialtext[3]->SetIsTutorialActive(false);
-			tutorialtext[4]->SetIsTutorialActive(false);
-			tutorialtext[5]->SetIsTutorialActive(true);
-			tutorial5 = true;
-		}
+			if (!tutorial1_2) {
+				tutorialTexts[1]->SetIsTutorialActive(true);
+				tutorialTexts[2]->SetIsTutorialActive(true);
+				tutorial1_2 = true;
+			}
 
-		if (photoCamera->isFirstCopied && !tutorial6_7) {
-			tutorialtext[5]->SetIsTutorialActive(false);
-			tutorialtext[6]->SetIsTutorialActive(true);
-			tutorialtext[7]->SetIsTutorialActive(true);
-			tutorial6_7 = true;
-		}
-		if (photoCamera->isFirstPasted && !tutorial8) {
-			tutorialtext[6]->SetIsTutorialActive(false);
-			tutorialtext[7]->SetIsTutorialActive(false);
-			tutorialtext[8]->SetIsTutorialActive(true);
-			tutorial8 = true;
-		}
+			if(photoCamera->HasStarted()&&!turorial3_4){
+			   tutorialTexts[1]->SetIsTutorialActive(false);
+			   tutorialTexts[2]->SetIsTutorialActive(false);
+			   tutorialTexts[3]->SetIsTutorialActive(true);
+			   tutorialTexts[4]->SetIsTutorialActive(true);
+			   tutorial3_4 = true;
+			   }
 
-		for (auto& text : tutorialTexts) {
-			if (text->GetIsTutorialActive()) {
-				text->Update();
+			if (photoCamera->HasMoved() && !tutorial5) {
+				tutorialtext[3]->SetIsTutorialActive(false);
+				tutorialtext[4]->SetIsTutorialActive(false);
+				tutorialtext[5]->SetIsTutorialActive(true);
+				tutorial5 = true;
+			}
+
+			if (photoCamera->isFirstCopied && !tutorial6_7) {
+				tutorialtext[5]->SetIsTutorialActive(false);
+				tutorialtext[6]->SetIsTutorialActive(true);
+				tutorialtext[7]->SetIsTutorialActive(true);
+				tutorial6_7 = true;
+			}
+			if (photoCamera->isFirstPasted && !tutorial8) {
+				tutorialtext[6]->SetIsTutorialActive(false);
+				tutorialtext[7]->SetIsTutorialActive(false);
+				tutorialtext[8]->SetIsTutorialActive(true);
+				tutorial8 = true;
+			}
+
+			for (auto& text : tutorialTexts) {
+				if (text->GetIsTutorialActive()) {
+					text->Update();
+				}
+			}
+			*/
+
+			if (!tutorial1_2) {
+				// text1,2を表示
+				Tutorialtext1->SetIsTutorialActive(true);
+				Tutorialtext2->SetIsTutorialActive(true);
+				tutorial1_2 = true;
+			}
+
+			if (photoCamera->HasStarted() && !tutorial3_4) {
+				Tutorialtext1->SetIsTutorialActive(false);
+				Tutorialtext2->SetIsTutorialActive(false);
+				Tutorialtext3->SetIsTutorialActive(true);
+				Tutorialtext4->SetIsTutorialActive(true);
+				tutorial3_4 = true;
+			}
+
+			if (photoCamera->HasMoved() && !tutorial5) {
+				Tutorialtext3->SetIsTutorialActive(false);
+				Tutorialtext4->SetIsTutorialActive(false);
+				Tutorialtext5->SetIsTutorialActive(true);
+				tutorial5 = true;
+			}
+
+			if (photoCamera->isFirstCopied && !tutorial6_7) {
+				Tutorialtext5->SetIsTutorialActive(false);
+				Tutorialtext6->SetIsTutorialActive(true);
+				Tutorialtext7->SetIsTutorialActive(true);
+				tutorial6_7 = true;
+			}
+			if (photoCamera->isFirstPasted && !tutorial8) {
+				Tutorialtext6->SetIsTutorialActive(false);
+				Tutorialtext7->SetIsTutorialActive(false);
+				Tutorialtext8->SetIsTutorialActive(true);
+				tutorial8 = true;
 			}
 		}
-		*/
 
-		if (!tutorial1_2) {
-			// text1,2を表示
-			Tutorialtext1->SetIsTutorialActive(true);
-			Tutorialtext2->SetIsTutorialActive(true);
-			tutorial1_2 = true;
-		}
-
-		if (photoCamera->HasStarted() && !tutorial3_4) {
-			Tutorialtext1->SetIsTutorialActive(false);
-			Tutorialtext2->SetIsTutorialActive(false);
-			Tutorialtext3->SetIsTutorialActive(true);
-			Tutorialtext4->SetIsTutorialActive(true);
-			tutorial3_4 = true;
-		}
-
-		if (photoCamera->HasMoved() && !tutorial5) {
-			Tutorialtext3->SetIsTutorialActive(false);
-			Tutorialtext4->SetIsTutorialActive(false);
-			Tutorialtext5->SetIsTutorialActive(true);
-			tutorial5 = true;
-		}
-
-		if (photoCamera->isFirstCopied && !tutorial6_7) {
-			Tutorialtext5->SetIsTutorialActive(false);
-			Tutorialtext6->SetIsTutorialActive(true);
-			Tutorialtext7->SetIsTutorialActive(true);
-			tutorial6_7 = true;
-		}
-		if (photoCamera->isFirstPasted && !tutorial8) {
-			Tutorialtext6->SetIsTutorialActive(false);
-			Tutorialtext7->SetIsTutorialActive(false);
-			Tutorialtext8->SetIsTutorialActive(true);
-			tutorial8 = true;
-		}
 	}
 	
 	//チュートリアル表示制御map2
@@ -436,33 +459,37 @@ void GamePlayScene::Update()
 		for (int i : {0, 1, 2, 5, 6, 9}) {
 			operationTexts[i]->Update();
 		}
-	}
-	else {
-		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
-			operationTexts[i]->Update();
+		else {
+			for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
+				operationTexts[i]->Update();
+			}
 		}
+		*/
+		if (!photoCamera->GetCameraMode()) {
+			OperationtextStickL->Update();
+			OperationtextButtonB->Update();
+			OperationtextButtonA->Update();
+			OperationtextIdou->Update();
+			OperationtextKrikae->Update();
+			OperationtextZyanpu->Update();
+		}
+		if (photoCamera->GetCameraMode()) {
+			OperationtextStickL->Update();
+			OperationtextButtonB->Update();
+			OperationtextLB->Update();
+			OperationtextRB->Update();
+			OperationtextIdou->Update();
+			OperationtextKrikae->Update();
+			OperationtextToru->Update();
+			OperationtextHaiti->Update();
+		}
+		//mode切り替え
+		photoCamera->SetcameraMode(player->GetcamerMode());
 	}
-	*/
-	if (!photoCamera->GetCameraMode()) {
-		OperationtextStickL->Update();
-		OperationtextButtonB->Update();
-		OperationtextButtonA->Update();
-		OperationtextIdou->Update();
-		OperationtextKrikae->Update();
-		OperationtextZyanpu->Update();
-	}
-	if (photoCamera->GetCameraMode()) {
-		OperationtextStickL->Update();
-		OperationtextButtonB->Update();
-		OperationtextLB->Update();
-		OperationtextRB->Update();
-		OperationtextIdou->Update();
-		OperationtextKrikae->Update();
-		OperationtextToru->Update();
-		OperationtextHaiti->Update();
-	}
-	//mode切り替え
-	photoCamera->SetcameraMode(player->GetcamerMode());
+	
+	// ポーズ
+	pauseMenu->Update();
+
 
 #ifdef _DEBUG
 
@@ -483,6 +510,16 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat3("Camera Rotation", &cameraTransform.rotate.x, 0.01f)) {
 			CameraManager::GetInstans()->GetActiveCamera()->SetRotate(cameraTransform.rotate);
 		}
+
+
+		//プレイヤーディレクれくしょなるライト
+		DirectionalLight directionalLight = object3DPlayer->GetDirectionalLight();
+		if (ImGui::DragFloat3("Player Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
+			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
+		}
+
+
+
 		/*
 		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
 			for (int i = 1; i <= tutorialTexts.size(); ++i) {
@@ -627,6 +664,7 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
 			OperationtextZyanpu->SetPosition(uizyanpu);
 		}
+
 	}
 
 #endif // _DEBUG
@@ -669,6 +707,9 @@ void GamePlayScene::Draw()
 	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
 
 	map->Draw();
+
+	//ポーズメニュー
+	pauseMenu->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 
