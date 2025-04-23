@@ -50,11 +50,11 @@ public:
 	void Draw();
 
 	void PrayerMove(); // 自機の動き
-	
+
 
 
 	void CalculateCollisionBounds(CollisionMapInfo& info);
-	
+
 	// 当たり判定
 	void CollisionMapInfoTop(CollisionMapInfo& info);// 天井衝突
 	void CollisionMapInfoBootm(CollisionMapInfo& info);// 床衝突
@@ -63,7 +63,7 @@ public:
 
 	void PlayerCollisionMove(const CollisionMapInfo& inffo);// プレイヤー衝突移動
 	void CeilingCollisionMove(const CollisionMapInfo& info);// 天井衝突移動
-	void OnGroundSwitching( CollisionMapInfo& info);// 着地判定
+	void OnGroundSwitching(CollisionMapInfo& info);// 着地判定
 	void HitWallCollisionMove(const CollisionMapInfo& info);// 壁衝突移動
 
 
@@ -71,7 +71,7 @@ public:
 	// map衝突判定
 	void MapCollision(CollisionMapInfo& info);// マップ衝突判定
 
-	
+
 	//アクセッサ
 	//死ぬ系
 	bool GetIsDead_() const { return isDead_; }// 死フラグ
@@ -84,6 +84,8 @@ public:
 	void SetMapChipField(Map* mapChipFild) { mapChipFild_ = mapChipFild; }// マップチップフィールド設定
 
 	bool GetcamerMode() { return CamerMode; }// カメラモード取得
+
+	Vector3 GetPosition() { return object3D_->GetTranslate(); }
 	
 	Vector3 GetWorldPosition() {
 

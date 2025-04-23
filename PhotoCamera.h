@@ -4,6 +4,7 @@
 #include "Block.h"
 #include "Sprite.h"
 #include "BitmapFont.h"
+#include "Player.h"
 #include <memory>
 using namespace std;
 class PhotoCamera
@@ -41,10 +42,13 @@ public:	// Setter / Getter
 	// カメラのオブジェクトを取得
 	Object3D* GetObject3D() { return object3D.get(); }
 
-	void SetcameraMode(bool mode) { CamerMode = mode; } // カメラモードを設定
+	void SetcameraMode(bool mode) { cameraMode = mode; } // カメラモードを設定
 private:
+	// マップデータ
 	Map* map;
 	MapChipData mapData;
+	// Player
+	Player* player;
 	// カメラの位置
 	Vector2 position;
 	// カメラのサイズ
@@ -63,7 +67,10 @@ private:
 	// MapThipTypeのマップデータ
 	MapChipType mapChipType;
 
-	bool CamerMode = false;
+	// カメラモードフラグ
+	bool cameraMode = false;
+	// 前のカメラモード保存フラグ
+	bool prevCameraMode = true;
 
 	// カメラサイズ
 	uint32_t cameraSizeX = 2;
@@ -78,6 +85,8 @@ private:
 	vector<unique_ptr<Sprite>>shutterRests_;
 	// ビットマップフォント
 	unique_ptr<BitmapFont>bitmapFont = nullptr;
+	
+	
 
 
 	//イージング用

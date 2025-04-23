@@ -14,12 +14,12 @@ void PhotoCamera::Initialize(Map* map)
 	// フォトカメラの範囲モデル
 	object3D = make_unique<Object3D>();
 	object3D->Initialize(Object3DCommon::GetInstance());
-	// @枠組みのモデルを用意するように
+	// 枠モデル
 	object3D->SetModel("Frame.obj");
-	// @値を後に調整する
+	// 枠の各数値
 	object3D->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	position = Vector2{ 2,13 };
-	object3D->SetTranslate(Vector3(position.x, position.y - 1, 0));
+	object3D->SetTranslate(Vector3(position.x, position.y , 0));
 	object3D->SetRotate(Vector3{ 0,0,0 });
 
 	// 残りシャッター枚数表示画像
@@ -65,7 +65,7 @@ void PhotoCamera::Update(Map* map)
 		shutter->Update();
 	}
 
-	if (CamerMode) {
+	if (cameraMode) {
 		// フォトカメラの移動
 		Move();
 
@@ -122,8 +122,13 @@ void PhotoCamera::Update(Map* map)
 			Paste();
 		}
 	}
+
+	if (!prevCameraMode && cameraMode) {
+		//object3D->SetTranslate()
+	}
+
 	// ビットマップフォントの更新処理
-	bitmapFont->Update(shutterLimitCountMax-shutterCount);
+	bitmapFont->Update(shutterLimitCountMax - shutterCount);
 	// フォトカメラの枠モデルの更新
 	object3D->Update();
 
@@ -137,6 +142,7 @@ void PhotoCamera::Update(Map* map)
 	DrawImGui();
 #endif // _DEBUG
 
+	prevCameraMode = cameraMode;
 
 	// 変更したmapDataをmapにセット / mapクラスに送り返し更新させる
 	this->map->SetMap(mapData);
@@ -147,7 +153,7 @@ void PhotoCamera::Update(Map* map)
 
 void PhotoCamera::Draw3DObject()
 {
-	if (CamerMode) {
+	if (cameraMode) {
 		// フォトカメラの枠モデルの描画
 		object3D->Draw();
 		// 生成されたブロックの描画
@@ -343,7 +349,7 @@ void PhotoCamera::DrawImGui()
 	// カメラのシャッター回数を表示
 	ImGui::Text("Shutter Count: %d / %d", shutterCount, shutterLimitCountMax);
 	// カメラのモードを表示
-	ImGui::Text("Camera Mode: %s", CamerMode ? "On" : "Off");
+	ImGui::Text("Camera Mode: %s", cameraMode ? "On" : "Off");
 	ImGui::Separator();
 
 	// コピーしたマップチップタイプを表示

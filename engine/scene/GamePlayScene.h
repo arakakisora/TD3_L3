@@ -8,7 +8,7 @@
 #include "Object3DCommon.h"
 #include "Audio.h"
 #include "BaseScene.h"
-#include"ObjectCamera.h"
+
 
 #include "SceneManager.h"
 #include "ParticleEmitter.h"
@@ -53,10 +53,8 @@ private:
 
 	Map* map=nullptr;
 	
-	// @ 消すAlso delete the ones in the CPP file.
-	// ゲームカメラ
-	//ObjectCamera* gameCamera_;
-
+	
+	// フォトカメラ
 	PhotoCamera* photoCamera;
 
 	// 天球モデル

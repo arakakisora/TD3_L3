@@ -89,8 +89,6 @@ void GamePlayScene::Initialize()
 
 
 	// ゲームカメラの生成
-	//gameCamera_ = new ObjectCamera();
-	//gameCamera_->Initialize(map);
 	photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
 
@@ -110,7 +108,6 @@ void GamePlayScene::Finalize()
 
 	delete object3DPlayer;
 
-	//delete gameCamera_;
 	photoCamera->Finalize();
 	delete photoCamera;
 }
@@ -126,7 +123,6 @@ void GamePlayScene::Update()
 	skydome_->Update();
 
 	// ゲームカメラ更新処理
-	//gameCamera_->Update();
 	photoCamera->Update(map);
 
 	
@@ -181,7 +177,6 @@ void GamePlayScene::Draw()
 	skydome_->Draw();
 
 	// ゲームカメラ
-	//gameCamera_->Draw();
 	photoCamera->Draw3DObject();
 	////プレイヤー
 	player->Draw();
