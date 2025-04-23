@@ -35,5 +35,6 @@ public:
 
 	uint32_t time = 0;
 	bool timehige = false;
+	int timer = 0;
 };
 

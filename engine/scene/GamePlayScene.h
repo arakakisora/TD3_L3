@@ -40,9 +40,6 @@ public:
 	/// </summary>
 	void Draw()override;
 
-	
-
-
 private:
 	std::unique_ptr<Camera> camera1;
 	std::unique_ptr<Camera> camera2;
@@ -50,6 +47,28 @@ private:
 	std::unique_ptr<Player>player;
 	Object3D* object3DPlayer=nullptr;
 
+	//チュートリアルテキスト
+	std::unique_ptr<Object3D> Tutorialtext1;
+	std::unique_ptr<Object3D>Tutorialtext2;
+	std::unique_ptr<Object3D>Tutorialtext3;
+	std::unique_ptr<Object3D>Tutorialtext4;
+	std::unique_ptr<Object3D>Tutorialtext5;
+	std::unique_ptr<Object3D>Tutorialtext6;
+	std::unique_ptr<Object3D>Tutorialtext7;
+	std::unique_ptr<Object3D>Tutorialtext8;
+	std::unique_ptr<Object3D>Tutorialtext9;//空白コピペ
+
+	//操作説明テキスト
+	std::unique_ptr<Sprite>OperationtextStickL;
+	std::unique_ptr<Sprite>OperationtextButtonB;
+	std::unique_ptr<Sprite>OperationtextButtonA;
+	std::unique_ptr<Sprite>OperationtextLB;
+	std::unique_ptr<Sprite>OperationtextRB;
+	std::unique_ptr<Sprite>OperationtextIdou;
+	std::unique_ptr<Sprite>OperationtextKrikae;
+	std::unique_ptr<Sprite>OperationtextToru;
+	std::unique_ptr<Sprite>OperationtextHaiti;
+	std::unique_ptr<Sprite>OperationtextZyanpu;
 
 	Map* map=nullptr;
 	
@@ -59,5 +78,16 @@ private:
 
 	PhotoCamera* photoCamera;
 
+	bool tutorial1_2 = false;
+	bool tutorial3_4 = false;
+	bool tutorial5 = false;
+	bool tutorial6_7 = false;
+	bool tutorial8 = false;
+	bool tutorial9 = false;
+
+	bool cameraStarted = false;
+	bool cameraMoved = false;
+	bool cameraCopied = false;
+	bool cameraPaseted = false;
 };
 

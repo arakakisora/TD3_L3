@@ -17,8 +17,10 @@ void PhotoCamera::Initialize()
 	object3D->SetTranslate(Vector3(position.x, position.y - 1, 0));
 	object3D->SetRotate(Vector3{ 0,0,0 });
 
-	// 座標変換
-
+	initialPos = position;
+	
+	isFirstCopied = false;
+	isFirstPasted = false;
 }
 
 void PhotoCamera::Update(Map* map)
@@ -181,9 +183,6 @@ void PhotoCamera::Move()
 
 
 
-
-
-
 void PhotoCamera::Copy() {
 	// マップデータが読み込めていないときはコピー不可
 	if (!map) return;
@@ -218,12 +217,9 @@ void PhotoCamera::Copy() {
 		}
 		copyData.push_back(row);
 	}
-
+	//初回コピーがしたか
+	isFirstCopied = true;
 }
-
-
-
-
 
 void PhotoCamera::Paste()
 {
@@ -252,6 +248,8 @@ void PhotoCamera::Paste()
 	map->SetMap(mapData);
 	// シャッターの回数をプラス
 	shutterCount++;
+	//初回ペーストしたか
+	isFirstPasted = true;
 }
 
 
