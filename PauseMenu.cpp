@@ -22,20 +22,13 @@ void PauseMenu::Initialize(Object3DCommon* object3dcommon, bool isPlayScene) {
 	object->SetScale({ 1.0f,2.0f,1.0f });
 	input = Input::GetInstance();
 
-	object3 = std::make_unique<Object3D>();
-	object3->Initialize(object3dcommon_);
-	object3->SetModel("plane.obj");
-	object3->SetScale({ 2.0f,2.0f,1.0f });
-
 	// 作成してでリストに追加
-	for (uint32_t i = 0; i < 3; ++i) {	
+	for (uint32_t i = 0; i < 2; ++i) {	
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
 		newObject->Initialize(Object3DCommon::GetInstance());
 		if (i == 0) {
 			newObject->SetModel("StageSelect/return.obj");
 		} else if (i == 1) {
-			newObject->SetModel("StageSelect/explanation.obj");
-		} else if (i == 2) {
 			if (isPlayScene) {
 				newObject->SetModel("StageSelect/StageSelect.obj");
 			} else {
@@ -123,7 +116,7 @@ void PauseMenu::Update() {
 		for (size_t i = 0; i < TextObjects.size(); ++i) {
 			Vector3 followPos = basePos;
 			followPos.z -= 5.0f;
-			followPos.y += 2.0f + (offsetY * -static_cast<float>(i)); // objectの位置から下方向にずらす
+			followPos.y += 1.0f + (offsetY * -static_cast<float>(i)); // objectの位置から下方向にずらす
 
 			TextObjects[i]->SetTranslate(followPos);
 
@@ -153,13 +146,13 @@ void PauseMenu::Update() {
 			}
 		}
 
-		//ポーズ画面が出ているときWで操作説明を表示(仮)
-		if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
-			isOperation_ = !isOperation_;
-		}
+		////ポーズ画面が出ているときWで操作説明を表示(仮)
+		//if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+		//	isOperation_ = !isOperation_;
+		//}
 
 		//ポーズ画面が出ているときTでタイトルへ(仮)
-		if (textindex == 2 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+		if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 			if (scenefige) {
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 			} else if(!scenefige){
@@ -182,21 +175,21 @@ void PauseMenu::Update() {
 		}
 	}
 
-	if (isOperation_) {
-		float operationEasedValue = float(easeInOutCirc(easeTimer2_));
-		Transform operationTransform;
-		operationTransform.translate = { 0.0f,0.0f,6.0f + (-8.0f * operationEasedValue) };
+	//if (isOperation_) {
+	//	float operationEasedValue = float(easeInOutCirc(easeTimer2_));
+	//	Transform operationTransform;
+	//	operationTransform.translate = { 0.0f,0.0f,6.0f + (-8.0f * operationEasedValue) };
 
-		float opScaleX = 2.0f * operationEasedValue;
-		float opScaleY = 1.0f * operationEasedValue;
-		float opScaleZ = 1.0f * operationEasedValue;
+	//	float opScaleX = 2.0f * operationEasedValue;
+	//	float opScaleY = 1.0f * operationEasedValue;
+	//	float opScaleZ = 1.0f * operationEasedValue;
 
-		operationTransform.scale = { opScaleX,opScaleY,opScaleZ };
+	//	operationTransform.scale = { opScaleX,opScaleY,opScaleZ };
 
-		object3->SetTranslate(operationTransform.translate);
-		object3->SetScale(operationTransform.scale);
-		object3->Update();
-	}
+	//	object3->SetTranslate(operationTransform.translate);
+	//	object3->SetScale(operationTransform.scale);
+	//	object3->Update();
+	//}
 }
 
 //描画
@@ -207,7 +200,7 @@ void PauseMenu::Draw() {
 		object->Draw();
 		if (isOperation_) {
 			//操作説明画面
-			object3->Draw();
+			//object3->Draw();
 		}
 	}
 
