@@ -39,7 +39,7 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("sphere.obj");
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 
-	ModelManager::GetInstans()->LoadModel("Player.obj");
+	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-1.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-2.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-3.obj");
@@ -57,11 +57,13 @@ void StageSelectScene::Initialize()
 
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
-	Player_->SetModel("Player.obj");
+	Player_->SetModel("playercharacter.obj");
 	Player_->SetTranslate(Vector3(0.0f, -2.0f, 0.0f));	
-	Player_->SetRotate({ 0,  -90.0f * (DirectX::XM_PI / 180.0f) , 180.0f * (DirectX::XM_PI / 180.0f) });
-	Player_->SetLighting(false);
-
+	Player_->SetLighting(true);
+	Player_->SetDirectionalLightEnable(true);
+	Player_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
+	Player_->SetRotate(Vector3(0.0f, 180.0f * (DirectX::XM_PI / 180.0f), 0.0f));
+	
 	// 作成してでリストに追加
 	for (uint32_t i = 0; i < MaxSelectIndex_; ++i) {
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
@@ -341,7 +343,7 @@ void StageSelectScene::move() {
 		holdTimer_ = 0.0f; // 長押しリセット
 
 		// プレイヤーを右に90度回転
-		Rotate.y += 90.0f * (DirectX::XM_PI / 180.0f);
+		Rotate.y -= 90.0f * (DirectX::XM_PI / 180.0f);
 		Player_->SetRotate(Rotate);
 	}
 
@@ -357,7 +359,7 @@ void StageSelectScene::move() {
 		holdTimer_ = 0.0f; // 長押しリセット
 
 		// プレイヤーを左に-90度回転
-		Rotate.y -= 90.0f * (DirectX::XM_PI / 180.0f);
+		Rotate.y += 90.0f * (DirectX::XM_PI / 180.0f);
 		Player_->SetRotate(Rotate);
 	}
 
@@ -394,7 +396,7 @@ void StageSelectScene::move() {
 			easingmoveFlag_ = false;
 
 			// プレイヤーの回転を元に戻す
-			Player_->SetRotate(Vector3(0.0f, -90.0f * (DirectX::XM_PI / 180.0f), 180.0f * (DirectX::XM_PI / 180.0f)));
+			Player_->SetRotate(Vector3(0.0f, 180.0f * (DirectX::XM_PI / 180.0f), 0.0f));
 
 			// スティックがニュートラルならフォロー位置をリセット
 			if (fabs(rightStickX) < stickThreshold) {
