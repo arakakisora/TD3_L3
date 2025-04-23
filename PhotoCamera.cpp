@@ -8,9 +8,10 @@
 #include "Easing.h"
 
 // MAPクラスとのループキャストに注意
-void PhotoCamera::Initialize(Map* map)
+void PhotoCamera::Initialize(Map* map,Player* player)
 {
 	this->map = map;
+	this->player = player;
 	// フォトカメラの範囲モデル
 	object3D = make_unique<Object3D>();
 	object3D->Initialize(Object3DCommon::GetInstance());
@@ -18,7 +19,7 @@ void PhotoCamera::Initialize(Map* map)
 	object3D->SetModel("Frame.obj");
 	// 枠の各数値
 	object3D->SetScale(Vector3{ 1.0f,1.0f,1.0f });
-	position = Vector2{ 2,13 };
+	position = Vector2{ this->player->GetPosition().x,this->player->GetPosition().y};
 	object3D->SetTranslate(Vector3(position.x, position.y , 0));
 	object3D->SetRotate(Vector3{ 0,0,0 });
 
@@ -48,10 +49,12 @@ void PhotoCamera::Initialize(Map* map)
 
 }
 
-void PhotoCamera::Update(Map* map)
+void PhotoCamera::Update(Map* map, Player* player)
 {
 
 	this->map = map;
+	this->player = player;
+	
 	// フォトカメラの範囲
 	cameraSizeX = this->map->GetkameraSizeX();
 	cameraSizeY = this->map->GetkameraSizeY();
@@ -64,12 +67,14 @@ void PhotoCamera::Update(Map* map)
 	for (auto& shutter : shutterRests_) {
 		shutter->Update();
 	}
-
+	if (!prevCameraMode && cameraMode) {
+		object3D->SetTranslate({ player->GetPosition().x,player->GetPosition().y + 2,player->GetPosition().z });
+	}
 	if (cameraMode) {
 		// フォトカメラの移動
+		
 		Move();
-
-
+		
 		// フォトカメラのコピー / スペースキーを押したら
 		if (
 #ifdef _DEBUG
@@ -123,9 +128,7 @@ void PhotoCamera::Update(Map* map)
 		}
 	}
 
-	if (!prevCameraMode && cameraMode) {
-		//object3D->SetTranslate()
-	}
+	
 
 	// ビットマップフォントの更新処理
 	bitmapFont->Update(shutterLimitCountMax - shutterCount);
@@ -247,7 +250,7 @@ void PhotoCamera::Move()
 	}
 
 
-	// イージング結果を object3D に反映
+	// @イージング結果を object3D に反映
 	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, 0));
 
 	// photo_ConvertYの代わりにposition.yをそのまま使用

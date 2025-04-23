@@ -90,7 +90,7 @@ void GamePlayScene::Initialize()
 
 	// ゲームカメラの生成
 	photoCamera = new PhotoCamera;
-	photoCamera->Initialize(map);
+	photoCamera->Initialize(map,player.get());
 
 	
 
@@ -123,7 +123,7 @@ void GamePlayScene::Update()
 	skydome_->Update();
 
 	// ゲームカメラ更新処理
-	photoCamera->Update(map);
+	photoCamera->Update(map,player.get());
 
 	
 	

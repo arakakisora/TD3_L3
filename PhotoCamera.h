@@ -11,9 +11,9 @@ class PhotoCamera
 {
 public:
 	// 初期化
-	void Initialize(Map* map);
+	void Initialize(Map* map,Player*player);
 	// 更新
-	void Update(Map* map);
+	void Update(Map* map,Player*player);
 	// 描画 / 3DObject
 	void Draw3DObject();
 	// 描画 / Sprite
@@ -33,8 +33,7 @@ public:
 
 public:	// Setter / Getter
 	// 変更したマップデータをmapにセット
-	//void SetMap(Map* map) { this->map = map; }
-
+	
 	// カメラの位置を取得
 	Vector2 GetPosition() { return position; }
 	// カメラのサイズを取得
