@@ -36,7 +36,7 @@ void PhotoCamera::Initialize(Map* map)
 	for (int i = 0; i < (int)shutterLimitCountMax; ++i) {
 		auto shutter_ = make_unique<Sprite>();
 		shutter_->Initialize(SpriteCommon::GetInstance(), "Resources/shutter.png");
-		shutter_->SetSize({ 70.0f,70.0f });
+		shutter_->SetSize({ 80.0f,80.0f });
 		shutter_->SetRotation(0.0f);
 		shutter_->setColor({ 1.0f,1.0f,1.0f,1.0f });
 		shutterRests_.push_back(move(shutter_));
@@ -166,8 +166,8 @@ void PhotoCamera::DrawSprite()
 
 	// 表示するのは1枚だけ
 	if (remainingShutter >= 0 && !shutterRests_.empty()) {
-		float x = 10.0f;
-		float y = 15.0f;
+		float x = 5.0f;
+		float y = 9.0f;
 		shutterRests_[0]->SetPosition(Vector2(x, y));
 		shutterRests_[0]->Draw();
 	}
