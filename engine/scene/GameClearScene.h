@@ -91,6 +91,10 @@ private:
 
 	bool nextsneneonthit = false;
 
+
 	// 背景
 	std::unique_ptr<Object3D> skydome_;
+
+	uint32_t nextStage = 0;
+
 };

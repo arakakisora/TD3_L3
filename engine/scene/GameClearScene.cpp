@@ -21,6 +21,9 @@ void GameClearScene::Initialize()
 
 	velocity_.resize(MaxtextIndex_); // すべてのオブジェクトに対応するサイズに設定
 
+	// クリアしたステージのindex
+	nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
+
 	// 作成してリストに追加
 	for (uint32_t i = 0; i < MaxtextIndex_; ++i) {
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
@@ -32,7 +35,7 @@ void GameClearScene::Initialize()
 		} else if (i == 2) {
 			newObject->SetModel("GameClear/ClearText_03.obj");
 		}
-		newObject->SetTranslate(Vector3(-0.5f + (0.5f * i), 0.0f, 10.0f));
+		newObject->SetTranslate(Vector3(-0.5f + (0.5f * i), 0.3f, 10.0f));
 		newObject->SetScale(Vector3(0.0f, 0.0f, 0.0f));
 		newObject->SetLighting(false);
 		Cleartext_.push_back(std::move(newObject));
@@ -74,10 +77,12 @@ void GameClearScene::Initialize()
 	ArroTextUI_ = std::make_unique<Sprite>();
 
 	ArroTextUI_->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/ArroUP.png");
+
 	ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
 	ArroTextUI_->SetSize({ 50.0f, 50.0f });
 	ArroTextUI_->SetRotation(0.0f);
 	ArroTextUI_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+
 
 
 	// 背景
@@ -86,6 +91,13 @@ void GameClearScene::Initialize()
 	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
 	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	skydome_->SetModel("backPlane.obj");
+
+	// ラストステージならフラグを立てる
+	if (nextStage == MaxStageIndex_) {
+		nextsneneonthit = true;
+		Selectindex  = 1;
+	}
+
 }
 
 void GameClearScene::Finalize()
@@ -95,7 +107,9 @@ void GameClearScene::Finalize()
 void GameClearScene::Update()
 {
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
+
 	skydome_->Update();
+
 #ifdef _DEBUG
 
 
@@ -122,11 +136,13 @@ void GameClearScene::Update()
 	}
 
 	// UIの更新
-	for (std::unique_ptr<Sprite>& UI : TextUI_) {
-		UI->Update();
+	for (uint32_t i = 0; i < 3; ++i) {
+		// nextsneneonthit が true ならスプライト2だけ非表示
+		if (nextsneneonthit && i == 2) {
+			TextUI_[i]->setColor({1.0f, 1.0f, 1.0f, 0.0f}); // アルファを0にして非表示に
+		}
+		TextUI_[i]->Update();
 	}
-
-	ArroTextUI_->Update();
 
 	// 移動開始
 	EasingMove();	
@@ -136,6 +152,10 @@ void GameClearScene::Update()
 		// コントローラー操作
 		ControllerUpdate();
 	}
+	
+	// ↑の更新
+	ArroTextUI_->Update();
+
 }
 
 void GameClearScene::Draw()
@@ -262,12 +282,6 @@ void GameClearScene::StartJump() {
 }
 void GameClearScene::ControllerUpdate() {
 
-	uint32_t nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
-
-	if (nextStage == MaxStageIndex_) {
-		nextsneneonthit = true;
-	}
-
 	// 長押し対応用の遅延時間
 	static float holdDelay_ = 0.2f; // 押しっぱなしで再入力されるまでの時間
 	static float holdTimer_ = 0.0f; // タイマー
@@ -280,7 +294,7 @@ void GameClearScene::ControllerUpdate() {
 	const float stickThreshold = 0.5f;
 
 	// 範囲の最大値
-	const int maxIndex = 2;
+	const int maxIndex = nextsneneonthit ? 1 : 2; ;
 
 	// 入力がしきい値を超えた瞬間だけ反応
 	if (!wasStickMoved) {
@@ -320,7 +334,7 @@ void GameClearScene::ControllerUpdate() {
 			}
 		}
 	}
-
+	
 	// 次のステージの場合
 	if (Selectindex == 2) {
 		ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
