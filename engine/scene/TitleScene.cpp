@@ -24,6 +24,7 @@ void TitleScene::Initialize()
 	titileobject_ = std::make_unique<Object3D>();
 	titileobject_->Initialize(Object3DCommon::GetInstance());
 	titileobject_->SetTranslate(Vector3(0.0f, 0.5f, 0.0f));
+	titileobject_->SetRotate(Vector3(0.0f, 3.3f, 0.0f));
 	titileobject_->SetModel("Text_Title.obj");
 	titileobject_->SetLighting(false);
 
