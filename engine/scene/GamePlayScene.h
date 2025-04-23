@@ -85,6 +85,7 @@ private:
 	std::unique_ptr<Sprite>OperationtextHaiti;
 	std::unique_ptr<Sprite>OperationtextZyanpu;
 
+	std::vector < std::unique_ptr<Sprite>> pauseui;
 	Map* map=nullptr;
 	
 	// @ 消すAlso delete the ones in the CPP file.

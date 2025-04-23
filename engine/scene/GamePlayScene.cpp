@@ -95,6 +95,8 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	TextureManager::GetInstance()->LoadTexture("Resources/toru.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/haiti.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/zyanpu.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/Pause.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_y.png");
 
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
@@ -296,6 +298,21 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	OperationtextZyanpu->SetPosition(Vector2(430, 655));
 	OperationtextZyanpu->SetSize(Vector2(60, 60));
 
+	for (uint32_t i = 0; i < 2; ++i) {
+		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
+		if (i == 0) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Pause.png");
+			newSprite->SetPosition(Vector2(1050.0f, 15.0f));
+			newSprite->SetSize(Vector2(150, 50));
+		} else if (i == 1) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
+			newSprite->SetPosition(Vector2(1210.0f, 5.0f));
+			newSprite->SetSize(Vector2(70, 70));
+		}
+		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		pauseui.push_back(std::move(newSprite));
+	}
+
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
 
@@ -486,7 +503,10 @@ void GamePlayScene::Update()
 		photoCamera->SetcameraMode(player->GetcamerMode());
 
 	
-	
+		for (std::unique_ptr<Sprite>& Uitext : pauseui) {
+			Uitext->Update();
+		}
+
 	// ポーズ
 	pauseMenu->Update();
 
@@ -748,6 +768,10 @@ void GamePlayScene::Draw()
 		OperationtextKrikae->Draw();
 		OperationtextToru->Draw();
 		OperationtextHaiti->Draw();
+	}
+	
+	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
+		Uitext->Draw();
 	}
 
 	// フォトカメラ内のスプライト描画
