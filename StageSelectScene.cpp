@@ -20,8 +20,11 @@ void StageSelectScene::Initialize()
 	camera_->SetTranslate({ 0,0,-50, });//カメラの位置
 	CameraManager::GetInstans()->AddCamera("maincam", camera_.get());
 
+	// UI読み込み
 	TextureManager::GetInstance()->LoadTexture("Resources/xbox_stick_l.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/idou.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_a.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/kettei.png");
 
 	//モデルの読み込み				
 	ModelManager::GetInstans()->LoadModel("axis.obj");
@@ -106,17 +109,25 @@ void StageSelectScene::Initialize()
 
 	// コントローラ操作のUI
 	// 作成してでリストに追加
-	for (uint32_t i = 0; i < 2; ++i) {
+	for (uint32_t i = 0; i < 4; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
 		if (i == 0) {
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
-			newSprite->SetPosition(Vector2(15.0f, 610.0f));
-			newSprite->SetSize(Vector2(70, 70));
+			newSprite->SetPosition(Vector2(15.0f, 650.0f));
+			newSprite->SetSize(Vector2(70, 60));
 		} else if (i == 1) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
-			newSprite->SetPosition(Vector2(105.0f, 620.0f));
-			newSprite->SetSize(Vector2(60, 60));
-		} 
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png"); 
+			newSprite->SetPosition(Vector2(100.0f, 660.0f));
+			newSprite->SetSize(Vector2(60, 50));
+		} else if (i == 2) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_a.png"); 	
+			newSprite->SetPosition(Vector2(180.0f, 648.0f));
+			newSprite->SetSize(Vector2(70, 70));
+		} else if (i == 3) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/kettei.png");
+			newSprite->SetPosition(Vector2(270.0f, 660.0f));
+			newSprite->SetSize(Vector2(60, 50));
+		}
 		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		xboxui.push_back(std::move(newSprite));
 	}
