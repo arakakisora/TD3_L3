@@ -57,6 +57,20 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial8.obj");
 
 	//操作説明UI
+
+	std::vector<OperationText>spriteInfos = {
+		{"Resources/xbox_stick_l.png",{90,655},{70,70}},
+		{"Resources/xbox_button_color_b.png",{557,655},{70,70}},
+		{"Resources/xbox_button_color_a.png",{319,655},{70,70}},
+		{"Resources/xbox_lb.png",{826,655}, {70,70}},
+		{"Resources/xbox_rb.png",{1039,655},{70,70}},
+		{"Resources/idou.png",{203,655},{60,60}},
+		{"Resources/kirikae.png",{672,655},{100,60}},
+		{"Resources/toru.png",{938,655},{60,60}},
+		{"Resources/haiti.png",{1143,655},{60,60}},
+		{"Resources/zyanpu.png",{430,655},{60,60}},
+	};
+
 	TextureManager::GetInstance()->LoadTexture("Resources/xbox_stick_l.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_b.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_a.png");
@@ -93,6 +107,25 @@ void GamePlayScene::Initialize()
 	player->SetDeathHeight(0.0f);
 
 	//チュートリアルテキスト
+	/*
+	for (int i = 1; i <= 8; ++i) {
+		tutorialTexts[i] = std::make_unique<Object3D>();
+		tutorialTexts[i]->Initialize(Object3DCommon::GetInstance());
+		tutorialTexts[i]->SetModel("tutorial/tutorial" + std::to_string(i) + ".obj");
+		tutorialTexts[i]->SetScale(Vector3(0.5f, 0.5f, 0.5f));
+		tutorialTexts[i]->SetRotate(Vector3(17.3f, 12.57f, 0.0f));
+		tutorialTexts[i]->SetLighting(false);
+		tutorialTexts[i]->SetIsTutorialActive(false);
+	}
+	tutorialTexts[1]->SetTranslate(Vector3(8.5f, 21.44f, 1.0f));
+	tutorialTexts[2]->SetTranslate(Vector3(15.3f, 21.4f, 0.75f));
+	tutorialTexts[3]->SetTranslate(Vector3(8.5f, 21.45f, 1.0f));
+	tutorialTexts[4]->SetTranslate(Vector3(15.46f, 21.4f, 0.69f));
+	tutorialTexts[5]->SetTranslate(Vector3(12.24f, 21.45f, 1.0f));
+	tutorialTexts[6]->SetTranslate(Vector3(8.5f, 21.4f, 1.0f));
+	tutorialTexts[7]->SetTranslate(Vector3(15.46f, 21.4f, 1.0f));
+	tutorialTexts[8]->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	*/
 	Tutorialtext1 = std::make_unique<Object3D>();
 	Tutorialtext1->Initialize(Object3DCommon::GetInstance());
 	Tutorialtext1->SetModel("tutorial/tutorial1.obj");
@@ -178,6 +211,16 @@ void GamePlayScene::Initialize()
 	*/
 
 	//操作説明UI
+	/*
+	operationTexts.clear();
+	for (const auto& info : spriteInfos) {
+		auto sprite = std::make_unique<Sprite>();
+		sprite->Initialize(SpriteCommon::GetInstance(), info.texturePath);
+		sprite->SetPosition(info.position);
+		sprite->SetSize(info.size);
+		operationTexts.emplace_back(std::move(sprite));
+	}
+	*/
 	OperationtextStickL = std::make_unique<Sprite>();
 	OperationtextStickL->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
 	OperationtextStickL->SetPosition(Vector2(90, 655));
@@ -269,8 +312,51 @@ void GamePlayScene::Update()
 	////プレイヤーの更新
 	player->Update();
 
-	//チュートリアル表示制御
-	if (SceneManager::GetInstance()->GetStageIndex() == 0) { // mapp1
+	//チュートリアル表示制御//map1
+	if (SceneManager::GetInstance()->GetStageIndex() == 0) { 
+		/*
+
+		if (!tutorial1_2) {
+			tutorialTexts[1]->SetIsTutorialActive(true);
+			tutorialTexts[2]->SetIsTutorialActive(true);
+			tutorial1_2 = true;
+		}
+
+		if(photoCamera->HasStarted()&&!turorial3_4){
+		   tutorialTexts[1]->SetIsTutorialActive(false);
+		   tutorialTexts[2]->SetIsTutorialActive(false);
+		   tutorialTexts[3]->SetIsTutorialActive(true);
+		   tutorialTexts[4]->SetIsTutorialActive(true);
+		   tutorial3_4 = true;
+		   }
+
+		if (photoCamera->HasMoved() && !tutorial5) {
+			tutorialtext[3]->SetIsTutorialActive(false);
+			tutorialtext[4]->SetIsTutorialActive(false);
+			tutorialtext[5]->SetIsTutorialActive(true);
+			tutorial5 = true;
+		}
+
+		if (photoCamera->isFirstCopied && !tutorial6_7) {
+			tutorialtext[5]->SetIsTutorialActive(false);
+			tutorialtext[6]->SetIsTutorialActive(true);
+			tutorialtext[7]->SetIsTutorialActive(true);
+			tutorial6_7 = true;
+		}
+		if (photoCamera->isFirstPasted && !tutorial8) {
+			tutorialtext[6]->SetIsTutorialActive(false);
+			tutorialtext[7]->SetIsTutorialActive(false);
+			tutorialtext[8]->SetIsTutorialActive(true);
+			tutorial8 = true;
+		}
+
+		for (auto& text : tutorialTexts) {
+			if (text->GetIsTutorialActive()) {
+				text->Update();
+			}
+		}
+		*/
+
 		if (!tutorial1_2) {
 			// text1,2を表示
 			Tutorialtext1->SetIsTutorialActive(true);
@@ -306,7 +392,7 @@ void GamePlayScene::Update()
 			tutorial8 = true;
 		}
 	}
-
+	/*
 	//チュートリアル表示制御map2
 	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
 		if (!tutorial9) {
@@ -314,7 +400,7 @@ void GamePlayScene::Update()
 			tutorial9 = true;
 		}
 	}
-
+	*/
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
 	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
 	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
@@ -323,9 +409,21 @@ void GamePlayScene::Update()
 	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Update();
 	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
 	if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
-	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
+	//if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
 
 	//ui
+	/*
+	if (!photoCamera->GetCameraMode()) {
+		for (int i : {0, 1, 2, 5, 6, 9}) {
+			operationTexts[i]->Update();
+		}
+	}
+	else {
+		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
+			operationTexts[i]->Update();
+		}
+	}
+	*/
 	if (!photoCamera->GetCameraMode()) {
 		OperationtextStickL->Update();
 		OperationtextButtonB->Update();
@@ -366,7 +464,19 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat3("Camera Rotation", &cameraTransform.rotate.x, 0.01f)) {
 			CameraManager::GetInstans()->GetActiveCamera()->SetRotate(cameraTransform.rotate);
 		}
-
+		/*
+		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
+			for (int i = 1; i <= tutorialTexts.size(); ++i) {
+				std::string label = "text" + std::to_string(i);
+				Transform t = tutorialTexts[i]->GetTransform();
+				if (ImGui::DragFloat3((label + "scale").c_str(), &t.scale.x, 0.01f) ||
+					ImGui::DragFloat3((label + "rotate").c_str(), &t.rotate.x, 0.01f) ||
+					ImGui::DragFloat3((label + "translate").c_str(), &t.translate.x, 0.01f)) {
+					tutorialTexts[i]->SetTransform(t);
+				}
+			}
+		}
+		*/
 		Transform text = Tutorialtext1->GetTransform();
 		Transform text2 = Tutorialtext2->GetTransform();
 		Transform text3 = Tutorialtext3->GetTransform();
@@ -375,7 +485,7 @@ void GamePlayScene::Update()
 		Transform text6 = Tutorialtext6->GetTransform();
 		Transform text7 = Tutorialtext7->GetTransform();
 		Transform text8 = Tutorialtext8->GetTransform();
-		Transform text9 = Tutorialtext9->GetTransform();
+		//Transform text9 = Tutorialtext9->GetTransform();
 		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
 			Tutorialtext1->SetTransform(text);
 		}
@@ -442,11 +552,22 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
 			Tutorialtext8->SetTransform(text8);
 		}
+		/*
 		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
 			Tutorialtext9->SetTransform(text9);
 		}
-
+		*/
 		//UI
+		/*
+		if (ImGui::CollapsingHeader("UI Translate")) {
+			for (int i = 0; i < operationTexts.size(); ++i) {
+				Vector2 pos = operationTexts[i]->GetPosition();
+				if (ImGui::DragFloat2(("Sprite" + std::to_string(i)).c_str(), &pos.x, 0.01f)) {
+					operationTexts[i]->SetPosition(pos);
+				}
+			}
+		}
+		*/
 		Vector2 uistickL = OperationtextStickL->GetPosition();
 		Vector2 uibuttonB = OperationtextButtonB->GetPosition();
 		Vector2 uibuttonA = OperationtextButtonA->GetPosition();
@@ -507,6 +628,14 @@ void GamePlayScene::Draw()
 	player->Draw();
 
 	//チュートリアルテキスト
+	/*
+	for (auto& text : tutorialTexts) {
+		if (text->GetIsTutorialActive()) {
+			text->Draw();
+		}
+	}
+	*/
+
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Draw();
 	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Draw();
 	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Draw();
@@ -528,6 +657,17 @@ void GamePlayScene::Draw()
 	SpriteCommon::GetInstance()->CommonDraw();
 
 	//ui
+	/*
+	if (!photoCamera->GetCameraMode()) {
+		for (int i : {0, 1, 2, 5, 6, 9}) {
+			operationTexts[i]->Draw();
+		}
+	} else {
+		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
+			operationTexts[i]->Draw();
+		}
+	}
+	*/
 	if (!photoCamera->GetCameraMode()) {
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();

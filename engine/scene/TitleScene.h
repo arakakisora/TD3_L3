@@ -37,4 +37,3 @@ public:
 	bool timehige = false;
 	int timer = 0;
 };
-

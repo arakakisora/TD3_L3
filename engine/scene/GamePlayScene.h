@@ -19,6 +19,15 @@
 
 #include "PhotoCamera.h"
 
+#include <array>
+
+
+struct OperationText {
+	std::string texturePath;
+	Vector2 position;
+	Vector2 size;
+};
+
 class GamePlayScene :public BaseScene
 {
 public:
@@ -48,6 +57,7 @@ private:
 	Object3D* object3DPlayer=nullptr;
 
 	//チュートリアルテキスト
+	//std::array<std::unique_ptr<Object3D>, 8>tutorialTexts;
 	std::unique_ptr<Object3D> Tutorialtext1;
 	std::unique_ptr<Object3D>Tutorialtext2;
 	std::unique_ptr<Object3D>Tutorialtext3;
@@ -59,6 +69,7 @@ private:
 	std::unique_ptr<Object3D>Tutorialtext9;//空白コピペ
 
 	//操作説明テキスト
+	//std::vector<std::unique_ptr<Sprite>>operationTexts;
 	std::unique_ptr<Sprite>OperationtextStickL;
 	std::unique_ptr<Sprite>OperationtextButtonB;
 	std::unique_ptr<Sprite>OperationtextButtonA;
