@@ -20,9 +20,8 @@ void StageSelectScene::Initialize()
 	camera_->SetTranslate({ 0,0,-50, });//カメラの位置
 	CameraManager::GetInstans()->AddCamera("maincam", camera_.get());
 
-	TextureManager::GetInstance()->LoadTexture("Resources/StageSelect/controllerUI.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Title.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_X.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/xbox_stick_l.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/idou.png");
 
 	//モデルの読み込み				
 	ModelManager::GetInstans()->LoadModel("axis.obj");
@@ -83,7 +82,8 @@ void StageSelectScene::Initialize()
 		} else {
 			newObject->SetModel("StageSelect/Text_1-1.obj");
 		}
-		newObject->SetTranslate(Vector3(7.0f * i, 2.5f, 0.0f)); // X座標を変更して配置
+		newObject->SetTranslate(Vector3(7.0f * i, 1.8f, 0.0f)); // X座標を変更して配置
+		newObject->SetScale(Vector3(1.5f,1.5f,1.5f));
 		newObject->SetLighting(false);
 		textoObjects_.push_back(std::move(newObject));
 	}
@@ -105,26 +105,21 @@ void StageSelectScene::Initialize()
 
 
 	// コントローラ操作のUI
-	uIController_ = std::make_unique <Sprite>();
-	uIController_->Initialize(SpriteCommon::GetInstance(), "Resources/StageSelect/controllerUI.png");
-	uIController_->SetPosition(Vector2( 15.0f,610.0f ));
-	uIController_->SetSize({ 340.0f, 100.0f });
-	uIController_->SetRotation(0.0f);
-	uIController_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-
-	uITitle_ = std::make_unique <Sprite>();
-	uITitle_->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Title.png");
-	uITitle_->SetPosition(Vector2(-50.0f, -10.0f));
-	uITitle_->SetSize({ 336.0f, 70.0f });
-	uITitle_->SetRotation(0.0f);
-	uITitle_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-	
-	uIX_ = std::make_unique <Sprite>();
-	uIX_->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_X.png");
-	uIX_->SetPosition(Vector2(230.0f, 15.0f));
-	uIX_->SetSize({ 30.0f, 30.0f });
-	uIX_->SetRotation(0.0f);
-	uIX_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	// 作成してでリストに追加
+	for (uint32_t i = 0; i < 2; ++i) {
+		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
+		if (i == 0) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
+			newSprite->SetPosition(Vector2(15.0f, 610.0f));
+			newSprite->SetSize(Vector2(70, 70));
+		} else if (i == 1) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
+			newSprite->SetPosition(Vector2(105.0f, 620.0f));
+			newSprite->SetSize(Vector2(60, 60));
+		} 
+		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		xboxui.push_back(std::move(newSprite));
+	}
 
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
@@ -193,11 +188,10 @@ void StageSelectScene::Update()
 		text->Update();
 	}
 
-
 	// UI
-	uIController_->Update();
-	uITitle_->Update();
-	uIX_->Update();
+	for (std::unique_ptr<Sprite>& Uitext : xboxui) {
+		Uitext->Update();
+	}
 
 
 #ifdef _DEBUG
@@ -225,17 +219,17 @@ void StageSelectScene::Update()
 
 #endif // _DEBUG
 
-	// ステージを決定していないなら
-	if (!easingsceneFlag_ && !easingmoveFlag_) {
-		// タイトルへシーン遷移
-		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)) {
-			titlefige_ = true;
-		}
+	//// ステージを決定していないなら
+	//if (!easingsceneFlag_ && !easingmoveFlag_) {
+	//	// タイトルへシーン遷移
+	//	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)) {
+	//		titlefige_ = true;
+	//	}
 
-		if (titlefige_) {
-			SceneManager::GetInstance()->ChangeScene("TITELE");
-		}
-	}
+	//	if (titlefige_) {
+	//		SceneManager::GetInstance()->ChangeScene("TITELE");
+	//	}
+	//}
 }
 
 void StageSelectScene::Draw() {
@@ -265,10 +259,10 @@ void StageSelectScene::Draw() {
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
 
-	//// UI
-	//uIController_->Draw();
-	//uITitle_->Draw();
-	//uIX_->Draw();
+	// UI
+	for (std::unique_ptr<Sprite>& Uitext : xboxui) {
+		Uitext->Draw();
+	}
 
 #pragma endregion
 
@@ -292,7 +286,7 @@ void StageSelectScene::move() {
 
 	// (右に移動)
 	if ((rightStickX > stickThreshold || (continueMove && rightStickX > stickThreshold))
-		&& currentIndex_ < MaxSelectIndex_ - 1 && !easingmoveFlag_ && !easingsceneFlag_|| Input::GetInstance()->TriggerKey(DIK_D)) {
+		&& currentIndex_ < MaxSelectIndex_ - 1 && !easingmoveFlag_ && !easingsceneFlag_) {
 
 		currentIndex_++;
 		easingmoveFlag_ = true;
@@ -308,7 +302,7 @@ void StageSelectScene::move() {
 
 	// (左に移動)
 	if ((rightStickX < -stickThreshold || (continueMove && rightStickX < -stickThreshold))
-		&& currentIndex_ > 0 && !easingmoveFlag_ && !easingsceneFlag_ || Input::GetInstance()->TriggerKey(DIK_A)) {
+		&& currentIndex_ > 0 && !easingmoveFlag_ && !easingsceneFlag_) {
 
 		currentIndex_--;
 		easingmoveFlag_ = true;
@@ -378,7 +372,7 @@ void StageSelectScene::moveChangeScene() {
 
 	if (!easingsceneFlag_ && !easingmoveFlag_) {
 		// Aボタンが押されたときに開始
-		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A) || Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 			easingsceneFlag_ = true;
 			easingmoveFlag_ = true;
 
