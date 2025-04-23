@@ -298,7 +298,7 @@ void GameClearScene::ControllerUpdate() {
 
 	// 入力がしきい値を超えた瞬間だけ反応
 	if (!wasStickMoved) {
-		if (rightStickX > stickThreshold && Selectindex < maxIndex) {
+		if (rightStickX > stickThreshold && Selectindex < (uint32_t)maxIndex) {
 			Selectindex++;
 			wasStickMoved = true;
 			holdTimer_ = 0.0f;
