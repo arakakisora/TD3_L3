@@ -16,9 +16,9 @@
 void GamePlayScene::Initialize()
 {
 	//カメラの生成
-	camera1 = std::make_unique<Camera>();
-	camera1->SetTranslate({ 12,17,-31 });//カメラの位置
-	CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
+camera1 = std::make_unique<Camera>();
+camera1->SetTranslate({ 12,17,-31 });//カメラの位置
+CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 	//カメラの生成
 	camera2 = std::make_unique<Camera>();
@@ -36,7 +36,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 	ModelManager::GetInstans()->LoadModel("cube.obj");
 
-	ModelManager::GetInstans()->LoadModel("Player.obj");
+	//ModelManager::GetInstans()->LoadModel("Player.obj");
+	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
 
 	// ブロック関連モデル
 	ModelManager::GetInstans()->LoadModel("block.obj");
@@ -112,8 +113,13 @@ void GamePlayScene::Initialize()
 	object3DPlayer = new Object3D();
 	Vector3 playerPostion = Vector3((float)map->GetPlayerStartX(), (float)map->GetPlayerStartY(), 0.0f);
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
-	object3DPlayer->SetModel("Player.obj");
-	object3DPlayer->SetScale(Vector3{ 0.1f,0.1f,0.1f });
+
+	object3DPlayer->SetModel("playercharacter.obj");
+	object3DPlayer->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	object3DPlayer->SetLighting(true);
+	object3DPlayer->SetDirectionalLightEnable(true);
+	object3DPlayer->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
+
 	player->SetMapChipField(map);
 	player->Initialize(object3DPlayer, playerPostion);
 	player->SetDeathHeight(0.0f);
@@ -484,6 +490,16 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat3("Camera Rotation", &cameraTransform.rotate.x, 0.01f)) {
 			CameraManager::GetInstans()->GetActiveCamera()->SetRotate(cameraTransform.rotate);
 		}
+
+
+		//プレイヤーディレクれくしょなるライト
+		DirectionalLight directionalLight = object3DPlayer->GetDirectionalLight();
+		if (ImGui::DragFloat3("Player Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
+			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
+		}
+
+
+
 		/*
 		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
 			for (int i = 1; i <= tutorialTexts.size(); ++i) {
@@ -628,6 +644,7 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
 			OperationtextZyanpu->SetPosition(uizyanpu);
 		}
+
 	}
 
 #endif // _DEBUG
