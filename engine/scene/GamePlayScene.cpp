@@ -46,7 +46,7 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
 	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
-	// 天球モデル
+	// 天球モデル / 背景のプレーン
 	ModelManager::GetInstans()->LoadModel("backPlane.obj");
 	// フォトカメラフレーム
 	ModelManager::GetInstans()->LoadModel("Frame.obj");
