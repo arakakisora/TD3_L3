@@ -159,7 +159,7 @@ void ObjectCamera::GameCameraphoto() {
             // ENTERキーが押されたときの処理
             if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
                 // カメラのモデルを取得
-                std::string model = gamecameras_[y][x]->GetModel();
+                std::string model = gamecameras_[y][x]->GetModelfilePath();
 
                 // モデルマップから現在のモデルの対応するマップチップタイプを取得
                 auto mapChipIter = std::find_if(mapChipTypemodelMap.begin(), mapChipTypemodelMap.end(),

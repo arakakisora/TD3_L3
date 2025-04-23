@@ -141,17 +141,7 @@ void Block::Update() {
 
 #ifdef _DEBUG
 
-	if (ImGui::CollapsingHeader("Blokc", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		
-		DirectionalLight directionalLight = object3D->GetDirectionalLight();
-		if (ImGui::DragFloat3("Blokc Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
-			object3D->SetDirectionalLightDirection(directionalLight.direction);
-		}
-
-
-
-	}
+	
 #endif // DEBUG_
 
 };

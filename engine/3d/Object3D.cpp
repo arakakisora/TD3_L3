@@ -131,7 +131,7 @@ void Object3D::SetModel(const std::string& filepath)
 }
 
 // GetModel の実装
-std::string Object3D::GetModel() const
+std::string Object3D::GetModelfilePath() const
 {
 	return modelFilePath_;
 }

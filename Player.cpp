@@ -9,6 +9,7 @@
 #endif // _DEBUG
 #include "Object3DCommon.h"
 #include <SceneManager.h>
+#include "Easing.h"
 
 
 
@@ -70,6 +71,7 @@ void Player::Update() {
 	if (!CamerMode) {
 
 		PrayerMove();
+		PlayerTurn();
 		// 衝突判定を初期化
 		CollisionMapInfo collisionMapInfo;
 		// 移動量に速度の値をコピー
@@ -111,11 +113,25 @@ void Player::PrayerMove() {
 			if (velocity_.x < 0.0f) {
 				velocity_.x *= (1.0f - kAttenuation);
 			}
+
+			if (lrDirection_ != LRDirecion::kright) {
+				lrDirection_ = LRDirecion::kright;
+				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
+				turnTimer_ = kLimitRunSpeed;
+			}
+
 			accceleration.x += kAccleration;
 		} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
 			if (velocity_.x > 0.0f) {
 				velocity_.x *= (1.0f - kAttenuation);
 			}
+
+			if (lrDirection_ != LRDirecion::kLeft) {
+				lrDirection_ = LRDirecion::kLeft;
+				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
+				turnTimer_ = kLimitRunSpeed;
+			}
+
 			accceleration.x -= kAccleration;
 		}
 
@@ -135,10 +151,21 @@ void Player::PrayerMove() {
 			if (velocity_.x < 0.0f) {
 				velocity_.x *= (1.0f - kAttenuation);
 			}
+			if (lrDirection_ != LRDirecion::kright) {
+				lrDirection_ = LRDirecion::kright;
+				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
+				turnTimer_ = kLimitRunSpeed;
+			}
 			accceleration.x += kAccleration;
 		} else if (Input::GetInstance()->GetGamePadStickX() < 0) {
 			if (velocity_.x > 0.0f) {
 				velocity_.x *= (1.0f - kAttenuation);
+			}
+
+			if (lrDirection_ != LRDirecion::kLeft) {
+				lrDirection_ = LRDirecion::kLeft;
+				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
+				turnTimer_ = kLimitRunSpeed;
 			}
 			accceleration.x -= kAccleration;
 		}
@@ -168,6 +195,29 @@ void Player::PrayerMove() {
 
 
 }
+
+void Player::PlayerTurn()
+{
+
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ -= 1.0f / 30.0f;
+
+		float t = std::clamp(1.0f - turnTimer_ / kLimitRunSpeed, 0.0f, 1.0f);
+		float easedT = Easing::EaseOutQuad(t);
+
+		float destinationRotationYTable[] = {
+			std::numbers::pi_v<float> / 2.0f,
+			std::numbers::pi_v<float> *3.0f / 2.0f,
+		};
+		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+
+		float newY = Easing::Lerp(turnFirstRotationY_, destinationRotationY, easedT);
+		object3D_->SetRotate({ 0, newY, 0 });
+	}
+
+
+}
+
 
 
 

@@ -50,6 +50,8 @@ public:
 	void Draw();
 
 	void PrayerMove(); // 自機の動き
+
+	void PlayerTurn(); // 自機の向き
 	
 
 
@@ -103,7 +105,7 @@ private:
 
 	
 	Vector3 velocity_ = {};                          // 速度
-	static inline const float kAccleration = 0.05f;  // 定数加速度
+	static inline const float kAccleration = 0.03f;  // 定数加速度
 	static inline const float kAttenuation = 0.2f;   // 速度減衰率
 	static inline const float kLimitRunSpeed = 1.0f; // 最大速度制限
 	
@@ -120,6 +122,12 @@ private:
 	static inline const float kAttenuationLanding = 0.1f;//着地時の減衰率
 	static inline const float kCollisionsmallnumber = 0.1f;//当たり判定の余裕
 	static inline const float kAttenuationWall = 1.0f;//壁に当たった時の減衰率
+
+	// 振り向き
+	LRDirecion lrDirection_ = LRDirecion::kright;
+	float turnFirstRotationY_ = 0.0f;           // 現在の向き
+	float turnTimer_ = 0.0f;                    // 振り向き時間
+	static inline const float KtimeTurn = 0.5f; // 角度補間タイム
 
 	//死んだ
 	bool isDead_ = false;

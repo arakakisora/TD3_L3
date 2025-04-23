@@ -26,7 +26,7 @@ public:
 	/// </summary>
 	void Draw();
 
-
+	Model* GetModel() { return model_; } // モデル取得関数
 	void SetModel(Model* model) { model_ = model; }
 	void SetModel(const std::string& filepath); 
 	
@@ -115,7 +115,7 @@ public:
 	Matrix4x4 GetWorldMatrix() { return worldMatrix; }
 
 	
-	std::string GetModel() const;  // 追加
+	std::string GetModelfilePath() const;  // 追加
 private:
 	Object3DCommon* object3DCommon_ = nullptr;
 
