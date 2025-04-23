@@ -21,7 +21,7 @@ void StageSelectScene::Initialize()
 	CameraManager::GetInstans()->AddCamera("maincam", camera_.get());
 
 	TextureManager::GetInstance()->LoadTexture("Resources/StageSelect/controllerUI.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Title.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Title.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_X.png");
 
 	//モデルの読み込み				
@@ -113,7 +113,7 @@ void StageSelectScene::Initialize()
 	uIController_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 
 	uITitle_ = std::make_unique <Sprite>();
-	uITitle_->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_Title.png");
+	uITitle_->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Title.png");
 	uITitle_->SetPosition(Vector2(-50.0f, -10.0f));
 	uITitle_->SetSize({ 336.0f, 70.0f });
 	uITitle_->SetRotation(0.0f);
@@ -265,10 +265,10 @@ void StageSelectScene::Draw() {
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
 
-	// UI
-	uIController_->Draw();
-	uITitle_->Draw();
-	uIX_->Draw();
+	//// UI
+	//uIController_->Draw();
+	//uITitle_->Draw();
+	//uIX_->Draw();
 
 #pragma endregion
 
