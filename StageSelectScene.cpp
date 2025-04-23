@@ -161,6 +161,9 @@ void StageSelectScene::Initialize()
 	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
 	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	skydome_->SetModel("backPlane.obj");
+
+	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.StartFadeIn(0.5);
 }
 
 void StageSelectScene::Finalize()
@@ -177,6 +180,8 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
+	// フェード更新
+	fadeManager_.Update();
 	skydome_->Update();
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
@@ -306,6 +311,8 @@ void StageSelectScene::Draw() {
 	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
 		Uitext->Draw();
 	}
+	// フェード描画
+	fadeManager_.Draw();
 
 #pragma endregion
 

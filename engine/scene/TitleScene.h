@@ -5,6 +5,7 @@
 #include "Object3D.h"
 #include "Audio.h"
 #include "BaseScene.h"
+#include "FadeManager.h"
 
 class TitleScene :public BaseScene
 {
@@ -39,4 +40,5 @@ public:
 
 	// 背景
 	std::unique_ptr<Object3D>skydome_;
+	FadeManager fadeManager_;
 };
