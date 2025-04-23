@@ -57,7 +57,7 @@ void Player::Update() {
 #ifdef _DEBUG
 
 	//Cキーを押してカメラモードへ
-	if (Input::GetInstance()->TriggerKey(DIK_C) && !CamerMode) {
+	if (Input::GetInstance()->TriggerKey(DIK_C)) {
 		CamerMode = !CamerMode;
 	}
 #endif // _DEBUG
