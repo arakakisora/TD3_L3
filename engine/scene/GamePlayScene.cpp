@@ -61,6 +61,14 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial7.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial8.obj");
 
+	// ポーズテキスト
+	ModelManager::GetInstans()->LoadModel("Pause.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/title.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
+	ModelManager::GetInstans()->LoadModel("StageSelect/StageSelect.obj");
+
+
 	//操作説明UI
 
 	std::vector<OperationText>spriteInfos = {
@@ -300,7 +308,10 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
 
-	
+	//ポーズメニュー
+	pauseMenu = std::make_unique<PauseMenu>();
+	pauseMenu->Initialize(Object3DCommon::GetInstance(), true);
+	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
 }
 
@@ -322,154 +333,163 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::Update()
 {
-	//カメラの更新
-	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
-	// 天球の更新
-	skydomerotate+=0.0f;
-	skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
-	skydome_->Update();
+	//ポーズ画面が出ている間は停止
+	if (!pauseMenu->IsPaused()) {
 
-	// ゲームカメラ更新処理
-	//gameCamera_->Update();
-	photoCamera->Update(map);
+		//カメラの更新
+		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
-	map->Update();
-	////プレイヤーの更新
-	player->Update();
+		// 天球の更新
+		skydomerotate += 0.0f;
+		skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
+		skydome_->Update();
 
-	//チュートリアル表示制御//map1
-	if (SceneManager::GetInstance()->GetStageIndex() == 0) { 
+		// ゲームカメラ更新処理
+		//gameCamera_->Update();
+		photoCamera->Update(map);
+
+		map->Update();
+		////プレイヤーの更新
+		player->Update();
+
+		//チュートリアル表示制御//map1
+		if (SceneManager::GetInstance()->GetStageIndex() == 0) {
+			/*
+
+			if (!tutorial1_2) {
+				tutorialTexts[1]->SetIsTutorialActive(true);
+				tutorialTexts[2]->SetIsTutorialActive(true);
+				tutorial1_2 = true;
+			}
+
+			if(photoCamera->HasStarted()&&!turorial3_4){
+			   tutorialTexts[1]->SetIsTutorialActive(false);
+			   tutorialTexts[2]->SetIsTutorialActive(false);
+			   tutorialTexts[3]->SetIsTutorialActive(true);
+			   tutorialTexts[4]->SetIsTutorialActive(true);
+			   tutorial3_4 = true;
+			   }
+
+			if (photoCamera->HasMoved() && !tutorial5) {
+				tutorialtext[3]->SetIsTutorialActive(false);
+				tutorialtext[4]->SetIsTutorialActive(false);
+				tutorialtext[5]->SetIsTutorialActive(true);
+				tutorial5 = true;
+			}
+
+			if (photoCamera->isFirstCopied && !tutorial6_7) {
+				tutorialtext[5]->SetIsTutorialActive(false);
+				tutorialtext[6]->SetIsTutorialActive(true);
+				tutorialtext[7]->SetIsTutorialActive(true);
+				tutorial6_7 = true;
+			}
+			if (photoCamera->isFirstPasted && !tutorial8) {
+				tutorialtext[6]->SetIsTutorialActive(false);
+				tutorialtext[7]->SetIsTutorialActive(false);
+				tutorialtext[8]->SetIsTutorialActive(true);
+				tutorial8 = true;
+			}
+
+			for (auto& text : tutorialTexts) {
+				if (text->GetIsTutorialActive()) {
+					text->Update();
+				}
+			}
+			*/
+
+			if (!tutorial1_2) {
+				// text1,2を表示
+				Tutorialtext1->SetIsTutorialActive(true);
+				Tutorialtext2->SetIsTutorialActive(true);
+				tutorial1_2 = true;
+			}
+
+			if (photoCamera->HasStarted() && !tutorial3_4) {
+				Tutorialtext1->SetIsTutorialActive(false);
+				Tutorialtext2->SetIsTutorialActive(false);
+				Tutorialtext3->SetIsTutorialActive(true);
+				Tutorialtext4->SetIsTutorialActive(true);
+				tutorial3_4 = true;
+			}
+
+			if (photoCamera->HasMoved() && !tutorial5) {
+				Tutorialtext3->SetIsTutorialActive(false);
+				Tutorialtext4->SetIsTutorialActive(false);
+				Tutorialtext5->SetIsTutorialActive(true);
+				tutorial5 = true;
+			}
+
+			if (photoCamera->isFirstCopied && !tutorial6_7) {
+				Tutorialtext5->SetIsTutorialActive(false);
+				Tutorialtext6->SetIsTutorialActive(true);
+				Tutorialtext7->SetIsTutorialActive(true);
+				tutorial6_7 = true;
+			}
+			if (photoCamera->isFirstPasted && !tutorial8) {
+				Tutorialtext6->SetIsTutorialActive(false);
+				Tutorialtext7->SetIsTutorialActive(false);
+				Tutorialtext8->SetIsTutorialActive(true);
+				tutorial8 = true;
+			}
+		}
 		/*
-
-		if (!tutorial1_2) {
-			tutorialTexts[1]->SetIsTutorialActive(true);
-			tutorialTexts[2]->SetIsTutorialActive(true);
-			tutorial1_2 = true;
-		}
-
-		if(photoCamera->HasStarted()&&!turorial3_4){
-		   tutorialTexts[1]->SetIsTutorialActive(false);
-		   tutorialTexts[2]->SetIsTutorialActive(false);
-		   tutorialTexts[3]->SetIsTutorialActive(true);
-		   tutorialTexts[4]->SetIsTutorialActive(true);
-		   tutorial3_4 = true;
-		   }
-
-		if (photoCamera->HasMoved() && !tutorial5) {
-			tutorialtext[3]->SetIsTutorialActive(false);
-			tutorialtext[4]->SetIsTutorialActive(false);
-			tutorialtext[5]->SetIsTutorialActive(true);
-			tutorial5 = true;
-		}
-
-		if (photoCamera->isFirstCopied && !tutorial6_7) {
-			tutorialtext[5]->SetIsTutorialActive(false);
-			tutorialtext[6]->SetIsTutorialActive(true);
-			tutorialtext[7]->SetIsTutorialActive(true);
-			tutorial6_7 = true;
-		}
-		if (photoCamera->isFirstPasted && !tutorial8) {
-			tutorialtext[6]->SetIsTutorialActive(false);
-			tutorialtext[7]->SetIsTutorialActive(false);
-			tutorialtext[8]->SetIsTutorialActive(true);
-			tutorial8 = true;
-		}
-
-		for (auto& text : tutorialTexts) {
-			if (text->GetIsTutorialActive()) {
-				text->Update();
+		//チュートリアル表示制御map2
+		if (SceneManager::GetInstance()->GetStageIndex() == 1) {
+			if (!tutorial9) {
+				Tutorialtext9->SetIsTutorialActive(true);
+				tutorial9 = true;
 			}
 		}
 		*/
+		if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
+		if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
+		if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
+		if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Update();
+		if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Update();
+		if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Update();
+		if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
+		if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
+		//if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
 
-		if (!tutorial1_2) {
-			// text1,2を表示
-			Tutorialtext1->SetIsTutorialActive(true);
-			Tutorialtext2->SetIsTutorialActive(true);
-			tutorial1_2 = true;
+		//ui
+		/*
+		if (!photoCamera->GetCameraMode()) {
+			for (int i : {0, 1, 2, 5, 6, 9}) {
+				operationTexts[i]->Update();
+			}
 		}
+		else {
+			for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
+				operationTexts[i]->Update();
+			}
+		}
+		*/
+		if (!photoCamera->GetCameraMode()) {
+			OperationtextStickL->Update();
+			OperationtextButtonB->Update();
+			OperationtextButtonA->Update();
+			OperationtextIdou->Update();
+			OperationtextKrikae->Update();
+			OperationtextZyanpu->Update();
+		}
+		if (photoCamera->GetCameraMode()) {
+			OperationtextStickL->Update();
+			OperationtextButtonB->Update();
+			OperationtextLB->Update();
+			OperationtextRB->Update();
+			OperationtextIdou->Update();
+			OperationtextKrikae->Update();
+			OperationtextToru->Update();
+			OperationtextHaiti->Update();
+		}
+		//mode切り替え
+		photoCamera->SetcameraMode(player->GetcamerMode());
+	}
+	
+	// ポーズ
+	pauseMenu->Update();
 
-		if (photoCamera->HasStarted() && !tutorial3_4) {
-			Tutorialtext1->SetIsTutorialActive(false);
-			Tutorialtext2->SetIsTutorialActive(false);
-			Tutorialtext3->SetIsTutorialActive(true);
-			Tutorialtext4->SetIsTutorialActive(true);
-			tutorial3_4 = true;
-		}
-
-		if (photoCamera->HasMoved() && !tutorial5) {
-			Tutorialtext3->SetIsTutorialActive(false);
-			Tutorialtext4->SetIsTutorialActive(false);
-			Tutorialtext5->SetIsTutorialActive(true);
-			tutorial5 = true;
-		}
-
-		if (photoCamera->isFirstCopied && !tutorial6_7) {
-			Tutorialtext5->SetIsTutorialActive(false);
-			Tutorialtext6->SetIsTutorialActive(true);
-			Tutorialtext7->SetIsTutorialActive(true);
-			tutorial6_7 = true;
-		}
-		if (photoCamera->isFirstPasted && !tutorial8) {
-			Tutorialtext6->SetIsTutorialActive(false);
-			Tutorialtext7->SetIsTutorialActive(false);
-			Tutorialtext8->SetIsTutorialActive(true);
-			tutorial8 = true;
-		}
-	}
-	/*
-	//チュートリアル表示制御map2
-	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
-		if (!tutorial9) {
-			Tutorialtext9->SetIsTutorialActive(true);
-			tutorial9 = true;
-		}
-	}
-	*/
-	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
-	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
-	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
-	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Update();
-	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Update();
-	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Update();
-	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
-	if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
-	//if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
-
-	//ui
-	/*
-	if (!photoCamera->GetCameraMode()) {
-		for (int i : {0, 1, 2, 5, 6, 9}) {
-			operationTexts[i]->Update();
-		}
-	}
-	else {
-		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
-			operationTexts[i]->Update();
-		}
-	}
-	*/
-	if (!photoCamera->GetCameraMode()) {
-		OperationtextStickL->Update();
-		OperationtextButtonB->Update();
-		OperationtextButtonA->Update();
-		OperationtextIdou->Update();
-		OperationtextKrikae->Update();
-		OperationtextZyanpu->Update();
-	}
-	if (photoCamera->GetCameraMode()) {
-		OperationtextStickL->Update();
-		OperationtextButtonB->Update();
-		OperationtextLB->Update();
-		OperationtextRB->Update();
-		OperationtextIdou->Update();
-		OperationtextKrikae->Update();
-		OperationtextToru->Update();
-		OperationtextHaiti->Update();
-	}
-	//mode切り替え
-	photoCamera->SetcameraMode(player->GetcamerMode());
 
 #ifdef _DEBUG
 
@@ -687,6 +707,9 @@ void GamePlayScene::Draw()
 	//if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
 
 	map->Draw();
+
+	//ポーズメニュー
+	pauseMenu->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 

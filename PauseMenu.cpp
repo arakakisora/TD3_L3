@@ -247,7 +247,7 @@ void PauseMenu::ControllerUpdate() {
 	// 押し始め検出
 	bool stickUpPressed = (rightStickY < -stickThreshold && prevRightStickY >= -stickThreshold);
 	bool stickDownPressed = (rightStickY > stickThreshold && prevRightStickY <= stickThreshold);
-	if (!isOperation_) {
+	if (!isOperation_ && easeTimer_ ==1.0f) {
 		// 上向き
 		if (stickUpPressed && textindex < TextObjects.size() - 1 && !easingmoveFlag_ && !easingsceneFlag_) {
 			textindex++;
