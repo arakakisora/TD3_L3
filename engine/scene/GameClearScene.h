@@ -90,4 +90,7 @@ private:
 	uint32_t Selectindex = 2;
 
 	bool nextsneneonthit = false;
+
+	// 背景
+	std::unique_ptr<Object3D> skydome_;
 };

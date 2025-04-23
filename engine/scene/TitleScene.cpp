@@ -20,6 +20,14 @@ void TitleScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("UI_Title_Stsrt.obj");
 	ModelManager::GetInstans()->LoadModel("UI_Title_A.obj");
 
+	// 背景
+	ModelManager::GetInstans()->LoadModel("backPlane.obj");
+	skydome_ = std::make_unique<Object3D>();
+	skydome_->Initialize(Object3DCommon::GetInstance());
+	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
+	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	skydome_->SetModel("backPlane.obj");
+
 	// タイトル生成
 	titileobject_ = std::make_unique<Object3D>();
 	titileobject_->Initialize(Object3DCommon::GetInstance());
@@ -53,7 +61,7 @@ void TitleScene::Finalize()
 void TitleScene::Update()
 {
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
-
+	skydome_->Update();
 	if (time <= 20) {
 		time++;
 	} else {
@@ -123,6 +131,8 @@ void TitleScene::Draw()
 {
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
+
+	skydome_->Draw();
 
 	// タイトル描画処理
 	titileobject_->Draw();

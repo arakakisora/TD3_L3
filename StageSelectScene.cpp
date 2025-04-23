@@ -154,6 +154,13 @@ void StageSelectScene::Initialize()
 	pauseMenu = std::make_unique<PauseMenu>();
 	pauseMenu->Initialize(Object3DCommon::GetInstance(), false);
 	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
+
+	// 背景
+	skydome_ = std::make_unique<Object3D>();
+	skydome_->Initialize(Object3DCommon::GetInstance());
+	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
+	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	skydome_->SetModel("backPlane.obj");
 }
 
 void StageSelectScene::Finalize()
@@ -170,6 +177,7 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
+	skydome_->Update();
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
 		//カメラの更新
@@ -267,7 +275,7 @@ void StageSelectScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
-
+	skydome_->Draw();
 
 	Player_->Draw();
 	

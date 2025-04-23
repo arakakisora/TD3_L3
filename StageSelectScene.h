@@ -96,4 +96,7 @@ public:
 
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
+
+	// 背景
+	std::unique_ptr<Object3D>skydome_;
 };
