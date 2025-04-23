@@ -25,7 +25,9 @@ void StageSelectScene::Initialize()
 	TextureManager::GetInstance()->LoadTexture("Resources/idou.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_a.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/kettei.png");
-
+	TextureManager::GetInstance()->LoadTexture("Resources/Pause.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_y.png");
+	
 	//モデルの読み込み				
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
@@ -91,7 +93,6 @@ void StageSelectScene::Initialize()
 		textoObjects_.push_back(std::move(newObject));
 	}
 
-
 	FollowTargetposition = { 0.0f,0.0f,-15.0f };
 
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(Player_, FollowTargetposition);
@@ -132,6 +133,21 @@ void StageSelectScene::Initialize()
 		xboxui.push_back(std::move(newSprite));
 	}
 
+	for (uint32_t i = 0; i < 2; ++i) {
+		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
+		if (i == 0) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Pause.png");
+			newSprite->SetPosition(Vector2(15.0f, 15.0f));
+			newSprite->SetSize(Vector2(150, 50));
+		} else if (i == 1) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
+			newSprite->SetPosition(Vector2(170.0f, 5.0f));
+			newSprite->SetSize(Vector2(70, 70));
+		} 
+		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		pauseui.push_back(std::move(newSprite));
+	}
+	
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
 	pauseMenu->Initialize(Object3DCommon::GetInstance(), false);
@@ -203,7 +219,9 @@ void StageSelectScene::Update()
 	for (std::unique_ptr<Sprite>& Uitext : xboxui) {
 		Uitext->Update();
 	}
-
+	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
+		Uitext->Update();
+	}
 
 #ifdef _DEBUG
 
@@ -272,6 +290,10 @@ void StageSelectScene::Draw() {
 
 	// UI
 	for (std::unique_ptr<Sprite>& Uitext : xboxui) {
+		Uitext->Draw();
+	}
+
+	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
 		Uitext->Draw();
 	}
 

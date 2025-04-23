@@ -91,7 +91,7 @@ public:
 	int frameCounter_ = 0;  // フレームカウンター
 
 	std::vector<std::unique_ptr<Sprite>> xboxui;
-
+	std::vector < std::unique_ptr<Sprite>> pauseui;
 	bool titlefige_ =false;
 
 	//ポーズメニュー
