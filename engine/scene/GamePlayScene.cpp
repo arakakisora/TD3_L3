@@ -485,7 +485,8 @@ void GamePlayScene::Update()
 		}
 		//mode切り替え
 		photoCamera->SetcameraMode(player->GetcamerMode());
-	}
+
+	
 	
 	// ポーズ
 	pauseMenu->Update();
@@ -668,8 +669,8 @@ void GamePlayScene::Update()
 	}
 
 #endif // _DEBUG
-
 }
+
 
 void GamePlayScene::Draw()
 {
