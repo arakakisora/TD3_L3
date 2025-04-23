@@ -90,4 +90,6 @@ private:
 	uint32_t Selectindex = 2;
 
 	bool nextsneneonthit = false;
+
+	uint32_t nextStage = 0;
 };
