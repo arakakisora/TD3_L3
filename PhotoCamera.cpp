@@ -230,6 +230,43 @@ void PhotoCamera::Move()
 		isMoving = true;
 	}
 
+	static int stickCoolTimeX = 0;
+	static int stickCoolTimeY = 0;
+
+	float stickX = Input::GetInstance()->GetGamePadStickX();
+	float stickY = Input::GetInstance()->GetGamePadStickY();
+
+	const float threshold = 0.5f;
+	const int maxCoolTime = 10;
+
+	if (std::abs(stickX) > threshold) {
+		if (stickCoolTimeX <= 0 && !isMoving) {
+			targetPos.x += (stickX > 0) ? 1 : -1;
+			moveTimer = 0.0f;
+			isMoving = true;
+			stickCoolTimeX = maxCoolTime;
+		} else {
+			stickCoolTimeX--;
+		}
+	} else {
+		stickCoolTimeX = 0;
+	}
+
+	if (std::abs(stickY) > threshold) {
+		if (stickCoolTimeY <= 0 && !isMoving) {
+			targetPos.y += (stickY > 0) ? 1 : -1;
+			moveTimer = 0.0f;
+			isMoving = true;
+			stickCoolTimeY = maxCoolTime;
+		} else {
+			stickCoolTimeY--;
+		}
+	} else {
+		stickCoolTimeY = 0;
+	}
+
+
+
 	// イージング補間
 	if (isMoving) {
 		moveTimer += moveSpeed;
@@ -417,40 +454,7 @@ void PhotoCamera::DrawImGui()
 
 	ImGui::End();
 
-	static int stickCoolTimeX = 0;
-	static int stickCoolTimeY = 0;
-
-	float stickX = Input::GetInstance()->GetGamePadStickX();
-	float stickY = Input::GetInstance()->GetGamePadStickY();
-
-	const float threshold = 0.5f;
-	const int maxCoolTime = 10;
-
-	if (std::abs(stickX) > threshold) {
-		if (stickCoolTimeX <= 0 && !isMoving) {
-			targetPos.x += (stickX > 0) ? 1 : -1;
-			moveTimer = 0.0f;
-			isMoving = true;
-			stickCoolTimeX = maxCoolTime;
-		} else {
-			stickCoolTimeX--;
-		}
-	} else {
-		stickCoolTimeX = 0;
-	}
-
-	if (std::abs(stickY) > threshold) {
-		if (stickCoolTimeY <= 0 && !isMoving) {
-			targetPos.y += (stickY > 0) ? 1 : -1;
-			moveTimer = 0.0f;
-			isMoving = true;
-			stickCoolTimeY = maxCoolTime;
-		} else {
-			stickCoolTimeY--;
-		}
-	} else {
-		stickCoolTimeY = 0;
-	}
+	
 
 
 }

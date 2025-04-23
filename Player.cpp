@@ -88,7 +88,7 @@ void Player::Update() {
 
 
 
-	//PrayerTurn();
+	////PrayerTurn();
 	object3D_->Update();
 
 	// ゴールフラグがたったらクリアシーンに移動
@@ -138,11 +138,11 @@ void Player::PrayerMove() {
 		velocity_.x += accceleration.x;
 		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
 	} else {
-		// X軸の減速処理（Y軸には影響を与えない）
-		velocity_.x *= (1.0f - kAttenuation);
 	}
 #endif // _DEBUG
 
+		// X軸の減速処理（Y軸には影響を与えない）
+		velocity_.x *= (1.0f - kAttenuation);
 
 	// コントローラー操作（左右移動）
 	if (Input::GetInstance()->GetGamePadStickX() > 0 || Input::GetInstance()->GetGamePadStickX() < 0) {
