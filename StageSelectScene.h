@@ -8,6 +8,7 @@
 #include <cmath>
 #include "ParticleMnager.h"
 #include "PauseMenu.h"
+#include "FadeManager.h"
 
 class StageSelectScene :public BaseScene
 {
@@ -98,4 +99,7 @@ public:
 
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
+
+	// フェードマネージャー
+	FadeManager fadeManager_;
 };

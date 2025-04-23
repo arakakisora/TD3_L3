@@ -15,6 +15,11 @@
 
 void StageSelectScene::Initialize()
 {
+	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.StartFadeIn(0.5f);
+
+
+
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetTranslate({ 0,0,-50, });//カメラの位置
@@ -146,6 +151,8 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
+	fadeManager_.Update();
+
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
 		//カメラの更新
@@ -269,7 +276,7 @@ void StageSelectScene::Draw() {
 	uIController_->Draw();
 	uITitle_->Draw();
 	uIX_->Draw();
-
+	fadeManager_.Draw();
 #pragma endregion
 
 }

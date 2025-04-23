@@ -5,6 +5,7 @@
 #include "Object3D.h"
 #include "Audio.h"
 #include "BaseScene.h"
+#include "FadeManager.h"
 
 class TitleScene :public BaseScene
 {
@@ -36,4 +37,6 @@ public:
 	uint32_t time = 0;
 	bool timehige = false;
 	int timer = 0;
+
+	FadeManager fadeManager_;
 };

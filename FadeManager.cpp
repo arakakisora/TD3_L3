@@ -26,9 +26,10 @@ void FadeManager::StartFadeOut(float duration)
 {
     isFadeOut_ = true;
     isFadeIn_ = false;
+    isFadeOutFinished_ = false;
     timer_ = 0.0f;
     duration_ = duration;
-    fadeSprite_->setColor(Vector4(0, 0, 0, 0.0f)); // 初期は透明
+    fadeSprite_->setColor(Vector4(0, 0, 0, 0.0f));
 }
 
 void FadeManager::Update()
@@ -42,8 +43,13 @@ void FadeManager::Update()
     fadeSprite_->setColor(Vector4(0, 0, 0, alpha));
 
     if (t >= 1.0f) {
-        isFadeIn_ = false;
-        isFadeOut_ = false;
+        if (isFadeOut_) {
+            isFadeOut_ = false;
+            isFadeOutFinished_ = true;
+        }
+        if (isFadeIn_) {
+            isFadeIn_ = false;
+        }
     }
 
     fadeSprite_->Update();
