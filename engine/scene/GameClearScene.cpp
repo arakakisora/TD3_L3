@@ -44,27 +44,27 @@ void GameClearScene::Initialize()
 	}
 
 
-	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Nextstage.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/TextUI_Stageselect.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/ArroUP.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Nextstage.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Stageselect.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/ArroUP.png");
 	
 	// 作成してリストに追加
 	for (uint32_t i = 0; i < 3; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
 	
 		if (i == 0) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_Title.png");
-			newSprite->SetPosition(Vector2(224.0f, 500.0f));
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Title.png");
+			newSprite->SetPosition(Vector2(250.0f, 500.0f));
 
 		} else if (i == 1) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_Stageselect.png");
-			newSprite->SetPosition(Vector2(528.0f, 500.0f));
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Stageselect.png");
+			newSprite->SetPosition(Vector2(550.0f, 500.0f));
 		} else if (i == 2) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/TextUI_Nextstage.png");
-			newSprite->SetPosition(Vector2(796.0f, 500.0f));
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Nextstage.png");
+			newSprite->SetPosition(Vector2(850.0f, 500.0f));
 		}
 
-		newSprite->SetSize({ 224.0f, 50.0f });
+		newSprite->SetSize({ 200.0f, 50.0f });
 		newSprite->SetRotation(0.0f);
 		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 
@@ -73,8 +73,8 @@ void GameClearScene::Initialize()
 
 	ArroTextUI_ = std::make_unique<Sprite>();
 
-	ArroTextUI_->Initialize(SpriteCommon::GetInstance(), "Resources/ArroUP.png");
-	ArroTextUI_->SetPosition(Vector2(890.0f, 575.0f));
+	ArroTextUI_->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/ArroUP.png");
+	ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
 	ArroTextUI_->SetSize({ 50.0f, 50.0f });
 	ArroTextUI_->SetRotation(0.0f);
 	ArroTextUI_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -254,6 +254,13 @@ void GameClearScene::StartJump() {
 	}
 }
 void GameClearScene::ControllerUpdate() {
+
+	uint32_t nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
+
+	if (nextStage == MaxStageIndex_) {
+		nextsneneonthit = true;
+	}
+
 	// 長押し対応用の遅延時間
 	static float holdDelay_ = 0.2f; // 押しっぱなしで再入力されるまでの時間
 	static float holdTimer_ = 0.0f; // タイマー
@@ -288,7 +295,7 @@ void GameClearScene::ControllerUpdate() {
 	
 	// タイトルの場合
 	if (Selectindex == 0) {
-		ArroTextUI_->SetPosition(Vector2(300.0f, 575.0f));
+		ArroTextUI_->SetPosition(Vector2(325.0f, 570.0f));
 		if (Changefige) {
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 				SceneManager::GetInstance()->ChangeScene("TITELE");
@@ -299,7 +306,7 @@ void GameClearScene::ControllerUpdate() {
 
 	// ステージセレクトの場合
 	if (Selectindex == 1) {
-		ArroTextUI_->SetPosition(Vector2(600.0f, 565.0f));
+		ArroTextUI_->SetPosition(Vector2(625.0f, 570.0f));
 		if (Changefige) {
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
@@ -309,10 +316,9 @@ void GameClearScene::ControllerUpdate() {
 
 	// 次のステージの場合
 	if (Selectindex == 2) {
-		ArroTextUI_->SetPosition(Vector2(890.0f, 575.0f));
+		ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
 		if (Changefige) {
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
-				uint32_t nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
 
 				if (nextStage < MaxStageIndex_) {
 					SceneManager::GetInstance()->SetStageIndex(nextStage);
