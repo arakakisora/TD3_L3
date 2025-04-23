@@ -2,16 +2,21 @@
 #include "Object3D.h"
 #include "Map.h"
 #include "Block.h"
+#include "Sprite.h"
+#include "BitmapFont.h"
+#include <memory>
 using namespace std;
 class PhotoCamera
 {
 public:
 	// 初期化
-	void Initialize();
+	void Initialize(Map* map);
 	// 更新
 	void Update(Map* map);
-	// 描画
-	void Draw();
+	// 描画 / 3DObject
+	void Draw3DObject();
+	// 描画 / Sprite
+	void DrawSprite();
 	// 終了処理
 	void Finalize();
 	// カメラの移動
@@ -25,8 +30,6 @@ public:
 	// imguiの描画
 	void DrawImGui();
 
-	void stickMove(); // スティック移動
-
 public:	// Setter / Getter
 	// 変更したマップデータをmapにセット
 	//void SetMap(Map* map) { this->map = map; }
@@ -38,12 +41,30 @@ public:	// Setter / Getter
 	// カメラのオブジェクトを取得
 	Object3D* GetObject3D() { return object3D.get(); }
 
+	//カメラが起動したか
+	bool HasStarted() const { return CamerMode; }
+	//カメラが動いたか
+	bool HasMoved() const { return position.x != initialPos.x || position.y != initialPos.y; }
+	//コピーしたか
+	bool HasCopied() const { return shutterCount > 0; }
+	//初回コピーフラグ取得
+	bool GetFirstCopied()const { return isFirstCopied; }
+	//初回ペーストフラグ取得
+	bool GetFirstPaseted()const { return isFirstPasted; }
+	//カメラモード取得
+	bool GetCameraMode()const { return CamerMode; }
 	void SetcameraMode(bool mode) { CamerMode = mode; } // カメラモードを設定
+public:
+	//初回コピーしたか
+	bool isFirstCopied = false;
+	//初回ペーストしたか
+	bool isFirstPasted = false;
 private:
 	Map* map;
 	MapChipData mapData;
 	// カメラの位置
 	Vector2 position;
+	Vector2 initialPos;
 	// カメラのサイズ
 	Vector2 rangeSize;
 	// カメラのオブジェクト
@@ -61,7 +82,7 @@ private:
 	MapChipType mapChipType;
 
 	bool CamerMode = false;
-
+	
 	// カメラサイズ
 	uint32_t cameraSizeX = 2;
 	uint32_t cameraSizeY = 2;
@@ -71,6 +92,10 @@ private:
 	// シャッター回数
 	uint32_t shutterCount = 0;
 
+	// 残りシャッター枚数のリソースデータ
+	vector<unique_ptr<Sprite>>shutterRests_;
+	// ビットマップフォント
+	unique_ptr<BitmapFont>bitmapFont = nullptr;
 
 
 	//イージング用

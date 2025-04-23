@@ -7,6 +7,7 @@
 #include "BaseScene.h"
 #include <cmath>
 #include "ParticleMnager.h"
+#include "PauseMenu.h"
 
 class StageSelectScene :public BaseScene
 {
@@ -94,4 +95,7 @@ public:
 	std::unique_ptr<Sprite> uIX_;
 
 	bool titlefige_ =false;
+
+	//ポーズメニュー
+	std::unique_ptr<PauseMenu>pauseMenu;
 };

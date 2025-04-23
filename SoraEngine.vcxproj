@@ -111,6 +111,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BitmapFont.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="engine\camera\CameraManager.cpp" />
@@ -149,6 +150,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\particle\ParticleEmitter.cpp" />
     <ClCompile Include="engine\particle\ParticleMnager.cpp" />
     <ClCompile Include="ObjectCamera.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PhotoCamera.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
@@ -186,6 +188,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitmapFont.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="engine\camera\CameraManager.h" />
@@ -229,6 +232,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\particle\ParticleEmitter.h" />
     <ClInclude Include="engine\particle\ParticleMnager.h" />
     <ClInclude Include="ObjectCamera.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PhotoCamera.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StageSelectScene.h" />

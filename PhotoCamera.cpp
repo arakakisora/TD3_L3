@@ -3,29 +3,52 @@
 #include "Input.h"
 #include <imgui.h>
 #include <iostream>
+#include "TextureManager.h"
+#include "SpriteCommon.h"
 #include "Easing.h"
+
 // MAPクラスとのループキャストに注意
-void PhotoCamera::Initialize()
+void PhotoCamera::Initialize(Map* map)
 {
+	this->map = map;
 	// フォトカメラの範囲モデル
 	object3D = make_unique<Object3D>();
 	object3D->Initialize(Object3DCommon::GetInstance());
 	// @枠組みのモデルを用意するように
-	object3D->SetModel("Player.obj");
+	object3D->SetModel("Frame.obj");
 	// @値を後に調整する
 	object3D->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	position = Vector2{ 2,13 };
 	object3D->SetTranslate(Vector3(position.x, position.y - 1, 0));
 	object3D->SetRotate(Vector3{ 0,0,0 });
+  
+	initialPos = position;
+	
+	isFirstCopied = false;
+	isFirstPasted = false;
 
-	//イージング用
+	// 残りシャッター枚数表示画像
+	TextureManager::GetInstance()->LoadTexture("Resources/shutter.png");
+
+	// フォトカメラのシャッター回数
+	shutterLimitCountMax = this->map->GetShutterCount();
+	// 残りシャッター枚数表示スプライト
+	for (int i = 0; i < (int)shutterLimitCountMax; ++i) {
+		auto shutter_ = make_unique<Sprite>();
+		shutter_->Initialize(SpriteCommon::GetInstance(), "Resources/shutter.png");
+		shutter_->SetSize({ 70.0f,70.0f });
+		shutter_->SetRotation(0.0f);
+		shutter_->setColor({ 1.0f,1.0f,1.0f,1.0f });
+		shutterRests_.push_back(move(shutter_));
+	}
+
 	currentPos = targetPos = position;
 	moveTimer = 1.0f;
 	isMoving = false;
 
-
-	// 座標変換
-
+	// ビットマップフォント
+	bitmapFont = make_unique<BitmapFont>();
+	bitmapFont->Initialize();
 }
 
 void PhotoCamera::Update(Map* map)
@@ -40,7 +63,10 @@ void PhotoCamera::Update(Map* map)
 
 	// mapDataを受け取る
 	mapData.data = this->map->GetMap();
-
+	// シャッターの残り枚数表示画像の更新
+	for (auto& shutter : shutterRests_) {
+		shutter->Update();
+	}
 
 	if (CamerMode) {
 		// フォトカメラの移動
@@ -86,6 +112,7 @@ void PhotoCamera::Update(Map* map)
 #ifdef _DEBUG
 			Input::GetInstance()->TriggerKey(DIK_P) ||
 #endif // _DEBUG
+
 			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {//RB
 
 
@@ -98,7 +125,8 @@ void PhotoCamera::Update(Map* map)
 			Paste();
 		}
 	}
-
+	// ビットマップフォントの更新処理
+	bitmapFont->Update(shutterLimitCountMax-shutterCount);
 	// フォトカメラの枠モデルの更新
 	object3D->Update();
 
@@ -106,6 +134,7 @@ void PhotoCamera::Update(Map* map)
 	for (auto& block : blocks) {
 		block->Update();
 	}
+
 #ifdef _DEBUG
 	// ImGuiの描画
 	DrawImGui();
@@ -119,7 +148,7 @@ void PhotoCamera::Update(Map* map)
 
 }
 
-void PhotoCamera::Draw()
+void PhotoCamera::Draw3DObject()
 {
 	if (CamerMode) {
 		// フォトカメラの枠モデルの描画
@@ -129,7 +158,26 @@ void PhotoCamera::Draw()
 			block->Draw();
 		}
 	}
+
 }
+
+void PhotoCamera::DrawSprite()
+{
+	int remainingShutter = shutterLimitCountMax - shutterCount;
+
+	// 表示するのは1枚だけ
+	if (remainingShutter >= 0 && !shutterRests_.empty()) {
+		float x = 10.0f;
+		float y = 15.0f;
+		shutterRests_[0]->SetPosition(Vector2(x, y));
+		shutterRests_[0]->Draw();
+	}
+
+	// ビットマップフォントのスプライト描画
+	bitmapFont->Draw();
+}
+
+
 
 void PhotoCamera::Finalize()
 {
@@ -165,7 +213,6 @@ void PhotoCamera::Move()
 	}
 #endif // _DEBUG
 
-	// ゲームパッドの十字キー移動
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_UP)) {
 		input.y++;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
@@ -175,9 +222,6 @@ void PhotoCamera::Move()
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_LEFT)) {
 		input.x--;
 	}
-	// スティック移動
-	stickMove();
-
 
 	// 十字キー・キーボードでも targetPos 更新
 	if ((input.x != 0 || input.y != 0) && !isMoving) {
@@ -214,11 +258,6 @@ void PhotoCamera::Move()
 
 }
 
-
-
-
-
-
 void PhotoCamera::Copy() {
 	// マップデータが読み込めていないときはコピー不可
 	if (!map) return;
@@ -253,12 +292,9 @@ void PhotoCamera::Copy() {
 		}
 		copyData.push_back(row);
 	}
-
+	//初回コピーがしたか
+	isFirstCopied = true;
 }
-
-
-
-
 
 void PhotoCamera::Paste()
 {
@@ -287,8 +323,9 @@ void PhotoCamera::Paste()
 	map->SetMap(mapData);
 	// シャッターの回数をプラス
 	shutterCount++;
+	//初回ペーストしたか
+	isFirstPasted = true;
 }
-
 
 void PhotoCamera::DrawImGui()
 {
@@ -351,10 +388,21 @@ void PhotoCamera::DrawImGui()
 	}
 
 	ImGui::End();
-}
 
-void PhotoCamera::stickMove()
-{
+	ImGui::Begin("ShutterCountSprite");
+
+	// シャッター回数の情報を表示
+	ImGui::Text("Shutter Count Information");
+	ImGui::Separator();
+	ImGui::Text("Current Shutter Count: %d", shutterCount);
+	ImGui::Text("Shutter Limit: %d", shutterLimitCountMax);
+	ImGui::Text("Remaining Shutter Count: %d", shutterLimitCountMax - shutterCount);
+
+	// プログレスバーで残りシャッター回数を視覚化
+	float progress = static_cast<float>(shutterCount) / static_cast<float>(shutterLimitCountMax);
+	ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f), "Usage");
+
+	ImGui::End();
 
 	static int stickCoolTimeX = 0;
 	static int stickCoolTimeY = 0;
@@ -390,5 +438,6 @@ void PhotoCamera::stickMove()
 	} else {
 		stickCoolTimeY = 0;
 	}
+
 
 }

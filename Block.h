@@ -63,7 +63,7 @@ public:
 	void Finalize();
 
 	static Block* CreateBlock(MapChipType type, const Vector3& position);
-	// 一定時間経過後に消えるブロックの貼り付け前（FixedTime）
+	// 一定時間経過後に消えるブロックの貼り付け前（FixedTime)
 	void FixedTimeBlock();
 	// 一定時間経過後に消えるブロックの貼り付け後（PutFixedTime）
 	void PutFixedTimeBlock();
