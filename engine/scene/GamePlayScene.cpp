@@ -59,6 +59,7 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial6.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial7.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial8.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial9.obj");
 
 	//操作説明UI
 
@@ -210,17 +211,15 @@ void GamePlayScene::Initialize()
 	Tutorialtext8->SetLighting(false);
 	Tutorialtext8->SetIsTutorialActive(false);
 
-	/*
+	
 	Tutorialtext9 = std::make_unique<Object3D>();
 	Tutorialtext9->Initialize(Object3DCommon::GetInstance());
 	Tutorialtext9->SetModel("tutorial/tutorial9.obj");
 	Tutorialtext9->SetScale(Vector3(0.5f,0.5f,0.5f));
 	Tutorialtext9->SetRotate(Vector3(17.3f,12.56f,0.0f));
-	Tutorialtext9->SetTranslate(Vector3(12.46,21.4f,1.0f));
+	Tutorialtext9->SetTranslate(Vector3(12.46f,21.4f,1.0f));
 	Tutorialtext9->SetLighting(false);
 	Tutorialtext9->SetIsTutorialActive(false);
-	空白も撮って配置することができるぞ！
-	*/
 
 	//操作説明UI
 	/*
@@ -412,7 +411,7 @@ void GamePlayScene::Update()
 			tutorial8 = true;
 		}
 	}
-	/*
+	
 	//チュートリアル表示制御map2
 	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
 		if (!tutorial9) {
@@ -420,7 +419,7 @@ void GamePlayScene::Update()
 			tutorial9 = true;
 		}
 	}
-	*/
+	
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
 	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
 	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
@@ -429,7 +428,7 @@ void GamePlayScene::Update()
 	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Update();
 	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
 	if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
-	//if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
+	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
 
 	//ui
 	/*
@@ -505,7 +504,7 @@ void GamePlayScene::Update()
 		Transform text6 = Tutorialtext6->GetTransform();
 		Transform text7 = Tutorialtext7->GetTransform();
 		Transform text8 = Tutorialtext8->GetTransform();
-		//Transform text9 = Tutorialtext9->GetTransform();
+		Transform text9 = Tutorialtext9->GetTransform();
 		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
 			Tutorialtext1->SetTransform(text);
 		}
@@ -572,11 +571,11 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
 			Tutorialtext8->SetTransform(text8);
 		}
-		/*
+		
 		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
 			Tutorialtext9->SetTransform(text9);
 		}
-		*/
+		
 		//UI
 		/*
 		if (ImGui::CollapsingHeader("UI Translate")) {
@@ -667,7 +666,7 @@ void GamePlayScene::Draw()
 	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Draw();
 	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Draw();
 	if (Tutorialtext8->GetIsTutorialActive()) Tutorialtext8->Draw();
-	//if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
+	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
 
 	map->Draw();
 
