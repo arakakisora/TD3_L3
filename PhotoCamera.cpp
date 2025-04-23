@@ -3,24 +3,52 @@
 #include "Input.h"
 #include <imgui.h>
 #include <iostream>
+#include "TextureManager.h"
+#include "SpriteCommon.h"
+#include "Easing.h"
+
 // MAPクラスとのループキャストに注意
-void PhotoCamera::Initialize()
+void PhotoCamera::Initialize(Map* map)
 {
+	this->map = map;
 	// フォトカメラの範囲モデル
 	object3D = make_unique<Object3D>();
 	object3D->Initialize(Object3DCommon::GetInstance());
 	// @枠組みのモデルを用意するように
-	object3D->SetModel("Player.obj");
+	object3D->SetModel("Frame.obj");
 	// @値を後に調整する
 	object3D->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	position = Vector2{ 2,13 };
 	object3D->SetTranslate(Vector3(position.x, position.y - 1, 0));
 	object3D->SetRotate(Vector3{ 0,0,0 });
-
+  
 	initialPos = position;
 	
 	isFirstCopied = false;
 	isFirstPasted = false;
+
+	// 残りシャッター枚数表示画像
+	TextureManager::GetInstance()->LoadTexture("Resources/shutter.png");
+
+	// フォトカメラのシャッター回数
+	shutterLimitCountMax = this->map->GetShutterCount();
+	// 残りシャッター枚数表示スプライト
+	for (int i = 0; i < (int)shutterLimitCountMax; ++i) {
+		auto shutter_ = make_unique<Sprite>();
+		shutter_->Initialize(SpriteCommon::GetInstance(), "Resources/shutter.png");
+		shutter_->SetSize({ 70.0f,70.0f });
+		shutter_->SetRotation(0.0f);
+		shutter_->setColor({ 1.0f,1.0f,1.0f,1.0f });
+		shutterRests_.push_back(move(shutter_));
+	}
+
+	currentPos = targetPos = position;
+	moveTimer = 1.0f;
+	isMoving = false;
+
+	// ビットマップフォント
+	bitmapFont = make_unique<BitmapFont>();
+	bitmapFont->Initialize();
 }
 
 void PhotoCamera::Update(Map* map)
@@ -35,7 +63,10 @@ void PhotoCamera::Update(Map* map)
 
 	// mapDataを受け取る
 	mapData.data = this->map->GetMap();
-
+	// シャッターの残り枚数表示画像の更新
+	for (auto& shutter : shutterRests_) {
+		shutter->Update();
+	}
 
 	if (CamerMode) {
 		// フォトカメラの移動
@@ -94,7 +125,8 @@ void PhotoCamera::Update(Map* map)
 			Paste();
 		}
 	}
-
+	// ビットマップフォントの更新処理
+	bitmapFont->Update(shutterLimitCountMax-shutterCount);
 	// フォトカメラの枠モデルの更新
 	object3D->Update();
 
@@ -102,6 +134,7 @@ void PhotoCamera::Update(Map* map)
 	for (auto& block : blocks) {
 		block->Update();
 	}
+
 #ifdef _DEBUG
 	// ImGuiの描画
 	DrawImGui();
@@ -115,7 +148,7 @@ void PhotoCamera::Update(Map* map)
 
 }
 
-void PhotoCamera::Draw()
+void PhotoCamera::Draw3DObject()
 {
 	if (CamerMode) {
 		// フォトカメラの枠モデルの描画
@@ -125,7 +158,26 @@ void PhotoCamera::Draw()
 			block->Draw();
 		}
 	}
+
 }
+
+void PhotoCamera::DrawSprite()
+{
+	int remainingShutter = shutterLimitCountMax - shutterCount;
+
+	// 表示するのは1枚だけ
+	if (remainingShutter >= 0 && !shutterRests_.empty()) {
+		float x = 10.0f;
+		float y = 15.0f;
+		shutterRests_[0]->SetPosition(Vector2(x, y));
+		shutterRests_[0]->Draw();
+	}
+
+	// ビットマップフォントのスプライト描画
+	bitmapFont->Draw();
+}
+
+
 
 void PhotoCamera::Finalize()
 {
@@ -146,30 +198,54 @@ void PhotoCamera::Finalize()
 
 void PhotoCamera::Move()
 {
+
+	Vector2 input = { 0, 0 };
+
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-		position.y++;
+		input.y++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
-		position.y--;
+		input.y--;
 	} else if (Input::GetInstance()->TriggerKey(DIK_D)) {
-		position.x++;
+		input.x++;
 	} else if (Input::GetInstance()->TriggerKey(DIK_A)) {
-		position.x--;
+		input.x--;
 	}
 #endif // _DEBUG
 
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_UP)) {
-		position.y++;
+		input.y++;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
-		position.y--;
+		input.y--;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_RIGHT)) {
-		position.x++;
+		input.x++;
 	} else if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_DPAD_LEFT)) {
-		position.x--;
+		input.x--;
 	}
 
-	// フォトカメラの配置を変更させる
-	object3D->SetTranslate(Vector3(position.x, position.y, 0));
+	// 十字キー・キーボードでも targetPos 更新
+	if ((input.x != 0 || input.y != 0) && !isMoving) {
+		targetPos.x += input.x;
+		targetPos.y += input.y;
+		moveTimer = 0.0f;
+		isMoving = true;
+	}
+
+	// イージング補間
+	if (isMoving) {
+		moveTimer += moveSpeed;
+		if (moveTimer >= 1.0f) {
+			moveTimer = 1.0f;
+			isMoving = false;
+			currentPos = targetPos;
+		} else {
+			currentPos = Easing::EaseLerp(currentPos, targetPos, moveTimer, Easing::EaseOutQuad);
+		}
+	}
+
+
+	// イージング結果を object3D に反映
+	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, 0));
 
 	// photo_ConvertYの代わりにposition.yをそのまま使用
 	for (size_t i = 0; i < blocks.size(); ++i) {
@@ -178,10 +254,9 @@ void PhotoCamera::Move()
 		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
 		blocks[i]->SetObject3DPosiition(blockPosition);
 	}
+	position = targetPos;
 
 }
-
-
 
 void PhotoCamera::Copy() {
 	// マップデータが読み込めていないときはコピー不可
@@ -252,7 +327,6 @@ void PhotoCamera::Paste()
 	isFirstPasted = true;
 }
 
-
 void PhotoCamera::DrawImGui()
 {
 	// ImGuiの描画コードを追加
@@ -262,6 +336,12 @@ void PhotoCamera::DrawImGui()
 	ImGui::Text("Camera Position: (%.2f, %.2f)", position.x, position.y);
 	ImGui::Text("Camera ConvertY: %d", photo_ConvertY);
 	ImGui::Separator();
+
+	//イージング用
+	ImGui::DragFloat("Move Speed", &moveSpeed, 0.01f, 0.0f, 1.0f);
+	//movetimer
+	ImGui::DragFloat("Move Timer", &moveTimer, 0.01f, 0.0f, 1.0f);
+
 
 	// カメラのサイズを表示
 	ImGui::Text("Camera Size: (%d, %d)", cameraSizeX, cameraSizeY);
@@ -308,4 +388,56 @@ void PhotoCamera::DrawImGui()
 	}
 
 	ImGui::End();
+
+	ImGui::Begin("ShutterCountSprite");
+
+	// シャッター回数の情報を表示
+	ImGui::Text("Shutter Count Information");
+	ImGui::Separator();
+	ImGui::Text("Current Shutter Count: %d", shutterCount);
+	ImGui::Text("Shutter Limit: %d", shutterLimitCountMax);
+	ImGui::Text("Remaining Shutter Count: %d", shutterLimitCountMax - shutterCount);
+
+	// プログレスバーで残りシャッター回数を視覚化
+	float progress = static_cast<float>(shutterCount) / static_cast<float>(shutterLimitCountMax);
+	ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f), "Usage");
+
+	ImGui::End();
+
+	static int stickCoolTimeX = 0;
+	static int stickCoolTimeY = 0;
+
+	float stickX = Input::GetInstance()->GetGamePadStickX();
+	float stickY = Input::GetInstance()->GetGamePadStickY();
+
+	const float threshold = 0.5f;
+	const int maxCoolTime = 10;
+
+	if (std::abs(stickX) > threshold) {
+		if (stickCoolTimeX <= 0 && !isMoving) {
+			targetPos.x += (stickX > 0) ? 1 : -1;
+			moveTimer = 0.0f;
+			isMoving = true;
+			stickCoolTimeX = maxCoolTime;
+		} else {
+			stickCoolTimeX--;
+		}
+	} else {
+		stickCoolTimeX = 0;
+	}
+
+	if (std::abs(stickY) > threshold) {
+		if (stickCoolTimeY <= 0 && !isMoving) {
+			targetPos.y += (stickY > 0) ? 1 : -1;
+			moveTimer = 0.0f;
+			isMoving = true;
+			stickCoolTimeY = maxCoolTime;
+		} else {
+			stickCoolTimeY--;
+		}
+	} else {
+		stickCoolTimeY = 0;
+	}
+
+
 }

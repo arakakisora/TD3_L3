@@ -45,6 +45,10 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
 	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
+	// 天球モデル
+	ModelManager::GetInstans()->LoadModel("backPlane.obj");
+	// フォトカメラフレーム
+	ModelManager::GetInstans()->LoadModel("Frame.obj");
 
 	//チュートリアルテキスト
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial1.obj");
@@ -91,17 +95,25 @@ void GamePlayScene::Initialize()
 	case 2: stagePath = "MapData/mapp3.csv"; break;
 	}
 
+	skydome_ = make_unique<Object3D>();
+	skydome_->Initialize(Object3DCommon::GetInstance());
+	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
+	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	skydome_->SetModel("backPlane.obj");
+
+
 	map = new Map;
 	map->LoadMapChipCsv(stagePath);
 	map->Initialize();
 
-	//playerの生成	
+
+	//playerの生成
 	player = std::make_unique<Player>();
 	object3DPlayer = new Object3D();
 	Vector3 playerPostion = Vector3((float)map->GetPlayerStartX(), (float)map->GetPlayerStartY(), 0.0f);
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 	object3DPlayer->SetModel("Player.obj");
-	object3DPlayer->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	object3DPlayer->SetScale(Vector3{ 0.1f,0.1f,0.1f });
 	player->SetMapChipField(map);
 	player->Initialize(object3DPlayer, playerPostion);
 	player->SetDeathHeight(0.0f);
@@ -280,7 +292,10 @@ void GamePlayScene::Initialize()
 	//gameCamera_ = new ObjectCamera();
 	//gameCamera_->Initialize(map);
 	photoCamera = new PhotoCamera;
-	photoCamera->Initialize();
+	photoCamera->Initialize(map);
+
+	
+
 }
 
 void GamePlayScene::Finalize()
@@ -303,6 +318,11 @@ void GamePlayScene::Update()
 {
 	//カメラの更新
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
+
+	// 天球の更新
+	skydomerotate+=0.0f;
+	skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
+	skydome_->Update();
 
 	// ゲームカメラ更新処理
 	//gameCamera_->Update();
@@ -621,9 +641,12 @@ void GamePlayScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
+	// 天球の描画
+	skydome_->Draw();
+
 	// ゲームカメラ
 	//gameCamera_->Draw();
-	photoCamera->Draw();
+	photoCamera->Draw3DObject();
 	////プレイヤー
 	player->Draw();
 
@@ -686,6 +709,10 @@ void GamePlayScene::Draw()
 		OperationtextToru->Draw();
 		OperationtextHaiti->Draw();
 	}
+
+	// フォトカメラ内のスプライト描画
+	photoCamera->DrawSprite();
+
 #pragma endregion
 }
 

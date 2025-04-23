@@ -28,6 +28,9 @@ struct OperationText {
 	Vector2 size;
 };
 
+
+#include "BitmapFont.h"
+
 class GamePlayScene :public BaseScene
 {
 public:
@@ -89,6 +92,7 @@ private:
 
 	PhotoCamera* photoCamera;
 
+
 	bool tutorial1_2 = false;
 	bool tutorial3_4 = false;
 	bool tutorial5 = false;
@@ -100,5 +104,10 @@ private:
 	bool cameraMoved = false;
 	bool cameraCopied = false;
 	bool cameraPaseted = false;
+
+	// 天球モデル
+	unique_ptr<Object3D> skydome_ = nullptr;
+	float skydomerotate;
+
 };
 
