@@ -6,6 +6,7 @@
 #include "TextureManager.h"
 #include "SpriteCommon.h"
 #include "Easing.h"
+
 // MAPクラスとのループキャストに注意
 void PhotoCamera::Initialize(Map* map)
 {
@@ -14,7 +15,7 @@ void PhotoCamera::Initialize(Map* map)
 	object3D = make_unique<Object3D>();
 	object3D->Initialize(Object3DCommon::GetInstance());
 	// @枠組みのモデルを用意するように
-	object3D->SetModel("Player.obj");
+	object3D->SetModel("Frame.obj");
 	// @値を後に調整する
 	object3D->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	position = Vector2{ 2,13 };
@@ -30,7 +31,7 @@ void PhotoCamera::Initialize(Map* map)
 	for (int i = 0; i < (int)shutterLimitCountMax; ++i) {
 		auto shutter_ = make_unique<Sprite>();
 		shutter_->Initialize(SpriteCommon::GetInstance(), "Resources/shutter.png");
-		shutter_->SetSize({ 100.0f,100.0f });
+		shutter_->SetSize({ 70.0f,70.0f });
 		shutter_->SetRotation(0.0f);
 		shutter_->setColor({ 1.0f,1.0f,1.0f,1.0f });
 		shutterRests_.push_back(move(shutter_));
@@ -40,7 +41,9 @@ void PhotoCamera::Initialize(Map* map)
 	moveTimer = 1.0f;
 	isMoving = false;
 
-
+	// ビットマップフォント
+	bitmapFont = make_unique<BitmapFont>();
+	bitmapFont->Initialize();
 
 
 }
@@ -119,7 +122,8 @@ void PhotoCamera::Update(Map* map)
 			Paste();
 		}
 	}
-
+	// ビットマップフォントの更新処理
+	bitmapFont->Update(shutterLimitCountMax-shutterCount);
 	// フォトカメラの枠モデルの更新
 	object3D->Update();
 
@@ -127,6 +131,7 @@ void PhotoCamera::Update(Map* map)
 	for (auto& block : blocks) {
 		block->Update();
 	}
+
 #ifdef _DEBUG
 	// ImGuiの描画
 	DrawImGui();
@@ -157,14 +162,18 @@ void PhotoCamera::DrawSprite()
 {
 	int remainingShutter = shutterLimitCountMax - shutterCount;
 
-	// 表示するのは残っているシャッター枚数分だけ
-	for (int i = 0; i < remainingShutter && i < (int)shutterRests_.size(); ++i) {
-		float x = 10.0f + i * 50.0f;
-		float y = 10.0f;
-		shutterRests_[i]->SetPosition(Vector2(x, y));
-		shutterRests_[i]->Draw();
+	// 表示するのは1枚だけ
+	if (remainingShutter >= 0 && !shutterRests_.empty()) {
+		float x = 10.0f;
+		float y = 15.0f;
+		shutterRests_[0]->SetPosition(Vector2(x, y));
+		shutterRests_[0]->Draw();
 	}
+
+	// ビットマップフォントのスプライト描画
+	bitmapFont->Draw();
 }
+
 
 
 void PhotoCamera::Finalize()

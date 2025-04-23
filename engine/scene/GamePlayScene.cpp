@@ -46,6 +46,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
 	// 天球モデル
 	ModelManager::GetInstans()->LoadModel("backPlane.obj");
+	// フォトカメラフレーム
+	ModelManager::GetInstans()->LoadModel("Frame.obj");
 
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
@@ -92,9 +94,7 @@ void GamePlayScene::Initialize()
 	photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
 
-	// ビットマップフォント
-	bitmapFont = make_unique<BitmapFont>();
-	bitmapFont->Initialize((uint32_t)1);
+	
 
 }
 
@@ -129,8 +129,7 @@ void GamePlayScene::Update()
 	//gameCamera_->Update();
 	photoCamera->Update(map);
 
-	// ビットマップフォントの更新処理
-	bitmapFont->Update();
+	
 	
 	map->Update();
 
@@ -202,8 +201,6 @@ void GamePlayScene::Draw()
 	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
 
-	// ビットマップフォントのスプライト描画
-	bitmapFont->Draw();
 #pragma endregion
 }
 
