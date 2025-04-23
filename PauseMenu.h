@@ -34,8 +34,6 @@ private:
 	//ポーズ画面のオブジェクト
 	std::unique_ptr<Object3D>object;
 
-	std::unique_ptr<Object3D>object3;
-
 	// テキストオブジェクトのリスト
 	std::vector<std::unique_ptr<Object3D>> TextObjects;
 	Transform texttransform[3]{};
