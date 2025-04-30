@@ -362,6 +362,10 @@ void PhotoCamera::Paste()
 				continue;
 			}
 
+			if (mapData.data[positionY][positionX] == MapChipType::kNCopyBlock) {
+				continue;
+			}
+
 			mapData.data[positionY][positionX] = type;
 			ispasted = true;
 		}
