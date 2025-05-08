@@ -78,7 +78,7 @@ void PhotoCamera::Update(Map* map)
 #ifdef _DEBUG
 			Input::GetInstance()->TriggerKey(DIK_SPACE) ||
 #endif // DEBUG
-			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER)
+			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)
 			)//LB
 		{
 
@@ -113,7 +113,7 @@ void PhotoCamera::Update(Map* map)
 			Input::GetInstance()->TriggerKey(DIK_P) ||
 #endif // _DEBUG
 
-			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {//RB
+			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_Y)) {//RB
 
 
 			// シャッター上限に達していったら使用不可
@@ -230,6 +230,41 @@ void PhotoCamera::Move()
 		isMoving = true;
 	}
 
+	// スティック移動
+	stickMove();
+
+
+
+	// イージング補間
+	if (isMoving) {
+		moveTimer += moveSpeed;
+		if (moveTimer >= 1.0f) {
+			moveTimer = 1.0f;
+			isMoving = false;
+			currentPos = targetPos;
+		} else {
+			currentPos = Easing::EaseLerp(currentPos, targetPos, moveTimer, Easing::EaseOutQuad);
+		}
+	}
+
+
+	// イージング結果を object3D に反映
+	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, 0));
+
+	// photo_ConvertYの代わりにposition.yをそのまま使用
+	for (size_t i = 0; i < blocks.size(); ++i) {
+		uint32_t x = static_cast<uint32_t>(i % cameraSizeX);
+		uint32_t y = static_cast<uint32_t>(i / cameraSizeX);
+		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
+		blocks[i]->SetObject3DPosiition(blockPosition);
+	}
+	position = targetPos;
+
+}
+
+void PhotoCamera::stickMove()
+{
+
 	static int stickCoolTimeX = 0;
 	static int stickCoolTimeY = 0;
 
@@ -265,35 +300,7 @@ void PhotoCamera::Move()
 		stickCoolTimeY = 0;
 	}
 
-
-
-	// イージング補間
-	if (isMoving) {
-		moveTimer += moveSpeed;
-		if (moveTimer >= 1.0f) {
-			moveTimer = 1.0f;
-			isMoving = false;
-			currentPos = targetPos;
-		} else {
-			currentPos = Easing::EaseLerp(currentPos, targetPos, moveTimer, Easing::EaseOutQuad);
-		}
-	}
-
-
-	// イージング結果を object3D に反映
-	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, 0));
-
-	// photo_ConvertYの代わりにposition.yをそのまま使用
-	for (size_t i = 0; i < blocks.size(); ++i) {
-		uint32_t x = static_cast<uint32_t>(i % cameraSizeX);
-		uint32_t y = static_cast<uint32_t>(i / cameraSizeX);
-		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
-		blocks[i]->SetObject3DPosiition(blockPosition);
-	}
-	position = targetPos;
-
 }
-
 void PhotoCamera::Copy() {
 	// マップデータが読み込めていないときはコピー不可
 	if (!map) return;
