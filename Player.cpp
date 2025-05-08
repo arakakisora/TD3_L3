@@ -313,6 +313,8 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kGoalUp) {
 				CheckGoal = true;
+			} else if (mapChipType == MapChipType::kGoalDown) {
+				CheckGoal = true;
 			}
 
 
