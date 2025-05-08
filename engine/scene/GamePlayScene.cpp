@@ -85,19 +85,6 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 		{"Resources/zyanpu.png",{430,655},{60,60}},
 	};
 
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_stick_l.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_b.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_a.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_lb.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_rb.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/idou.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/kirikae.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/toru.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/haiti.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/zyanpu.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/Pause.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_y.png");
-
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	std::string stagePath;

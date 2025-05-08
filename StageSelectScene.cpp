@@ -20,14 +20,6 @@ void StageSelectScene::Initialize()
 	camera_->SetTranslate({ 0,0,-50, });//カメラの位置
 	CameraManager::GetInstans()->AddCamera("maincam", camera_.get());
 
-	// UI読み込み
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_stick_l.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/idou.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_a.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/kettei.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/Pause.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_y.png");
-	
 	//モデルの読み込み				
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
