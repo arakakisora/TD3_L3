@@ -300,6 +300,8 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kGoalUp) {
 				CheckGoal = true;
+			} else if (mapChipType == MapChipType::kGoalDown) {
+				CheckGoal = true;
 			}
 
 			// 右点の判定
@@ -366,6 +368,8 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kGoalDown) {
+		CheckGoal = true;
 	}
 	// 右点の判定
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
@@ -377,6 +381,8 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
 	}
 
@@ -437,6 +443,8 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kGoalDown) {
+		CheckGoal = true;
 	}
 	// 右点の判定
 	//   左点の判定
@@ -450,6 +458,8 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
 	}
 
@@ -500,6 +510,8 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kGoalDown) {
+		CheckGoal = true;
 	}
 
 	// 右下点の判定
@@ -513,6 +525,8 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
 	}
 
@@ -561,6 +575,8 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kGoalDown) {
+		CheckGoal = true;
 	}
 
 	// hidari下点の判定
@@ -574,6 +590,8 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
+		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
 	}
 	// hit
