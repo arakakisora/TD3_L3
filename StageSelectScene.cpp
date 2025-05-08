@@ -301,10 +301,10 @@ void StageSelectScene::move() {
 
 	Vector3 Rotate = Player_->GetRotate();
 #ifdef _DEBUG
-	// キー入力による代替（右：Dキー、左：Aキー）
-	if (Input::GetInstance()->PushKey(DIK_D)) {
+	// キー入力による代替
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
 		rightStickX = 1.0f;
-	} else if (Input::GetInstance()->PushKey(DIK_A)) {
+	} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
 		rightStickX = -1.0f;
 	}
 #endif // _DEBUG
