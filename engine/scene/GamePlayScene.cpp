@@ -511,7 +511,24 @@ void GamePlayScene::Update()
 	// ポーズ
 	pauseMenu->Update();
 
+	//リセット
+	if (Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
+		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 
+		holdTime += deltaTime;
+
+		if (holdTime >= holdDuration) {
+			holdTime = 0.0f;
+
+			int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+			SceneManager::GetInstance()->SetStageIndex(stageIndex);
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+		}
+
+	} else {
+		//離されたらタイマーをリセット
+		holdTime = 0.0f;
+	}
 #ifdef _DEBUG
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {

@@ -114,5 +114,10 @@ private:
 
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
+
+	//リセット用タイマー
+    float holdTime = 0.0f;
+	const float holdDuration = 3.0f;
+	const float deltaTime = 1.0f / 60.0f;
 };
 
