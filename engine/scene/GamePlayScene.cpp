@@ -316,6 +316,9 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	pauseMenu->Initialize(Object3DCommon::GetInstance(), true);
 	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
+	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.StartFadeIn();
+
 }
 
 void GamePlayScene::Finalize()
@@ -339,6 +342,8 @@ void GamePlayScene::Update()
 
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
+		// フェード更新
+		fadeManager_.Update();
 
 		//カメラの更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
@@ -353,8 +358,21 @@ void GamePlayScene::Update()
 		photoCamera->Update(map);
 
 		map->Update();
-		////プレイヤーの更新
+		//プレイヤーの更新
 		player->Update();
+
+		if (player->GetCheckGoal() && !isfadesense_) {
+			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -7 });
+			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+			// フェードアウト開始
+			fadeManager_.StartFadeOut();
+			isfadesense_ = true;  // 一度だけ行う
+		}
+
+		if (fadeManager_.IsFadeOutFinished()) {
+			// シーン切り替え
+			SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
+		}
 
 		//チュートリアル表示制御//map1
 		if (SceneManager::GetInstance()->GetStageIndex() == 0) {
@@ -781,6 +799,9 @@ void GamePlayScene::Draw()
 
 	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
+	
+	// フェード描画
+	fadeManager_.Draw();
 
 #pragma endregion
 }
