@@ -53,7 +53,7 @@ void StageSelectScene::Initialize()
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
 	Player_->SetModel("playercharacter.obj");
-	Player_->SetTranslate(Vector3(0.0f, -2.0f, 0.0f));	
+	Player_->SetTranslate(Vector3(0.0f, -2.5f, 0.0f));	
 	Player_->SetLighting(true);
 	Player_->SetDirectionalLightEnable(true);
 	Player_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
@@ -72,30 +72,13 @@ void StageSelectScene::Initialize()
 		} else {
 			newObject->SetModel("StageSelect/Stage01.obj");
 		}
-		newObject->SetTranslate(Vector3(7.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
+		newObject->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 		newObject->SetLighting(false);
+		newObject->SetScale(Vector3(1.5f,1.5f,1.5f));
 		stageObjects_.push_back(std::move(newObject));
 	}
-	// 作成してでリストに追加
-	for (uint32_t i = 0; i < MaxSelectIndex_; ++i) {
-		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
-		newObject->Initialize(Object3DCommon::GetInstance());
-		if (i == 0) {
-			newObject->SetModel("StageSelect/Text_1-1.obj");
-		} else if (i == 1) {
-			newObject->SetModel("StageSelect/Text_1-2.obj");
-		} else if (i == 2) {
-			newObject->SetModel("StageSelect/Text_1-3.obj");
-		} else {
-			newObject->SetModel("StageSelect/Text_1-1.obj");
-		}
-		newObject->SetTranslate(Vector3(7.0f * i, 1.8f, 0.0f)); // X座標を変更して配置
-		newObject->SetScale(Vector3(1.5f,1.5f,1.5f));
-		newObject->SetLighting(false);
-		textoObjects_.push_back(std::move(newObject));
-	}
 
-	FollowTargetposition = { 0.0f,0.0f,-15.0f };
+	FollowTargetposition = { 0.0f,1.0f,-20.0f };
 
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(Player_, FollowTargetposition);
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
@@ -205,7 +188,8 @@ void StageSelectScene::Update()
 
 	} else {
 		// ▼ カメラを引く処理をここにも追加 ▼
-		FollowTargetposition.z = -30.0f;
+		FollowTargetposition.y = 1.0f;
+		FollowTargetposition.z = -20.0f;
 		Camera* activeCam = CameraManager::GetInstans()->GetActiveCamera();
 		if (activeCam == CameraManager::GetInstans()->GetCamera("maincam")) {
 			activeCam->SetFollowTarget(Player_, FollowTargetposition);
@@ -224,10 +208,6 @@ void StageSelectScene::Update()
 
 	for (std::unique_ptr<Object3D>& stage : stageObjects_) {
 		stage->Update();
-	}
-
-	for (std::unique_ptr<Object3D>& text : textoObjects_) {
-		text->Update();
 	}
 
 	// UI
@@ -288,10 +268,6 @@ void StageSelectScene::Draw() {
 		stage->Draw();
 	}
 
-	for (std::unique_ptr<Object3D>& text : textoObjects_) {
-		text->Draw();
-	}
-
 
 	//ポーズメニュー
 	pauseMenu->Draw();
@@ -333,6 +309,14 @@ void StageSelectScene::move() {
 	const float stickThreshold = 0.5f;
 
 	Vector3 Rotate = Player_->GetRotate();
+#ifdef _DEBUG
+	// キー入力による代替（右：Dキー、左：Aキー）
+	if (Input::GetInstance()->PushKey(DIK_D)) {
+		rightStickX = 1.0f;
+	} else if (Input::GetInstance()->PushKey(DIK_A)) {
+		rightStickX = -1.0f;
+	}
+#endif // _DEBUG
 
 	// (右に移動)
 	if ((rightStickX > stickThreshold || (continueMove && rightStickX > stickThreshold))
@@ -382,7 +366,7 @@ void StageSelectScene::move() {
 		Vector3 newPos = SmoothLerp(startPos_, endPos_, easedValue);
 
 		// mainObject の y 座標を常に -2.0f に設定
-		newPos.y = -2.0f;
+		newPos.y = -2.5f;
 
 		// メインオブジェクトを移動
 		Player_->SetTranslate(newPos);
@@ -390,7 +374,8 @@ void StageSelectScene::move() {
 		// カメラが "main" のときだけカメラの位置更新
 		Camera* activeCam = CameraManager::GetInstans()->GetActiveCamera();
 		if (activeCam == CameraManager::GetInstans()->GetCamera("maincam")) {
-			FollowTargetposition.z = -30.0f;
+			FollowTargetposition.y = 1.0f;
+			FollowTargetposition.z = -20.0f;
 			activeCam->SetFollowTarget(Player_, FollowTargetposition);
 		}
 
@@ -398,13 +383,15 @@ void StageSelectScene::move() {
 		if (easingProgress_ >= 1.0f) {
 			easingmoveFlag_ = false;
 
-			// プレイヤーの回転を元に戻す
+			// プレイヤーの回転をリセット
 			Player_->SetRotate(Vector3(0.0f, 180.0f * (DirectX::XM_PI / 180.0f), 0.0f));
 
-			// スティックがニュートラルならフォロー位置をリセット
+			// スティックがニュートラルならフォロー位置もリセット
 			if (fabs(rightStickX) < stickThreshold) {
-				FollowTargetposition.z = -15.0f;
+				FollowTargetposition.y = 1.0f;
+				FollowTargetposition.z = -20.0f;
 			}
+			// フォローターゲットを再設定（Z位置が変わったときのみでもOK）
 			activeCam->SetFollowTarget(Player_, FollowTargetposition);
 		}
 	} else {
@@ -440,6 +427,27 @@ void StageSelectScene::moveChangeScene() {
 			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
 			easingProgress_ = 0.0f;  // イージング開始
 		}
+
+#ifdef _DEBUG
+		if(Input::GetInstance()->PushKey(DIK_SPACE)) {
+			easingsceneFlag_ = true;
+			easingmoveFlag_ = true;
+
+			// stageObjects_ の現在位置にカメラを移動
+			Vector3 selectObjectPos = stageObjects_[currentIndex_]->GetTranslate();
+			// mainObject の位置を stageObjects_ の位置に設定
+			Player_->SetTranslate(selectObjectPos);
+			// カメラのターゲットを現在選択されているオブジェクトに設定
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stageObjects_[currentIndex_].get(), { 0, 0, -15 });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+
+			// 開始位置
+			startPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, -15.0f);
+			// 終了位置
+			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
+			easingProgress_ = 0.0f;  // イージング開始
+		}
+#endif // _DEBUG
 	}
 
 	if (easingsceneFlag_) {
@@ -478,22 +486,7 @@ void StageSelectScene::moveChangeScene() {
 
 			SceneManager::GetInstance()->SetStageIndex(currentIndex_);
 			// シーン変更（必要に応じてシーン変更を実行）
-			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
-
-			/* 以前のコード
-
-			
-
-			// ステージによってシーン遷移
-			if (currentIndex_ == 0) {                                  // Stage_01
-				// シーン変更（必要に応じてシーン変更を実行）
-				SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
-			} else if (currentIndex_ == 1) {                           // Stage_02
-				// シーン変更（必要に応じてシーン変更を実行）
-				SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
-			}
-			*/
-      
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");      
 		}
 	}
 }
