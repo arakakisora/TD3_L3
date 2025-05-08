@@ -87,6 +87,8 @@ public:
 
 	bool GetcamerMode() { return CamerMode; }// カメラモード取得
 
+	bool GetCheckGoal() { return CheckGoal; }
+
 	Vector3 GetWorldPosition() {
 
 		Vector3 worldPos;

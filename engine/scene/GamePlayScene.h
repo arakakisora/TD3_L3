@@ -21,7 +21,7 @@
 #include "PauseMenu.h"
 
 #include <array>
-
+#include"FadeManager.h"
 
 struct OperationText {
 	std::string texturePath;
@@ -111,8 +111,12 @@ private:
 	unique_ptr<Object3D> skydome_ = nullptr;
 	float skydomerotate;
 
-
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
+	
+	// フェードアウト
+	FadeManager fadeManager_;
+	// 切り替えフラグ:
+	bool isfadesense_ = false;
 };
 

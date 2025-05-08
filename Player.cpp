@@ -91,10 +91,10 @@ void Player::Update() {
 	////PrayerTurn();
 	object3D_->Update();
 
-	// ゴールフラグがたったらクリアシーンに移動
-	if (CheckGoal) {
-		SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
-	}
+	//// ゴールフラグがたったらクリアシーンに移動
+	//if (CheckGoal) {
+	//	//SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
+	//}
 }
 
 void Player::Draw() {
