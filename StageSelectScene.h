@@ -74,7 +74,7 @@ public:
 	// ステージ選択オブジェクトのリスト
 	std::vector<std::unique_ptr<Object3D>> stageObjects_;
 	// テキストオブジェクトのリスト
-	std::vector<std::unique_ptr<Object3D>> textoObjects_;
+	//std::vector<std::unique_ptr<Object3D>> textoObjects_;
 	// 最大ステージ数
 	uint32_t MaxSelectIndex_ = 3;
 	// 現在のステージ
