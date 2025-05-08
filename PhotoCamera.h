@@ -21,6 +21,10 @@ public:
 	void Finalize();
 	// カメラの移動
 	void Move();
+
+	//コントローラー操作
+	void stickMove();
+	
 	// マップデータのコピー
 	void Copy();
 
@@ -29,6 +33,8 @@ public:
 
 	// imguiの描画
 	void DrawImGui();
+
+
 
 public:	// Setter / Getter
 	// 変更したマップデータをmapにセット
@@ -82,7 +88,7 @@ private:
 	MapChipType mapChipType;
 
 	bool CamerMode = false;
-	
+
 	// カメラサイズ
 	uint32_t cameraSizeX = 2;
 	uint32_t cameraSizeY = 2;

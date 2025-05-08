@@ -221,7 +221,7 @@ void PauseMenu::ControllerUpdate() {
 	bool isPauseAnimationFinished = (easeTimer_ >= 1.0f || easeTimer_ <= 0.0f);
 
 	// キーを押したらフラグオン(仮)
-	if (isPauseAnimationFinished && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_Y)) {
+	if (isPauseAnimationFinished && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_START)) {
 		isPaused_ = !isPaused_;
 		if (isOperation_) {
 			isOperation_ = false;
