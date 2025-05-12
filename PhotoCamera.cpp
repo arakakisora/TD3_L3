@@ -19,7 +19,7 @@ void PhotoCamera::Initialize(Map* map)
 	// @値を後に調整する
 	object3D->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	position = Vector2{ 2,13 };
-	object3D->SetTranslate(Vector3(position.x, position.y - 1, 0));
+	object3D->SetTranslate(Vector3(position.x, position.y - 1, -30.0f));
 	object3D->SetRotate(Vector3{ 0,0,0 });
   
 	initialPos = position;
@@ -281,7 +281,7 @@ void PhotoCamera::Move()
 
 
 	// イージング結果を object3D に反映
-	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, 0));
+	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, -3.0f));
 
 	// photo_ConvertYの代わりにposition.yをそのまま使用
 	for (size_t i = 0; i < blocks.size(); ++i) {
