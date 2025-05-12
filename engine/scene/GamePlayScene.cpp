@@ -71,7 +71,7 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 
 	//操作説明UI
-
+	/*
 	std::vector<OperationText>spriteInfos = {
 		{"Resources/xbox_stick_l.png",{90,655},{70,70}},
 		{"Resources/xbox_button_color_b.png",{557,655},{70,70}},
@@ -84,7 +84,7 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 		{"Resources/haiti.png",{1143,655},{60,60}},
 		{"Resources/zyanpu.png",{430,655},{60,60}},
 	};
-
+	*/
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	std::string stagePath;
@@ -251,12 +251,12 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	OperationtextButtonA->SetSize(Vector2(70, 70));
 
 	OperationtextLB = std::make_unique<Sprite>();
-	OperationtextLB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_lb.png");
+	OperationtextLB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_x.png");
 	OperationtextLB->SetPosition(Vector2(826, 655));
 	OperationtextLB->SetSize(Vector2(70, 70));
 
 	OperationtextRB = std::make_unique<Sprite>();
-	OperationtextRB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_rb.png");
+	OperationtextRB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
 	OperationtextRB->SetPosition(Vector2(1039, 655));
 	OperationtextRB->SetSize(Vector2(70, 70));
 
@@ -292,7 +292,7 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 			newSprite->SetPosition(Vector2(1050.0f, 15.0f));
 			newSprite->SetSize(Vector2(150, 50));
 		} else if (i == 1) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_menu.png");
 			newSprite->SetPosition(Vector2(1210.0f, 5.0f));
 			newSprite->SetSize(Vector2(70, 70));
 		}
