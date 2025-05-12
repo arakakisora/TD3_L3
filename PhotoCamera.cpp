@@ -402,42 +402,54 @@ void PhotoCamera::Paste()
 	if (!map) return;
 	// コピーデータがないときはペースト不可
 	if (copyData.empty()) return;
-	//貼り付けたか
+
+	// 貼り付けたかどうかのフラグ
 	bool ispasted = false;
+
 	// コピーデータをマップデータにペースト
 	for (uint32_t y = 0; y < cameraSizeY; ++y) {
 		for (uint32_t x = 0; x < cameraSizeX; ++x) {
 			MapChipType type = copyData[y][x];
 
-			if (type == MapChipType::kNCopyBlock) {
+			// コピー元のデータが貼り付け禁止またはゴールならスキップ
+			if (type == MapChipType::kNCopyBlock ||
+				type == MapChipType::kGoalUp ||
+				type == MapChipType::kGoalDown) {
 				continue;
 			}
+
 			int positionX = static_cast<int>(position.x) + x;
 			int positionY = static_cast<int>(Map::kNumBlockVirtical - position.y - 1) + y;
 
-			// マップの範囲外をチェック
-			if (positionX < 0 || positionY < 0 || positionX >= mapData.data[0].size() || positionY >= mapData.data.size()) {
+			// マップの範囲外チェック
+			if (positionX < 0 || positionY < 0 ||
+				positionX >= mapData.data[0].size() ||
+				positionY >= mapData.data.size()) {
 				continue;
 			}
 
-			if (mapData.data[positionY][positionX] == MapChipType::kNCopyBlock) {
+			// 貼り付け先が貼り付け禁止ブロック or ゴールならスキップ
+			MapChipType target = mapData.data[positionY][positionX];
+			if (target == MapChipType::kNCopyBlock ||
+				target == MapChipType::kGoalUp ||
+				target == MapChipType::kGoalDown) {
 				continue;
 			}
 
+			// 貼り付け実行
 			mapData.data[positionY][positionX] = type;
 			ispasted = true;
 		}
 	}
 
+	// 一つでも貼り付けていたら、マップ更新とカウンタ更新
 	if (ispasted) {
-		// 変更したマップデータをマップにセット
 		map->SetMap(mapData);
-		// シャッターの回数をプラス
 		shutterCount++;
-		//初回ペーストしたか
 		isFirstPasted = true;
 	}
 }
+
 
 void PhotoCamera::DrawImGui()
 {
