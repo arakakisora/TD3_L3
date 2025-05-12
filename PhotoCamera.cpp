@@ -21,9 +21,9 @@ void PhotoCamera::Initialize(Map* map)
 	position = Vector2{ 2,13 };
 	object3D->SetTranslate(Vector3(position.x, position.y - 1, -30.0f));
 	object3D->SetRotate(Vector3{ 0,0,0 });
-  
+
 	initialPos = position;
-	
+
 	isFirstCopied = false;
 	isFirstPasted = false;
 
@@ -126,7 +126,7 @@ void PhotoCamera::Update(Map* map)
 		}
 	}
 	// ビットマップフォントの更新処理
-	bitmapFont->Update(shutterLimitCountMax-shutterCount);
+	bitmapFont->Update(shutterLimitCountMax - shutterCount);
 	// フォトカメラの枠モデルの更新
 	object3D->Update();
 
@@ -222,13 +222,21 @@ void PhotoCamera::Move()
 		input.x--;
 	}
 
-	// 十字キー・キーボードでも targetPos 更新
 	if ((input.x != 0 || input.y != 0) && !isMoving) {
-		targetPos.x += input.x;
-		targetPos.y += input.y;
-		moveTimer = 0.0f;
-		isMoving = true;
+		Vector2 nextTargetPos = targetPos;
+		nextTargetPos.x += input.x;
+		nextTargetPos.y += input.y;
+
+		// 固定された範囲で移動制限
+		if (nextTargetPos.x >= 1 && nextTargetPos.x <= 22 &&
+			nextTargetPos.y >= 13 && nextTargetPos.y <= 23) {
+			targetPos = nextTargetPos;
+			moveTimer = 0.0f;
+			isMoving = true;
+		}
 	}
+
+
 
 	// スティック移動
 	stickMove();
@@ -274,11 +282,19 @@ void PhotoCamera::stickMove()
 	const float threshold = 0.5f;
 	const int maxCoolTime = 10;
 
+	Vector2 nextTargetPos = targetPos;
+
+	// X方向
 	if (std::abs(stickX) > threshold) {
 		if (stickCoolTimeX <= 0 && !isMoving) {
-			targetPos.x += (stickX > 0) ? 1 : -1;
-			moveTimer = 0.0f;
-			isMoving = true;
+			nextTargetPos.x += (stickX > 0) ? 1 : -1;
+
+			if (nextTargetPos.x >= 1 && nextTargetPos.x <= 22) {
+				targetPos.x = nextTargetPos.x;
+				moveTimer = 0.0f;
+				isMoving = true;
+			}
+
 			stickCoolTimeX = maxCoolTime;
 		} else {
 			stickCoolTimeX--;
@@ -287,11 +303,17 @@ void PhotoCamera::stickMove()
 		stickCoolTimeX = 0;
 	}
 
+	// Y方向
 	if (std::abs(stickY) > threshold) {
 		if (stickCoolTimeY <= 0 && !isMoving) {
-			targetPos.y += (stickY > 0) ? 1 : -1;
-			moveTimer = 0.0f;
-			isMoving = true;
+			nextTargetPos.y += (stickY > 0) ? 1 : -1;
+
+			if (nextTargetPos.y >= 13 && nextTargetPos.y <= 23) {
+				targetPos.y = nextTargetPos.y;
+				moveTimer = 0.0f;
+				isMoving = true;
+			}
+
 			stickCoolTimeY = maxCoolTime;
 		} else {
 			stickCoolTimeY--;
@@ -299,6 +321,7 @@ void PhotoCamera::stickMove()
 	} else {
 		stickCoolTimeY = 0;
 	}
+
 
 
 
@@ -493,7 +516,7 @@ void PhotoCamera::DrawImGui()
 
 	ImGui::End();
 
-	
+
 
 
 }
