@@ -281,7 +281,7 @@ void PhotoCamera::Move()
 
 
 	// イージング結果を object3D に反映
-	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, -3.0f));
+	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, -1.0f));
 
 	// photo_ConvertYの代わりにposition.yをそのまま使用
 	for (size_t i = 0; i < blocks.size(); ++i) {
