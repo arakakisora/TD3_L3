@@ -55,6 +55,8 @@ void TitleScene::Initialize()
 	fadeManager_.Initialize("Resources/white.png");
 	fadeManager_.StartFadeIn();
 
+	// ステージを0からに初期化
+	SceneManager::GetInstance()->SetStageIndex(0);
 }
 
 void TitleScene::Finalize()
