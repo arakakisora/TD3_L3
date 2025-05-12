@@ -23,7 +23,7 @@ void BitmapFont::Initialize()
 		sprite->SetSize(Vector2(75.0f, 75.0f));
 		sprite->SetRotation(0.0f);
 		sprite->setColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		sprite->SetPosition(Vector2(130.0f, 10.0f));
+		sprite->SetPosition(Vector2(130.0f, 17.0f));
 		sprites.push_back(move(sprite));
 	}
 

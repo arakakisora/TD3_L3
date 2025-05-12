@@ -121,7 +121,7 @@ void StageSelectScene::Initialize()
 			newSprite->SetPosition(Vector2(15.0f, 15.0f));
 			newSprite->SetSize(Vector2(150, 50));
 		} else if (i == 1) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_menu.png");
 			newSprite->SetPosition(Vector2(170.0f, 5.0f));
 			newSprite->SetSize(Vector2(70, 70));
 		} 
