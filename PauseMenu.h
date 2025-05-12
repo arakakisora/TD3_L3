@@ -25,6 +25,7 @@ public:
 
 	void ControllerUpdate();
 
+	void PausedStart();
 
 private:
 	Object3DCommon* object3dcommon_;
@@ -53,6 +54,6 @@ private:
 
 
 	bool scenefige = false;
-
+	bool isClosing_ = false;
 };
 
