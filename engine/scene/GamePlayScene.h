@@ -77,8 +77,8 @@ private:
 	std::unique_ptr<Sprite>OperationtextStickL;
 	std::unique_ptr<Sprite>OperationtextButtonB;
 	std::unique_ptr<Sprite>OperationtextButtonA;
-	std::unique_ptr<Sprite>OperationtextLB;
-	std::unique_ptr<Sprite>OperationtextRB;
+	std::unique_ptr<Sprite>OperationtextX;
+	std::unique_ptr<Sprite>OperationtextY;
 	std::unique_ptr<Sprite>OperationtextIdou;
 	std::unique_ptr<Sprite>OperationtextKrikae;
 	std::unique_ptr<Sprite>OperationtextToru;

@@ -250,15 +250,15 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	OperationtextButtonA->SetPosition(Vector2(319, 655));
 	OperationtextButtonA->SetSize(Vector2(70, 70));
 
-	OperationtextLB = std::make_unique<Sprite>();
-	OperationtextLB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_x.png");
-	OperationtextLB->SetPosition(Vector2(826, 655));
-	OperationtextLB->SetSize(Vector2(70, 70));
+	OperationtextX = std::make_unique<Sprite>();
+	OperationtextX->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_x.png");
+	OperationtextX->SetPosition(Vector2(826, 655));
+	OperationtextX->SetSize(Vector2(70, 70));
 
-	OperationtextRB = std::make_unique<Sprite>();
-	OperationtextRB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
-	OperationtextRB->SetPosition(Vector2(1039, 655));
-	OperationtextRB->SetSize(Vector2(70, 70));
+	OperationtextY = std::make_unique<Sprite>();
+	OperationtextY->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
+	OperationtextY->SetPosition(Vector2(1039, 655));
+	OperationtextY->SetSize(Vector2(70, 70));
 
 	OperationtextIdou = std::make_unique<Sprite>();
 	OperationtextIdou->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
@@ -498,8 +498,8 @@ void GamePlayScene::Update()
 		if (photoCamera->GetCameraMode()) {
 			OperationtextStickL->Update();
 			OperationtextButtonB->Update();
-			OperationtextLB->Update();
-			OperationtextRB->Update();
+			OperationtextX->Update();
+			OperationtextY->Update();
 			OperationtextIdou->Update();
 			OperationtextKrikae->Update();
 			OperationtextToru->Update();
@@ -668,46 +668,85 @@ void GamePlayScene::Update()
 		}
 		*/
 		Vector2 uistickL = OperationtextStickL->GetPosition();
+		Vector2 uistickLsize = OperationtextStickL->GetSize();
 		Vector2 uibuttonB = OperationtextButtonB->GetPosition();
+		Vector2 uibuttonBsize = OperationtextButtonB->GetSize();
 		Vector2 uibuttonA = OperationtextButtonA->GetPosition();
-		Vector2 uiLB = OperationtextLB->GetPosition();
-		Vector2 uiRB = OperationtextRB->GetPosition();
+		Vector2 uibuttonAsize = OperationtextButtonA->GetSize();
+		Vector2 uiX = OperationtextX->GetPosition();
+		Vector2 uiXsize = OperationtextX->GetSize();
+		Vector2 uiY = OperationtextY->GetPosition();
+		Vector2 uiYsize = OperationtextY->GetSize();
 		Vector2 uitoru = OperationtextToru->GetPosition();
+		Vector2 uitorusize = OperationtextToru->GetSize();
 		Vector2 uihaiti = OperationtextHaiti->GetPosition();
+		Vector2 uihaitisize = OperationtextHaiti->GetSize();
 		Vector2 uikirikae = OperationtextKrikae->GetPosition();
+		Vector2 uikirikaesize = OperationtextKrikae->GetSize();
 		Vector2 uiidou = OperationtextIdou->GetPosition();
+		Vector2 uiidousize = OperationtextIdou->GetSize();
 		Vector2 uizyanpu = OperationtextZyanpu->GetPosition();
+		Vector2 uizyanpusize = OperationtextZyanpu->GetSize();
 		if (ImGui::DragFloat2("uiStickLtranslate", &uistickL.x), 0.01f) {
 			OperationtextStickL->SetPosition(uistickL);
+		}
+		if (ImGui::DragFloat2("uiStickLsize", &uistickLsize.x), 0.01f) {
+			OperationtextStickL->SetSize(uistickLsize);
 		}
 		if (ImGui::DragFloat2("uibuttonBtranslate", &uibuttonB.x), 0.01f) {
 			OperationtextButtonB->SetPosition(uibuttonB);
 		}
+		if (ImGui::DragFloat2("uibuttonBsize", &uibuttonBsize.x), 0.01f) {
+			OperationtextButtonB->SetSize(uibuttonBsize);
+		}
 		if (ImGui::DragFloat2("uibuttonAtranslate", &uibuttonA.x), 0.01f) {
 			OperationtextButtonA->SetPosition(uibuttonA);
 		}
-		if (ImGui::DragFloat2("uiLBtranslate", &uiLB.x), 0.01f) {
-			OperationtextLB->SetPosition(uiLB);
+		if (ImGui::DragFloat2("uibuttonAsize", &uibuttonAsize.x), 0.01f) {
+			OperationtextButtonA->SetSize(uibuttonAsize);
 		}
-		if (ImGui::DragFloat2("uiRBtranslate", &uiRB.x), 0.01f) {
-			OperationtextRB->SetPosition(uiRB);
+		if (ImGui::DragFloat2("uiXtranslate", &uiX.x), 0.01f) {
+			OperationtextX->SetPosition(uiX);
+		}
+		if (ImGui::DragFloat2("uiXsize", &uiXsize.x), 0.01f) {
+			OperationtextX->SetSize(uiXsize);
+		}
+		if (ImGui::DragFloat2("uiYtranslate", &uiY.x), 0.01f) {
+			OperationtextY->SetPosition(uiY);
+		}
+		if (ImGui::DragFloat2("uiYsize", &uiYsize.x), 0.01f) {
+			OperationtextY->SetSize(uiYsize);
 		}
 		if (ImGui::DragFloat2("uitorutranslate", &uitoru.x), 0.01f) {
 			OperationtextToru->SetPosition(uitoru);
 		}
+		if (ImGui::DragFloat2("uitorusize", &uitorusize.x), 0.01f) {
+			OperationtextToru->SetSize(uitorusize);
+		}
 		if (ImGui::DragFloat2("uihaititranslate", &uihaiti.x), 0.01f) {
 			OperationtextHaiti->SetPosition(uihaiti);
+		}
+		if (ImGui::DragFloat2("uihaitisize", &uihaitisize.x), 0.01f) {
+			OperationtextHaiti->SetSize(uihaitisize);
 		}
 		if (ImGui::DragFloat2("uikirikaetranslate", &uikirikae.x), 0.01f) {
 			OperationtextKrikae->SetPosition(uikirikae);
 		}
+		if (ImGui::DragFloat2("uikirikaesize", &uikirikaesize.x), 0.01f) {
+			OperationtextKrikae->SetSize(uikirikaesize);
+		}
 		if (ImGui::DragFloat2("uiidoutranslate", &uiidou.x), 0.01f) {
 			OperationtextIdou->SetPosition(uiidou);
+		}
+		if (ImGui::DragFloat2("uiidousize", &uiidousize.x), 0.01f) {
+			OperationtextIdou->SetSize(uiidousize);
 		}
 		if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
 			OperationtextZyanpu->SetPosition(uizyanpu);
 		}
-
+		if (ImGui::DragFloat2("uizyanpusize", &uizyanpusize.x), 0.01f) {
+			OperationtextZyanpu->SetSize(uizyanpusize);
+		}
 	}
 
 #endif // _DEBUG
@@ -785,8 +824,8 @@ void GamePlayScene::Draw()
 	if (photoCamera->GetCameraMode()) {
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();
-		OperationtextLB->Draw();
-		OperationtextRB->Draw();
+		OperationtextX->Draw();
+		OperationtextY->Draw();
 		OperationtextIdou->Draw();
 		OperationtextKrikae->Draw();
 		OperationtextToru->Draw();
