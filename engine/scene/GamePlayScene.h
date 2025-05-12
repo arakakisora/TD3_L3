@@ -124,5 +124,8 @@ private:
     float holdTime = 0.0f;
 	const float holdDuration = 1.7f;
 	const float deltaTime = 1.0f / 60.0f;
+
+
+	bool fige = false;
 };
 

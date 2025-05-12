@@ -41,10 +41,15 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
 
+	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+
+	currentIndex_ = stageIndex;
+
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
 	Player_->SetModel("playercharacter.obj");
-	Player_->SetTranslate(Vector3(0.0f, -2.5f, 0.0f));	
+	Vector3 initialPos = Vector3(9.0f * currentIndex_, -2.5f, 0.0f);
+	Player_->SetTranslate(initialPos);
 	Player_->SetLighting(true);
 	Player_->SetDirectionalLightEnable(true);
 	Player_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
