@@ -85,19 +85,6 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 		{"Resources/zyanpu.png",{430,655},{60,60}},
 	};
 
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_stick_l.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_b.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_a.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_lb.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_rb.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/idou.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/kirikae.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/toru.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/haiti.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/zyanpu.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/Pause.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_y.png");
-
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	std::string stagePath;
@@ -329,6 +316,9 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	pauseMenu->Initialize(Object3DCommon::GetInstance(), true);
 	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
+	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.StartFadeIn();
+
 }
 
 void GamePlayScene::Finalize()
@@ -352,6 +342,8 @@ void GamePlayScene::Update()
 
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
+		// フェード更新
+		fadeManager_.Update();
 
 		//カメラの更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
@@ -366,8 +358,21 @@ void GamePlayScene::Update()
 		photoCamera->Update(map);
 
 		map->Update();
-		////プレイヤーの更新
+		//プレイヤーの更新
 		player->Update();
+
+		if (player->GetCheckGoal() && !isfadesense_) {
+			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -7 });
+			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+			// フェードアウト開始
+			fadeManager_.StartFadeOut();
+			isfadesense_ = true;  // 一度だけ行う
+		}
+
+		if (fadeManager_.IsFadeOutFinished()) {
+			// シーン切り替え
+			SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
+		}
 
 		//チュートリアル表示制御//map1
 		if (SceneManager::GetInstance()->GetStageIndex() == 0) {
@@ -794,6 +799,9 @@ void GamePlayScene::Draw()
 
 	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
+	
+	// フェード描画
+	fadeManager_.Draw();
 
 #pragma endregion
 }

@@ -295,6 +295,21 @@ void GameClearScene::ControllerUpdate() {
 
 	// 範囲の最大値
 	const int maxIndex = nextsneneonthit ? 1 : 2; ;
+#ifdef _DEBUG
+	// キーボード入力
+	// 入力がしきい値を超えた瞬間だけ反応
+	if (!wasStickMoved) {
+		if (Input::GetInstance()->PushKey(DIK_RIGHT) && Selectindex < (uint32_t)maxIndex) {
+			Selectindex++;
+			wasStickMoved = true;
+			holdTimer_ = 0.0f;
+		} else if (Input::GetInstance()->PushKey(DIK_LEFT) && Selectindex > 0) {
+			Selectindex--;
+			wasStickMoved = true;
+			holdTimer_ = 0.0f;
+		}
+	}
+#endif // _DEBUG
 
 	// 入力がしきい値を超えた瞬間だけ反応
 	if (!wasStickMoved) {
@@ -318,6 +333,11 @@ void GameClearScene::ControllerUpdate() {
 	if (Selectindex == 0) {
 		ArroTextUI_->SetPosition(Vector2(325.0f, 570.0f));
 		if (Changefige) {
+#ifdef _DEBUG
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				SceneManager::GetInstance()->ChangeScene("TITELE");
+			}
+#endif // _DEBUG
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 				SceneManager::GetInstance()->ChangeScene("TITELE");
 			}
@@ -329,6 +349,11 @@ void GameClearScene::ControllerUpdate() {
 	if (Selectindex == 1) {
 		ArroTextUI_->SetPosition(Vector2(625.0f, 570.0f));
 		if (Changefige) {
+#ifdef _DEBUG
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+			}
+#endif // _DEBUG
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 			}
@@ -339,6 +364,14 @@ void GameClearScene::ControllerUpdate() {
 	if (Selectindex == 2) {
 		ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
 		if (Changefige) {
+#ifdef _DEBUG
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				if (nextStage < MaxStageIndex_) {
+					SceneManager::GetInstance()->SetStageIndex(nextStage);
+					SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+				}
+			}
+#endif // _DEBUG
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 
 				if (nextStage < MaxStageIndex_) {
