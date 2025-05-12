@@ -43,11 +43,9 @@ private:
 
 	//ポーズ開く
 	bool isPaused_ = false;
-	//操作説明表示
-	bool isOperation_ = false;
+
 	//イージングタイマー
 	float easeTimer_ = 0.0f;
-	float easeTimer2_ = 0.0f;
 
 	bool easingsceneFlag_ = false; 
 	bool easingmoveFlag_ = false;

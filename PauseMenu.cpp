@@ -80,21 +80,6 @@ void PauseMenu::Update() {
 	PausedStart();
 	// コントローラの動き
 	ControllerUpdate();
-
-	//操作説明
-	if (isOperation_) {
-		easeTimer2_ += easeSpeed;
-		if (easeTimer2_ > 1.0f) {
-			easeTimer2_ = 1.0f;
-		}
-	} else
-	{
-		easeTimer2_ -= easeSpeed;
-		if (easeTimer2_ < 0.0f) {
-			easeTimer2_ = 0.0f;
-		}
-	}
-
 }
 
 //描画
@@ -103,10 +88,6 @@ void PauseMenu::Draw() {
 	if (isPaused_) {
 		//ポーズ画面
 		object->Draw();
-		if (isOperation_) {
-			//操作説明画面
-			//object3->Draw();
-		}
 	}
 
 	for (std::unique_ptr<Object3D>& text : TextObjects) {
@@ -177,9 +158,6 @@ void PauseMenu::ControllerUpdate() {
 	// キーを押したらフラグオン
 	if (isPauseAnimationFinished && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_START)) {
 		isPaused_ = !isPaused_;
-		if (isOperation_) {
-			isOperation_ = false;
-		}
 	}
 
 	// スティックのしきい値
@@ -194,7 +172,7 @@ void PauseMenu::ControllerUpdate() {
 	// 押し始め検出
 	bool stickUpPressed = (rightStickY < -stickThreshold && prevRightStickY >= -stickThreshold);
 	bool stickDownPressed = (rightStickY > stickThreshold && prevRightStickY <= stickThreshold);
-	if (!isOperation_ && easeTimer_ ==1.0f) {
+	if (easeTimer_ ==1.0f) {
 		// 上向き
 		if (stickUpPressed && textindex < TextObjects.size() - 1 && !easingmoveFlag_ && !easingsceneFlag_) {
 			textindex++;
@@ -214,15 +192,7 @@ void PauseMenu::ControllerUpdate() {
 		//ポーズ画面を閉じる
 		if (textindex == 0 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 			isPaused_ = !isPaused_;
-			if (isOperation_) {
-				isOperation_ = false;
-			}
 		}
-
-		////ポーズ画面が出ているときWで操作説明を表示(仮)
-		//if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
-		//	isOperation_ = !isOperation_;
-		//}
 
 		//ポーズ画面が出ているときTでタイトルへ(仮)
 		if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
