@@ -318,7 +318,6 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 	fadeManager_.Initialize("Resources/white.png");
 	fadeManager_.StartFadeIn();
-
 }
 
 void GamePlayScene::Finalize()
@@ -339,7 +338,6 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::Update()
 {
-
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
 		// フェード更新
@@ -362,11 +360,18 @@ void GamePlayScene::Update()
 		player->Update();
 
 		if (player->GetCheckGoal() && !isfadesense_) {
-			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -7 });
-			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 			// フェードアウト開始
 			fadeManager_.StartFadeOut();
 			isfadesense_ = true;  // 一度だけ行う
+		}
+
+		if (isfadesense_ && fige) {
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0,0, -7.0f });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+	/*	
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 4.910f, 0.680f, -1.260f });
+			CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);*/
 		}
 
 		if (fadeManager_.IsFadeOutFinished()) {
@@ -535,6 +540,38 @@ void GamePlayScene::Update()
 		holdTime = 0.0f;
 	}
 #ifdef _DEBUG
+	ImGui::Begin("casassaa");
+	if (ImGui::CollapsingHeader("Camera Control Set", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::Button("Switch to Main Camera")) {
+			CameraManager::GetInstans()->SetActiveCamera("maincam");
+		}
+		if (ImGui::Button("Switch to Sub Camera")) {
+			CameraManager::GetInstans()->SetActiveCamera("subcam");
+		}
+
+		//カメラの位置
+		Transform cameraTransform = CameraManager::GetInstans()->GetActiveCamera()->GetTransform();
+		if (ImGui::DragFloat3("Camera Position", &cameraTransform.translate.x, 0.01f)) {
+			CameraManager::GetInstans()->GetActiveCamera()->SetTranslate(cameraTransform.translate);
+			CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
+
+		}
+		//カメラの向き
+		if (ImGui::DragFloat3("Camera Rotation", &cameraTransform.rotate.x, 0.01f)) {
+			CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
+
+			//CameraManager::GetInstans()->GetActiveCamera()->SetRotate(cameraTransform.rotate);
+		}
+
+
+		//プレイヤーディレクれくしょなるライト
+		DirectionalLight directionalLight = object3DPlayer->GetDirectionalLight();
+		if (ImGui::DragFloat3("Player Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
+			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
+		}
+	}
+	ImGui::End();
+
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
@@ -563,152 +600,156 @@ void GamePlayScene::Update()
 
 
 
-		/*
-		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
-			for (int i = 1; i <= tutorialTexts.size(); ++i) {
-				std::string label = "text" + std::to_string(i);
-				Transform t = tutorialTexts[i]->GetTransform();
-				if (ImGui::DragFloat3((label + "scale").c_str(), &t.scale.x, 0.01f) ||
-					ImGui::DragFloat3((label + "rotate").c_str(), &t.rotate.x, 0.01f) ||
-					ImGui::DragFloat3((label + "translate").c_str(), &t.translate.x, 0.01f)) {
-					tutorialTexts[i]->SetTransform(t);
-				}
-			}
-		}
-		*/
-		Transform text = Tutorialtext1->GetTransform();
-		Transform text2 = Tutorialtext2->GetTransform();
-		Transform text3 = Tutorialtext3->GetTransform();
-		Transform text4 = Tutorialtext4->GetTransform();
-		Transform text5 = Tutorialtext5->GetTransform();
-		Transform text6 = Tutorialtext6->GetTransform();
-		Transform text7 = Tutorialtext7->GetTransform();
-		Transform text8 = Tutorialtext8->GetTransform();
-		Transform text9 = Tutorialtext9->GetTransform();
-		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text1rotate", &text.rotate.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text1translate", &text.translate.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text2scale", &text2.scale.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text2rotate", &text2.rotate.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text2translate", &text2.translate.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text3scale", &text3.scale.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text3rotate", &text3.rotate.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text3translate", &text3.translate.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text4scale", &text4.scale.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text4rotate", &text4.rotate.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text4translate", &text4.translate.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text5scale", &text5.scale.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text5rotate", &text5.rotate.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text5translate", &text5.translate.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text6scale", &text6.scale.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text6rotate", &text6.rotate.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text6translate", &text6.translate.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text7scale", &text7.scale.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text7rotate", &text7.rotate.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text7translate", &text7.translate.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
-			Tutorialtext8->SetTransform(text8);
-		}
-		
-		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
-			Tutorialtext9->SetTransform(text9);
-		}
-		
-		//UI
-		/*
-		if (ImGui::CollapsingHeader("UI Translate")) {
-			for (int i = 0; i < operationTexts.size(); ++i) {
-				Vector2 pos = operationTexts[i]->GetPosition();
-				if (ImGui::DragFloat2(("Sprite" + std::to_string(i)).c_str(), &pos.x, 0.01f)) {
-					operationTexts[i]->SetPosition(pos);
-				}
-			}
-		}
-		*/
-		Vector2 uistickL = OperationtextStickL->GetPosition();
-		Vector2 uibuttonB = OperationtextButtonB->GetPosition();
-		Vector2 uibuttonA = OperationtextButtonA->GetPosition();
-		Vector2 uiLB = OperationtextLB->GetPosition();
-		Vector2 uiRB = OperationtextRB->GetPosition();
-		Vector2 uitoru = OperationtextToru->GetPosition();
-		Vector2 uihaiti = OperationtextHaiti->GetPosition();
-		Vector2 uikirikae = OperationtextKrikae->GetPosition();
-		Vector2 uiidou = OperationtextIdou->GetPosition();
-		Vector2 uizyanpu = OperationtextZyanpu->GetPosition();
-		if (ImGui::DragFloat2("uiStickLtranslate", &uistickL.x), 0.01f) {
-			OperationtextStickL->SetPosition(uistickL);
-		}
-		if (ImGui::DragFloat2("uibuttonBtranslate", &uibuttonB.x), 0.01f) {
-			OperationtextButtonB->SetPosition(uibuttonB);
-		}
-		if (ImGui::DragFloat2("uibuttonAtranslate", &uibuttonA.x), 0.01f) {
-			OperationtextButtonA->SetPosition(uibuttonA);
-		}
-		if (ImGui::DragFloat2("uiLBtranslate", &uiLB.x), 0.01f) {
-			OperationtextLB->SetPosition(uiLB);
-		}
-		if (ImGui::DragFloat2("uiRBtranslate", &uiRB.x), 0.01f) {
-			OperationtextRB->SetPosition(uiRB);
-		}
-		if (ImGui::DragFloat2("uitorutranslate", &uitoru.x), 0.01f) {
-			OperationtextToru->SetPosition(uitoru);
-		}
-		if (ImGui::DragFloat2("uihaititranslate", &uihaiti.x), 0.01f) {
-			OperationtextHaiti->SetPosition(uihaiti);
-		}
-		if (ImGui::DragFloat2("uikirikaetranslate", &uikirikae.x), 0.01f) {
-			OperationtextKrikae->SetPosition(uikirikae);
-		}
-		if (ImGui::DragFloat2("uiidoutranslate", &uiidou.x), 0.01f) {
-			OperationtextIdou->SetPosition(uiidou);
-		}
-		if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
-			OperationtextZyanpu->SetPosition(uizyanpu);
-		}
+		///*
+		//if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
+		//	for (int i = 1; i <= tutorialTexts.size(); ++i) {
+		//		std::string label = "text" + std::to_string(i);
+		//		Transform t = tutorialTexts[i]->GetTransform();
+		//		if (ImGui::DragFloat3((label + "scale").c_str(), &t.scale.x, 0.01f) ||
+		//			ImGui::DragFloat3((label + "rotate").c_str(), &t.rotate.x, 0.01f) ||
+		//			ImGui::DragFloat3((label + "translate").c_str(), &t.translate.x, 0.01f)) {
+		//			tutorialTexts[i]->SetTransform(t);
+		//		}
+		//	}
+		//}
+		//*/
+		//Transform text = Tutorialtext1->GetTransform();
+		//Transform text2 = Tutorialtext2->GetTransform();
+		//Transform text3 = Tutorialtext3->GetTransform();
+		//Transform text4 = Tutorialtext4->GetTransform();
+		//Transform text5 = Tutorialtext5->GetTransform();
+		//Transform text6 = Tutorialtext6->GetTransform();
+		//Transform text7 = Tutorialtext7->GetTransform();
+		//Transform text8 = Tutorialtext8->GetTransform();
+		//Transform text9 = Tutorialtext9->GetTransform();
+		//if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
+		//	Tutorialtext1->SetTransform(text);
+		//}
+		//if (ImGui::DragFloat3("text1rotate", &text.rotate.x, 0.01f)) {
+		//	Tutorialtext1->SetTransform(text);
+		//}
+		//if (ImGui::DragFloat3("text1translate", &text.translate.x, 0.01f)) {
+		//	Tutorialtext1->SetTransform(text);
+		//}
+		//if (ImGui::DragFloat3("text2scale", &text2.scale.x, 0.01f)) {
+		//	Tutorialtext2->SetTransform(text2);
+		//}
+		//if (ImGui::DragFloat3("text2rotate", &text2.rotate.x, 0.01f)) {
+		//	Tutorialtext2->SetTransform(text2);
+		//}
+		//if (ImGui::DragFloat3("text2translate", &text2.translate.x, 0.01f)) {
+		//	Tutorialtext2->SetTransform(text2);
+		//}
+		//if (ImGui::DragFloat3("text3scale", &text3.scale.x, 0.01f)) {
+		//	Tutorialtext3->SetTransform(text3);
+		//}
+		//if (ImGui::DragFloat3("text3rotate", &text3.rotate.x, 0.01f)) {
+		//	Tutorialtext3->SetTransform(text3);
+		//}
+		//if (ImGui::DragFloat3("text3translate", &text3.translate.x, 0.01f)) {
+		//	Tutorialtext3->SetTransform(text3);
+		//}
+		//if (ImGui::DragFloat3("text4scale", &text4.scale.x, 0.01f)) {
+		//	Tutorialtext4->SetTransform(text4);
+		//}
+		//if (ImGui::DragFloat3("text4rotate", &text4.rotate.x, 0.01f)) {
+		//	Tutorialtext4->SetTransform(text4);
+		//}
+		//if (ImGui::DragFloat3("text4translate", &text4.translate.x, 0.01f)) {
+		//	Tutorialtext4->SetTransform(text4);
+		//}
+		//if (ImGui::DragFloat3("text5scale", &text5.scale.x, 0.01f)) {
+		//	Tutorialtext5->SetTransform(text5);
+		//}
+		//if (ImGui::DragFloat3("text5rotate", &text5.rotate.x, 0.01f)) {
+		//	Tutorialtext5->SetTransform(text5);
+		//}
+		//if (ImGui::DragFloat3("text5translate", &text5.translate.x, 0.01f)) {
+		//	Tutorialtext5->SetTransform(text5);
+		//}
+		//if (ImGui::DragFloat3("text6scale", &text6.scale.x, 0.01f)) {
+		//	Tutorialtext6->SetTransform(text6);
+		//}
+		//if (ImGui::DragFloat3("text6rotate", &text6.rotate.x, 0.01f)) {
+		//	Tutorialtext6->SetTransform(text6);
+		//}
+		//if (ImGui::DragFloat3("text6translate", &text6.translate.x, 0.01f)) {
+		//	Tutorialtext6->SetTransform(text6);
+		//}
+		//if (ImGui::DragFloat3("text7scale", &text7.scale.x, 0.01f)) {
+		//	Tutorialtext7->SetTransform(text7);
+		//}
+		//if (ImGui::DragFloat3("text7rotate", &text7.rotate.x, 0.01f)) {
+		//	Tutorialtext7->SetTransform(text7);
+		//}
+		//if (ImGui::DragFloat3("text7translate", &text7.translate.x, 0.01f)) {
+		//	Tutorialtext7->SetTransform(text7);
+		//}
+		//if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
+		//	Tutorialtext8->SetTransform(text8);
+		//}
+		//
+		//if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
+		//	Tutorialtext9->SetTransform(text9);
+		//}
+		//
+		////UI
+		///*
+		//if (ImGui::CollapsingHeader("UI Translate")) {
+		//	for (int i = 0; i < operationTexts.size(); ++i) {
+		//		Vector2 pos = operationTexts[i]->GetPosition();
+		//		if (ImGui::DragFloat2(("Sprite" + std::to_string(i)).c_str(), &pos.x, 0.01f)) {
+		//			operationTexts[i]->SetPosition(pos);
+		//		}
+		//	}
+		//}
+		//*/
+		//Vector2 uistickL = OperationtextStickL->GetPosition();
+		//Vector2 uibuttonB = OperationtextButtonB->GetPosition();
+		//Vector2 uibuttonA = OperationtextButtonA->GetPosition();
+		//Vector2 uiLB = OperationtextLB->GetPosition();
+		//Vector2 uiRB = OperationtextRB->GetPosition();
+		//Vector2 uitoru = OperationtextToru->GetPosition();
+		//Vector2 uihaiti = OperationtextHaiti->GetPosition();
+		//Vector2 uikirikae = OperationtextKrikae->GetPosition();
+		//Vector2 uiidou = OperationtextIdou->GetPosition();
+		//Vector2 uizyanpu = OperationtextZyanpu->GetPosition();
+		//if (ImGui::DragFloat2("uiStickLtranslate", &uistickL.x), 0.01f) {
+		//	OperationtextStickL->SetPosition(uistickL);
+		//}
+		//if (ImGui::DragFloat2("uibuttonBtranslate", &uibuttonB.x), 0.01f) {
+		//	OperationtextButtonB->SetPosition(uibuttonB);
+		//}
+		//if (ImGui::DragFloat2("uibuttonAtranslate", &uibuttonA.x), 0.01f) {
+		//	OperationtextButtonA->SetPosition(uibuttonA);
+		//}
+		//if (ImGui::DragFloat2("uiLBtranslate", &uiLB.x), 0.01f) {
+		//	OperationtextLB->SetPosition(uiLB);
+		//}
+		//if (ImGui::DragFloat2("uiRBtranslate", &uiRB.x), 0.01f) {
+		//	OperationtextRB->SetPosition(uiRB);
+		//}
+		//if (ImGui::DragFloat2("uitorutranslate", &uitoru.x), 0.01f) {
+		//	OperationtextToru->SetPosition(uitoru);
+		//}
+		//if (ImGui::DragFloat2("uihaititranslate", &uihaiti.x), 0.01f) {
+		//	OperationtextHaiti->SetPosition(uihaiti);
+		//}
+		//if (ImGui::DragFloat2("uikirikaetranslate", &uikirikae.x), 0.01f) {
+		//	OperationtextKrikae->SetPosition(uikirikae);
+		//}
+		//if (ImGui::DragFloat2("uiidoutranslate", &uiidou.x), 0.01f) {
+		//	OperationtextIdou->SetPosition(uiidou);
+		//}
+		//if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
+		//	OperationtextZyanpu->SetPosition(uizyanpu);
+		//}
 
 	}
+
+	//ImGui::Begin("Clear");
+	//ImGui::Checkbox("Tipe_1", &fige);
+	//ImGui::End();
 
 #endif // _DEBUG
 }

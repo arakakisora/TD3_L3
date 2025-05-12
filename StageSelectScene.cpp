@@ -41,10 +41,15 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
 
+	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+
+	currentIndex_ = stageIndex;
+
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
 	Player_->SetModel("playercharacter.obj");
-	Player_->SetTranslate(Vector3(0.0f, -2.5f, 0.0f));	
+	Vector3 initialPos = Vector3(9.0f * currentIndex_, -2.5f, 0.0f);
+	Player_->SetTranslate(initialPos);
 	Player_->SetLighting(true);
 	Player_->SetDirectionalLightEnable(true);
 	Player_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
@@ -301,10 +306,10 @@ void StageSelectScene::move() {
 
 	Vector3 Rotate = Player_->GetRotate();
 #ifdef _DEBUG
-	// キー入力による代替（右：Dキー、左：Aキー）
-	if (Input::GetInstance()->PushKey(DIK_D)) {
+	// キー入力による代替
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
 		rightStickX = 1.0f;
-	} else if (Input::GetInstance()->PushKey(DIK_A)) {
+	} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
 		rightStickX = -1.0f;
 	}
 #endif // _DEBUG
