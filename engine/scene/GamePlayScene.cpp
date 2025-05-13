@@ -238,53 +238,73 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	*/
 	OperationtextStickL = std::make_unique<Sprite>();
 	OperationtextStickL->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
-	OperationtextStickL->SetPosition(Vector2(90, 655));
+	OperationtextStickL->SetPosition(Vector2(43, 655));
 	OperationtextStickL->SetSize(Vector2(70, 70));
 
 	OperationtextButtonB = std::make_unique<Sprite>();
 	OperationtextButtonB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_b.png");
-	OperationtextButtonB->SetPosition(Vector2(557, 655));
+	OperationtextButtonB->SetPosition(Vector2(416, 655));
 	OperationtextButtonB->SetSize(Vector2(70, 70));
 
 	OperationtextButtonA = std::make_unique<Sprite>();
 	OperationtextButtonA->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_a.png");
-	OperationtextButtonA->SetPosition(Vector2(319, 655));
+	OperationtextButtonA->SetPosition(Vector2(228, 655));
 	OperationtextButtonA->SetSize(Vector2(70, 70));
 
+	OperationtextX = std::make_unique<Sprite>();
+	OperationtextX->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_x.png");
+	OperationtextX->SetPosition(Vector2(628, 655));
+	OperationtextX->SetSize(Vector2(70, 70));
+
+	OperationtextY = std::make_unique<Sprite>();
+	OperationtextY->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
+	OperationtextY->SetPosition(Vector2(792, 655));
+	OperationtextY->SetSize(Vector2(70, 70));
+
 	OperationtextLB = std::make_unique<Sprite>();
-	OperationtextLB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_x.png");
-	OperationtextLB->SetPosition(Vector2(826, 655));
-	OperationtextLB->SetSize(Vector2(70, 70));
+	OperationtextLB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_lb.png");
+	OperationtextLB->SetPosition(Vector2(964, 655));
+	OperationtextLB->SetSize(Vector2(70, 60));
 
 	OperationtextRB = std::make_unique<Sprite>();
-	OperationtextRB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
-	OperationtextRB->SetPosition(Vector2(1039, 655));
-	OperationtextRB->SetSize(Vector2(70, 70));
+	OperationtextRB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_rb.png");
+	OperationtextRB->SetPosition(Vector2(1090, 655));
+	OperationtextRB->SetSize(Vector2(70, 60));
 
 	OperationtextIdou = std::make_unique<Sprite>();
 	OperationtextIdou->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
-	OperationtextIdou->SetPosition(Vector2(203, 655));
+	OperationtextIdou->SetPosition(Vector2(135, 655));
 	OperationtextIdou->SetSize(Vector2(60, 60));
 
 	OperationtextKrikae = std::make_unique<Sprite>();
 	OperationtextKrikae->Initialize(SpriteCommon::GetInstance(), "Resources/kirikae.png");
-	OperationtextKrikae->SetPosition(Vector2(672, 655));
+	OperationtextKrikae->SetPosition(Vector2(507, 655));
 	OperationtextKrikae->SetSize(Vector2(100, 60));
 
 	OperationtextToru = std::make_unique<Sprite>();
 	OperationtextToru->Initialize(SpriteCommon::GetInstance(), "Resources/toru.png");
-	OperationtextToru->SetPosition(Vector2(938, 655));
+	OperationtextToru->SetPosition(Vector2(712, 655));
 	OperationtextToru->SetSize(Vector2(60, 60));
 
 	OperationtextHaiti = std::make_unique<Sprite>();
 	OperationtextHaiti->Initialize(SpriteCommon::GetInstance(), "Resources/haiti.png");
-	OperationtextHaiti->SetPosition(Vector2(1143, 655));
+	OperationtextHaiti->SetPosition(Vector2(882, 655));
 	OperationtextHaiti->SetSize(Vector2(60, 60));
 
 	OperationtextZyanpu = std::make_unique<Sprite>();
 	OperationtextZyanpu->Initialize(SpriteCommon::GetInstance(), "Resources/zyanpu.png");
-	OperationtextZyanpu->SetPosition(Vector2(430, 655));
+	OperationtextZyanpu->SetPosition(Vector2(326, 655));
 	OperationtextZyanpu->SetSize(Vector2(60, 60));
+
+	OperationtextReset = std::make_unique<Sprite>();
+	OperationtextReset->Initialize(SpriteCommon::GetInstance(), "Resources/reset.png");
+	OperationtextReset->SetPosition(Vector2(1167, 655));
+	OperationtextReset->SetSize(Vector2(70, 60));
+
+	OperationtextPlus = std::make_unique<Sprite>();
+	OperationtextPlus->Initialize(SpriteCommon::GetInstance(), "Resources/plus.png");
+	OperationtextPlus->SetPosition(Vector2(1031, 655));
+	OperationtextPlus->SetSize(Vector2(60, 60));
 
 	for (uint32_t i = 0; i < 2; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
@@ -497,19 +517,27 @@ void GamePlayScene::Update()
 			OperationtextStickL->Update();
 			OperationtextButtonB->Update();
 			OperationtextButtonA->Update();
+			OperationtextLB->Update();
+			OperationtextRB->Update();
 			OperationtextIdou->Update();
 			OperationtextKrikae->Update();
 			OperationtextZyanpu->Update();
+			OperationtextReset->Update();
+			OperationtextPlus->Update();
 		}
 		if (photoCamera->GetCameraMode()) {
 			OperationtextStickL->Update();
 			OperationtextButtonB->Update();
+			OperationtextX->Update();
+			OperationtextY->Update();
 			OperationtextLB->Update();
 			OperationtextRB->Update();
 			OperationtextIdou->Update();
 			OperationtextKrikae->Update();
 			OperationtextToru->Update();
 			OperationtextHaiti->Update();
+			OperationtextReset->Update();
+			OperationtextPlus->Update();
 		}
 		//mode切り替え
 		photoCamera->SetcameraMode(player->GetcamerMode());
@@ -569,150 +597,224 @@ void GamePlayScene::Update()
 
 
 
-		///*
-		//if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
-		//	for (int i = 1; i <= tutorialTexts.size(); ++i) {
-		//		std::string label = "text" + std::to_string(i);
-		//		Transform t = tutorialTexts[i]->GetTransform();
-		//		if (ImGui::DragFloat3((label + "scale").c_str(), &t.scale.x, 0.01f) ||
-		//			ImGui::DragFloat3((label + "rotate").c_str(), &t.rotate.x, 0.01f) ||
-		//			ImGui::DragFloat3((label + "translate").c_str(), &t.translate.x, 0.01f)) {
-		//			tutorialTexts[i]->SetTransform(t);
-		//		}
-		//	}
-		//}
-		//*/
-		//Transform text = Tutorialtext1->GetTransform();
-		//Transform text2 = Tutorialtext2->GetTransform();
-		//Transform text3 = Tutorialtext3->GetTransform();
-		//Transform text4 = Tutorialtext4->GetTransform();
-		//Transform text5 = Tutorialtext5->GetTransform();
-		//Transform text6 = Tutorialtext6->GetTransform();
-		//Transform text7 = Tutorialtext7->GetTransform();
-		//Transform text8 = Tutorialtext8->GetTransform();
-		//Transform text9 = Tutorialtext9->GetTransform();
-		//if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
-		//	Tutorialtext1->SetTransform(text);
-		//}
-		//if (ImGui::DragFloat3("text1rotate", &text.rotate.x, 0.01f)) {
-		//	Tutorialtext1->SetTransform(text);
-		//}
-		//if (ImGui::DragFloat3("text1translate", &text.translate.x, 0.01f)) {
-		//	Tutorialtext1->SetTransform(text);
-		//}
-		//if (ImGui::DragFloat3("text2scale", &text2.scale.x, 0.01f)) {
-		//	Tutorialtext2->SetTransform(text2);
-		//}
-		//if (ImGui::DragFloat3("text2rotate", &text2.rotate.x, 0.01f)) {
-		//	Tutorialtext2->SetTransform(text2);
-		//}
-		//if (ImGui::DragFloat3("text2translate", &text2.translate.x, 0.01f)) {
-		//	Tutorialtext2->SetTransform(text2);
-		//}
-		//if (ImGui::DragFloat3("text3scale", &text3.scale.x, 0.01f)) {
-		//	Tutorialtext3->SetTransform(text3);
-		//}
-		//if (ImGui::DragFloat3("text3rotate", &text3.rotate.x, 0.01f)) {
-		//	Tutorialtext3->SetTransform(text3);
-		//}
-		//if (ImGui::DragFloat3("text3translate", &text3.translate.x, 0.01f)) {
-		//	Tutorialtext3->SetTransform(text3);
-		//}
-		//if (ImGui::DragFloat3("text4scale", &text4.scale.x, 0.01f)) {
-		//	Tutorialtext4->SetTransform(text4);
-		//}
-		//if (ImGui::DragFloat3("text4rotate", &text4.rotate.x, 0.01f)) {
-		//	Tutorialtext4->SetTransform(text4);
-		//}
-		//if (ImGui::DragFloat3("text4translate", &text4.translate.x, 0.01f)) {
-		//	Tutorialtext4->SetTransform(text4);
-		//}
-		//if (ImGui::DragFloat3("text5scale", &text5.scale.x, 0.01f)) {
-		//	Tutorialtext5->SetTransform(text5);
-		//}
-		//if (ImGui::DragFloat3("text5rotate", &text5.rotate.x, 0.01f)) {
-		//	Tutorialtext5->SetTransform(text5);
-		//}
-		//if (ImGui::DragFloat3("text5translate", &text5.translate.x, 0.01f)) {
-		//	Tutorialtext5->SetTransform(text5);
-		//}
-		//if (ImGui::DragFloat3("text6scale", &text6.scale.x, 0.01f)) {
-		//	Tutorialtext6->SetTransform(text6);
-		//}
-		//if (ImGui::DragFloat3("text6rotate", &text6.rotate.x, 0.01f)) {
-		//	Tutorialtext6->SetTransform(text6);
-		//}
-		//if (ImGui::DragFloat3("text6translate", &text6.translate.x, 0.01f)) {
-		//	Tutorialtext6->SetTransform(text6);
-		//}
-		//if (ImGui::DragFloat3("text7scale", &text7.scale.x, 0.01f)) {
-		//	Tutorialtext7->SetTransform(text7);
-		//}
-		//if (ImGui::DragFloat3("text7rotate", &text7.rotate.x, 0.01f)) {
-		//	Tutorialtext7->SetTransform(text7);
-		//}
-		//if (ImGui::DragFloat3("text7translate", &text7.translate.x, 0.01f)) {
-		//	Tutorialtext7->SetTransform(text7);
-		//}
-		//if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
-		//	Tutorialtext8->SetTransform(text8);
-		//}
-		//
-		//if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
-		//	Tutorialtext9->SetTransform(text9);
-		//}
-		//
-		////UI
-		///*
-		//if (ImGui::CollapsingHeader("UI Translate")) {
-		//	for (int i = 0; i < operationTexts.size(); ++i) {
-		//		Vector2 pos = operationTexts[i]->GetPosition();
-		//		if (ImGui::DragFloat2(("Sprite" + std::to_string(i)).c_str(), &pos.x, 0.01f)) {
-		//			operationTexts[i]->SetPosition(pos);
-		//		}
-		//	}
-		//}
-		//*/
-		//Vector2 uistickL = OperationtextStickL->GetPosition();
-		//Vector2 uibuttonB = OperationtextButtonB->GetPosition();
-		//Vector2 uibuttonA = OperationtextButtonA->GetPosition();
-		//Vector2 uiLB = OperationtextLB->GetPosition();
-		//Vector2 uiRB = OperationtextRB->GetPosition();
-		//Vector2 uitoru = OperationtextToru->GetPosition();
-		//Vector2 uihaiti = OperationtextHaiti->GetPosition();
-		//Vector2 uikirikae = OperationtextKrikae->GetPosition();
-		//Vector2 uiidou = OperationtextIdou->GetPosition();
-		//Vector2 uizyanpu = OperationtextZyanpu->GetPosition();
-		//if (ImGui::DragFloat2("uiStickLtranslate", &uistickL.x), 0.01f) {
-		//	OperationtextStickL->SetPosition(uistickL);
-		//}
-		//if (ImGui::DragFloat2("uibuttonBtranslate", &uibuttonB.x), 0.01f) {
-		//	OperationtextButtonB->SetPosition(uibuttonB);
-		//}
-		//if (ImGui::DragFloat2("uibuttonAtranslate", &uibuttonA.x), 0.01f) {
-		//	OperationtextButtonA->SetPosition(uibuttonA);
-		//}
-		//if (ImGui::DragFloat2("uiLBtranslate", &uiLB.x), 0.01f) {
-		//	OperationtextLB->SetPosition(uiLB);
-		//}
-		//if (ImGui::DragFloat2("uiRBtranslate", &uiRB.x), 0.01f) {
-		//	OperationtextRB->SetPosition(uiRB);
-		//}
-		//if (ImGui::DragFloat2("uitorutranslate", &uitoru.x), 0.01f) {
-		//	OperationtextToru->SetPosition(uitoru);
-		//}
-		//if (ImGui::DragFloat2("uihaititranslate", &uihaiti.x), 0.01f) {
-		//	OperationtextHaiti->SetPosition(uihaiti);
-		//}
-		//if (ImGui::DragFloat2("uikirikaetranslate", &uikirikae.x), 0.01f) {
-		//	OperationtextKrikae->SetPosition(uikirikae);
-		//}
-		//if (ImGui::DragFloat2("uiidoutranslate", &uiidou.x), 0.01f) {
-		//	OperationtextIdou->SetPosition(uiidou);
-		//}
-		//if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
-		//	OperationtextZyanpu->SetPosition(uizyanpu);
-		//}
+
+		/*
+		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
+			for (int i = 1; i <= tutorialTexts.size(); ++i) {
+				std::string label = "text" + std::to_string(i);
+				Transform t = tutorialTexts[i]->GetTransform();
+				if (ImGui::DragFloat3((label + "scale").c_str(), &t.scale.x, 0.01f) ||
+					ImGui::DragFloat3((label + "rotate").c_str(), &t.rotate.x, 0.01f) ||
+					ImGui::DragFloat3((label + "translate").c_str(), &t.translate.x, 0.01f)) {
+					tutorialTexts[i]->SetTransform(t);
+				}
+			}
+		}
+		*/
+		Transform text = Tutorialtext1->GetTransform();
+		Transform text2 = Tutorialtext2->GetTransform();
+		Transform text3 = Tutorialtext3->GetTransform();
+		Transform text4 = Tutorialtext4->GetTransform();
+		Transform text5 = Tutorialtext5->GetTransform();
+		Transform text6 = Tutorialtext6->GetTransform();
+		Transform text7 = Tutorialtext7->GetTransform();
+		Transform text8 = Tutorialtext8->GetTransform();
+		Transform text9 = Tutorialtext9->GetTransform();
+		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
+			Tutorialtext1->SetTransform(text);
+		}
+		if (ImGui::DragFloat3("text1rotate", &text.rotate.x, 0.01f)) {
+			Tutorialtext1->SetTransform(text);
+		}
+		if (ImGui::DragFloat3("text1translate", &text.translate.x, 0.01f)) {
+			Tutorialtext1->SetTransform(text);
+		}
+		if (ImGui::DragFloat3("text2scale", &text2.scale.x, 0.01f)) {
+			Tutorialtext2->SetTransform(text2);
+		}
+		if (ImGui::DragFloat3("text2rotate", &text2.rotate.x, 0.01f)) {
+			Tutorialtext2->SetTransform(text2);
+		}
+		if (ImGui::DragFloat3("text2translate", &text2.translate.x, 0.01f)) {
+			Tutorialtext2->SetTransform(text2);
+		}
+		if (ImGui::DragFloat3("text3scale", &text3.scale.x, 0.01f)) {
+			Tutorialtext3->SetTransform(text3);
+		}
+		if (ImGui::DragFloat3("text3rotate", &text3.rotate.x, 0.01f)) {
+			Tutorialtext3->SetTransform(text3);
+		}
+		if (ImGui::DragFloat3("text3translate", &text3.translate.x, 0.01f)) {
+			Tutorialtext3->SetTransform(text3);
+		}
+		if (ImGui::DragFloat3("text4scale", &text4.scale.x, 0.01f)) {
+			Tutorialtext4->SetTransform(text4);
+		}
+		if (ImGui::DragFloat3("text4rotate", &text4.rotate.x, 0.01f)) {
+			Tutorialtext4->SetTransform(text4);
+		}
+		if (ImGui::DragFloat3("text4translate", &text4.translate.x, 0.01f)) {
+			Tutorialtext4->SetTransform(text4);
+		}
+		if (ImGui::DragFloat3("text5scale", &text5.scale.x, 0.01f)) {
+			Tutorialtext5->SetTransform(text5);
+		}
+		if (ImGui::DragFloat3("text5rotate", &text5.rotate.x, 0.01f)) {
+			Tutorialtext5->SetTransform(text5);
+		}
+		if (ImGui::DragFloat3("text5translate", &text5.translate.x, 0.01f)) {
+			Tutorialtext5->SetTransform(text5);
+		}
+		if (ImGui::DragFloat3("text6scale", &text6.scale.x, 0.01f)) {
+			Tutorialtext6->SetTransform(text6);
+		}
+		if (ImGui::DragFloat3("text6rotate", &text6.rotate.x, 0.01f)) {
+			Tutorialtext6->SetTransform(text6);
+		}
+		if (ImGui::DragFloat3("text6translate", &text6.translate.x, 0.01f)) {
+			Tutorialtext6->SetTransform(text6);
+		}
+		if (ImGui::DragFloat3("text7scale", &text7.scale.x, 0.01f)) {
+			Tutorialtext7->SetTransform(text7);
+		}
+		if (ImGui::DragFloat3("text7rotate", &text7.rotate.x, 0.01f)) {
+			Tutorialtext7->SetTransform(text7);
+		}
+		if (ImGui::DragFloat3("text7translate", &text7.translate.x, 0.01f)) {
+			Tutorialtext7->SetTransform(text7);
+		}
+		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
+			Tutorialtext8->SetTransform(text8);
+		}
+		
+		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
+			Tutorialtext9->SetTransform(text9);
+		}
+		
+		//UI
+		/*
+		if (ImGui::CollapsingHeader("UI Translate")) {
+			for (int i = 0; i < operationTexts.size(); ++i) {
+				Vector2 pos = operationTexts[i]->GetPosition();
+				if (ImGui::DragFloat2(("Sprite" + std::to_string(i)).c_str(), &pos.x, 0.01f)) {
+					operationTexts[i]->SetPosition(pos);
+				}
+			}
+		}
+		*/
+		Vector2 uistickL = OperationtextStickL->GetPosition();
+		Vector2 uistickLsize = OperationtextStickL->GetSize();
+		Vector2 uibuttonB = OperationtextButtonB->GetPosition();
+		Vector2 uibuttonBsize = OperationtextButtonB->GetSize();
+		Vector2 uibuttonA = OperationtextButtonA->GetPosition();
+		Vector2 uibuttonAsize = OperationtextButtonA->GetSize();
+		Vector2 uiX = OperationtextX->GetPosition();
+		Vector2 uiXsize = OperationtextX->GetSize();
+		Vector2 uiY = OperationtextY->GetPosition();
+		Vector2 uiYsize = OperationtextY->GetSize();
+		Vector2 uiLB = OperationtextLB->GetPosition();
+		Vector2 uiLBsize = OperationtextLB->GetSize();
+		Vector2 uiRB = OperationtextRB->GetPosition();
+		Vector2 uiRBsize = OperationtextRB->GetSize();
+		Vector2 uitoru = OperationtextToru->GetPosition();
+		Vector2 uitorusize = OperationtextToru->GetSize();
+		Vector2 uihaiti = OperationtextHaiti->GetPosition();
+		Vector2 uihaitisize = OperationtextHaiti->GetSize();
+		Vector2 uikirikae = OperationtextKrikae->GetPosition();
+		Vector2 uikirikaesize = OperationtextKrikae->GetSize();
+		Vector2 uiidou = OperationtextIdou->GetPosition();
+		Vector2 uiidousize = OperationtextIdou->GetSize();
+		Vector2 uizyanpu = OperationtextZyanpu->GetPosition();
+		Vector2 uizyanpusize = OperationtextZyanpu->GetSize();
+		Vector2 uireset = OperationtextReset->GetPosition();
+		Vector2 uiresetsize = OperationtextReset->GetSize();
+		Vector2 uiPlus = OperationtextPlus->GetPosition();
+		Vector2 uiPlussize = OperationtextPlus->GetSize();
+
+		if (ImGui::DragFloat2("uiStickLtranslate", &uistickL.x), 0.01f) {
+			OperationtextStickL->SetPosition(uistickL);
+		}
+		if (ImGui::DragFloat2("uiStickLsize", &uistickLsize.x), 0.01f) {
+			OperationtextStickL->SetSize(uistickLsize);
+		}
+		if (ImGui::DragFloat2("uibuttonBtranslate", &uibuttonB.x), 0.01f) {
+			OperationtextButtonB->SetPosition(uibuttonB);
+		}
+		if (ImGui::DragFloat2("uibuttonBsize", &uibuttonBsize.x), 0.01f) {
+			OperationtextButtonB->SetSize(uibuttonBsize);
+		}
+		if (ImGui::DragFloat2("uibuttonAtranslate", &uibuttonA.x), 0.01f) {
+			OperationtextButtonA->SetPosition(uibuttonA);
+		}
+		if (ImGui::DragFloat2("uibuttonAsize", &uibuttonAsize.x), 0.01f) {
+			OperationtextButtonA->SetSize(uibuttonAsize);
+		}
+		if (ImGui::DragFloat2("uiXtranslate", &uiX.x), 0.01f) {
+			OperationtextX->SetPosition(uiX);
+		}
+		if (ImGui::DragFloat2("uiXsize", &uiXsize.x), 0.01f) {
+			OperationtextX->SetSize(uiXsize);
+		}
+		if (ImGui::DragFloat2("uiYtranslate", &uiY.x), 0.01f) {
+			OperationtextY->SetPosition(uiY);
+		}
+		if (ImGui::DragFloat2("uiYsize", &uiYsize.x), 0.01f) {
+			OperationtextY->SetSize(uiYsize);
+		}
+		if (ImGui::DragFloat2("uiLBtranslate", &uiLB.x), 0.01f) {
+			OperationtextLB->SetPosition(uiLB);
+		}
+		if (ImGui::DragFloat2("uiLBsize", &uiLBsize.x), 0.01f) {
+			OperationtextLB->SetSize(uiLBsize);
+		}
+		if (ImGui::DragFloat2("uiRBtranslate", &uiRB.x), 0.01f) {
+			OperationtextRB->SetPosition(uiRB);
+		}
+		if (ImGui::DragFloat2("uiRBsize", &uiRBsize.x), 0.01f) {
+			OperationtextRB->SetSize(uiRBsize);
+		}
+		if (ImGui::DragFloat2("uitorutranslate", &uitoru.x), 0.01f) {
+			OperationtextToru->SetPosition(uitoru);
+		}
+		if (ImGui::DragFloat2("uitorusize", &uitorusize.x), 0.01f) {
+			OperationtextToru->SetSize(uitorusize);
+		}
+		if (ImGui::DragFloat2("uihaititranslate", &uihaiti.x), 0.01f) {
+			OperationtextHaiti->SetPosition(uihaiti);
+		}
+		if (ImGui::DragFloat2("uihaitisize", &uihaitisize.x), 0.01f) {
+			OperationtextHaiti->SetSize(uihaitisize);
+		}
+		if (ImGui::DragFloat2("uikirikaetranslate", &uikirikae.x), 0.01f) {
+			OperationtextKrikae->SetPosition(uikirikae);
+		}
+		if (ImGui::DragFloat2("uikirikaesize", &uikirikaesize.x), 0.01f) {
+			OperationtextKrikae->SetSize(uikirikaesize);
+		}
+		if (ImGui::DragFloat2("uiidoutranslate", &uiidou.x), 0.01f) {
+			OperationtextIdou->SetPosition(uiidou);
+		}
+		if (ImGui::DragFloat2("uiidousize", &uiidousize.x), 0.01f) {
+			OperationtextIdou->SetSize(uiidousize);
+		}
+		if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
+			OperationtextZyanpu->SetPosition(uizyanpu);
+		}
+		if (ImGui::DragFloat2("uizyanpusize", &uizyanpusize.x), 0.01f) {
+			OperationtextZyanpu->SetSize(uizyanpusize);
+		}
+		if (ImGui::DragFloat2("uiResettranslate", &uireset.x), 0.01f) {
+			OperationtextReset->SetPosition(uireset);
+		}
+		if (ImGui::DragFloat2("uiResetsize", &uiresetsize.x), 0.01f) {
+			OperationtextReset->SetSize(uiresetsize);
+		}
+		if (ImGui::DragFloat2("uiPlustranslate", &uiPlus.x), 0.01f) {
+			OperationtextPlus->SetPosition(uiPlus);
+		}
+		if (ImGui::DragFloat2("uiPlussize", &uiPlussize.x), 0.01f) {
+			OperationtextPlus->SetSize(uiPlussize);
+		}
 
 	}
 
@@ -788,19 +890,27 @@ void GamePlayScene::Draw()
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();
 		OperationtextButtonA->Draw();
+		OperationtextLB->Draw();
+		OperationtextRB->Draw();
 		OperationtextIdou->Draw();
 		OperationtextKrikae->Draw();
 		OperationtextZyanpu->Draw();
+		OperationtextReset->Draw();
+		OperationtextPlus->Draw();
 	}
 	if (photoCamera->GetCameraMode()) {
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();
+		OperationtextX->Draw();
+		OperationtextY->Draw();
 		OperationtextLB->Draw();
 		OperationtextRB->Draw();
 		OperationtextIdou->Draw();
 		OperationtextKrikae->Draw();
 		OperationtextToru->Draw();
 		OperationtextHaiti->Draw();
+		OperationtextReset->Draw();
+		OperationtextPlus->Draw();
 	}
 	
 	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
