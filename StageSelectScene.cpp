@@ -404,6 +404,27 @@ void StageSelectScene::move() {
 void StageSelectScene::moveChangeScene() {
 
 	if (!easingsceneFlag_ && !easingmoveFlag_) {
+#ifdef _DEBUG
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			easingsceneFlag_ = true;
+			easingmoveFlag_ = true;
+
+			// stageObjects_ の現在位置にカメラを移動
+			Vector3 selectObjectPos = stageObjects_[currentIndex_]->GetTranslate();
+			// mainObject の位置を stageObjects_ の位置に設定
+			Player_->SetTranslate(selectObjectPos);
+			// カメラのターゲットを現在選択されているオブジェクトに設定
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stageObjects_[currentIndex_].get(), { 0, 0, -15 });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+
+			// 開始位置
+			startPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, -15.0f);
+			// 終了位置
+			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
+			easingProgress_ = 0.0f;  // イージング開始
+		}
+#endif // _DEBUG
+
 		// Aボタンが押されたときに開始
 		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 			easingsceneFlag_ = true;
@@ -423,32 +444,12 @@ void StageSelectScene::moveChangeScene() {
 			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
 			easingProgress_ = 0.0f;  // イージング開始
 		}
-
-#ifdef _DEBUG
-		if(Input::GetInstance()->PushKey(DIK_SPACE)) {
-			easingsceneFlag_ = true;
-			easingmoveFlag_ = true;
-
-			// stageObjects_ の現在位置にカメラを移動
-			Vector3 selectObjectPos = stageObjects_[currentIndex_]->GetTranslate();
-			// mainObject の位置を stageObjects_ の位置に設定
-			Player_->SetTranslate(selectObjectPos);
-			// カメラのターゲットを現在選択されているオブジェクトに設定
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stageObjects_[currentIndex_].get(), { 0, 0, -15 });
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
-
-			// 開始位置
-			startPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, -15.0f);
-			// 終了位置
-			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
-			easingProgress_ = 0.0f;  // イージング開始
-		}
-#endif // _DEBUG
 	}
 
 	if (easingsceneFlag_) {
 
 		Vector3 newPos = Player_->GetTranslate();
+		newPos.y = -2.5f;
 		newPos.z = 0.0f;
 		Player_->SetTranslate(newPos);
 
