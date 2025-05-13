@@ -27,7 +27,7 @@ void Map::Finalize() {
 	blockobject3D.clear();
 }
 
-void Map::Update() {
+void Map::Update(const bool cameraMode) {
 	GenerateChangeStageBlock(mapChipDataNext_);
 	// 3Dオブジェクトの更新
 	for (std::vector<Block*>& blockLine : blockobject3D) {
@@ -139,7 +139,7 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 
 	// メタ情報の初期化（念のため）
 	photoCameraCount = 0;
-	kameraSizeX = 2; // ← デフォルト値（最小2x2）を明示しておくと安全
+	kameraSizeX = 2; 
 	kameraSizeY = 2;
 
 	std::string line;

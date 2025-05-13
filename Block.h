@@ -55,7 +55,7 @@ public:
 	// 初期化
 	void Initialize(MapChipType type, const Vector3& position, Map* map);
 	// 更新
-	void Update();
+	void Update(const bool cameramode = false);
 	// 描画
 	void Draw();
 
@@ -103,5 +103,9 @@ private:	// 各ブロック用の変数
 	float velocity = 0.0f;
 	bool isFalling = false;
 	static constexpr float gravity = 0.02f;
+
+	// nullBlock用のCameraMode
+	bool cameraMode_;
+
 };
 

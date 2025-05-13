@@ -46,29 +46,24 @@ void Player::Update() {
 		object3D_->SetTransform(transform);
 
 		//カメラフラグ
-		ImGui::Text("CameraMode %d", CamerMode);
-
-
-
+		ImGui::Text("CameraMode %d", cameraMode_);
 	}
 #endif // DEBUG_
-
-
 
 #ifdef _DEBUG
 
 	//Cキーを押してカメラモードへ
 	if (Input::GetInstance()->TriggerKey(DIK_C)) {
-		CamerMode = !CamerMode;
+		cameraMode_ = !cameraMode_;
 	}
 #endif // _DEBUG
 
 
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && onGround_) {
-		CamerMode = !CamerMode;
+		cameraMode_ = !cameraMode_;
 	}
 
-	if (!CamerMode) {
+	if (!cameraMode_) {
 
 		PrayerMove();
 		PlayerTurn();
