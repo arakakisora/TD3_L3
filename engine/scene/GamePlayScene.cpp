@@ -46,6 +46,7 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
 	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
+	ModelManager::GetInstans()->LoadModel("nullBlock.obj");
 	// 天球モデル / 背景のプレーン
 	ModelManager::GetInstans()->LoadModel("backPlane.obj");
 	// フォトカメラフレーム
@@ -338,7 +339,6 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 	fadeManager_.Initialize("Resources/white.png");
 	fadeManager_.StartFadeIn();
-
 }
 
 void GamePlayScene::Finalize()
@@ -359,7 +359,6 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::Update()
 {
-
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
 		// フェード更新
@@ -382,11 +381,18 @@ void GamePlayScene::Update()
 		player->Update();
 
 		if (player->GetCheckGoal() && !isfadesense_) {
-			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -7 });
-			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 			// フェードアウト開始
 			fadeManager_.StartFadeOut();
 			isfadesense_ = true;  // 一度だけ行う
+		}
+
+		if (isfadesense_ && fige) {
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0,0, -7.0f });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+		
+			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 4.910f, 0.680f, -1.260f });
+			//CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
+			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 		}
 
 		if (fadeManager_.IsFadeOutFinished()) {
@@ -588,6 +594,7 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat3("Player Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
 			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
 		}
+
 
 
 
@@ -808,7 +815,12 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat2("uiPlussize", &uiPlussize.x), 0.01f) {
 			OperationtextPlus->SetSize(uiPlussize);
 		}
+
 	}
+
+	ImGui::Begin("ClearPattern");
+	ImGui::Checkbox("Pattern_1", &fige);
+	ImGui::End();
 
 #endif // _DEBUG
 }

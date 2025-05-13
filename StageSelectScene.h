@@ -103,4 +103,6 @@ public:
 
 	FadeManager fadeManager_;
 
+	// ステージ選択時のプレイヤーの位置
+	Vector3 playerInitialOffset_; 
 };

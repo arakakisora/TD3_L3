@@ -41,10 +41,15 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
 
+	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+
+	currentIndex_ = stageIndex;
+
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
 	Player_->SetModel("playercharacter.obj");
-	Player_->SetTranslate(Vector3(0.0f, -2.5f, 0.0f));	
+	Vector3 initialPos = Vector3(9.0f * currentIndex_, -2.5f, 0.0f);
+	Player_->SetTranslate(initialPos);
 	Player_->SetLighting(true);
 	Player_->SetDirectionalLightEnable(true);
 	Player_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
@@ -301,10 +306,10 @@ void StageSelectScene::move() {
 
 	Vector3 Rotate = Player_->GetRotate();
 #ifdef _DEBUG
-	// キー入力による代替（右：Dキー、左：Aキー）
-	if (Input::GetInstance()->PushKey(DIK_D)) {
+	// キー入力による代替
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
 		rightStickX = 1.0f;
-	} else if (Input::GetInstance()->PushKey(DIK_A)) {
+	} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
 		rightStickX = -1.0f;
 	}
 #endif // _DEBUG
@@ -399,6 +404,27 @@ void StageSelectScene::move() {
 void StageSelectScene::moveChangeScene() {
 
 	if (!easingsceneFlag_ && !easingmoveFlag_) {
+#ifdef _DEBUG
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			easingsceneFlag_ = true;
+			easingmoveFlag_ = true;
+
+			// stageObjects_ の現在位置にカメラを移動
+			Vector3 selectObjectPos = stageObjects_[currentIndex_]->GetTranslate();
+			// mainObject の位置を stageObjects_ の位置に設定
+			Player_->SetTranslate(selectObjectPos);
+			// カメラのターゲットを現在選択されているオブジェクトに設定
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stageObjects_[currentIndex_].get(), { 0, 0, -15 });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+
+			// 開始位置
+			startPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, -15.0f);
+			// 終了位置
+			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
+			easingProgress_ = 0.0f;  // イージング開始
+		}
+#endif // _DEBUG
+
 		// Aボタンが押されたときに開始
 		if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 			easingsceneFlag_ = true;
@@ -418,32 +444,12 @@ void StageSelectScene::moveChangeScene() {
 			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
 			easingProgress_ = 0.0f;  // イージング開始
 		}
-
-#ifdef _DEBUG
-		if(Input::GetInstance()->PushKey(DIK_SPACE)) {
-			easingsceneFlag_ = true;
-			easingmoveFlag_ = true;
-
-			// stageObjects_ の現在位置にカメラを移動
-			Vector3 selectObjectPos = stageObjects_[currentIndex_]->GetTranslate();
-			// mainObject の位置を stageObjects_ の位置に設定
-			Player_->SetTranslate(selectObjectPos);
-			// カメラのターゲットを現在選択されているオブジェクトに設定
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stageObjects_[currentIndex_].get(), { 0, 0, -15 });
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
-
-			// 開始位置
-			startPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, -15.0f);
-			// 終了位置
-			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
-			easingProgress_ = 0.0f;  // イージング開始
-		}
-#endif // _DEBUG
 	}
 
 	if (easingsceneFlag_) {
 
 		Vector3 newPos = Player_->GetTranslate();
+		newPos.y = -2.5f;
 		newPos.z = 0.0f;
 		Player_->SetTranslate(newPos);
 
