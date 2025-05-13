@@ -79,11 +79,15 @@ private:
 	std::unique_ptr<Sprite>OperationtextButtonA;
 	std::unique_ptr<Sprite>OperationtextX;
 	std::unique_ptr<Sprite>OperationtextY;
+	std::unique_ptr<Sprite>OperationtextLB;
+	std::unique_ptr<Sprite>OperationtextRB;
 	std::unique_ptr<Sprite>OperationtextIdou;
 	std::unique_ptr<Sprite>OperationtextKrikae;
 	std::unique_ptr<Sprite>OperationtextToru;
 	std::unique_ptr<Sprite>OperationtextHaiti;
 	std::unique_ptr<Sprite>OperationtextZyanpu;
+	std::unique_ptr<Sprite>OperationtextReset;
+	std::unique_ptr<Sprite>OperationtextPlus;
 
 	std::vector < std::unique_ptr<Sprite>> pauseui;
 	Map* map=nullptr;

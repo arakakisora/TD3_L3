@@ -237,53 +237,73 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	*/
 	OperationtextStickL = std::make_unique<Sprite>();
 	OperationtextStickL->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
-	OperationtextStickL->SetPosition(Vector2(90, 655));
+	OperationtextStickL->SetPosition(Vector2(43, 655));
 	OperationtextStickL->SetSize(Vector2(70, 70));
 
 	OperationtextButtonB = std::make_unique<Sprite>();
 	OperationtextButtonB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_b.png");
-	OperationtextButtonB->SetPosition(Vector2(557, 655));
+	OperationtextButtonB->SetPosition(Vector2(416, 655));
 	OperationtextButtonB->SetSize(Vector2(70, 70));
 
 	OperationtextButtonA = std::make_unique<Sprite>();
 	OperationtextButtonA->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_a.png");
-	OperationtextButtonA->SetPosition(Vector2(319, 655));
+	OperationtextButtonA->SetPosition(Vector2(228, 655));
 	OperationtextButtonA->SetSize(Vector2(70, 70));
 
 	OperationtextX = std::make_unique<Sprite>();
 	OperationtextX->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_x.png");
-	OperationtextX->SetPosition(Vector2(826, 655));
+	OperationtextX->SetPosition(Vector2(628, 655));
 	OperationtextX->SetSize(Vector2(70, 70));
 
 	OperationtextY = std::make_unique<Sprite>();
 	OperationtextY->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
-	OperationtextY->SetPosition(Vector2(1039, 655));
+	OperationtextY->SetPosition(Vector2(792, 655));
 	OperationtextY->SetSize(Vector2(70, 70));
+
+	OperationtextLB = std::make_unique<Sprite>();
+	OperationtextLB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_lb.png");
+	OperationtextLB->SetPosition(Vector2(964, 655));
+	OperationtextLB->SetSize(Vector2(70, 60));
+
+	OperationtextRB = std::make_unique<Sprite>();
+	OperationtextRB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_rb.png");
+	OperationtextRB->SetPosition(Vector2(1090, 655));
+	OperationtextRB->SetSize(Vector2(70, 60));
 
 	OperationtextIdou = std::make_unique<Sprite>();
 	OperationtextIdou->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
-	OperationtextIdou->SetPosition(Vector2(203, 655));
+	OperationtextIdou->SetPosition(Vector2(135, 655));
 	OperationtextIdou->SetSize(Vector2(60, 60));
 
 	OperationtextKrikae = std::make_unique<Sprite>();
 	OperationtextKrikae->Initialize(SpriteCommon::GetInstance(), "Resources/kirikae.png");
-	OperationtextKrikae->SetPosition(Vector2(672, 655));
+	OperationtextKrikae->SetPosition(Vector2(507, 655));
 	OperationtextKrikae->SetSize(Vector2(100, 60));
 
 	OperationtextToru = std::make_unique<Sprite>();
 	OperationtextToru->Initialize(SpriteCommon::GetInstance(), "Resources/toru.png");
-	OperationtextToru->SetPosition(Vector2(938, 655));
+	OperationtextToru->SetPosition(Vector2(712, 655));
 	OperationtextToru->SetSize(Vector2(60, 60));
 
 	OperationtextHaiti = std::make_unique<Sprite>();
 	OperationtextHaiti->Initialize(SpriteCommon::GetInstance(), "Resources/haiti.png");
-	OperationtextHaiti->SetPosition(Vector2(1143, 655));
+	OperationtextHaiti->SetPosition(Vector2(882, 655));
 	OperationtextHaiti->SetSize(Vector2(60, 60));
 
 	OperationtextZyanpu = std::make_unique<Sprite>();
 	OperationtextZyanpu->Initialize(SpriteCommon::GetInstance(), "Resources/zyanpu.png");
-	OperationtextZyanpu->SetPosition(Vector2(430, 655));
+	OperationtextZyanpu->SetPosition(Vector2(326, 655));
 	OperationtextZyanpu->SetSize(Vector2(60, 60));
+
+	OperationtextReset = std::make_unique<Sprite>();
+	OperationtextReset->Initialize(SpriteCommon::GetInstance(), "Resources/reset.png");
+	OperationtextReset->SetPosition(Vector2(1167, 655));
+	OperationtextReset->SetSize(Vector2(70, 60));
+
+	OperationtextPlus = std::make_unique<Sprite>();
+	OperationtextPlus->Initialize(SpriteCommon::GetInstance(), "Resources/plus.png");
+	OperationtextPlus->SetPosition(Vector2(1031, 655));
+	OperationtextPlus->SetSize(Vector2(60, 60));
 
 	for (uint32_t i = 0; i < 2; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
@@ -491,19 +511,27 @@ void GamePlayScene::Update()
 			OperationtextStickL->Update();
 			OperationtextButtonB->Update();
 			OperationtextButtonA->Update();
+			OperationtextLB->Update();
+			OperationtextRB->Update();
 			OperationtextIdou->Update();
 			OperationtextKrikae->Update();
 			OperationtextZyanpu->Update();
+			OperationtextReset->Update();
+			OperationtextPlus->Update();
 		}
 		if (photoCamera->GetCameraMode()) {
 			OperationtextStickL->Update();
 			OperationtextButtonB->Update();
 			OperationtextX->Update();
 			OperationtextY->Update();
+			OperationtextLB->Update();
+			OperationtextRB->Update();
 			OperationtextIdou->Update();
 			OperationtextKrikae->Update();
 			OperationtextToru->Update();
 			OperationtextHaiti->Update();
+			OperationtextReset->Update();
+			OperationtextPlus->Update();
 		}
 		//mode切り替え
 		photoCamera->SetcameraMode(player->GetcamerMode());
@@ -677,6 +705,10 @@ void GamePlayScene::Update()
 		Vector2 uiXsize = OperationtextX->GetSize();
 		Vector2 uiY = OperationtextY->GetPosition();
 		Vector2 uiYsize = OperationtextY->GetSize();
+		Vector2 uiLB = OperationtextLB->GetPosition();
+		Vector2 uiLBsize = OperationtextLB->GetSize();
+		Vector2 uiRB = OperationtextRB->GetPosition();
+		Vector2 uiRBsize = OperationtextRB->GetSize();
 		Vector2 uitoru = OperationtextToru->GetPosition();
 		Vector2 uitorusize = OperationtextToru->GetSize();
 		Vector2 uihaiti = OperationtextHaiti->GetPosition();
@@ -687,6 +719,11 @@ void GamePlayScene::Update()
 		Vector2 uiidousize = OperationtextIdou->GetSize();
 		Vector2 uizyanpu = OperationtextZyanpu->GetPosition();
 		Vector2 uizyanpusize = OperationtextZyanpu->GetSize();
+		Vector2 uireset = OperationtextReset->GetPosition();
+		Vector2 uiresetsize = OperationtextReset->GetSize();
+		Vector2 uiPlus = OperationtextPlus->GetPosition();
+		Vector2 uiPlussize = OperationtextPlus->GetSize();
+
 		if (ImGui::DragFloat2("uiStickLtranslate", &uistickL.x), 0.01f) {
 			OperationtextStickL->SetPosition(uistickL);
 		}
@@ -717,6 +754,18 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat2("uiYsize", &uiYsize.x), 0.01f) {
 			OperationtextY->SetSize(uiYsize);
 		}
+		if (ImGui::DragFloat2("uiLBtranslate", &uiLB.x), 0.01f) {
+			OperationtextLB->SetPosition(uiLB);
+		}
+		if (ImGui::DragFloat2("uiLBsize", &uiLBsize.x), 0.01f) {
+			OperationtextLB->SetSize(uiLBsize);
+		}
+		if (ImGui::DragFloat2("uiRBtranslate", &uiRB.x), 0.01f) {
+			OperationtextRB->SetPosition(uiRB);
+		}
+		if (ImGui::DragFloat2("uiRBsize", &uiRBsize.x), 0.01f) {
+			OperationtextRB->SetSize(uiRBsize);
+		}
 		if (ImGui::DragFloat2("uitorutranslate", &uitoru.x), 0.01f) {
 			OperationtextToru->SetPosition(uitoru);
 		}
@@ -746,6 +795,18 @@ void GamePlayScene::Update()
 		}
 		if (ImGui::DragFloat2("uizyanpusize", &uizyanpusize.x), 0.01f) {
 			OperationtextZyanpu->SetSize(uizyanpusize);
+		}
+		if (ImGui::DragFloat2("uiResettranslate", &uireset.x), 0.01f) {
+			OperationtextReset->SetPosition(uireset);
+		}
+		if (ImGui::DragFloat2("uiResetsize", &uiresetsize.x), 0.01f) {
+			OperationtextReset->SetSize(uiresetsize);
+		}
+		if (ImGui::DragFloat2("uiPlustranslate", &uiPlus.x), 0.01f) {
+			OperationtextPlus->SetPosition(uiPlus);
+		}
+		if (ImGui::DragFloat2("uiPlussize", &uiPlussize.x), 0.01f) {
+			OperationtextPlus->SetSize(uiPlussize);
 		}
 	}
 
@@ -817,19 +878,27 @@ void GamePlayScene::Draw()
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();
 		OperationtextButtonA->Draw();
+		OperationtextLB->Draw();
+		OperationtextRB->Draw();
 		OperationtextIdou->Draw();
 		OperationtextKrikae->Draw();
 		OperationtextZyanpu->Draw();
+		OperationtextReset->Draw();
+		OperationtextPlus->Draw();
 	}
 	if (photoCamera->GetCameraMode()) {
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();
 		OperationtextX->Draw();
 		OperationtextY->Draw();
+		OperationtextLB->Draw();
+		OperationtextRB->Draw();
 		OperationtextIdou->Draw();
 		OperationtextKrikae->Draw();
 		OperationtextToru->Draw();
 		OperationtextHaiti->Draw();
+		OperationtextReset->Draw();
+		OperationtextPlus->Draw();
 	}
 	
 	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
