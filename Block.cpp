@@ -32,6 +32,10 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 			//　もし、ブロックようにクラスを作ったのであればここに初期化
 			// 
 		//	break;
+	case MapChipType::kBlank:
+		// モデル設定
+		object3D->SetModel("nullBlock.obj");
+		break;
 	case MapChipType::kNCopyBlock:				// No.2 コピー不可能 
 		// モデル指定
 		object3D->SetModel("ncopyblock.obj");
@@ -138,7 +142,10 @@ void Block::Update() {
 		}
 		object3D->Update();
 	}
+	else if (MapChipType::kBlank == type) {
+		object3D->Update();
 
+	}
 #ifdef _DEBUG
 
 	if (ImGui::CollapsingHeader("Blokc", ImGuiTreeNodeFlags_DefaultOpen))
@@ -178,6 +185,9 @@ void Block::Draw() {
 		object3D->Draw();
 	} 
 	else if (MapChipType::kFallBlock == type) {
+		object3D->Draw();
+	}
+	else if (MapChipType::kBlank == type) {
 		object3D->Draw();
 	}
 }
