@@ -702,6 +702,7 @@ void GamePlayScene::Update()
 			}
 		}
 		*/
+		/*
 		Vector2 uistickL = OperationtextStickL->GetPosition();
 		Vector2 uistickLsize = OperationtextStickL->GetSize();
 		Vector2 uibuttonB = OperationtextButtonB->GetPosition();
@@ -815,7 +816,7 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat2("uiPlussize", &uiPlussize.x), 0.01f) {
 			OperationtextPlus->SetSize(uiPlussize);
 		}
-
+		*/
 	}
 
 	ImGui::Begin("ClearPattern");
