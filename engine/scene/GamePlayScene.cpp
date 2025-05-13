@@ -368,10 +368,10 @@ void GamePlayScene::Update()
 		if (isfadesense_ && fige) {
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0,0, -7.0f });
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
-	/*	
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 4.910f, 0.680f, -1.260f });
-			CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);*/
+		
+			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 4.910f, 0.680f, -1.260f });
+			//CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
+			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 		}
 
 		if (fadeManager_.IsFadeOutFinished()) {
@@ -540,38 +540,6 @@ void GamePlayScene::Update()
 		holdTime = 0.0f;
 	}
 #ifdef _DEBUG
-	ImGui::Begin("casassaa");
-	if (ImGui::CollapsingHeader("Camera Control Set", ImGuiTreeNodeFlags_DefaultOpen)) {
-		if (ImGui::Button("Switch to Main Camera")) {
-			CameraManager::GetInstans()->SetActiveCamera("maincam");
-		}
-		if (ImGui::Button("Switch to Sub Camera")) {
-			CameraManager::GetInstans()->SetActiveCamera("subcam");
-		}
-
-		//カメラの位置
-		Transform cameraTransform = CameraManager::GetInstans()->GetActiveCamera()->GetTransform();
-		if (ImGui::DragFloat3("Camera Position", &cameraTransform.translate.x, 0.01f)) {
-			CameraManager::GetInstans()->GetActiveCamera()->SetTranslate(cameraTransform.translate);
-			CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
-
-		}
-		//カメラの向き
-		if (ImGui::DragFloat3("Camera Rotation", &cameraTransform.rotate.x, 0.01f)) {
-			CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
-
-			//CameraManager::GetInstans()->GetActiveCamera()->SetRotate(cameraTransform.rotate);
-		}
-
-
-		//プレイヤーディレクれくしょなるライト
-		DirectionalLight directionalLight = object3DPlayer->GetDirectionalLight();
-		if (ImGui::DragFloat3("Player Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
-			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
-		}
-	}
-	ImGui::End();
-
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
@@ -747,9 +715,9 @@ void GamePlayScene::Update()
 
 	}
 
-	//ImGui::Begin("Clear");
-	//ImGui::Checkbox("Tipe_1", &fige);
-	//ImGui::End();
+	ImGui::Begin("ClearPattern");
+	ImGui::Checkbox("Pattern_1", &fige);
+	ImGui::End();
 
 #endif // _DEBUG
 }
