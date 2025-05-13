@@ -636,19 +636,27 @@ void GamePlayScene::Draw()
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();
 		OperationtextButtonA->Draw();
+		OperationtextLB->Draw();
+		OperationtextRB->Draw();
 		OperationtextIdou->Draw();
 		OperationtextKrikae->Draw();
 		OperationtextZyanpu->Draw();
+		OperationtextReset->Draw();
+		OperationtextPlus->Draw();
 	}
 	if (photoCamera->GetCameraMode()) {
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();
 		OperationtextLB->Draw();
 		OperationtextRB->Draw();
+		OperationtextX->Draw();
+		OperationtextY->Draw();
 		OperationtextIdou->Draw();
 		OperationtextKrikae->Draw();
 		OperationtextToru->Draw();
 		OperationtextHaiti->Draw();
+		OperationtextReset->Draw();
+		OperationtextPlus->Draw();
 	}
 	
 	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
