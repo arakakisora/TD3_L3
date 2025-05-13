@@ -38,7 +38,7 @@ public:
 	// 終了処理
     void Finalize();
 	// 更新
-    void Update();
+    void Update(const bool cameraMode= false);
 	// 描画
     void Draw();
 	// 3Dオブジェクト生成

@@ -51,10 +51,10 @@ void PhotoCamera::Initialize(Map* map)
 	bitmapFont->Initialize();
 }
 
-void PhotoCamera::Update(Map* map)
+void PhotoCamera::Update(Map* map,const bool cameraMode)
 {
-
 	this->map = map;
+	this->cameraMode_ = cameraMode;
 	// フォトカメラの範囲
 	cameraSizeX = this->map->GetkameraSizeX();
 	cameraSizeY = this->map->GetkameraSizeY();
@@ -132,7 +132,7 @@ void PhotoCamera::Update(Map* map)
 
 	// 生成されたブロックの更新
 	for (auto& block : blocks) {
-		block->Update();
+		block->Update(cameraMode_);
 	}
 
 #ifdef _DEBUG

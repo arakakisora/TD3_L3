@@ -374,12 +374,12 @@ void GamePlayScene::Update()
 
 		// ゲームカメラ更新処理
 		//gameCamera_->Update();
-		photoCamera->Update(map);
-
+		photoCamera->Update(map,player->GetCameraMode());
+		// マップの更新
 		map->Update();
 		//プレイヤーの更新
 		player->Update();
-
+		
 		if (player->GetCheckGoal() && !isfadesense_) {
 			// フェードアウト開始
 			fadeManager_.StartFadeOut();
@@ -540,7 +540,7 @@ void GamePlayScene::Update()
 			OperationtextPlus->Update();
 		}
 		//mode切り替え
-		photoCamera->SetcameraMode(player->GetcamerMode());
+		photoCamera->SetcameraMode(player->GetCameraMode());
 
 	
 		for (std::unique_ptr<Sprite>& Uitext : pauseui) {
@@ -568,6 +568,104 @@ void GamePlayScene::Update()
 		//離されたらタイマーをリセット
 		holdTime = 0.0f;
 	}
+	DrawImgui();
+}
+
+
+void GamePlayScene::Draw()
+{
+#pragma region 3Dオブジェクト描画
+
+	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
+	Object3DCommon::GetInstance()->CommonDraw();
+
+	// 天球の描画
+	skydome_->Draw();
+
+	// ゲームカメラ
+	//gameCamera_->Draw();
+	photoCamera->Draw3DObject();
+	////プレイヤー
+	player->Draw();
+
+	//チュートリアルテキスト
+	/*
+	for (auto& text : tutorialTexts) {
+		if (text->GetIsTutorialActive()) {
+			text->Draw();
+		}
+	}
+	*/
+
+	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Draw();
+	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Draw();
+	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Draw();
+	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Draw();
+	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Draw();
+	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Draw();
+	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Draw();
+	if (Tutorialtext8->GetIsTutorialActive()) Tutorialtext8->Draw();
+	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
+
+	map->Draw();
+
+	//ポーズメニュー
+	pauseMenu->Draw();
+
+	ParticleMnager::GetInstance()->Draw();
+
+#pragma endregion
+
+#pragma region スプライト描画
+	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
+	SpriteCommon::GetInstance()->CommonDraw();
+
+	//ui
+	/*
+	if (!photoCamera->GetCameraMode()) {
+		for (int i : {0, 1, 2, 5, 6, 9}) {
+			operationTexts[i]->Draw();
+		}
+	} else {
+		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
+			operationTexts[i]->Draw();
+		}
+	}
+	*/
+	if (!photoCamera->GetCameraMode()) {
+		OperationtextStickL->Draw();
+		OperationtextButtonB->Draw();
+		OperationtextButtonA->Draw();
+		OperationtextIdou->Draw();
+		OperationtextKrikae->Draw();
+		OperationtextZyanpu->Draw();
+	}
+	if (photoCamera->GetCameraMode()) {
+		OperationtextStickL->Draw();
+		OperationtextButtonB->Draw();
+		OperationtextLB->Draw();
+		OperationtextRB->Draw();
+		OperationtextIdou->Draw();
+		OperationtextKrikae->Draw();
+		OperationtextToru->Draw();
+		OperationtextHaiti->Draw();
+	}
+	
+	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
+		Uitext->Draw();
+	}
+
+	// フォトカメラ内のスプライト描画
+	photoCamera->DrawSprite();
+	
+	// フェード描画
+	fadeManager_.Draw();
+
+#pragma endregion
+}
+
+void GamePlayScene::DrawImgui()
+{
 #ifdef _DEBUG
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -826,108 +924,11 @@ void GamePlayScene::Update()
 #endif // _DEBUG
 }
 
-
-void GamePlayScene::Draw()
+bool GamePlayScene::GetCameraMode()
 {
-#pragma region 3Dオブジェクト描画
-
-	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
-	Object3DCommon::GetInstance()->CommonDraw();
-
-	// 天球の描画
-	skydome_->Draw();
-
-	// ゲームカメラ
-	//gameCamera_->Draw();
-	photoCamera->Draw3DObject();
-	////プレイヤー
-	player->Draw();
-
-	//チュートリアルテキスト
-	/*
-	for (auto& text : tutorialTexts) {
-		if (text->GetIsTutorialActive()) {
-			text->Draw();
-		}
+	if (player) {
+		return player->GetCameraMode();
 	}
-	*/
-
-	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Draw();
-	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Draw();
-	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Draw();
-	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Draw();
-	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Draw();
-	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Draw();
-	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Draw();
-	if (Tutorialtext8->GetIsTutorialActive()) Tutorialtext8->Draw();
-	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
-
-	map->Draw();
-
-	//ポーズメニュー
-	pauseMenu->Draw();
-
-	ParticleMnager::GetInstance()->Draw();
-
-#pragma endregion
-
-#pragma region スプライト描画
-	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
-	SpriteCommon::GetInstance()->CommonDraw();
-
-	//ui
-	/*
-	if (!photoCamera->GetCameraMode()) {
-		for (int i : {0, 1, 2, 5, 6, 9}) {
-			operationTexts[i]->Draw();
-		}
-	} else {
-		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
-			operationTexts[i]->Draw();
-		}
-	}
-	*/
-	if (!photoCamera->GetCameraMode()) {
-		OperationtextStickL->Draw();
-		OperationtextButtonB->Draw();
-		OperationtextButtonA->Draw();
-		OperationtextLB->Draw();
-		OperationtextRB->Draw();
-		OperationtextIdou->Draw();
-		OperationtextKrikae->Draw();
-		OperationtextZyanpu->Draw();
-		OperationtextReset->Draw();
-		OperationtextPlus->Draw();
-	}
-	if (photoCamera->GetCameraMode()) {
-		OperationtextStickL->Draw();
-		OperationtextButtonB->Draw();
-		OperationtextX->Draw();
-		OperationtextY->Draw();
-		OperationtextLB->Draw();
-		OperationtextRB->Draw();
-		OperationtextIdou->Draw();
-		OperationtextKrikae->Draw();
-		OperationtextToru->Draw();
-		OperationtextHaiti->Draw();
-		OperationtextReset->Draw();
-		OperationtextPlus->Draw();
-	}
-	
-	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
-		Uitext->Draw();
-	}
-
-	// フォトカメラ内のスプライト描画
-	photoCamera->DrawSprite();
-	
-	// フェード描画
-	fadeManager_.Draw();
-
-#pragma endregion
+  return false;
 }
-
-
-
-
-
+	

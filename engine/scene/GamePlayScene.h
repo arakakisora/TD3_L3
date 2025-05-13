@@ -53,6 +53,12 @@ public:
 	/// </summary>
 	void Draw()override;
 
+	// Imgui描画
+	void DrawImgui();
+
+public:	// Getter
+	bool GetCameraMode();
+
 private:
 	std::unique_ptr<Camera> camera1;
 	std::unique_ptr<Camera> camera2;
@@ -131,5 +137,7 @@ private:
 
 
 	bool fige = false;
+
+
 };
 

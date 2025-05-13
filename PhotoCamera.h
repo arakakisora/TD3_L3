@@ -12,7 +12,7 @@ public:
 	// 初期化
 	void Initialize(Map* map);
 	// 更新
-	void Update(Map* map);
+	void Update(Map* map,const bool cameraMode);
 	// 描画 / 3DObject
 	void Draw3DObject();
 	// 描画 / Sprite
@@ -102,6 +102,9 @@ private:
 	vector<unique_ptr<Sprite>>shutterRests_;
 	// ビットマップフォント
 	unique_ptr<BitmapFont>bitmapFont = nullptr;
+
+	// cameraMode用
+	bool cameraMode_;
 
 
 	//イージング用
