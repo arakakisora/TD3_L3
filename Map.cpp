@@ -64,8 +64,6 @@ void Map::Update(const bool cameraMode) {
 #endif // _DEBUG
 }
 
-
-
 void Map::Draw() {
 
 	for (std::vector<Block*>& blockLine : blockobject3D) {
@@ -191,8 +189,6 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 	// プレイヤーの初期位置を設定
 	MapDataToPlayerInitPosition();
 }
-
-
 
 void Map::MapDataToPlayerInitPosition()
 {
