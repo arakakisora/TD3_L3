@@ -118,6 +118,10 @@ private:
 	static inline const float kGravityAccleration = 0.05f; // 重力加速度
 	static inline const float kLimitFallSpeed = 2.0f;      // 最大落下速度
 	static inline const float kJampAcceleration = 0.5f;    // ジャンプ初速
+	static inline const float kJampBlockAcceleration = 0.8f;//ジャンプブロックのジャンプ初速
+	bool isAccumulateJump_ = false;                         //ジャンプ準備
+	float AccumulateJumpTimer_ = 0.0f;
+	static inline const float kAccumulateJumpTime_ = 0.2f;   //溜め時間
 	// 当たり判定
 	Map* mapChipFild_ = nullptr;
 	static inline const float kWidth = 0.8f;//当たり判定の幅

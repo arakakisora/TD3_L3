@@ -16,9 +16,9 @@
 void GamePlayScene::Initialize()
 {
 	//カメラの生成
-camera1 = std::make_unique<Camera>();
-camera1->SetTranslate({ 12,17,-31 });//カメラの位置
-CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
+	camera1 = std::make_unique<Camera>();
+	camera1->SetTranslate({ 12,17,-31 });//カメラの位置
+	CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 	//カメラの生成
 	camera2 = std::make_unique<Camera>();
@@ -215,13 +215,13 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	Tutorialtext8->SetLighting(false);
 	Tutorialtext8->SetIsTutorialActive(false);
 
-	
+
 	Tutorialtext9 = std::make_unique<Object3D>();
 	Tutorialtext9->Initialize(Object3DCommon::GetInstance());
 	Tutorialtext9->SetModel("tutorial/tutorial9.obj");
-	Tutorialtext9->SetScale(Vector3(0.5f,0.5f,0.5f));
-	Tutorialtext9->SetRotate(Vector3(17.3f,12.56f,0.0f));
-	Tutorialtext9->SetTranslate(Vector3(12.46f,21.4f,1.0f));
+	Tutorialtext9->SetScale(Vector3(0.5f, 0.5f, 0.5f));
+	Tutorialtext9->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext9->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
 	Tutorialtext9->SetLighting(false);
 	Tutorialtext9->SetIsTutorialActive(false);
 
@@ -374,12 +374,12 @@ void GamePlayScene::Update()
 
 		// ゲームカメラ更新処理
 		//gameCamera_->Update();
-		photoCamera->Update(map,player->GetCameraMode());
+		photoCamera->Update(map, player->GetCameraMode());
 		// マップの更新
 		map->Update();
 		//プレイヤーの更新
 		player->Update();
-		
+
 		if (player->GetCheckGoal() && !isfadesense_) {
 			// フェードアウト開始
 			fadeManager_.StartFadeOut();
@@ -389,7 +389,7 @@ void GamePlayScene::Update()
 		if (isfadesense_ && fige) {
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0,0, -7.0f });
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
-		
+
 			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 4.910f, 0.680f, -1.260f });
 			//CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
 			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
@@ -482,7 +482,7 @@ void GamePlayScene::Update()
 		}
 
 	}
-	
+
 	//チュートリアル表示制御map2
 	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
 		if (!tutorial9) {
@@ -490,7 +490,7 @@ void GamePlayScene::Update()
 			tutorial9 = true;
 		}
 	}
-	
+
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
 	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
 	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
@@ -513,39 +513,39 @@ void GamePlayScene::Update()
 			}
 		}
 		*/
-		if (!photoCamera->GetCameraMode()) {
-			OperationtextStickL->Update();
-			OperationtextButtonB->Update();
-			OperationtextButtonA->Update();
-			OperationtextLB->Update();
-			OperationtextRB->Update();
-			OperationtextIdou->Update();
-			OperationtextKrikae->Update();
-			OperationtextZyanpu->Update();
-			OperationtextReset->Update();
-			OperationtextPlus->Update();
-		}
-		if (photoCamera->GetCameraMode()) {
-			OperationtextStickL->Update();
-			OperationtextButtonB->Update();
-			OperationtextX->Update();
-			OperationtextY->Update();
-			OperationtextLB->Update();
-			OperationtextRB->Update();
-			OperationtextIdou->Update();
-			OperationtextKrikae->Update();
-			OperationtextToru->Update();
-			OperationtextHaiti->Update();
-			OperationtextReset->Update();
-			OperationtextPlus->Update();
-		}
-		//mode切り替え
-		photoCamera->SetcameraMode(player->GetCameraMode());
+	if (!photoCamera->GetCameraMode()) {
+		OperationtextStickL->Update();
+		OperationtextButtonB->Update();
+		OperationtextButtonA->Update();
+		OperationtextLB->Update();
+		OperationtextRB->Update();
+		OperationtextIdou->Update();
+		OperationtextKrikae->Update();
+		OperationtextZyanpu->Update();
+		OperationtextReset->Update();
+		OperationtextPlus->Update();
+	}
+	if (photoCamera->GetCameraMode()) {
+		OperationtextStickL->Update();
+		OperationtextButtonB->Update();
+		OperationtextX->Update();
+		OperationtextY->Update();
+		OperationtextLB->Update();
+		OperationtextRB->Update();
+		OperationtextIdou->Update();
+		OperationtextKrikae->Update();
+		OperationtextToru->Update();
+		OperationtextHaiti->Update();
+		OperationtextReset->Update();
+		OperationtextPlus->Update();
+	}
+	//mode切り替え
+	photoCamera->SetcameraMode(player->GetCameraMode());
 
-	
-		for (std::unique_ptr<Sprite>& Uitext : pauseui) {
-			Uitext->Update();
-		}
+
+	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
+		Uitext->Update();
+	}
 
 	// ポーズ
 	pauseMenu->Update();
@@ -658,14 +658,14 @@ void GamePlayScene::Draw()
 		OperationtextReset->Draw();
 		OperationtextPlus->Draw();
 	}
-	
+
 	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
 		Uitext->Draw();
 	}
 
 	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
-	
+
 	// フェード描画
 	fadeManager_.Draw();
 
@@ -792,11 +792,11 @@ void GamePlayScene::DrawImgui()
 		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
 			Tutorialtext8->SetTransform(text8);
 		}
-		
+
 		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
 			Tutorialtext9->SetTransform(text9);
 		}
-		
+
 		//UI
 		/*
 		if (ImGui::CollapsingHeader("UI Translate")) {
@@ -937,6 +937,6 @@ bool GamePlayScene::GetCameraMode()
 	if (player) {
 		return player->GetCameraMode();
 	}
-  return false;
+	return false;
 }
-	
+
