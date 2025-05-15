@@ -68,7 +68,7 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 
 	case MapChipType::kPutFixedTimeBlock:		// No.8 貼り付け後一定時間 
 		// モデル指定
-		//object3D->SetModel("Timer.obj");
+		object3D->SetModel("Timer.obj");
 		break;
 
 	}
@@ -217,7 +217,17 @@ void Block::FixedTimeBlock()
 
 void Block::PutFixedTimeBlock()
 {
-	if (isFixedTimeBlockPut) {
+	if (!isFixedTimeBlockPut) {
+		isFixedTimeBlockPut = true;
+		fixedTimeCounter = 0;
+	}
 
+	fixedTimeCounter++;
+
+	if (fixedTimeCounter > kFixedTime) {
+		IndexSet index = map->GetMapChipIndexSetByPosition(object3D->GetTranslate());
+		map->RemoveObjectAt(index.xIndex, index.yIndex);
+		isAlive = false; 
 	}
 }
+
