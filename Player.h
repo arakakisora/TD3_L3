@@ -129,7 +129,7 @@ private:
 	LRDirecion lrDirection_ = LRDirecion::kright;
 	float turnFirstRotationY_ = 0.0f;           // 現在の向き
 	float turnTimer_ = 0.0f;                    // 振り向き時間
-	static inline const float KtimeTurn = 0.2f; // 角度補間タイム
+	static inline const float KtimeTurn = 1.0f; // 角度補間タイム
 
 	//死んだ
 	bool isDead_ = false;

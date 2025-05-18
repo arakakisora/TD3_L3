@@ -175,9 +175,9 @@ void Player::PlayerTurn()
 {
 
 	if (turnTimer_ > 0.0f) {
-		turnTimer_ -= 1.0f / 60.0f;
+		turnTimer_ -= 1.0f / 30.0f;
 
-		float t = std::clamp(1.0f - turnTimer_ / kLimitRunSpeed, 0.0f, 1.0f);
+		float t = std::clamp(1.0f - turnTimer_ / 1.0f, 0.0f, 1.0f);
 		float easedT = Easing::EaseOutQuad(t);
 
 		float destinationRotationYTable[] = {
