@@ -107,14 +107,14 @@ private:
 
 
 	Vector3 velocity_ = {};                          // 速度
-	static inline const float kAccleration = 0.03f;  // 定数加速度
+	static inline const float kAccleration = 0.05f;  // 定数加速度
 	static inline const float kAttenuation = 0.2f;   // 速度減衰率
-	static inline const float kLimitRunSpeed = 1.0f; // 最大速度制限
-
+	static inline const float kLimitRunSpeed = 0.2f; // 最大速度制限
+	float deltaTime_ = 1.0f / 60.0f;
 	// ジャンプ
 	bool onGround_ = true;                                 // 接点状態フラグ
 	static inline const float kGravityAccleration = 0.05f; // 重力加速度
-	static inline const float kLimitFallSpeed = 2.0f;      // 最大落下速度
+	static inline const float kLimitFallSpeed = 1.0f;      // 最大落下速度
 	static inline const float kJampAcceleration = 0.5f;    // ジャンプ初速
 	// 当たり判定
 	Map* mapChipFild_ = nullptr;

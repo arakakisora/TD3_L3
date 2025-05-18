@@ -86,7 +86,7 @@ void PhotoCamera::Update(Map* map)
 			for (uint32_t y = 0; y < cameraSizeY; ++y) {
 				for (uint32_t x = 0; x < cameraSizeX; ++x) {
 					// コピーしたマップデータの描画用Blockクラスの位置
-					Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
+					Vector3 blockPosition = Vector3(currentPos.x + x, currentPos.y - y, -1.0F);
 					// コピーしたマップデータの描画用Blockクラスのマップチップタイプ
 					MapChipType mapChipType = copyData[y][x];
 					// コピーしたマップデータの描画用Blockクラスのマップチップタイプが空白でないとき
@@ -263,7 +263,7 @@ void PhotoCamera::Move()
 	for (size_t i = 0; i < blocks.size(); ++i) {
 		uint32_t x = static_cast<uint32_t>(i % cameraSizeX);
 		uint32_t y = static_cast<uint32_t>(i / cameraSizeX);
-		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
+		Vector3 blockPosition = Vector3(currentPos.x + x, currentPos.y - y, -1.0F);
 		blocks[i]->SetObject3DPosiition(blockPosition);
 	}
 	position = targetPos;
@@ -324,19 +324,7 @@ void PhotoCamera::stickMove()
 
 
 
-
-	// イージング補間
-	if (isMoving) {
-		moveTimer += moveSpeed;
-		if (moveTimer >= 1.0f) {
-			moveTimer = 1.0f;
-			isMoving = false;
-			currentPos = targetPos;
-		} else {
-			currentPos = Easing::EaseLerp(currentPos, targetPos, moveTimer, Easing::EaseOutQuad);
-		}
-	}
-
+	
 
 	// イージング結果を object3D に反映
 	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, -1.0f));
@@ -345,7 +333,7 @@ void PhotoCamera::stickMove()
 	for (size_t i = 0; i < blocks.size(); ++i) {
 		uint32_t x = static_cast<uint32_t>(i % cameraSizeX);
 		uint32_t y = static_cast<uint32_t>(i / cameraSizeX);
-		Vector3 blockPosition = Vector3(position.x + x, position.y - y, -1.0F);
+		Vector3 blockPosition = Vector3(currentPos.x + x, currentPos.y - y, -1.0F);
 		blocks[i]->SetObject3DPosiition(blockPosition);
 	}
 	position = targetPos;
