@@ -15,7 +15,7 @@ void PauseMenu::Initialize(Object3DCommon* object3dcommon, bool isPlayScene) {
 	object3dcommon_ = object3dcommon;
 	scenefige = isPlayScene;
 
-	transform.translate = { -2.6f,1.5f,-2.0f };
+	transform.translate = { -2.6f,1.5f,0.0f };
 	object = std::make_unique<Object3D>();
 	object->Initialize(object3dcommon_);
 	object->SetModel("Pause.obj");
@@ -197,8 +197,10 @@ void PauseMenu::ControllerUpdate() {
 		//ポーズ画面が出ているときTでタイトルへ(仮)
 		if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 			if (scenefige) {
+				// ゲームプレイ中はステージセレクトに戻る
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 			} else if (!scenefige) {
+				// それ以外はタイトルに戻る
 				SceneManager::GetInstance()->ChangeScene("TITELE");
 			}
 		}

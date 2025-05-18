@@ -339,6 +339,30 @@ void GamePlayScene::Initialize()
 
 	fadeManager_.Initialize("Resources/white.png");
 	fadeManager_.StartFadeIn();
+
+
+	ParticleMnager::GetInstance()->CreateParticleGroup("Goal", "Resources/block.png", "block.obj");
+	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/block.png", "block.obj");
+
+	// パーティクル発生器
+	emitter_ = new ParticleEmitter(
+		{ 0.0f,0.0f,0.0f },
+		3.0f,
+		0.0f,
+		6,
+		"Goal"
+	);
+	// パーティクルの位置
+	Vector3 start = map->FindMapChipPosition(MapChipType::kGoalDown);
+	emitter_->SetPosition(start);
+
+	playeremitter_ = new ParticleEmitter(
+		{ 0.0f,0.0f,0.0f },
+		5.0f,
+		0.0f,
+		1,
+		"Player"
+	);
 }
 
 void GamePlayScene::Finalize()
@@ -355,6 +379,10 @@ void GamePlayScene::Finalize()
 	//delete gameCamera_;
 	photoCamera->Finalize();
 	delete photoCamera;
+
+	delete emitter_;
+	delete playeremitter_;
+
 }
 
 void GamePlayScene::Update()
@@ -380,19 +408,29 @@ void GamePlayScene::Update()
 		//プレイヤーの更新
 		player->Update();
 
+		playeremitter_->Update();
+
+		if (player->GetCameraMode()) {
+			// カメラモード時パーティクル解除
+			player->SetPrayerMoveRight(false);
+			player->SetPrayerMoveLeft(false);
+		}
+
 		if (player->GetCheckGoal() && !isfadesense_) {
+
+			// クリアパーティクル発生
+			emitter_->Emit();
 			// フェードアウト開始
 			fadeManager_.StartFadeOut();
 			isfadesense_ = true;  // 一度だけ行う
 		}
 
-		if (isfadesense_ && fige) {
+		if (isfadesense_) {
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0,0, -7.0f });
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 
-			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 4.910f, 0.680f, -1.260f });
-			//CameraManager::GetInstans()->GetActiveCamera()->SetRotate({ 0.070f,-1.41f,-0.020f });
-			//CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+			// クリアパーティクル開始
+			emitter_->Update();
 		}
 
 		if (fadeManager_.IsFadeOutFinished()) {
@@ -481,6 +519,30 @@ void GamePlayScene::Update()
 			}
 		}
 
+	} else {
+		player->SetPrayerMoveRight(false);
+		player->SetPrayerMoveLeft(false);
+	}
+
+	// プレイヤー用のパーティクルの位置を常に更新
+	Vector3 pos = player->GetTranslate();
+
+	// 右に移動中
+	if (player->GetPrayerMoveRight()) {
+		// 左方向に設定
+		playeremitter_->SetisRight(false);
+		Vector3 offset = { 0.5f,0.0f,0.0f };
+		playeremitter_->SetPosition(pos + offset);
+		playeremitter_->PlayerEmit();
+	}
+
+	// 左に移動中
+	if (player->GetPrayerMoveLeft()) {
+		// 右方向に設定
+		playeremitter_->SetisRight(true);
+		Vector3 offset = { 1.5f,0.0f,0.0f };
+		playeremitter_->SetPosition(pos + offset);
+		playeremitter_->PlayerEmit();
 	}
 
 	//チュートリアル表示制御map2
@@ -548,7 +610,9 @@ void GamePlayScene::Update()
 	}
 
 	// ポーズ
-	pauseMenu->Update();
+	if (!player->GetCheckGoal() ){
+		pauseMenu->Update();
+	}
 
 	//リセット
 	if (Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
@@ -924,10 +988,6 @@ void GamePlayScene::DrawImgui()
 		}
 		*/
 	}
-
-	ImGui::Begin("ClearPattern");
-	ImGui::Checkbox("Pattern_1", &fige);
-	ImGui::End();
 
 #endif // _DEBUG
 }
