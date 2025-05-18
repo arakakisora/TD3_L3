@@ -9,6 +9,8 @@
 #include "ParticleMnager.h"
 #include "PauseMenu.h"
 #include "FadeManager.h"
+#include "ParticleEmitter.h"
+#include "ParticleMnager.h"
 
 class StageSelectScene :public BaseScene
 {
@@ -105,4 +107,9 @@ public:
 
 	// ステージ選択時のプレイヤーの位置
 	Vector3 playerInitialOffset_; 
+
+	ParticleEmitter* playeremitter_;
+	// プレイヤー移動フラグ
+	bool playermoveright = false;
+	bool playermoveleft = false;
 };
