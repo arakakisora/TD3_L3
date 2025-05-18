@@ -114,9 +114,6 @@ void Player::PrayerMove() {
 
 
 
-	
-
-
 
 
 	// コントローラー操作（左右移動）
@@ -142,6 +139,10 @@ void Player::PrayerMove() {
 				turnTimer_ =KtimeTurn;
 			}
 			accceleration.x += kAccleration;
+
+			// パーティクルのフラグを設定（右移動）
+			playermoveright = true;
+			playermoveleft = false;
 		} else if (
 #ifdef _DEBUG
 			Input::GetInstance()->PushKey(DIK_LEFT) ||
@@ -156,12 +157,20 @@ void Player::PrayerMove() {
 				turnTimer_ = KtimeTurn;
 			}
 			accceleration.x -= kAccleration;
+
+			// パーティクルのフラグを設定（左移動）
+			playermoveleft = true;
+			playermoveright = false;
 		}
 
 		velocity_.x += accceleration.x;
 		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
 	} else {
 		velocity_.x *= (1.0f - kAttenuation);
+
+		// スティックが真ん中なら両方falseにする
+		playermoveright = false;
+		playermoveleft = false;
 	}
 
 	// ジャンプ処理

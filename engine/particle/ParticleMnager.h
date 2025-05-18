@@ -16,7 +16,7 @@ struct Particle {
 	Vector4 color;
 
 
-	
+
 
 
 };
@@ -49,7 +49,7 @@ class ParticleMnager
 public:
 
 	static ParticleMnager* GetInstance();
-	
+
 private:
 	// コンストラクタをプライベートにする
 	ParticleMnager() = default;
@@ -62,7 +62,7 @@ private:
 public:
 
 	//初期化
-	void Initialize(DirectXCommon* dxcommn,SrvManager*srvmaneger);
+	void Initialize(DirectXCommon* dxcommn, SrvManager* srvmaneger);
 
 
 
@@ -73,21 +73,25 @@ public:
 	void Update();
 	void Draw();
 
-	void CreateParticleGroup(const std::string name,const std::string textureFilePath, std::string modelFilePath);
+	void CreateParticleGroup(const std::string name, const std::string textureFilePath, std::string modelFilePath);
 
 	void Emit(const std::string& name, const Vector3 position, uint32_t count);
 
 	void SetModel(const std::string& filepath);
 
 	Particle MakeNewParticle(std::mt19937& randomEngine, const Vector3& translate);
-	
+
+
+
+	void PlayerEmit(const std::string& name, const Vector3 position, uint32_t count, bool isRight);
+	Particle PlayerMakeNewParticle(std::mt19937& randomEngine, const Vector3& translate, bool isRight);
 
 private:
 
 
 	//インスタンス
 	static ParticleMnager* instance_;
-	DirectXCommon* dxCommon_=nullptr;
+	DirectXCommon* dxCommon_ = nullptr;
 	SrvManager* srvManager_ = nullptr;
 
 
@@ -102,7 +106,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 	//VBV
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
-	
+
 	//SRT
 	Transform transform;
 	Matrix4x4 worldMatrix;
@@ -118,7 +122,5 @@ private:
 	//マテリアルにデータを書き込む	
 	Material* materialData = nullptr;
 	//std::string textureFilePath_;
-	
+
 };
-
-

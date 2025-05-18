@@ -112,4 +112,5 @@ public: // 新設 Setter / Getter
     std::vector<std::vector<MapChipType>> GetMap() const { return mapChipData_.data; }
 	//void SetMap(std::vector<std::vector<MapChipType>> map) { mapChipData_.data = map; }
 	void SetMap(const MapChipData& map) { mapChipDataNext_ = map; }
+    Vector3 FindMapChipPosition(MapChipType mapChipType);
 };

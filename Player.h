@@ -101,6 +101,11 @@ public:
 		return worldPos;
 	};
 
+	Vector3 GetTranslate() { return object3D_->GetTranslate(); }
+	bool GetPrayerMoveRight() { return playermoveright; }
+	bool GetPrayerMoveLeft() { return playermoveleft; }
+	void SetPrayerMoveRight(bool right) { playermoveright = right; }
+	void SetPrayerMoveLeft(bool left) { playermoveleft = left; }
 
 private:
 
@@ -145,4 +150,7 @@ private:
 	bool cameraMode_ = false;
 	// クリアシーン移動フラグ
 	bool CheckGoal = false;
+	// プレイヤー移動フラグ
+	bool playermoveright = false;
+	bool playermoveleft = false;
 };
