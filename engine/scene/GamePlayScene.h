@@ -53,6 +53,12 @@ public:
 	/// </summary>
 	void Draw()override;
 
+	// Imgui描画
+	void DrawImgui();
+
+public:	// Getter
+	bool GetCameraMode();
+
 private:
 	std::unique_ptr<Camera> camera1;
 	std::unique_ptr<Camera> camera2;
@@ -77,6 +83,8 @@ private:
 	std::unique_ptr<Sprite>OperationtextStickL;
 	std::unique_ptr<Sprite>OperationtextButtonB;
 	std::unique_ptr<Sprite>OperationtextButtonA;
+	std::unique_ptr<Sprite>OperationtextX;
+	std::unique_ptr<Sprite>OperationtextY;
 	std::unique_ptr<Sprite>OperationtextLB;
 	std::unique_ptr<Sprite>OperationtextRB;
 	std::unique_ptr<Sprite>OperationtextIdou;
@@ -84,6 +92,8 @@ private:
 	std::unique_ptr<Sprite>OperationtextToru;
 	std::unique_ptr<Sprite>OperationtextHaiti;
 	std::unique_ptr<Sprite>OperationtextZyanpu;
+	std::unique_ptr<Sprite>OperationtextReset;
+	std::unique_ptr<Sprite>OperationtextPlus;
 
 	std::vector < std::unique_ptr<Sprite>> pauseui;
 	Map* map=nullptr;
@@ -127,5 +137,7 @@ private:
 
 
 	bool fige = false;
+
+
 };
 

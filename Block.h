@@ -20,6 +20,7 @@ enum class MapChipType {
 	kFallBlock,			// 重力の影響受		No.6
 	kFixedTimeBlock,	// 貼り付け前一定時間	No.7
 	kPutFixedTimeBlock,	// 貼り付け後一定時間　	No.8
+	kjumpBlock,         // プレイヤーの上昇 No.9
 };
 
 namespace {
@@ -34,6 +35,7 @@ namespace {
 		{"6", MapChipType::kFallBlock},
 		{"7", MapChipType::kFixedTimeBlock },
 		{"8",MapChipType::kPutFixedTimeBlock},
+		{"9",MapChipType::kjumpBlock},
 
 		/*０：空
 	１：プレイヤーの初期位置
@@ -55,7 +57,7 @@ public:
 	// 初期化
 	void Initialize(MapChipType type, const Vector3& position, Map* map);
 	// 更新
-	void Update();
+	void Update(const bool cameramode = false);
 	// 描画
 	void Draw();
 
@@ -67,6 +69,9 @@ public:
 	void FixedTimeBlock();
 	// 一定時間経過後に消えるブロックの貼り付け後（PutFixedTime）
 	void PutFixedTimeBlock();
+	//ジャンプブロック
+	void JumpBlock();
+
 	// SetPosition
 
 	//落下フラグセット
@@ -103,5 +108,9 @@ private:	// 各ブロック用の変数
 	float velocity = 0.0f;
 	bool isFalling = false;
 	static constexpr float gravity = 0.02f;
+
+	// nullBlock用のCameraMode
+	bool cameraMode_;
+
 };
 

@@ -71,17 +71,21 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 		//object3D->SetModel("Timer.obj");
 		break;
 
+	case MapChipType::kjumpBlock:               // No.9 プレイヤーの上昇
+		// モデル指定
+		object3D->SetModel("cube.obj");
+		break;
 	}
-	
+
 	object3D->SetLighting(true);
 	object3D->SetDirectionalLightEnable(true);
 	object3D->SetDirectionalLightDirection({ 0.88f, -1.90f, 4.0f });
 }
 
 
+void Block::Update(const bool cameraMode) {
 
-void Block::Update() {
-
+	cameraMode_ = cameraMode;
 	/*else if (MapChipType::マップチップタイプ == type) {
 	* モデルの更新なのでこれは絶対に必要
 		object3D->Update();
@@ -91,24 +95,19 @@ void Block::Update() {
 	}*/
 	if (MapChipType::kCopyBlock == type) {
 		object3D->Update();
-	} 
-	else if (MapChipType::kGoalUp == type) {
+	} else if (MapChipType::kGoalUp == type) {
 		object3D->Update();
 	} else if (MapChipType::kGoalDown == type) {
 		object3D->Update();
-	}
-	else if (MapChipType::kNCopyBlock == type) {
+	} else if (MapChipType::kNCopyBlock == type) {
 		object3D->Update();
-	}
-	else if (MapChipType::kFixedTimeBlock == type) {
+	} else if (MapChipType::kFixedTimeBlock == type) {
 		object3D->Update();
 		FixedTimeBlock();
-	} 
-	else if (MapChipType::kPutFixedTimeBlock == type) {
+	} else if (MapChipType::kPutFixedTimeBlock == type) {
 		object3D->Update();
 		PutFixedTimeBlock();
-	}
-	else if (MapChipType::kFallBlock == type) {
+	} else if (MapChipType::kFallBlock == type) {
 		Vector3 position = object3D->GetTranslate();
 		IndexSet index = map->GetMapChipIndexSetByPosition(position);
 		uint32_t belowIndex = index.yIndex + 1;
@@ -120,7 +119,6 @@ void Block::Update() {
 			}
 			isFalling = true;
 		}
-
 		//落下
 		if (isFalling) {
 			velocity += gravity;
@@ -142,21 +140,23 @@ void Block::Update() {
 		}
 		object3D->Update();
 	}
-	else if (MapChipType::kBlank == type) {
+	else if (MapChipType::kjumpBlock == type) {
 		object3D->Update();
-
 	}
+
+	else if (cameraMode_ && MapChipType::kBlank == type) {
+		object3D->Update();
+	}
+
 #ifdef _DEBUG
 
-	if (ImGui::CollapsingHeader("Blokc", ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader("Block", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		
+
 		DirectionalLight directionalLight = object3D->GetDirectionalLight();
-		if (ImGui::DragFloat3("Blokc Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
+		if (ImGui::DragFloat3("Block Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
 			object3D->SetDirectionalLightDirection(directionalLight.direction);
 		}
-
-
 
 	}
 #endif // DEBUG_
@@ -168,26 +168,22 @@ void Block::Draw() {
 	// Drawはelse ifを追加してDrawかくだけ
 	if (MapChipType::kCopyBlock == type) {
 		object3D->Draw();
-	} 
-	else if (MapChipType::kGoalUp == type) {
+	} else if (MapChipType::kGoalUp == type) {
+		object3D->Draw();
+	} else if (MapChipType::kGoalDown == type) {
+		object3D->Draw();
+	} else if (MapChipType::kNCopyBlock == type) {
+		object3D->Draw();
+	} else if (MapChipType::kFixedTimeBlock == type) {
+		object3D->Draw();
+	} else if (MapChipType::kPutFixedTimeBlock == type) {
+		object3D->Draw();
+	} else if (MapChipType::kFallBlock == type) {
+		object3D->Draw();
+	} else if (MapChipType::kjumpBlock == type) {
 		object3D->Draw();
 	}
-	else if (MapChipType::kGoalDown == type) {
-		object3D->Draw();
-	} 
-	else if (MapChipType::kNCopyBlock == type) {
-		object3D->Draw();
-	} 
-	else if (MapChipType::kFixedTimeBlock == type) {
-		object3D->Draw();
-	} 
-	else if (MapChipType::kPutFixedTimeBlock == type) {
-		object3D->Draw();
-	} 
-	else if (MapChipType::kFallBlock == type) {
-		object3D->Draw();
-	}
-	else if (MapChipType::kBlank == type) {
+	else if (cameraMode_ && MapChipType::kBlank == type) {
 		object3D->Draw();
 	}
 }
@@ -233,4 +229,9 @@ void Block::PutFixedTimeBlock()
 	if (isFixedTimeBlockPut) {
 
 	}
+}
+
+//ジャンプブロック
+void Block::JumpBlock() {
+
 }

@@ -67,7 +67,9 @@ public:
 	void CeilingCollisionMove(const CollisionMapInfo& info);// 天井衝突移動
 	void OnGroundSwitching(CollisionMapInfo& info);// 着地判定
 	void HitWallCollisionMove(const CollisionMapInfo& info);// 壁衝突移動
-
+	
+	// Blockクラスへのカメラモード 
+	bool SetCameraMode(bool cameraMode) { return cameraMode = cameraMode_; }
 
 	Vector3 CornerPosition(const Vector3& centor, Corner corner);// 4つの角の位置を計算yo
 	// map衝突判定
@@ -85,7 +87,7 @@ public:
 	const Vector3& GetVelocity() const { return velocity_; }// 速度取得
 	void SetMapChipField(Map* mapChipFild) { mapChipFild_ = mapChipFild; }// マップチップフィールド設定
 
-	bool GetcamerMode() { return CamerMode; }// カメラモード取得
+	bool GetCameraMode() { return cameraMode_; }// カメラモード取得
 
 	bool GetCheckGoal() { return CheckGoal; }
 
@@ -116,6 +118,10 @@ private:
 	static inline const float kGravityAccleration = 0.05f; // 重力加速度
 	static inline const float kLimitFallSpeed = 1.0f;      // 最大落下速度
 	static inline const float kJampAcceleration = 0.5f;    // ジャンプ初速
+	static inline const float kJampBlockAcceleration = 0.8f;//ジャンプブロックのジャンプ初速
+	bool isAccumulateJump_ = false;                         //ジャンプ準備
+	float AccumulateJumpTimer_ = 0.0f;
+	static inline const float kAccumulateJumpTime_ = 0.2f;   //溜め時間
 	// 当たり判定
 	Map* mapChipFild_ = nullptr;
 	static inline const float kWidth = 0.8f;//当たり判定の幅
@@ -136,7 +142,7 @@ private:
 	//落下死高さ
 	float deathHeight_; // 落下死の高さ
 	//カメラモードフラグ
-	bool CamerMode = false;
+	bool cameraMode_ = false;
 	// クリアシーン移動フラグ
 	bool CheckGoal = false;
 };
