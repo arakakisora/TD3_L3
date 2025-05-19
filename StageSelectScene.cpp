@@ -131,7 +131,7 @@ void StageSelectScene::Initialize()
 	
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
-	pauseMenu->Initialize(Object3DCommon::GetInstance(), false);
+	pauseMenu->Initialize(Object3DCommon::GetInstance(), PauseType::StageSelectScene);
 	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
 	// 背景

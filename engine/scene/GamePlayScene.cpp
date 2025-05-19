@@ -334,7 +334,7 @@ void GamePlayScene::Initialize()
 
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
-	pauseMenu->Initialize(Object3DCommon::GetInstance(), true);
+	pauseMenu->Initialize(Object3DCommon::GetInstance(), PauseType::GamePlayScene);
 	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
 	fadeManager_.Initialize("Resources/white.png");
