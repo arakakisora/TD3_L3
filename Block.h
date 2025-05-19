@@ -87,8 +87,7 @@ public:
         void SetPosition(const Vector3& position) { this->position = position; }
 		// ブロックの座標を取得し直接モデルの座標にする
 		void SetObject3DPosiition(const Vector3& position);
-		//落下フラグセット
-		void SetFalling(bool falling);
+		
 		Vector3 GetPosition() { return position; }
 
 private:

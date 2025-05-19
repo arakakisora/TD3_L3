@@ -152,7 +152,7 @@ void Block::Update(const bool cameraMode) {
 
 #ifdef _DEBUG
 
-	if (ImGui::CollapsingHeader("Block", ImGuiTreeNodeFlags_DefaultOpen))
+	/*if (ImGui::CollapsingHeader("Block", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 
 		DirectionalLight directionalLight = object3D->GetDirectionalLight();
@@ -160,7 +160,7 @@ void Block::Update(const bool cameraMode) {
 			object3D->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
-	}
+	}*/
 #endif // DEBUG_
 
 };
