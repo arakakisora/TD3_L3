@@ -71,6 +71,10 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 		object3D->SetModel("putTimer.obj");
 		break;
 
+	case MapChipType::kjumpBlock:               // No.9 プレイヤーの上昇
+		// モデル指定
+		object3D->SetModel("cube.obj");
+		break;
 	}
 
 	object3D->SetLighting(true);
@@ -117,7 +121,6 @@ void Block::Update(const bool cameraMode) {
 			}
 			isFalling = true;
 		}
-
 		//落下
 		if (isFalling) {
 			velocity += gravity;
@@ -139,6 +142,10 @@ void Block::Update(const bool cameraMode) {
 		}
 		object3D->Update();
 	}
+	else if (MapChipType::kjumpBlock == type) {
+		object3D->Update();
+	}
+
 	else if (cameraMode_ && MapChipType::kBlank == type) {
 		object3D->Update();
 	}
@@ -174,6 +181,8 @@ void Block::Draw() {
 	} else if (MapChipType::kPutFixedTimeBlock == type) {
 		object3D->Draw();
 	} else if (MapChipType::kFallBlock == type) {
+		object3D->Draw();
+	} else if (MapChipType::kjumpBlock == type) {
 		object3D->Draw();
 	}
 	else if (cameraMode_ && MapChipType::kBlank == type) {
@@ -255,4 +264,9 @@ void Block::PutFixedTimeBlock()
 		map->RemoveObjectAt(index.xIndex, index.yIndex);
 		isAlive = false;
 	}
+}
+
+//ジャンプブロック
+void Block::JumpBlock() {
+
 }

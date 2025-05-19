@@ -81,8 +81,6 @@ void Player::Update() {
 
 	}
 
-
-
 	////PrayerTurn();
 	object3D_->Update();
 
@@ -98,77 +96,81 @@ void Player::Draw() {
 }
 
 void Player::PrayerMove() {
-#ifdef _DEBUG
 
-	// 左右移動操作（キーボード）
-	if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
-		// 左右加速
-		Vector3 accceleration = {};
-		if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-			if (velocity_.x < 0.0f) {
-				velocity_.x *= (1.0f - kAttenuation);
-			}
 
-			if (lrDirection_ != LRDirecion::kright) {
-				lrDirection_ = LRDirecion::kright;
-				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
-				turnTimer_ = kLimitRunSpeed;
-			}
-
-			accceleration.x += kAccleration;
-		} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-			if (velocity_.x > 0.0f) {
-				velocity_.x *= (1.0f - kAttenuation);
-			}
-
-			if (lrDirection_ != LRDirecion::kLeft) {
-				lrDirection_ = LRDirecion::kLeft;
-				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
-				turnTimer_ = kLimitRunSpeed;
-			}
-
-			accceleration.x -= kAccleration;
+	//溜めVersion
+	/*
+	if (isAccumulateJump_) {
+		AccumulateJumpTimer_ += 1.0f / 60.0f;
+		if (AccumulateJumpTimer_ >= kAccumulateJumpTime_) {
+			// ジャンプ実行
+			velocity_.y = kJampBlockAcceleration;
+			onGround_ = false;
+			isAccumulateJump_ = false;
+			AccumulateJumpTimer_ = 0.0f;
 		}
-
-		velocity_.x += accceleration.x;
-		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
-	} else {
 	}
-#endif // _DEBUG
+	*/
 
-		// X軸の減速処理（Y軸には影響を与えない）
-		velocity_.x *= (1.0f - kAttenuation);
+
+
+
 
 	// コントローラー操作（左右移動）
-	if (Input::GetInstance()->GetGamePadStickX() > 0 || Input::GetInstance()->GetGamePadStickX() < 0) {
+	if (
+#ifdef _DEBUG
+		Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT) ||
+#endif // _DEBUG
+		Input::GetInstance()->GetGamePadStickX() > 0 || Input::GetInstance()->GetGamePadStickX() < 0) {
+
+
 		Vector3 accceleration = {};
-		if (Input::GetInstance()->GetGamePadStickX() > 0) {
+		if (
+#ifdef _DEBUG
+			Input::GetInstance()->PushKey(DIK_RIGHT) ||
+#endif // _DEBUG
+			Input::GetInstance()->GetGamePadStickX() > 0) {
 			if (velocity_.x < 0.0f) {
 				velocity_.x *= (1.0f - kAttenuation);
 			}
 			if (lrDirection_ != LRDirecion::kright) {
 				lrDirection_ = LRDirecion::kright;
 				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
-				turnTimer_ = kLimitRunSpeed;
+				turnTimer_ =KtimeTurn;
 			}
 			accceleration.x += kAccleration;
-		} else if (Input::GetInstance()->GetGamePadStickX() < 0) {
+
+			// パーティクルのフラグを設定（右移動）
+			playermoveright = true;
+			playermoveleft = false;
+		} else if (
+#ifdef _DEBUG
+			Input::GetInstance()->PushKey(DIK_LEFT) ||
+#endif // _DEBUG
+			Input::GetInstance()->GetGamePadStickX() < 0) {
 			if (velocity_.x > 0.0f) {
 				velocity_.x *= (1.0f - kAttenuation);
 			}
-
 			if (lrDirection_ != LRDirecion::kLeft) {
 				lrDirection_ = LRDirecion::kLeft;
 				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
-				turnTimer_ = kLimitRunSpeed;
+				turnTimer_ = KtimeTurn;
 			}
 			accceleration.x -= kAccleration;
+
+			// パーティクルのフラグを設定（左移動）
+			playermoveleft = true;
+			playermoveright = false;
 		}
 
 		velocity_.x += accceleration.x;
 		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
 	} else {
 		velocity_.x *= (1.0f - kAttenuation);
+
+		// スティックが真ん中なら両方falseにする
+		playermoveright = false;
+		playermoveleft = false;
 	}
 
 	// ジャンプ処理
@@ -188,7 +190,6 @@ void Player::PrayerMove() {
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 	}
 
-
 }
 
 void Player::PlayerTurn()
@@ -197,7 +198,7 @@ void Player::PlayerTurn()
 	if (turnTimer_ > 0.0f) {
 		turnTimer_ -= 1.0f / 30.0f;
 
-		float t = std::clamp(1.0f - turnTimer_ / kLimitRunSpeed, 0.0f, 1.0f);
+		float t = std::clamp(1.0f - turnTimer_ / 1.0f, 0.0f, 1.0f);
 		float easedT = Easing::EaseOutQuad(t);
 
 		float destinationRotationYTable[] = {
@@ -210,12 +211,7 @@ void Player::PlayerTurn()
 		object3D_->SetRotate({ 0, newY, 0 });
 	}
 
-
 }
-
-
-
-
 
 void Player::MapCollision(CollisionMapInfo& info) {
 
@@ -237,7 +233,6 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 	return center + offseetTable[static_cast<uint32_t>(corner)];
 
-
 }
 
 void Player::PlayerCollisionMove(const CollisionMapInfo& info) {
@@ -248,7 +243,6 @@ void Player::PlayerCollisionMove(const CollisionMapInfo& info) {
 	position.y += info.move.y;
 	position.z += info.move.z;
 	object3D_->SetTranslate(position);
-
 
 }
 
@@ -293,6 +287,20 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kNCopyBlock) {
 				hit = true;
+			} else if (mapChipType == MapChipType::kjumpBlock) {
+			
+				velocity_.y = kJampBlockAcceleration;
+				onGround_ = false;
+
+				//溜めVersion
+				/*
+				if (!isAccumulateJump_) {
+					isAccumulateJump_ = true;
+					AccumulateJumpTimer_ = 0.0f;
+					velocity_.y = 0.0f;
+				}
+				*/
+				return;
 			} else if (mapChipType == MapChipType::kGoalUp) {
 				CheckGoal = true;
 			} else if (mapChipType == MapChipType::kGoalDown) {
@@ -302,7 +310,7 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 			} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
 				hit = true;
 			}
-
+			
 			// 右点の判定
 			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom] + Vector3(0, -kCollisionsmallnumber, 0));
 			mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -312,6 +320,19 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kNCopyBlock) {
 				hit = true;
+			} else if (mapChipType == MapChipType::kjumpBlock) {
+				velocity_.y = kJampBlockAcceleration;
+				onGround_ = false;
+
+				//溜めVersion
+				/*
+				if (!isAccumulateJump_) {
+					isAccumulateJump_ = true;
+					AccumulateJumpTimer_ = 0.0f;
+					velocity_.y = 0.0f;
+				}
+				*/
+				return;
 			} else if (mapChipType == MapChipType::kGoalUp) {
 				CheckGoal = true;
 			} else if (mapChipType == MapChipType::kGoalDown) {
@@ -321,8 +342,6 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 			} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
 				hit = true;
 			}
-
-
 
 			if (!hit) {
 
@@ -369,6 +388,8 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kjumpBlock) {
+		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
@@ -386,6 +407,8 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 	} else if (mapChipType == MapChipType::kFallBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kjumpBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
@@ -452,6 +475,8 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kjumpBlock) {
+		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
@@ -471,6 +496,8 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 	} else if (mapChipType == MapChipType::kFallBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kjumpBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
@@ -527,6 +554,8 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kjumpBlock) {
+		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
@@ -546,6 +575,8 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 	} else if (mapChipType == MapChipType::kFallBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kjumpBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
@@ -600,6 +631,8 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
 		hit = true;
+	} else if (mapChipType == MapChipType::kjumpBlock) {
+		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
@@ -619,6 +652,8 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 	} else if (mapChipType == MapChipType::kFallBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kNCopyBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kjumpBlock) {
 		hit = true;
 	} else if (mapChipType == MapChipType::kGoalUp) {
 		CheckGoal = true;

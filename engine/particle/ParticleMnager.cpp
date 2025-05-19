@@ -4,6 +4,7 @@
 #include "CameraManager.h"
 #include <MyMath.h>
 #include <numbers>
+#include <iterator>
 #ifdef _DEBUG
 #include <imgui.h>
 #endif // _DEBUG
@@ -103,9 +104,27 @@ void ParticleMnager::Update()
 			(*particleIterator).currentTime += 1.0f / 60.0f;
 			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifetime);
 
+			
+			// 毎フレーム回転
+			particleIterator->transform.rotate.x += 0.05f;
+			particleIterator->transform.rotate.y += 0.1f;
+			particleIterator->transform.rotate.z += 0.2f;
+
+			Matrix4x4 rotateX = MyMath::MakeRotateXMatrix(particleIterator->transform.rotate.x);
+			Matrix4x4 rotateY = MyMath::MakeRotateYMatrix(particleIterator->transform.rotate.y);
+			Matrix4x4 rotateZ = MyMath::MakeRotateZMatrix(particleIterator->transform.rotate.z);
+
+			// 回転行列の合成（順序：Z → Y → X）
+			Matrix4x4 rotateMatrix = rotateZ * rotateY * rotateX;
+			Matrix4x4 scaleMatrix = MyMath::MakeScaleMatrix(particleIterator->transform.scale);
+			Matrix4x4 translateMatrix = MyMath::MakeTranslateMatrix(particleIterator->transform.translate);
+
+			// ビルボードを含めた SRT 合成（順序は演出次第で調整）
+			Matrix4x4 worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
+
 
 			//ワールド行列を計算
-			Matrix4x4 worldMatrix = MyMath::MakeScaleMatrix((*particleIterator).transform.scale) * billboardMatrix * MyMath::MakeTranslateMatrix((*particleIterator).transform.translate);
+			//Matrix4x4 worldMatrix = MyMath::MakeScaleMatrix((*particleIterator).transform.scale) * billboardMatrix * MyMath::MakeTranslateMatrix((*particleIterator).transform.translate);
 			//waorldViewProjection行列を計算
 			Matrix4x4 worldViewProjetionMatrix = worldMatrix * viewMatrix * projectionMatrix;
 
@@ -232,7 +251,6 @@ void ParticleMnager::CreateParticleGroup(const std::string name, const std::stri
 void ParticleMnager::Emit(const std::string& name, const Vector3 position, uint32_t count)
 {
 
-
 	//パーティクルグループが存在するかチェックしてassert
 	assert(particleGroups.contains(name));
 	//パーティクルグループのパーティクルリストにパーティクルを追加
@@ -250,9 +268,6 @@ void ParticleMnager::Emit(const std::string& name, const Vector3 position, uint3
 	//particleGroups.at(name).instanceResource = dxCommon_->CreateBufferResource(sizeof(ParticleForGPU) * particleGroups.at(name).instanceCount);
 	////インスタンス用のリソースをマップ
 	//particleGroups.at(name).instanceResource->Map(0, nullptr, reinterpret_cast<void**>(&particleGroups.at(name).instanceData));
-	//
-
-
 }
 
 void ParticleMnager::SetModel(const std::string& filepath)
@@ -278,6 +293,53 @@ Particle ParticleMnager::MakeNewParticle(std::mt19937& randomEngine, const Vecto
 	particle.Velocity = { distribution(randomEngine),distribution(randomEngine) ,distribution(randomEngine) };
 	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
 	particle.lifetime = distTime(randomEngine);
+	particle.currentTime = 0;
+	return particle;
+}
+
+void ParticleMnager::PlayerEmit(const std::string& name, const Vector3 position, uint32_t count, bool isRight)
+{
+	assert(particleGroups.contains(name));
+
+	auto& group = particleGroups.at(name);
+
+	// 超過分を削除（新しいパーティクルを追加するために古いパーティクルを削除）
+	uint32_t currentCount = static_cast<uint32_t>(group.particles.size());
+	uint32_t toRemove = (currentCount + count > 50) ? (currentCount + count - 50) : 0;
+	if (toRemove > 0) {
+		auto eraseBegin = group.particles.begin();
+		auto eraseEnd = std::next(eraseBegin, toRemove); // リスト用
+		group.particles.erase(eraseBegin, eraseEnd);
+		group.instanceCount -= toRemove;
+	}
+
+	// 実際に追加
+	for (uint32_t i = 0; i < count; ++i) {
+		group.particles.push_back(PlayerMakeNewParticle(randomEngine, position, isRight));
+	}
+
+	group.instanceCount += count;
+}
+
+
+Particle ParticleMnager::PlayerMakeNewParticle(std::mt19937& randomEngine, const Vector3& translate, bool isRight)
+{
+
+	std::uniform_real_distribution<float>distribution(-0.1f, 0.1f);
+	std::uniform_real_distribution<float>distrotate(-5.0f, 5.0f);
+	std::uniform_real_distribution<float>distColor(0.0f, 1.0f);
+	float distVelocityX = isRight ? 1.5f : -1.5f;
+	float distVelocityY = 2.0f;
+
+	Particle particle;
+	Vector3 randomTranslate{ 0.0f,-0.3f ,0.0f };
+	Vector3 randomRotate{ distrotate(randomEngine),distrotate(randomEngine) ,distrotate(randomEngine) };
+	particle.transform.scale = { 0.25f,0.4f,0.01f };
+	particle.transform.translate = translate + randomTranslate;
+	particle.transform.rotate = randomRotate;
+	particle.Velocity = { distVelocityX,distVelocityY ,0.0f };
+	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	particle.lifetime = 0.3f;
 	particle.currentTime = 0;
 	return particle;
 }

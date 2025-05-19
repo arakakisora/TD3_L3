@@ -143,6 +143,17 @@ void StageSelectScene::Initialize()
 
 	fadeManager_.Initialize("Resources/white.png");
 	fadeManager_.StartFadeIn(0.5);
+
+
+	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/block.png", "block.obj");
+
+	playeremitter_ = new ParticleEmitter(
+		{ 0.0f,0.0f,0.0f },
+		5.0f,
+		0.0f,
+		1,
+		"Player"
+	);
 }
 
 void StageSelectScene::Finalize()
@@ -154,6 +165,8 @@ void StageSelectScene::Finalize()
 	CameraManager::GetInstans()->Finalize();
 
 	delete Player_;
+
+	delete playeremitter_;
 }
 
 
@@ -181,6 +194,25 @@ void StageSelectScene::Update()
 		}
 
 		Player_->Update();
+		// プレイヤー用のパーティクルの位置を常に更新
+		Vector3 pos = Player_->GetTranslate();
+
+		// 右に移動中
+		if (playermoveright) {
+			// 左方向に設定
+			playeremitter_->SetisRight(false);
+			Vector3 offset = { -0.3f,0.0f,0.0f };
+			playeremitter_->SetPosition(pos + offset);
+			playeremitter_->PlayerEmit();
+		}
+		// 左に移動中
+		if (playermoveleft) {
+			// 右方向に設定
+			playeremitter_->SetisRight(true);
+			Vector3 offset = { 0.3f,0.0f,0.0f };
+			playeremitter_->SetPosition(pos + offset);
+			playeremitter_->PlayerEmit();
+		}
 
 	} else {
 		// ▼ カメラを引く処理をここにも追加 ▼
@@ -192,6 +224,8 @@ void StageSelectScene::Update()
 		}
 
 		Player_->Update();
+		// プレイヤー用のパーティクルの位置を常に更新
+		Vector3 pos = Player_->GetTranslate();
 
 		// ←ポーズ中でもカメラだけ更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
@@ -268,6 +302,8 @@ void StageSelectScene::Draw() {
 	//ポーズメニュー
 	pauseMenu->Draw();
 
+	ParticleMnager::GetInstance()->Draw();
+
 #pragma endregion
 
 
@@ -328,6 +364,10 @@ void StageSelectScene::move() {
 		// プレイヤーを右に90度回転
 		Rotate.y -= 90.0f * (DirectX::XM_PI / 180.0f);
 		Player_->SetRotate(Rotate);
+
+		// パーティクルのフラグ設定（右移動）
+		playermoveright = true;
+		playermoveleft = false;
 	}
 
 	// (左に移動)
@@ -344,6 +384,10 @@ void StageSelectScene::move() {
 		// プレイヤーを左に-90度回転
 		Rotate.y += 90.0f * (DirectX::XM_PI / 180.0f);
 		Player_->SetRotate(Rotate);
+
+		// パーティクルのフラグ設定（左移動）
+		playermoveright = false;
+		playermoveleft = true;
 	}
 
 	// イージング処理
@@ -389,6 +433,10 @@ void StageSelectScene::move() {
 			}
 			// フォローターゲットを再設定（Z位置が変わったときのみでもOK）
 			activeCam->SetFollowTarget(Player_, FollowTargetposition);
+
+			// パーティクルのフラグリセット
+			playermoveright = false;
+			playermoveleft = false;
 		}
 	} else {
 		// イージングが終わっている間は長押しタイマーをカウント

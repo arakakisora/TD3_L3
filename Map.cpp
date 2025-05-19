@@ -65,8 +65,6 @@ void Map::Update(const bool cameraMode) {
 #endif // _DEBUG
 }
 
-
-
 void Map::Draw() {
 
 	for (std::vector<Block*>& blockLine : blockobject3D) {
@@ -193,8 +191,6 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 	MapDataToPlayerInitPosition();
 }
 
-
-
 void Map::MapDataToPlayerInitPosition()
 {
 	// プレイヤーの初期位置をマップデータから取得
@@ -293,4 +289,16 @@ void Map::RemoveObjectAt(uint32_t x, uint32_t y) {
 
 	// マップデータを更新(削除を反映）
 	SetMapData(x, y, MapChipType::kBlank);
+}
+
+Vector3 Map::FindMapChipPosition(MapChipType mapChipType) {
+	for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
+		for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
+			if (mapChipData_.data[y][x] == mapChipType) {
+				return GetMapChipPostionByIndex(x, y);
+			}
+		}
+	}
+	// 見つからなかった場合は (0, 0, 0) を返す（用途に応じて変更）
+	return Vector3{ 0.0f, 0.0f, 0.0f };
 }
