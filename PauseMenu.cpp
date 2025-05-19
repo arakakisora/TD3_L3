@@ -93,9 +93,10 @@ void PauseMenu::Draw() {
 		//ポーズ画面
 		object->Draw();
 	}
-
-	for (std::unique_ptr<Object3D>& text : TextObjects) {
-		text->Draw();
+	if (easeTimer_ >= 0.1f) {
+		for (std::unique_ptr<Object3D>& text : TextObjects) {
+			text->Draw();
+		}
 	}
 }
 
