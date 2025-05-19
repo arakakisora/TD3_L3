@@ -172,7 +172,7 @@ void PauseMenu::ControllerUpdate() {
 	// 押し始め検出
 	bool stickUpPressed = (rightStickY < -stickThreshold && prevRightStickY >= -stickThreshold);
 	bool stickDownPressed = (rightStickY > stickThreshold && prevRightStickY <= stickThreshold);
-	if (easeTimer_ ==1.0f) {
+	if (easeTimer_ == 1.0f) {
 		// 上向き
 		if (stickUpPressed && textindex < TextObjects.size() - 1 && !easingmoveFlag_ && !easingsceneFlag_) {
 			textindex++;
@@ -204,6 +204,18 @@ void PauseMenu::ControllerUpdate() {
 				SceneManager::GetInstance()->ChangeScene("TITELE");
 			}
 		}
+		for (size_t i = 0; i < TextObjects.size(); ++i) {
+			// 選択したオブジェクトの色を変更
+			if (textindex == i) {
+				TextObjects[i]->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+			} else {
+				TextObjects[i]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+			}
+		}
+	} else {
+		// カラーリセット
+		for (size_t i = 0; i < TextObjects.size(); ++i) {
+			TextObjects[i]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		}
 	}
-
 }
