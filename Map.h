@@ -98,7 +98,11 @@ private: // マップデータの読み込み用
     //プレイヤーの初期位置のマップ番号を記録する変数
 	uint32_t playerStartX = 0;
 	uint32_t playerStartY = 0;
-	
+
+    
+    //カメラモードラッパー
+    bool cameraMode_;
+
 public:
     uint32_t GetMapWidth() const { return kNumBlockHorizontal; }
     uint32_t GetMapHeight() const { return kNumBlockVirtical; }

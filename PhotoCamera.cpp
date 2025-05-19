@@ -385,6 +385,8 @@ void PhotoCamera::Copy() {
 				row.push_back(MapChipType::kBlank);
 			} else if (type == MapChipType::kNCopyBlock) {
 				row.push_back(MapChipType::kBlank);
+			} else if (type == MapChipType::kPutFixedTimeBlock) {
+				row.push_back(MapChipType::kFixedTimeBlock);
 			} else {
 				type = mapData.data[targetY][targetX];
 				row.push_back(type);
@@ -436,7 +438,6 @@ void PhotoCamera::Paste()
 				continue;
 			}
 
-			// 貼り付け実行
 			// 貼り付け実行
 			if (type == MapChipType::kFixedTimeBlock) {
 				mapData.data[positionY][positionX] = MapChipType::kPutFixedTimeBlock;
