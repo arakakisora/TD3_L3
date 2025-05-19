@@ -109,7 +109,7 @@ void PauseMenu::PausedStart() {
 		Vector3 cameraPos = camera_->GetTransform().translate;
 		transform.translate.x = cameraPos.x;
 		transform.translate.y = cameraPos.y;
-		transform.translate.z = 5.0f + (-6.0f * easedValue);
+		transform.translate.z = 5.0f + (-7.0f * easedValue);
 
 		float minScale = 0.1f;
 		float limitedScale = (easedValue > 1.0f) ? 1.0f :
