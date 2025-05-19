@@ -201,7 +201,7 @@ void StageSelectScene::Update()
 		if (playermoveright) {
 			// 左方向に設定
 			playeremitter_->SetisRight(false);
-			Vector3 offset = { 0.5f,0.0f,0.0f };
+			Vector3 offset = { -0.3f,0.0f,0.0f };
 			playeremitter_->SetPosition(pos + offset);
 			playeremitter_->PlayerEmit();
 		}
@@ -209,7 +209,7 @@ void StageSelectScene::Update()
 		if (playermoveleft) {
 			// 右方向に設定
 			playeremitter_->SetisRight(true);
-			Vector3 offset = { 1.5f,0.0f,0.0f };
+			Vector3 offset = { 0.3f,0.0f,0.0f };
 			playeremitter_->SetPosition(pos + offset);
 			playeremitter_->PlayerEmit();
 		}

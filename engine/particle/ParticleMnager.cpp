@@ -332,14 +332,14 @@ Particle ParticleMnager::PlayerMakeNewParticle(std::mt19937& randomEngine, const
 	float distVelocityY = 2.0f;
 
 	Particle particle;
-	Vector3 randomTranslate{ -1.0f,distribution(randomEngine) ,distribution(randomEngine) };
+	Vector3 randomTranslate{ 0.0f,-0.3f ,0.0f };
 	Vector3 randomRotate{ distrotate(randomEngine),distrotate(randomEngine) ,distrotate(randomEngine) };
 	particle.transform.scale = { 0.25f,0.4f,0.01f };
 	particle.transform.translate = translate + randomTranslate;
 	particle.transform.rotate = randomRotate;
 	particle.Velocity = { distVelocityX,distVelocityY ,0.0f };
 	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
-	particle.lifetime = 0.2f;
+	particle.lifetime = 0.3f;
 	particle.currentTime = 0;
 	return particle;
 }
