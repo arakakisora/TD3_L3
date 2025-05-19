@@ -47,6 +47,7 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
 	ModelManager::GetInstans()->LoadModel("nullBlock.obj");
+	ModelManager::GetInstans()->LoadModel("putTimer.obj");
 	// 天球モデル / 背景のプレーン
 	ModelManager::GetInstans()->LoadModel("backPlane.obj");
 	// フォトカメラフレーム
@@ -404,7 +405,7 @@ void GamePlayScene::Update()
 		//gameCamera_->Update();
 		photoCamera->Update(map, player->GetCameraMode());
 		// マップの更新
-		map->Update();
+		map->Update(player->GetCameraMode());
 		//プレイヤーの更新
 		player->Update();
 

@@ -28,13 +28,14 @@ void Map::Finalize() {
 }
 
 void Map::Update(const bool cameraMode) {
+	this->cameraMode_ = cameraMode;
 	GenerateChangeStageBlock(mapChipDataNext_);
 	// 3Dオブジェクトの更新
 	for (std::vector<Block*>& blockLine : blockobject3D) {
 		for (Block* block : blockLine) {
 			if (!block)
 				continue;
-			block->Update();
+			block->Update(cameraMode_);
 		}
 	}
 

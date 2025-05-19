@@ -69,6 +69,7 @@ public:
 	void FixedTimeBlock();
 	// 一定時間経過後に消えるブロックの貼り付け後（PutFixedTime）
 	void PutFixedTimeBlock();
+
 	//ジャンプブロック
 	void JumpBlock();
 
@@ -77,28 +78,31 @@ public:
 	//落下フラグセット
 	void SetFalling(bool falling);
 
+
 	static Block* CreateBlock(MapChipType type, const Vector3& position, Map* map);
 
-	// 
-	Vector3 GetPosition() {
-		return position;
-	}
-
-private:
-	int mapID;
-	MapChipType type;
-	Object3D* object3D;
-	Map* map;
-
-	Vector3 position;
-
-    public:
+	
+public:
 		// ブロックの位置を設定
         void SetPosition(const Vector3& position) { this->position = position; }
 		// ブロックの座標を取得し直接モデルの座標にする
 		void SetObject3DPosiition(const Vector3& position);
+		//落下フラグセット
+		void SetFalling(bool falling);
+		Vector3 GetPosition() { return position; }
+
+private:
+		int mapID;
+		MapChipType type;
+		Object3D* object3D;
+		Map* map;
+
+		Vector3 position;
+
 private:	// 各ブロック用の変数
 	// 一定時間経過後に消えるブロックの貼り付け前（FixedTime）No.7
+	int fixedTimeCounter = 0; // フレームカウント
+	bool isAlive = true;      // ブロックが生存しているか
 
 	// 一定時間経過後に消えるブロックの貼り付け後（PutFixedTime）No.8
 	bool isFixedTimeBlockPut = false;
