@@ -114,7 +114,9 @@ void GamePlayScene::Initialize()
 	//playerの生成
 	player = std::make_unique<Player>();
 	object3DPlayer = new Object3D();
-	Vector3 playerPostion = Vector3((float)map->GetPlayerStartX(), (float)map->GetPlayerStartY(), 0.0f);
+	Vector3 playerPostion = map->GetPlayerStartPosition();
+	
+
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 
 	object3DPlayer->SetModel("playercharacter.obj");
