@@ -77,6 +77,10 @@ public: //カメラに使用する
 	uint32_t GetPlayerStartX() const { return playerStartX; }
 	uint32_t GetPlayerStartY() const { return playerStartY; }
 
+
+    // playerPositionInit
+    Vector3 GetPlayerStartPosition() const { return playerStartPosition; }
+
 private: // ブロック関連
 
     // マップチップデータ
@@ -102,6 +106,9 @@ private: // マップデータの読み込み用
     
     //カメラモードラッパー
     bool cameraMode_;
+
+    Vector3 playerStartPosition; 
+
 
 public:
     uint32_t GetMapWidth() const { return kNumBlockHorizontal; }
