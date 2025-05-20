@@ -47,6 +47,7 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
 	ModelManager::GetInstans()->LoadModel("nullBlock.obj");
+	ModelManager::GetInstans()->LoadModel("putTimer.obj");
 	// 天球モデル / 背景のプレーン
 	ModelManager::GetInstans()->LoadModel("backPlane.obj");
 	// フォトカメラフレーム
@@ -62,6 +63,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial7.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial8.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial9.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial10.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial11.obj");
 
 	// ポーズテキスト
 	ModelManager::GetInstans()->LoadModel("Pause.obj");
@@ -97,8 +100,9 @@ void GamePlayScene::Initialize()
 
 	skydome_ = make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
-	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	skydome_->SetTranslate(Vector3{17.6f,16.67f,62.72f});
+	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
+	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
 	skydome_->SetModel("backPlane.obj");
 
 
@@ -215,7 +219,6 @@ void GamePlayScene::Initialize()
 	Tutorialtext8->SetLighting(false);
 	Tutorialtext8->SetIsTutorialActive(false);
 
-
 	Tutorialtext9 = std::make_unique<Object3D>();
 	Tutorialtext9->Initialize(Object3DCommon::GetInstance());
 	Tutorialtext9->SetModel("tutorial/tutorial9.obj");
@@ -224,6 +227,24 @@ void GamePlayScene::Initialize()
 	Tutorialtext9->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
 	Tutorialtext9->SetLighting(false);
 	Tutorialtext9->SetIsTutorialActive(false);
+
+	Tutorialtext10 = std::make_unique<Object3D>();
+	Tutorialtext10->Initialize(Object3DCommon::GetInstance());
+	Tutorialtext10->SetModel("tutorial/tutorial10.obj");
+	Tutorialtext10->SetScale(Vector3(1.0f, 0.5f, 0.5f));
+	Tutorialtext10->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext10->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	Tutorialtext10->SetLighting(false);
+	Tutorialtext10->SetIsTutorialActive(false);
+
+	Tutorialtext11 = std::make_unique<Object3D>();
+	Tutorialtext11->Initialize(Object3DCommon::GetInstance());
+	Tutorialtext11->SetModel("tutorial/tutorial11.obj");
+	Tutorialtext11->SetScale(Vector3(1.0f, 0.5f, 0.5f));
+	Tutorialtext11->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext11->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	Tutorialtext11->SetLighting(false);
+	Tutorialtext11->SetIsTutorialActive(false);
 
 	//操作説明UI
 	/*
@@ -393,19 +414,27 @@ void GamePlayScene::Update()
 		// フェード更新
 		fadeManager_.Update();
 
+		//ゲームの経過時間
+		if (tutorial8) {
+			elapsedTime += deltaTime;
+
+			if (elapsedTime >= afterseconds) {
+				secondspassed = true;
+			}
+		}
 		//カメラの更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
 		// 天球の更新
-		skydomerotate += 0.0f;
-		skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
+		//skydomerotate += 0.0f;
+		//skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
 		skydome_->Update();
 
 		// ゲームカメラ更新処理
 		//gameCamera_->Update();
 		photoCamera->Update(map, player->GetCameraMode());
 		// マップの更新
-		map->Update();
+		map->Update(player->GetCameraMode());
 		//プレイヤーの更新
 		player->Update();
 		
@@ -548,11 +577,55 @@ void GamePlayScene::Update()
 				Tutorialtext8->SetIsTutorialActive(true);
 				tutorial8 = true;
 			}
+			
+			if (tutorial8 && secondspassed) {
+				Tutorialtext8->SetIsTutorialActive(false);
+				Tutorialtext10->SetIsTutorialActive(true);
+				tutorial10 = true;
+			}
+			
 		}
 
 	} else {
 		player->SetPrayerMoveRight(false);
 		player->SetPrayerMoveLeft(false);
+	}
+
+	// プレイヤー用のパーティクルの位置を常に更新
+	Vector3 pos = player->GetTranslate();
+
+	// 右に移動中
+	if (player->GetPrayerMoveRight()) {
+		// 左方向に設定
+		playeremitter_->SetisRight(false);
+		Vector3 offset = { -0.3f,0.0f,0.0f };
+		playeremitter_->SetPosition(pos + offset);
+		playeremitter_->PlayerEmit();
+	}
+
+	// 左に移動中
+	if (player->GetPrayerMoveLeft()) {
+		// 右方向に設定
+		playeremitter_->SetisRight(true);
+		Vector3 offset = { 0.3f,0.0f,0.0f };
+		playeremitter_->SetPosition(pos + offset);
+		playeremitter_->PlayerEmit();
+	}
+
+	//チュートリアル表示制御map2
+	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
+		if (!tutorial9) {
+			Tutorialtext9->SetIsTutorialActive(true);
+			tutorial9 = true;
+		}
+	}
+
+	//チュートリアル表示制御map3
+	if (SceneManager::GetInstance()->GetStageIndex() == 2) {
+		if (!tutorial11) {
+			Tutorialtext11->SetIsTutorialActive(true);
+			tutorial11 = true;
+		}
 	}
 
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
@@ -564,6 +637,8 @@ void GamePlayScene::Update()
 	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
 	if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
 	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
+	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Update();
+	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Update();
 
 	//ui
 	/*
@@ -672,6 +747,8 @@ void GamePlayScene::Draw()
 	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Draw();
 	if (Tutorialtext8->GetIsTutorialActive()) Tutorialtext8->Draw();
 	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
+	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Draw();
+	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Draw();
 
 	map->Draw();
 
@@ -740,7 +817,24 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawImgui()
 {
+
 #ifdef _DEBUG
+	ImGui::Begin("Back");
+
+	// Transform構造体を直接編集
+	Transform skydomeTransform = skydome_->GetTransform();
+	bool changed = false;
+
+	changed |= ImGui::DragFloat3("Skydome Scale", &skydomeTransform.scale.x, 0.01f);
+	changed |= ImGui::DragFloat3("Skydome Rotate", &skydomeTransform.rotate.x, 0.01f);
+	changed |= ImGui::DragFloat3("Skydome Position", &skydomeTransform.translate.x, 0.01f);
+
+	if (changed) {
+		skydome_->SetTransform(skydomeTransform);
+	}
+
+	ImGui::End();
+
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {

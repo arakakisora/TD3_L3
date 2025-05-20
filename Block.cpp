@@ -68,7 +68,7 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 
 	case MapChipType::kPutFixedTimeBlock:		// No.8 貼り付け後一定時間 
 		// モデル指定
-		//object3D->SetModel("Timer.obj");
+		object3D->SetModel("putTimer.obj");
 		break;
 
 	case MapChipType::kjumpBlock:               // No.9 プレイヤーの上昇
@@ -106,7 +106,9 @@ void Block::Update(const bool cameraMode) {
 		FixedTimeBlock();
 	} else if (MapChipType::kPutFixedTimeBlock == type) {
 		object3D->Update();
-		PutFixedTimeBlock();
+		if (!cameraMode_) {
+			PutFixedTimeBlock();
+		}
 	} else if (MapChipType::kFallBlock == type) {
 		Vector3 position = object3D->GetTranslate();
 		IndexSet index = map->GetMapChipIndexSetByPosition(position);
@@ -150,7 +152,7 @@ void Block::Update(const bool cameraMode) {
 
 #ifdef _DEBUG
 
-	if (ImGui::CollapsingHeader("Block", ImGuiTreeNodeFlags_DefaultOpen))
+	/*if (ImGui::CollapsingHeader("Block", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 
 		DirectionalLight directionalLight = object3D->GetDirectionalLight();
@@ -158,7 +160,7 @@ void Block::Update(const bool cameraMode) {
 			object3D->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
-	}
+	}*/
 #endif // DEBUG_
 
 };
@@ -226,8 +228,41 @@ void Block::FixedTimeBlock()
 
 void Block::PutFixedTimeBlock()
 {
-	if (isFixedTimeBlockPut) {
+	if (!isFixedTimeBlockPut) {
+		isFixedTimeBlockPut = true;
+		fixedTimeCounter = 0;
+	}
 
+	// カメラモードがOFF（プレイヤーが操作可能な時間）だけカウントを進める
+	if (!cameraMode_) {
+		fixedTimeCounter++;
+	}
+	// 点滅処理：4秒経過〜5秒までの間
+	const int blinkStart = 60 * 4;       // 4秒後
+	const int blinkEnd = kFixedTime;     // 5秒後（たとえば300など）
+
+	if (fixedTimeCounter >= blinkStart && fixedTimeCounter <= blinkEnd) {
+		int blinkFrame = fixedTimeCounter - blinkStart;
+
+		// 点滅速度を上げる：初期は20フレームごと、最終的に4フレームごとに変化するように
+		// 速くするため、フレーム数を直線的に減らす
+		int blinkInterval = (std::max)(4, 20 - (blinkFrame / 3)); // 0〜60で 20→4 に変化
+
+		bool isVisible = (blinkFrame / blinkInterval) % 2 == 0;
+
+		if (isVisible) {
+			// 明るい赤（表示）
+			object3D->SetColor({ 1.0f, 0.3f, 0.3f, 1.0f });
+		} else {
+			// 半透明（非表示気味）
+			object3D->SetColor({ 1.0f, 0.0f, 0.0f, 0.1f });
+		}
+	}
+
+	if (fixedTimeCounter > kFixedTime) {
+		IndexSet index = map->GetMapChipIndexSetByPosition(object3D->GetTranslate());
+		map->RemoveObjectAt(index.xIndex, index.yIndex);
+		isAlive = false;
 	}
 }
 

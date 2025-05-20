@@ -78,6 +78,8 @@ private:
 	std::unique_ptr<Object3D>Tutorialtext7;
 	std::unique_ptr<Object3D>Tutorialtext8;
 	std::unique_ptr<Object3D>Tutorialtext9;//空白コピペ
+	std::unique_ptr<Object3D>Tutorialtext10;//リセット
+	std::unique_ptr<Object3D>Tutorialtext11;//×ブロック
 
 	//操作説明テキスト
 	//std::vector<std::unique_ptr<Sprite>>operationTexts;
@@ -112,6 +114,8 @@ private:
 	bool tutorial6_7 = false;
 	bool tutorial8 = false;
 	bool tutorial9 = false;
+	bool tutorial10 = false;
+	bool tutorial11 = false;
 
 	bool cameraStarted = false;
 	bool cameraMoved = false;
@@ -134,8 +138,17 @@ private:
 	//リセット用タイマー
     float holdTime = 0.0f;
 	const float holdDuration = 1.7f;
-	const float deltaTime = 1.0f / 60.0f;
 
+	//リセットテキスト用タイマー
+
+	//経過時間
+	float elapsedTime = 0.0f;
+	//30秒後に表示
+	const float afterseconds = 30.0f;
+	//30秒経過フラグ
+	bool secondspassed = false;
+
+	const float deltaTime = 1.0f / 60.0f;
 
 
 	ParticleEmitter* emitter_;
