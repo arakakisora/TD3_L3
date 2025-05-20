@@ -382,5 +382,6 @@
     <None Include="MapData\mapp3.csv" />
     <None Include="MapData\mapp4.csv" />
     <None Include="MapData\mapp5.csv" />
+    <None Include="MapData\map050.csv" />
   </ItemGroup>
 </Project>
