@@ -77,6 +77,8 @@ public:
 
 	//落下フラグセット
 	void SetFalling(bool falling);
+	//setvelocity
+	void SetVelocity(float velocity) { this->velocity = velocity; }
 
 
 	static Block* CreateBlock(MapChipType type, const Vector3& position, Map* map);
@@ -89,12 +91,20 @@ public:
 		void SetObject3DPosiition(const Vector3& position);
 		
 		Vector3 GetPosition() { return position; }
+		//落ちるよう
+		bool IsPendingRespawn() const { return pendingRespawn; }
+		void GetRespawnInfo(uint32_t& sx, uint32_t& sy, uint32_t& dx, uint32_t& dy) const {
+			sx = respawnSrcX; sy = respawnSrcY;
+			dx = respawnDstX; dy = respawnDstY;
+		}
+		Vector3 GetTranslate() const;
 
 private:
 		int mapID;
 		MapChipType type;
 		Object3D* object3D;
 		Map* map;
+		Object3D *animationObject;
 
 		Vector3 position;
 
@@ -111,7 +121,10 @@ private:	// 各ブロック用の変数
 	float velocity = 0.0f;
 	bool isFalling = false;
 	static constexpr float gravity = 0.02f;
-
+	bool pendingRespawn = false;
+	
+	uint32_t respawnSrcX = 0, respawnSrcY = 0;
+	uint32_t respawnDstX = 0, respawnDstY = 0;
 	// nullBlock用のCameraMode
 	bool cameraMode_;
 

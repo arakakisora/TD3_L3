@@ -80,6 +80,10 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 	object3D->SetLighting(true);
 	object3D->SetDirectionalLightEnable(true);
 	object3D->SetDirectionalLightDirection({ 0.88f, -1.90f, 4.0f });
+
+	animationObject = new Object3D();
+	animationObject->Initialize(Object3DCommon::GetInstance());
+	animationObject->SetModel("cube.obj");
 }
 
 
@@ -110,37 +114,42 @@ void Block::Update(const bool cameraMode) {
 			PutFixedTimeBlock();
 		}
 	} else if (MapChipType::kFallBlock == type) {
+
 		Vector3 position = object3D->GetTranslate();
-		IndexSet index = map->GetMapChipIndexSetByPosition(position);
-		uint32_t belowIndex = index.yIndex + 1;
-		//下にブロックがあるか
-		if (belowIndex < map->GetNumBlockVirtical() &&
-			map->GetMapChipTypeByIndex(index.xIndex, belowIndex) == MapChipType::kBlank) {
-			if (!isFalling) {
-				map->SetMapData(index.xIndex, index.yIndex, MapChipType::kBlank);
-			}
+		if (!isFalling) {
 			isFalling = true;
+
+			// 今このセルにいるインデックスを取って……
+			IndexSet idx = map->GetMapChipIndexSetByPosition(position);
+			// マップ上の静的ブロックを消す
+			map->RemoveObjectAt(idx.xIndex, idx.yIndex);
+
+			// 見た目用にだけ落下アニメブロックを spawn
+			// （velocity を初速として渡せます）
+			//map->SpawnFallVisual(object3D->GetTranslate(), velocity);
+
+			// このインスタンスはもう不要なので即抜け
+			return;
 		}
-		//落下
+
+
 		if (isFalling) {
-			velocity += gravity;
-			position.y -= velocity;
+			
 
-			IndexSet newIndex = map->GetMapChipIndexSetByPosition(position);
+			// 今このセルにいるインデックスを取って……
+			IndexSet idx = map->GetMapChipIndexSetByPosition(position);
+			// マップ上の静的ブロックを消す
+			map->RemoveObjectAt(idx.xIndex, idx.yIndex+2);
+			
 
-			//下にブロックがあるか
-			if (belowIndex < map->GetNumBlockVirtical() &&
-				map->GetMapChipTypeByIndex(index.xIndex, belowIndex) != MapChipType::kBlank) {
-				isFalling = false;
-				velocity = 0.0f;
-				position.y = map->GetMapChipPostionByIndex(index.xIndex, belowIndex - 1).y;
-				map->RemoveObjectAt(index.xIndex, index.yIndex);
-				map->GenerateObjectAt(newIndex.xIndex, newIndex.yIndex, MapChipType::kFallBlock);
-			}
+			// 見た目用にだけ落下アニメブロックを spawn
+			// （velocity を初速として渡せます）
+			//map->SpawnFallVisual(object3D->GetTranslate(), velocity);
 
-			object3D->SetTranslate(position);
+			// このインスタンスはもう不要なので即抜け
+			return;
 		}
-		object3D->Update();
+
 	}
 	else if (MapChipType::kjumpBlock == type) {
 		object3D->Update();
