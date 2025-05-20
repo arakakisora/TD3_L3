@@ -33,8 +33,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
 	ModelManager::GetInstans()->LoadModel("sphere.obj");
-	ModelManager::GetInstans()->LoadModel("terrain.obj");
 	ModelManager::GetInstans()->LoadModel("cube.obj");
+	ModelManager::GetInstans()->LoadModel("jump.obj");
 
 	//ModelManager::GetInstans()->LoadModel("Player.obj");
 	ModelManager::GetInstans()->LoadModel("playercharacter.obj");

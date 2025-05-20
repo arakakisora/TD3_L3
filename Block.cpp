@@ -73,7 +73,7 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 
 	case MapChipType::kjumpBlock:               // No.9 プレイヤーの上昇
 		// モデル指定
-		object3D->SetModel("cube.obj");
+		object3D->SetModel("jump.obj");
 		break;
 	}
 
