@@ -106,7 +106,7 @@ bool PauseMenu::IsPaused()const {
 	return isPaused_ || easeTimer_ > 0.0f;
 }
 
-void PauseMenu::PausedStartGamePlay() {
+void PauseMenu::PausedStartGamePlay() { 
 	if (isPaused_ || easeTimer_ > 0.0f) {
 		// イージングの値（0.0〜1.0）の計算（※逆再生に対応）
 		float easedValue = float(easeInOutCirc(easeTimer_));
