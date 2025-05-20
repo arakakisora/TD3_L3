@@ -305,6 +305,10 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				CheckGoal = true;
 			} else if (mapChipType == MapChipType::kGoalDown) {
 				CheckGoal = true;
+			} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+				hit = true;
+			} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+				hit = true;
 			}
 			
 			// 右点の判定
@@ -333,6 +337,10 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				CheckGoal = true;
 			} else if (mapChipType == MapChipType::kGoalDown) {
 				CheckGoal = true;
+			} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+				hit = true;
+			} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+				hit = true;
 			}
 
 			if (!hit) {
@@ -386,6 +394,10 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+		hit = true;
 	}
 	// 右点の判定
 	indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
@@ -402,6 +414,10 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+		hit = true;
 	}
 
 	// hit
@@ -465,6 +481,10 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+		hit = true;
 	}
 	// 右点の判定
 	//   左点の判定
@@ -483,6 +503,10 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+		hit = true;
 	}
 
 	// hit
@@ -536,6 +560,10 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+		hit = true;
 	}
 
 	// 右下点の判定
@@ -554,6 +582,10 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+		hit = true;
 	}
 
 	// hit
@@ -605,6 +637,10 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+		hit = true;
 	}
 
 	// hidari下点の判定
@@ -623,6 +659,10 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		CheckGoal = true;
 	} else if (mapChipType == MapChipType::kGoalDown) {
 		CheckGoal = true;
+	} else if (mapChipType == MapChipType::kFixedTimeBlock) {
+		hit = true;
+	} else if (mapChipType == MapChipType::kPutFixedTimeBlock) {
+		hit = true;
 	}
 	// hit
 	if (hit) {
