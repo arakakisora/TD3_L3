@@ -412,12 +412,13 @@ void GamePlayScene::Update()
 		fadeManager_.Update();
 
 		//ゲームの経過時間
-		elapsedTime += deltaTime;
+		if (tutorial8) {
+			elapsedTime += deltaTime;
 
-		if (elapsedTime >= afterseconds) {
-			secondspassed = true;
+			if (elapsedTime >= afterseconds) {
+				secondspassed = true;
+			}
 		}
-
 		//カメラの更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
