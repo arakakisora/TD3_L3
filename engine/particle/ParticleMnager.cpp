@@ -305,7 +305,8 @@ void ParticleMnager::PlayerEmit(const std::string& name, const Vector3 position,
 
 	// 超過分を削除（新しいパーティクルを追加するために古いパーティクルを削除）
 	uint32_t currentCount = static_cast<uint32_t>(group.particles.size());
-	uint32_t toRemove = (currentCount + count > 50) ? (currentCount + count - 50) : 0;
+	uint32_t const Maxsize = 15;
+	uint32_t toRemove = (currentCount + count > Maxsize) ? (currentCount + count - Maxsize) : 0;
 	if (toRemove > 0) {
 		auto eraseBegin = group.particles.begin();
 		auto eraseEnd = std::next(eraseBegin, toRemove); // リスト用
@@ -325,7 +326,7 @@ void ParticleMnager::PlayerEmit(const std::string& name, const Vector3 position,
 Particle ParticleMnager::PlayerMakeNewParticle(std::mt19937& randomEngine, const Vector3& translate, bool isRight)
 {
 
-	std::uniform_real_distribution<float>distribution(-0.1f, 0.1f);
+	//std::uniform_real_distribution<float>distribution(-0.1f, 0.1f);
 	std::uniform_real_distribution<float>distrotate(-5.0f, 5.0f);
 	std::uniform_real_distribution<float>distColor(0.0f, 1.0f);
 	float distVelocityX = isRight ? 1.5f : -1.5f;

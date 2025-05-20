@@ -335,7 +335,7 @@ void GamePlayScene::Initialize()
 
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
-	pauseMenu->Initialize(Object3DCommon::GetInstance(), true);
+	pauseMenu->Initialize(Object3DCommon::GetInstance(), PauseType::GamePlayScene);
 	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
 	fadeManager_.Initialize("Resources/white.png");
@@ -364,6 +364,7 @@ void GamePlayScene::Initialize()
 		1,
 		"Player"
 	);
+	playeroffset = { 0.0f,0.0f,0.0f };
 }
 
 void GamePlayScene::Finalize()
@@ -408,8 +409,38 @@ void GamePlayScene::Update()
 		map->Update(player->GetCameraMode());
 		//プレイヤーの更新
 		player->Update();
+		
+		// プレイヤーが右に移動中
+		if (player->GetPrayerMoveRight()) {
+			playeroffset = { -0.3f,0.0f,0.0f };
+			playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
+			// 左方向に設定
+			playeremitter_->SetisRight(false);
+			// プレイヤーのパーティクルを発生させる
+			playeremitter_->PlayerEmit();
+		}
 
+		// プレイヤーが左に移動中
+		if (player->GetPrayerMoveLeft()) {
+			playeroffset = { 0.3f,0.0f,0.0f };
+			playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
+			// 右方向に設定
+			playeremitter_->SetisRight(true);
+			// プレイヤーのパーティクルを発生させる
+			playeremitter_->PlayerEmit();
+		} 
+
+		playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
+		// パーティクルの更新
 		playeremitter_->Update();
+
+		//チュートリアル表示制御map2
+		if (SceneManager::GetInstance()->GetStageIndex() == 1) {
+			if (!tutorial9) {
+				Tutorialtext9->SetIsTutorialActive(true);
+				tutorial9 = true;
+			}
+		}
 
 		if (player->GetCameraMode()) {
 			// カメラモード時パーティクル解除
@@ -523,35 +554,6 @@ void GamePlayScene::Update()
 	} else {
 		player->SetPrayerMoveRight(false);
 		player->SetPrayerMoveLeft(false);
-	}
-
-	// プレイヤー用のパーティクルの位置を常に更新
-	Vector3 pos = player->GetTranslate();
-
-	// 右に移動中
-	if (player->GetPrayerMoveRight()) {
-		// 左方向に設定
-		playeremitter_->SetisRight(false);
-		Vector3 offset = { -0.3f,0.0f,0.0f };
-		playeremitter_->SetPosition(pos + offset);
-		playeremitter_->PlayerEmit();
-	}
-
-	// 左に移動中
-	if (player->GetPrayerMoveLeft()) {
-		// 右方向に設定
-		playeremitter_->SetisRight(true);
-		Vector3 offset = { 0.3f,0.0f,0.0f };
-		playeremitter_->SetPosition(pos + offset);
-		playeremitter_->PlayerEmit();
-	}
-
-	//チュートリアル表示制御map2
-	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
-		if (!tutorial9) {
-			Tutorialtext9->SetIsTutorialActive(true);
-			tutorial9 = true;
-		}
 	}
 
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();

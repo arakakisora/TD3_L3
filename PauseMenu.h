@@ -6,11 +6,16 @@
 
 class Camera; // 前方宣言
 
+enum class PauseType {
+	StageSelectScene,
+	GamePlayScene
+};
+
 class PauseMenu
 {
 public:
 	//初期化
-	void Initialize(Object3DCommon* object3dcommon, bool isPlayScene);
+	void Initialize(Object3DCommon* object3dcommon, PauseType type);
 	//更新
 	void Update();
 	//描画
@@ -22,12 +27,15 @@ public:
 		camera_ = camera;
 	}
 
-
+	// コントローラー操作
 	void ControllerUpdate();
-
-	void PausedStart();
+	// イージング移動
+	void PausedStartGamePlay();
+	// イージング移動
+	void PausedStartStageSelect();
 
 private:
+	PauseType pauseType_;
 	Object3DCommon* object3dcommon_;
 	Camera* camera_ = nullptr;
 	Transform transform;
@@ -50,8 +58,6 @@ private:
 	bool easingsceneFlag_ = false; 
 	bool easingmoveFlag_ = false;
 
-
-	bool scenefige = false;
 	bool isClosing_ = false;
 };
 

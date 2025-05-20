@@ -65,6 +65,7 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player>player;
 	Object3D* object3DPlayer=nullptr;
+	Vector3 playeroffset{};
 
 	//チュートリアルテキスト
 	//std::array<std::unique_ptr<Object3D>, 8>tutorialTexts;
