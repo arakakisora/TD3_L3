@@ -100,8 +100,9 @@ void GamePlayScene::Initialize()
 
 	skydome_ = make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
-	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	skydome_->SetTranslate(Vector3{17.6f,16.67f,62.72f});
+	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
+	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
 	skydome_->SetModel("backPlane.obj");
 
 
@@ -425,8 +426,8 @@ void GamePlayScene::Update()
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
 		// 天球の更新
-		skydomerotate += 0.0f;
-		skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
+		//skydomerotate += 0.0f;
+		//skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
 		skydome_->Update();
 
 		// ゲームカメラ更新処理
@@ -816,7 +817,24 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawImgui()
 {
+
 #ifdef _DEBUG
+	ImGui::Begin("Back");
+
+	// Transform構造体を直接編集
+	Transform skydomeTransform = skydome_->GetTransform();
+	bool changed = false;
+
+	changed |= ImGui::DragFloat3("Skydome Scale", &skydomeTransform.scale.x, 0.01f);
+	changed |= ImGui::DragFloat3("Skydome Rotate", &skydomeTransform.rotate.x, 0.01f);
+	changed |= ImGui::DragFloat3("Skydome Position", &skydomeTransform.translate.x, 0.01f);
+
+	if (changed) {
+		skydome_->SetTransform(skydomeTransform);
+	}
+
+	ImGui::End();
+
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
