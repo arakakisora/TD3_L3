@@ -344,6 +344,22 @@ void GamePlayScene::Initialize()
 		pauseui.push_back(std::move(newSprite));
 	}
 
+	//ブロックのスプライト
+	nCopySprite = std::make_unique<Sprite>();
+	nCopySprite->Initialize(SpriteCommon::GetInstance(), "Resources/ncopy.png");
+	nCopySprite->SetPosition(Vector2(275, 121));
+	nCopySprite->SetSize(Vector2(45, 45));
+
+	jumpSprite = std::make_unique<Sprite>();
+	jumpSprite->Initialize(SpriteCommon::GetInstance(), "Resources/jumpsprite.png");
+	jumpSprite->SetPosition(Vector2(275, 121));
+	jumpSprite->SetSize(Vector2(45, 45));
+
+	timerSprite = std::make_unique<Sprite>();
+	timerSprite->Initialize(SpriteCommon::GetInstance(), "Resources/timersprite.png");
+	timerSprite->SetPosition(Vector2(275, 121));
+	timerSprite->SetSize(Vector2(45, 45));
+
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
 
@@ -628,6 +644,7 @@ void GamePlayScene::Update()
 			Tutorialtext11->SetIsTutorialActive(true);
 			tutorial11 = true;
 		}
+		nCopySprite->Update();
 	}
 
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
@@ -808,6 +825,8 @@ void GamePlayScene::Draw()
 		Uitext->Draw();
 	}
 
+	nCopySprite->Draw();
+
 	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
 
@@ -960,6 +979,17 @@ void GamePlayScene::DrawImgui()
 		}
 
 		//UI
+
+		Vector2 ncopy = nCopySprite->GetPosition();
+		Vector2 ncopysize = nCopySprite->GetSize();
+
+		if (ImGui::DragFloat2("ncopytranslate", &ncopy.x), 0.01f) {
+			nCopySprite->SetPosition(ncopy);
+		}
+		if (ImGui::DragFloat2("ncopysize", &ncopysize.x), 0.01f) {
+			nCopySprite->SetSize(ncopysize);
+		}
+
 		/*
 		if (ImGui::CollapsingHeader("UI Translate")) {
 			for (int i = 0; i < operationTexts.size(); ++i) {
