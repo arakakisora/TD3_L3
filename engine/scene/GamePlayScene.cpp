@@ -109,11 +109,11 @@ void GamePlayScene::Initialize()
 	map->LoadMapChipCsv(stagePath);
 	map->Initialize();
 
-
+	//6,3
 	//playerの生成
 	player = std::make_unique<Player>();
 	object3DPlayer = new Object3D();
-	Vector3 playerPostion = Vector3((float)map->GetPlayerStartX(), (float)map->GetPlayerStartY(), 0.0f);
+	Vector3 playerPostion = map->GetMapChipPostionByIndex(6, 3);
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 
 	object3DPlayer->SetModel("playercharacter.obj");
@@ -590,26 +590,26 @@ void GamePlayScene::Update()
 		player->SetPrayerMoveLeft(false);
 	}
 
-	// プレイヤー用のパーティクルの位置を常に更新
-	Vector3 pos = player->GetTranslate();
+	//// プレイヤー用のパーティクルの位置を常に更新
+	//Vector3 pos = player->GetTranslate();
 
-	// 右に移動中
-	if (player->GetPrayerMoveRight()) {
-		// 左方向に設定
-		playeremitter_->SetisRight(false);
-		Vector3 offset = { -0.3f,0.0f,0.0f };
-		playeremitter_->SetPosition(pos + offset);
-		playeremitter_->PlayerEmit();
-	}
+	//// 右に移動中
+	//if (player->GetPrayerMoveRight()) {
+	//	// 左方向に設定
+	//	playeremitter_->SetisRight(false);
+	//	Vector3 offset = { -0.3f,0.0f,0.0f };
+	//	playeremitter_->SetPosition(pos + offset);
+	//	playeremitter_->PlayerEmit();
+	//}
 
-	// 左に移動中
-	if (player->GetPrayerMoveLeft()) {
-		// 右方向に設定
-		playeremitter_->SetisRight(true);
-		Vector3 offset = { 0.3f,0.0f,0.0f };
-		playeremitter_->SetPosition(pos + offset);
-		playeremitter_->PlayerEmit();
-	}
+	//// 左に移動中
+	//if (player->GetPrayerMoveLeft()) {
+	//	// 右方向に設定
+	//	playeremitter_->SetisRight(true);
+	//	Vector3 offset = { 0.3f,0.0f,0.0f };
+	//	playeremitter_->SetPosition(pos + offset);
+	//	playeremitter_->PlayerEmit();
+	//}
 
 	//チュートリアル表示制御map2
 	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
