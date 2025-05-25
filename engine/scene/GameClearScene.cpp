@@ -14,7 +14,7 @@
 void GameClearScene::Initialize()
 {
 	CameraManager::GetInstans()->Initialize();
-	
+
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_01.obj");
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_02.obj");
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_03.obj");
@@ -50,11 +50,11 @@ void GameClearScene::Initialize()
 	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Nextstage.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Stageselect.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/ArroUP.png");
-	
+
 	// 作成してリストに追加
 	for (uint32_t i = 0; i < 3; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
-	
+
 		if (i == 0) {
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Title.png");
 			newSprite->SetPosition(Vector2(250.0f, 500.0f));
@@ -95,7 +95,7 @@ void GameClearScene::Initialize()
 	// ラストステージならフラグを立てる
 	if (nextStage == MaxStageIndex_) {
 		nextsneneonthit = true;
-		Selectindex  = 1;
+		Selectindex = 1;
 	}
 
 }
@@ -124,7 +124,7 @@ void GameClearScene::Update()
 
 		//ImGui::Checkbox("start", &fige);
 
-	}  
+	}
 
 
 #endif // _DEBUG
@@ -139,20 +139,25 @@ void GameClearScene::Update()
 	for (uint32_t i = 0; i < 3; ++i) {
 		// nextsneneonthit が true ならスプライト2だけ非表示
 		if (nextsneneonthit && i == 2) {
-			TextUI_[i]->setColor({1.0f, 1.0f, 1.0f, 0.0f}); // アルファを0にして非表示に
+			TextUI_[i]->setColor({ 1.0f, 1.0f, 1.0f, 0.0f }); // アルファを0にして非表示に
 		}
 		TextUI_[i]->Update();
 	}
 
 	// 移動開始
-	EasingMove();	
+	EasingMove();
 
 	if (allObjectsFinished) {
 		Changefige = true;
 		// コントローラー操作
 		ControllerUpdate();
 	}
-	
+
+	if (Changefige) {
+		// ジャンプ開始
+		StartJump();
+	}
+
 	// ↑の更新
 	ArroTextUI_->Update();
 
@@ -229,57 +234,76 @@ void GameClearScene::EasingMove() {
 }
 
 void GameClearScene::StartJump() {
-	static float acceleration = -9.8f;
-	static float jumpHeight = 2.5f;
-	static float totalElapsedTime = 0.0f;
-	static float jumpInterval = 0.2f;  // 各オブジェクトのジャンプ開始時間差
-	static float cooldownTime = 120.0f;
+	// 初期化（オブジェクト数が変わった時も対応）
+	if (!initialized || jumpStartTimes.size() != Cleartext_.size()) {
+		size_t count = Cleartext_.size();
 
-	static std::vector<float> jumpStartTimes;
-	static std::vector<float> velocities;
-	static std::vector<bool> isJumping;
-	static float cooldownTimer = 0.0f;
+		jumpStartTimes.assign(count, 0.0f);
+		velocities.assign(count, 0.0f);
+		isJumping.assign(count, false);
+		originalYPositions.clear();
+		cooldownTimers.assign(count, 0.0f);
+		totalElapsedTimes.assign(count, 0.0f);
 
-	// 初期化（初回または再ジャンプ時）
-	if (jumpStartTimes.size() != Cleartext_.size()) {
-		jumpStartTimes.clear();
-		velocities.clear();
-		isJumping.clear();
-
-		for (size_t i = 0; i < Cleartext_.size(); ++i) {
-			jumpStartTimes.push_back(i * jumpInterval);
-			velocities.push_back(0.0f);
-			isJumping.push_back(false);
+		for (size_t i = 0; i < count; ++i) {
+			jumpStartTimes[i] = i * jumpInterval;
+			originalYPositions.push_back(Cleartext_[i]->GetTranslate().y);
 		}
-		totalElapsedTime = 0.0f;
-		cooldownTimer = 0.0f;
+
+		initialized = true;
 	}
 
-	totalElapsedTime += deltaTime;
-
 	for (size_t i = 0; i < Cleartext_.size(); ++i) {
+		float baseY = originalYPositions[i];
+
+		// タイマー更新
+		totalElapsedTimes[i] += deltaTime;
+
+		// クールダウン中なら待機
+		if (cooldownTimers[i] > 0.0f) {
+			cooldownTimers[i] -= deltaTime;
+			if (cooldownTimers[i] < 0.0f) cooldownTimers[i] = 0.0f;
+		}
+
 		// ジャンプ開始
-		if (!isJumping[i] && totalElapsedTime >= jumpStartTimes[i]) {
+		if (!isJumping[i] && cooldownTimers[i] <= 0.0f && totalElapsedTimes[i] >= jumpStartTimes[i]) {
 			velocities[i] = jumpHeight;
 			isJumping[i] = true;
 		}
 
-		// ジャンプ処理
+		// ジャンプ中の処理
 		if (isJumping[i]) {
 			velocities[i] += acceleration * deltaTime;
 
 			Vector3 pos = Cleartext_[i]->GetTranslate();
 			pos.y += velocities[i] * deltaTime;
 
-			if (pos.y <= 0.0f) {
-				pos.y = 0.0f;
+			// 着地判定
+			if (pos.y <= baseY) {
+				pos.y = baseY;
 				velocities[i] = 0.0f;
+				isJumping[i] = false;
+
+				// 個別にクールタイム開始
+				cooldownTimers[i] = cooldownTime;
+
+				// 次回ジャンプの遅延タイミングをリセット（オプション）
+				totalElapsedTimes[i] = 0.0f;
 			}
 
 			Cleartext_[i]->SetTranslate(pos);
+		} else {
+			// 非ジャンプ中 → y位置をリセット
+			Vector3 pos = Cleartext_[i]->GetTranslate();
+			if (pos.y != baseY) {
+				pos.y = baseY;
+				Cleartext_[i]->SetTranslate(pos);
+			}
 		}
 	}
 }
+
+
 void GameClearScene::ControllerUpdate() {
 
 	// 長押し対応用の遅延時間
@@ -328,7 +352,7 @@ void GameClearScene::ControllerUpdate() {
 	if (fabsf(rightStickX) < stickThreshold) {
 		wasStickMoved = false;
 	}
-	
+
 	// タイトルの場合
 	if (Selectindex == 0) {
 		ArroTextUI_->SetPosition(Vector2(325.0f, 570.0f));
@@ -359,7 +383,7 @@ void GameClearScene::ControllerUpdate() {
 			}
 		}
 	}
-	
+
 	// 次のステージの場合
 	if (Selectindex == 2) {
 		ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
