@@ -53,6 +53,7 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 
 	case MapChipType::kGoalDown:				// No.5 ゴール下 
 		// モデル指定
+		basePosition_ = position;
 		object3D->SetModel("GoalBase.obj");
 		break;
 
@@ -98,6 +99,22 @@ void Block::Update(const bool cameraMode) {
 	} else if (MapChipType::kGoalUp == type) {
 		object3D->Update();
 	} else if (MapChipType::kGoalDown == type) {
+		frameCount_++;
+		// 浮遊の動きを作る
+		float time = static_cast<float>(frameCount_) * 0.05f; // frameCount_ は毎フレーム +1 されると仮定
+		float amplitude = 0.2f;  // 浮遊の高さ（-0.7 ～ +0.7）
+		float frequency = 0.5f;  // 動く速さ（大きいほど速くなる）
+		float cycle = 2.0f * 3.14159265f / frequency;
+		if (time >= cycle) {
+			frameCount_ = 0;
+			time = 0.0f;
+		}
+		float floatY = std::sin(time * frequency) * amplitude;
+		offset = { 0.0f,0.5f,0.0f };
+		offset.y += floatY;
+		Vector3 newpos;
+		newpos = { basePosition_.x + offset.x, basePosition_.y + offset.y, basePosition_.z + offset.z };
+		object3D->SetTranslate(newpos);
 		object3D->Update();
 	} else if (MapChipType::kNCopyBlock == type) {
 		object3D->Update();

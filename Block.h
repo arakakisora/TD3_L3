@@ -114,6 +114,8 @@ private:	// 各ブロック用の変数
 
 	// nullBlock用のCameraMode
 	bool cameraMode_;
-
+	Vector3 basePosition_{};
+	Vector3 offset{};
+	int frameCount_ = 0;
 };
 
