@@ -95,7 +95,7 @@ void GamePlayScene::Initialize()
 
 	std::string stagePath;
 	switch (stageIndex) {
-	case 0: stagePath = "MapData/mapp5.csv"; break;
+	case 0: stagePath = "MapData/mapp9.csv"; break;
 	case 1: stagePath = "MapData/mapp6.csv"; break;
 	case 2: stagePath = "MapData/mapp7.csv"; break;
 	}
