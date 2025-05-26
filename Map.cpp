@@ -193,17 +193,17 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 
 void Map::MapDataToPlayerInitPosition()
 {
-	// プレイヤーの初期位置をマップデータから取得
 	for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
 		for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
 			if (mapChipData_.data[y][x] == MapChipType::kPlayer) {
-				playerStartX = x;
-				playerStartY = y;
+				// マップインデックスからワールド座標に変換して保存
+				playerStartPosition = GetMapChipPostionByIndex(x, y);
 				return;
 			}
 		}
 	}
 }
+
 
 MapChipType Map::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {
 	// マップチップの範囲外の場合は空白を返す

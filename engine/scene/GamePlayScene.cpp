@@ -33,8 +33,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
 	ModelManager::GetInstans()->LoadModel("sphere.obj");
-	ModelManager::GetInstans()->LoadModel("terrain.obj");
 	ModelManager::GetInstans()->LoadModel("cube.obj");
+	ModelManager::GetInstans()->LoadModel("jump.obj");
 
 	//ModelManager::GetInstans()->LoadModel("Player.obj");
 	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
@@ -100,8 +100,9 @@ void GamePlayScene::Initialize()
 
 	skydome_ = make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
-	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	skydome_->SetTranslate(Vector3{17.6f,16.67f,62.72f});
+	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
+	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
 	skydome_->SetModel("backPlane.obj");
 
 
@@ -113,7 +114,11 @@ void GamePlayScene::Initialize()
 	//playerの生成
 	player = std::make_unique<Player>();
 	object3DPlayer = new Object3D();
-	Vector3 playerPostion = map->GetMapChipPostionByIndex(6, 3);
+
+	Vector3 playerPostion = map->GetPlayerStartPosition();
+	
+
+
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 
 	object3DPlayer->SetModel("playercharacter.obj");
@@ -341,6 +346,22 @@ void GamePlayScene::Initialize()
 		pauseui.push_back(std::move(newSprite));
 	}
 
+	//ブロックのスプライト
+	nCopySprite = std::make_unique<Sprite>();
+	nCopySprite->Initialize(SpriteCommon::GetInstance(), "Resources/ncopy.png");
+	nCopySprite->SetPosition(Vector2(275, 121));
+	nCopySprite->SetSize(Vector2(45, 45));
+
+	jumpSprite = std::make_unique<Sprite>();
+	jumpSprite->Initialize(SpriteCommon::GetInstance(), "Resources/jumpsprite.png");
+	jumpSprite->SetPosition(Vector2(275, 121));
+	jumpSprite->SetSize(Vector2(45, 45));
+
+	timerSprite = std::make_unique<Sprite>();
+	timerSprite->Initialize(SpriteCommon::GetInstance(), "Resources/timersprite.png");
+	timerSprite->SetPosition(Vector2(275, 121));
+	timerSprite->SetSize(Vector2(45, 45));
+
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
 
@@ -425,8 +446,8 @@ void GamePlayScene::Update()
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
 		// 天球の更新
-		skydomerotate += 0.0f;
-		skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
+		//skydomerotate += 0.0f;
+		//skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
 		skydome_->Update();
 
 		// ゲームカメラ更新処理
@@ -625,6 +646,7 @@ void GamePlayScene::Update()
 			Tutorialtext11->SetIsTutorialActive(true);
 			tutorial11 = true;
 		}
+		nCopySprite->Update();
 	}
 
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
@@ -805,6 +827,8 @@ void GamePlayScene::Draw()
 		Uitext->Draw();
 	}
 
+	nCopySprite->Draw();
+
 	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
 
@@ -816,7 +840,24 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawImgui()
 {
+
 #ifdef _DEBUG
+	ImGui::Begin("Back");
+
+	// Transform構造体を直接編集
+	Transform skydomeTransform = skydome_->GetTransform();
+	bool changed = false;
+
+	changed |= ImGui::DragFloat3("Skydome Scale", &skydomeTransform.scale.x, 0.01f);
+	changed |= ImGui::DragFloat3("Skydome Rotate", &skydomeTransform.rotate.x, 0.01f);
+	changed |= ImGui::DragFloat3("Skydome Position", &skydomeTransform.translate.x, 0.01f);
+
+	if (changed) {
+		skydome_->SetTransform(skydomeTransform);
+	}
+
+	ImGui::End();
+
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
@@ -940,6 +981,17 @@ void GamePlayScene::DrawImgui()
 		}
 
 		//UI
+
+		Vector2 ncopy = nCopySprite->GetPosition();
+		Vector2 ncopysize = nCopySprite->GetSize();
+
+		if (ImGui::DragFloat2("ncopytranslate", &ncopy.x), 0.01f) {
+			nCopySprite->SetPosition(ncopy);
+		}
+		if (ImGui::DragFloat2("ncopysize", &ncopysize.x), 0.01f) {
+			nCopySprite->SetSize(ncopysize);
+		}
+
 		/*
 		if (ImGui::CollapsingHeader("UI Translate")) {
 			for (int i = 0; i < operationTexts.size(); ++i) {

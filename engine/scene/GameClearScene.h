@@ -95,6 +95,22 @@ private:
 	// 背景
 	std::unique_ptr<Object3D> skydome_;
 
+
+	// メンバ変数で以下を持つ（全オブジェクト用）
 	uint32_t nextStage = 0;
+	float acceleration = -9.8f;
+	float jumpHeight = 2.5f;
+	float jumpInterval = 0.2f;
+	float cooldownTime = 1.0f; // 個々のクールタイム（秒）
+
+	bool initialized = false;
+
+	std::vector<float> jumpStartTimes;
+	std::vector<float> velocities;
+	std::vector<bool> isJumping;
+	std::vector<float> originalYPositions;
+	std::vector<float> cooldownTimers;       // 個々のクールタイム管理
+	std::vector<float> totalElapsedTimes;    // 個々の経過時間（ジャンプのタイミング調整）
+
 
 };

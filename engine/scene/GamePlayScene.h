@@ -79,7 +79,9 @@ private:
 	std::unique_ptr<Object3D>Tutorialtext8;
 	std::unique_ptr<Object3D>Tutorialtext9;//空白コピペ
 	std::unique_ptr<Object3D>Tutorialtext10;//リセット
-	std::unique_ptr<Object3D>Tutorialtext11;//×ブロック
+	std::unique_ptr<Object3D>Tutorialtext11;//×ブロック説明
+
+
 
 	//操作説明テキスト
 	//std::vector<std::unique_ptr<Sprite>>operationTexts;
@@ -97,6 +99,11 @@ private:
 	std::unique_ptr<Sprite>OperationtextZyanpu;
 	std::unique_ptr<Sprite>OperationtextReset;
 	std::unique_ptr<Sprite>OperationtextPlus;
+
+	//ブロックのスプライト
+	std::unique_ptr<Sprite>nCopySprite;
+	std::unique_ptr<Sprite>jumpSprite;
+	std::unique_ptr<Sprite>timerSprite;
 
 	std::vector < std::unique_ptr<Sprite>> pauseui;
 	Map* map=nullptr;
