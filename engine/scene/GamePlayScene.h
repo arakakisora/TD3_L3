@@ -80,6 +80,8 @@ private:
 	std::unique_ptr<Object3D>Tutorialtext9;//空白コピペ
 	std::unique_ptr<Object3D>Tutorialtext10;//リセット
 	std::unique_ptr<Object3D>Tutorialtext11;//×ブロック説明
+	std::unique_ptr<Object3D>Tutorialtext12;//タイマー
+	std::unique_ptr<Object3D>Tutorialtext13;//ジャンプ
 
 
 
@@ -114,7 +116,6 @@ private:
 
 	PhotoCamera* photoCamera;
 
-
 	bool tutorial1_2 = false;
 	bool tutorial3_4 = false;
 	bool tutorial5 = false;
@@ -123,6 +124,8 @@ private:
 	bool tutorial9 = false;
 	bool tutorial10 = false;
 	bool tutorial11 = false;
+	bool tutorial12 = false;
+	bool tutorial13 = false;
 
 	bool cameraStarted = false;
 	bool cameraMoved = false;
@@ -136,7 +139,6 @@ private:
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
 
-	
 	// フェードアウト
 	FadeManager fadeManager_;
 	// 切り替えフラグ:
@@ -156,7 +158,6 @@ private:
 	bool secondspassed = false;
 
 	const float deltaTime = 1.0f / 60.0f;
-
 
 	ParticleEmitter* emitter_;
 	ParticleEmitter* playeremitter_;
