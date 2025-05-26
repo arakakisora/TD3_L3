@@ -27,6 +27,28 @@ void PhotoCamera::Initialize(Map* map)
 	isFirstCopied = false;
 	isFirstPasted = false;
 
+	//sahtter演出用のオブジェクト
+	shuttertopObject = new Object3D();
+	shuttertopObject->Initialize(Object3DCommon::GetInstance());
+	shuttertopObject->SetModel("plane.obj");
+	//サイズは画面いっぱいにする
+	shuttertopObject->SetScale(Vector3{ 13.0f,4.0f,1.0f });
+	shuttertopObject->SetTranslate(Vector3(12.5f, 30.0f, -1.5f));
+	shuttertopObject->SetRotate(Vector3{ 0,0,0 });
+	//bottm
+	shutterbottomObject = new Object3D();
+	shutterbottomObject->Initialize(Object3DCommon::GetInstance());
+	shutterbottomObject->SetModel("plane.obj");
+	//サイズは画面いっぱいにする
+	shutterbottomObject->SetScale(Vector3{ 13.0f,4.0f,1.0f });
+	shutterbottomObject->SetTranslate(Vector3(12.5f, -30.0f, -1.5f));
+	shutterbottomObject->SetRotate(Vector3{ 0,0,0 });
+	
+
+	
+
+
+
 	// 残りシャッター枚数表示画像
 	TextureManager::GetInstance()->LoadTexture("Resources/shutter.png");
 
@@ -51,7 +73,7 @@ void PhotoCamera::Initialize(Map* map)
 	bitmapFont->Initialize();
 }
 
-void PhotoCamera::Update(Map* map,const bool cameraMode)
+void PhotoCamera::Update(Map* map, const bool cameraMode)
 {
 	this->map = map;
 	this->cameraMode_ = cameraMode;
@@ -68,6 +90,14 @@ void PhotoCamera::Update(Map* map,const bool cameraMode)
 		shutter->Update();
 	}
 
+
+	shutterEffectUpdate();
+	//sahtter演出用のオブジェクト
+	shuttertopObject->Update();
+	shutterbottomObject->Update();
+
+	
+
 	if (CamerMode) {
 		// フォトカメラの移動
 		Move();
@@ -81,7 +111,7 @@ void PhotoCamera::Update(Map* map,const bool cameraMode)
 			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)
 			)//LB
 		{
-
+			shatterEffect();
 			Copy();
 			for (uint32_t y = 0; y < cameraSizeY; ++y) {
 				for (uint32_t x = 0; x < cameraSizeX; ++x) {
@@ -157,6 +187,11 @@ void PhotoCamera::Draw3DObject()
 			block->Draw();
 		}
 	}
+	//shutter演出用のオブジェクト
+	shuttertopObject->Draw();
+	shutterbottomObject->Draw();
+
+	
 
 }
 
@@ -191,6 +226,8 @@ void PhotoCamera::Finalize()
 	if (object3D) {
 		object3D.reset();
 	}
+	delete shuttertopObject;
+	delete shutterbottomObject;
 }
 
 
@@ -324,7 +361,7 @@ void PhotoCamera::stickMove()
 
 
 
-	
+
 
 	// イージング結果を object3D に反映
 	object3D->SetTranslate(Vector3(currentPos.x, currentPos.y, -1.0f));
@@ -522,6 +559,121 @@ void PhotoCamera::DrawImGui()
 
 	ImGui::End();
 
+	//shatter演出用のオブジェクトImGui
+	ImGui::Begin("ShutterTopObject");
+
+
+	
+
+	if (ImGui::CollapsingHeader("shtter", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+
+		//Transformのドラッグ
+		
+		Transform transformtop = shuttertopObject->GetTransform();
+		if (ImGui::DragFloat3("obj3Position", &transformtop.translate.x, 0.01f)) {
+			shuttertopObject->SetTransform(transformtop);
+		}
+		//rotation
+		if (ImGui::DragFloat3("obj3Rotation", &transformtop.rotate.x, 0.01f)) {
+			shuttertopObject->SetTransform(transformtop);
+		}
+		//scale
+		if (ImGui::DragFloat3("obj3Scale", &transformtop.scale.x, 0.01f)) {
+			shuttertopObject->SetTransform(transformtop);
+		}
+		
+		Transform transformbot = shutterbottomObject->GetTransform();
+		if (ImGui::DragFloat3("Position", &transformbot.translate.x, 0.01f)) {
+			shutterbottomObject->SetTransform(transformbot);
+		}
+		//rotation
+		if (ImGui::DragFloat3("Rotation", &transformbot.rotate.x, 0.01f)) {
+			shutterbottomObject->SetTransform(transformbot);
+		}
+		//scale
+		if (ImGui::DragFloat3("Scale", &transformbot.scale.x, 0.01f)) {
+			shutterbottomObject->SetTransform(transformbot);
+		}
+
+
+	}
+
+	//effectをかけるボタン
+	if (ImGui::Button("ShutterEffect")) {
+		shatterEffect();
+	}
+
+	ImGui::End();
+
+}
+
+void PhotoCamera::shatterEffect()
+{
+	if (isShutterEffectPlaying) return;
+
+	isShutterEffectPlaying = true;
+	shutterAnimTime = 0.0f;
+
+	// 初期位置にリセット
+	shuttertopObject->SetTranslate(Vector3(12.5f, 30.0f, -1.5f));
+	shutterbottomObject->SetTranslate(Vector3(12.5f, 5.0f, -1.5f));
+
+	
+
+}
+
+void PhotoCamera::shutterEffectUpdate()
+{
+	if (!isShutterEffectPlaying) return;
+
+	shutterAnimTime += 0.01f; // ← deltaTime に置き換えOK
+	float t = shutterAnimTime / shutterAnimDuration;
+	t = std::min(t, 1.0f);
+
+	// 閉じる：Top 30 → 17, Bottom 5 → -17
+	// 開く  ：Top 17 → 30, Bottom -17 → 5
+	float topY, bottomY;
+
+	if (t < 0.5f) {
+		// 閉じるフェーズ（0.0〜0.5）
+		float p = t / 0.5f;
+		topY = Easing::EaseLerp(30.0f, 20.0f, p, Easing::EaseOutQuad);
+		bottomY = Easing::EaseLerp(5.0f, 12.0f, p, Easing::EaseOutQuad);
+	} else {
+		// 開くフェーズ（0.5〜1.0）
+		float p = (t - 0.5f) / 0.5f;
+		topY = Easing::EaseLerp(20.0f, 30.0f, p, Easing::EaseInQuad);
+		bottomY = Easing::EaseLerp(12.0f, 5.0f, p, Easing::EaseInQuad);
+	}
+
+	shuttertopObject->SetTranslate(Vector3(12.5f, topY, -1.5f));
+	shutterbottomObject->SetTranslate(Vector3(12.5f, bottomY, -1.5f));
+
+	if (t >= 1.0f) {
+		isShutterEffectPlaying = false;
+	}
+
+	//for (int i = 0; i < kShutterBladeCount; ++i) {
+	//	float angle = (360.0f / kShutterBladeCount) * i;
+	//	float rad = DirectX::XMConvertToRadians(angle);
+
+	//	float radius = Easing::EaseLerp(10.0f, 0.0f, t, Easing::EaseInOutQuad); // 中心に集まる
+
+	//	Vector3 pos = {
+	//		std::cos(rad) * radius + 12.5f,
+	//		std::sin(rad) * radius + 17.5f,
+	//		-1.5f
+	//	};
+	//	float bladeAngle = Easing::EaseLerp(angle, angle + 30.0f, t, Easing::EaseInOutQuad); // 回転
+
+	//	shutterBlades_[i]->SetTranslate(pos);
+	//	shutterBlades_[i]->SetRotate(Vector3{ 0, 0, bladeAngle });
+	//}
+
+	//if (t >= 1.0f) {
+	//	isShutterEffectPlaying = false;
+	//}
 
 
 

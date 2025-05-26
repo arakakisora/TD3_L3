@@ -34,7 +34,8 @@ public:
 	// imguiの描画
 	void DrawImGui();
 
-
+	void shatterEffect();
+	void shutterEffectUpdate();
 
 public:	// Setter / Getter
 	// 変更したマップデータをmapにセット
@@ -114,5 +115,14 @@ private:
 	float moveSpeed = 0.1f;     // 1フレームごとの t 増加量
 	bool isMoving = false;      // 現在移動中かどうか
 
+	//シャッター演出用
+	// シャッター演出制御用
+	bool isShutterEffectPlaying = false;
+	float shutterAnimTime = 0.0f;
+	const float shutterAnimDuration = 0.15f;
+	Object3D* shuttertopObject; // シャッター演出用のオブジェクト
+	Object3D* shutterbottomObject; // シャッター演出用のオブジェクト
+
+	
 };
 

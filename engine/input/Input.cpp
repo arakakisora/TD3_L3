@@ -77,6 +77,7 @@ void Input::Update()
 	mousePos.y = (float)point.y;
 
 	prevState_ = state_;
+	
 
 	// XInputの状態を取得
 	ZeroMemory(&state_, sizeof(XINPUT_STATE));
