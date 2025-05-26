@@ -65,6 +65,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial9.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial10.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial11.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial12.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial13.obj");
 
 	// ポーズテキスト
 	ModelManager::GetInstans()->LoadModel("Pause.obj");
@@ -93,9 +95,9 @@ void GamePlayScene::Initialize()
 
 	std::string stagePath;
 	switch (stageIndex) {
-	case 0: stagePath = "MapData/mapp1.csv"; break;
-	case 1: stagePath = "MapData/mapp2.csv"; break;
-	case 2: stagePath = "MapData/mapp3.csv"; break;
+	case 0: stagePath = "MapData/mapp5.csv"; break;
+	case 1: stagePath = "MapData/mapp6.csv"; break;
+	case 2: stagePath = "MapData/mapp7.csv"; break;
 	}
 
 	skydome_ = make_unique<Object3D>();
@@ -247,6 +249,26 @@ void GamePlayScene::Initialize()
 	Tutorialtext11->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
 	Tutorialtext11->SetLighting(false);
 	Tutorialtext11->SetIsTutorialActive(false);
+
+	Tutorialtext12 = std::make_unique<Object3D>();
+	Tutorialtext12->Initialize(Object3DCommon::GetInstance());
+	Tutorialtext12->SetModel("tutorial/tutorial12.obj");
+	Tutorialtext12->SetScale(Vector3(1.0f, 0.5f, 0.5f));
+	Tutorialtext12->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext12->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	Tutorialtext12->SetLighting(false);
+	Tutorialtext12->SetIsTutorialActive(false);
+
+	Tutorialtext13 = std::make_unique<Object3D>();
+	Tutorialtext13->Initialize(Object3DCommon::GetInstance());
+	Tutorialtext13->SetModel("tutorial/tutorial13.obj");
+	Tutorialtext13->SetScale(Vector3(1.0f, 0.5f, 0.5f));
+	Tutorialtext13->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext13->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	Tutorialtext13->SetLighting(false);
+	Tutorialtext13->SetIsTutorialActive(false);
+
+
 
 	//操作説明UI
 	/*
