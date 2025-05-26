@@ -119,8 +119,10 @@ private:
 	// シャッター演出制御用
 	bool isShutterEffectPlaying = false;
 	float shutterAnimTime = 0.0f;
-	const float shutterAnimDuration = 1.0f;
+	const float shutterAnimDuration = 0.15f;
 	Object3D* shuttertopObject; // シャッター演出用のオブジェクト
 	Object3D* shutterbottomObject; // シャッター演出用のオブジェクト
+
+	
 };
 

@@ -43,6 +43,10 @@ void PhotoCamera::Initialize(Map* map)
 	shutterbottomObject->SetScale(Vector3{ 13.0f,4.0f,1.0f });
 	shutterbottomObject->SetTranslate(Vector3(12.5f, -30.0f, -1.5f));
 	shutterbottomObject->SetRotate(Vector3{ 0,0,0 });
+	
+
+	
+
 
 
 	// 残りシャッター枚数表示画像
@@ -92,6 +96,8 @@ void PhotoCamera::Update(Map* map, const bool cameraMode)
 	shuttertopObject->Update();
 	shutterbottomObject->Update();
 
+	
+
 	if (CamerMode) {
 		// フォトカメラの移動
 		Move();
@@ -105,7 +111,7 @@ void PhotoCamera::Update(Map* map, const bool cameraMode)
 			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)
 			)//LB
 		{
-
+			shatterEffect();
 			Copy();
 			for (uint32_t y = 0; y < cameraSizeY; ++y) {
 				for (uint32_t x = 0; x < cameraSizeX; ++x) {
@@ -184,6 +190,9 @@ void PhotoCamera::Draw3DObject()
 	//shutter演出用のオブジェクト
 	shuttertopObject->Draw();
 	shutterbottomObject->Draw();
+
+	
+
 }
 
 void PhotoCamera::DrawSprite()
@@ -610,6 +619,7 @@ void PhotoCamera::shatterEffect()
 	shuttertopObject->SetTranslate(Vector3(12.5f, 30.0f, -1.5f));
 	shutterbottomObject->SetTranslate(Vector3(12.5f, 5.0f, -1.5f));
 
+	
 
 }
 
@@ -643,5 +653,28 @@ void PhotoCamera::shutterEffectUpdate()
 	if (t >= 1.0f) {
 		isShutterEffectPlaying = false;
 	}
+
+	//for (int i = 0; i < kShutterBladeCount; ++i) {
+	//	float angle = (360.0f / kShutterBladeCount) * i;
+	//	float rad = DirectX::XMConvertToRadians(angle);
+
+	//	float radius = Easing::EaseLerp(10.0f, 0.0f, t, Easing::EaseInOutQuad); // 中心に集まる
+
+	//	Vector3 pos = {
+	//		std::cos(rad) * radius + 12.5f,
+	//		std::sin(rad) * radius + 17.5f,
+	//		-1.5f
+	//	};
+	//	float bladeAngle = Easing::EaseLerp(angle, angle + 30.0f, t, Easing::EaseInOutQuad); // 回転
+
+	//	shutterBlades_[i]->SetTranslate(pos);
+	//	shutterBlades_[i]->SetRotate(Vector3{ 0, 0, bladeAngle });
+	//}
+
+	//if (t >= 1.0f) {
+	//	isShutterEffectPlaying = false;
+	//}
+
+
 
 }
