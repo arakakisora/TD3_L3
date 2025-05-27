@@ -107,6 +107,9 @@ private:
 	std::unique_ptr<Sprite>jumpSprite;
 	std::unique_ptr<Sprite>timerSprite;
 
+	//リセットメータのスプライト
+	std::unique_ptr<Sprite>resetMeter;
+
 	std::vector < std::unique_ptr<Sprite>> pauseui;
 	Map* map=nullptr;
 	

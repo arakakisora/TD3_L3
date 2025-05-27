@@ -95,14 +95,21 @@ void GamePlayScene::Initialize()
 
 	std::string stagePath;
 	switch (stageIndex) {
-	case 0: stagePath = "MapData/mapp5.csv"; break;
-	case 1: stagePath = "MapData/mapp6.csv"; break;
-	case 2: stagePath = "MapData/mapp7.csv"; break;
+	case 0: stagePath = "MapData/mapp1.csv"; break;
+	case 1: stagePath = "MapData/mapp2.csv"; break;
+	case 2: stagePath = "MapData/mapp3.csv"; break;
+	case 3: stagePath = "MapData/mapp4.csv"; break;
+	case 4: stagePath = "MapData/mapp5.csv"; break;
+	case 5: stagePath = "MapData/mapp6.csv"; break;
+	case 6: stagePath = "MapData/mapp7.csv"; break;
+	case 7: stagePath = "MapData/mapp8.csv"; break;
+	case 8: stagePath = "MapData/mapp9.csv"; break; 
+	case 9: stagePath = "MapData/mapp10.csv"; break;
 	}
 
 	skydome_ = make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{17.6f,16.67f,62.72f});
+	skydome_->SetTranslate(Vector3{ 17.6f,16.67f,62.72f });
 	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
 	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
 	skydome_->SetModel("backPlane.obj");
@@ -118,7 +125,7 @@ void GamePlayScene::Initialize()
 	object3DPlayer = new Object3D();
 
 	Vector3 playerPostion = map->GetPlayerStartPosition();
-	
+
 
 
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
@@ -384,6 +391,12 @@ void GamePlayScene::Initialize()
 	timerSprite->SetPosition(Vector2(275, 121));
 	timerSprite->SetSize(Vector2(45, 45));
 
+	//リセットメーターのスプライト
+	resetMeter = std::make_unique<Sprite>();
+	resetMeter->Initialize(SpriteCommon::GetInstance(), "Resources/resetmeter.png");
+	resetMeter->SetPosition(Vector2(325, 70));
+	resetMeter->SetSize(Vector2(200, 45));
+
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
 
@@ -479,7 +492,7 @@ void GamePlayScene::Update()
 		map->Update(player->GetCameraMode());
 		//プレイヤーの更新
 		player->Update();
-		
+
 		// プレイヤーが右に移動中
 		if (player->GetPrayerMoveRight()) {
 			playeroffset = { -0.3f,0.0f,0.0f };
@@ -498,7 +511,7 @@ void GamePlayScene::Update()
 			playeremitter_->SetisRight(true);
 			// プレイヤーのパーティクルを発生させる
 			playeremitter_->PlayerEmit();
-		} 
+		}
 
 		playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
 		// パーティクルの更新
@@ -619,13 +632,13 @@ void GamePlayScene::Update()
 				Tutorialtext8->SetIsTutorialActive(true);
 				tutorial8 = true;
 			}
-			
+
 			if (tutorial8 && secondspassed) {
 				Tutorialtext8->SetIsTutorialActive(false);
 				Tutorialtext10->SetIsTutorialActive(true);
 				tutorial10 = true;
 			}
-			
+
 		}
 
 	} else {
@@ -730,7 +743,7 @@ void GamePlayScene::Update()
 	}
 
 	// ポーズ
-	if (!player->GetCheckGoal() ){
+	if (!player->GetCheckGoal()) {
 		pauseMenu->Update();
 	}
 
@@ -739,6 +752,13 @@ void GamePlayScene::Update()
 		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 
 		holdTime += deltaTime;
+
+		//メーターの進み具合
+		float progress = min(holdTime / holdDuration, 1.0f);
+		float maxWidth = 600.0f;
+		float meterWidth = maxWidth * progress;
+
+		resetMeter->SetSize(Vector2(meterWidth, 45));
 
 		if (holdTime >= holdDuration) {
 			holdTime = 0.0f;
@@ -752,6 +772,8 @@ void GamePlayScene::Update()
 		//離されたらタイマーをリセット
 		holdTime = 0.0f;
 	}
+	resetMeter->Update();
+
 	DrawImgui();
 }
 
@@ -847,6 +869,11 @@ void GamePlayScene::Draw()
 
 	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
 		Uitext->Draw();
+	}
+
+	//リセットメーター描画
+	if (holdTime > 0.0f) {
+		resetMeter->Draw();
 	}
 
 	nCopySprite->Draw();
@@ -1006,12 +1033,20 @@ void GamePlayScene::DrawImgui()
 
 		Vector2 ncopy = nCopySprite->GetPosition();
 		Vector2 ncopysize = nCopySprite->GetSize();
+		Vector2 resetmeter = resetMeter->GetPosition();
+		Vector2 resetmetersize = resetMeter->GetSize();
 
 		if (ImGui::DragFloat2("ncopytranslate", &ncopy.x), 0.01f) {
 			nCopySprite->SetPosition(ncopy);
 		}
 		if (ImGui::DragFloat2("ncopysize", &ncopysize.x), 0.01f) {
 			nCopySprite->SetSize(ncopysize);
+		}
+		if (ImGui::DragFloat2("resetMetertranslate", &resetmeter.x), 0.01f) {
+			resetMeter->SetPosition(resetmeter);
+		}
+		if (ImGui::DragFloat2("resetMetersize", &resetmetersize.x), 0.01f) {
+			resetMeter->SetSize(resetmetersize);
 		}
 
 		/*
