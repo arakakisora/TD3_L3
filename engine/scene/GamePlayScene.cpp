@@ -75,6 +75,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/StageSelect.obj");
 
+	//リセットお知らせ
+	ModelManager::GetInstans()->LoadModel("resetnotice.obj");
 
 	//操作説明UI
 	/*
@@ -103,7 +105,7 @@ void GamePlayScene::Initialize()
 	case 5: stagePath = "MapData/mapp6.csv"; break;
 	case 6: stagePath = "MapData/mapp7.csv"; break;
 	case 7: stagePath = "MapData/mapp8.csv"; break;
-	case 8: stagePath = "MapData/mapp9.csv"; break; 
+	case 8: stagePath = "MapData/mapp9.csv"; break;
 	case 9: stagePath = "MapData/mapp10.csv"; break;
 	}
 
@@ -277,7 +279,14 @@ void GamePlayScene::Initialize()
 	Tutorialtext13->SetLighting(false);
 	Tutorialtext13->SetIsTutorialActive(false);
 
-
+	//リセットお知らせ
+	ResetNotice = std::make_unique<Object3D>();
+	ResetNotice->Initialize(Object3DCommon::GetInstance());
+	ResetNotice->SetModel("resetnotice.obj");
+	ResetNotice->SetScale(Vector3(0.5f, 0.5f, 0.5f));
+	ResetNotice->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	ResetNotice->SetTranslate(Vector3(12.46f, 23.25f, -1.0f));
+	ResetNotice->SetLighting(false);
 
 	//操作説明UI
 	/*
@@ -464,6 +473,7 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::Update()
 {
+
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
 		// フェード更新
@@ -773,6 +783,7 @@ void GamePlayScene::Update()
 		holdTime = 0.0f;
 	}
 	resetMeter->Update();
+	ResetNotice->Update();
 
 	DrawImgui();
 }
@@ -814,6 +825,11 @@ void GamePlayScene::Draw()
 	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
 	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Draw();
 	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Draw();
+
+	//リセットお知らせ
+	if (holdTime > 0.0f) {
+		ResetNotice->Draw();
+	}
 
 	map->Draw();
 
@@ -933,9 +949,6 @@ void GamePlayScene::DrawImgui()
 			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
-
-
-
 		/*
 		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
 			for (int i = 1; i <= tutorialTexts.size(); ++i) {
@@ -958,6 +971,8 @@ void GamePlayScene::DrawImgui()
 		Transform text7 = Tutorialtext7->GetTransform();
 		Transform text8 = Tutorialtext8->GetTransform();
 		Transform text9 = Tutorialtext9->GetTransform();
+		Transform resetnotice = ResetNotice->GetTransform();
+
 		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
 			Tutorialtext1->SetTransform(text);
 		}
@@ -1024,10 +1039,16 @@ void GamePlayScene::DrawImgui()
 		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
 			Tutorialtext8->SetTransform(text8);
 		}
-
 		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
 			Tutorialtext9->SetTransform(text9);
 		}
+		if (ImGui::DragFloat3("resetNoticetranslate", &resetnotice.translate.x), 0.01f) {
+			ResetNotice->SetTransform(resetnotice);
+		}
+		if (ImGui::DragFloat3("resetNoticescale", &resetnotice.scale.x), 0.01f) {
+			ResetNotice->SetTransform(resetnotice);
+		}
+
 
 		//UI
 
