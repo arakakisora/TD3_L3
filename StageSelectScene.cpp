@@ -65,7 +65,19 @@ void StageSelectScene::Initialize()
 			newObject->SetModel("StageSelect/Stage02.obj");
 		} else if (i == 2) {
 			newObject->SetModel("StageSelect/Stage03.obj");
-		} else {
+		} else if (i == 3) {
+			newObject->SetModel("StageSelect/Stage01.obj");
+		} else if (i == 4) {
+			newObject->SetModel("StageSelect/Stage02.obj");
+		} else if (i == 5) {
+			newObject->SetModel("StageSelect/Stage03.obj");
+		} else if (i == 6) {
+			newObject->SetModel("StageSelect/Stage01.obj");
+		} else if (i == 7) {
+			newObject->SetModel("StageSelect/Stage02.obj");
+		} else if (i == 8) {
+			newObject->SetModel("StageSelect/Stage03.obj");
+		} else if (i == 9) {
 			newObject->SetModel("StageSelect/Stage01.obj");
 		}
 		newObject->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
