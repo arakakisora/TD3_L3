@@ -83,7 +83,8 @@ private:
 	std::unique_ptr<Object3D>Tutorialtext12;//タイマー
 	std::unique_ptr<Object3D>Tutorialtext13;//ジャンプ
 
-
+	//リセットお知らせ
+	std::unique_ptr<Object3D>ResetNotice;
 
 	//操作説明テキスト
 	//std::vector<std::unique_ptr<Sprite>>operationTexts;
