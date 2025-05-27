@@ -49,7 +49,7 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("nullBlock.obj");
 	ModelManager::GetInstans()->LoadModel("putTimer.obj");
 	// 天球モデル / 背景のプレーン
-	ModelManager::GetInstans()->LoadModel("backPlane.obj");
+	ModelManager::GetInstans()->LoadModel("PlaySceneBackPlane.obj");
 	// フォトカメラフレーム
 	ModelManager::GetInstans()->LoadModel("Frame.obj");
 
@@ -103,7 +103,7 @@ void GamePlayScene::Initialize()
 	case 5: stagePath = "MapData/mapp6.csv"; break;
 	case 6: stagePath = "MapData/mapp7.csv"; break;
 	case 7: stagePath = "MapData/mapp8.csv"; break;
-	case 8: stagePath = "MapData/mapp9.csv"; break; 
+	case 8: stagePath = "MapData/mapp9.csv"; break;
 	case 9: stagePath = "MapData/mapp10.csv"; break;
 	}
 
@@ -112,7 +112,7 @@ void GamePlayScene::Initialize()
 	skydome_->SetTranslate(Vector3{ 17.6f,16.67f,62.72f });
 	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
 	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
-	skydome_->SetModel("backPlane.obj");
+	skydome_->SetModel("PlaySceneBackPlane.obj");
 
 
 	map = new Map;
