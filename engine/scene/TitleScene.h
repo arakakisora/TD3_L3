@@ -29,6 +29,14 @@ public:
 	/// </summary>
 	void Draw()override;
 
+	// シャッター演出の開始
+	void shatterEffect();
+	// シャッター演出の更新
+	void shutterEffectUpdate();
+	
+	// プレイヤーのイージング処理移動
+	void UpdatePlayerPositionByStep(float deltaTime);
+
 public:
 	std::unique_ptr<Object3D> titileobject_;
 	std::unique_ptr<Object3D> uIbject_start_;
@@ -41,4 +49,30 @@ public:
 	// 背景
 	std::unique_ptr<Object3D>skydome_;
 	FadeManager fadeManager_;
+
+	// 演出のステップ
+	int currentStep = 0;
+
+	//シャッター演出用
+	// シャッター演出制御用
+	bool isShutterEffectPlaying = false;
+	float shutterAnimTime = 0.0f;
+	const float shutterAnimDuration = 0.15f;
+	std::unique_ptr<Object3D> shuttertopObject; // シャッター演出用のオブジェクト
+	std::unique_ptr<Object3D> shutterbottomObject; // シャッター演出用のオブジェクト
+
+
+	// プレイヤー
+	std::unique_ptr<Object3D> player_;
+	// イージング処理
+	float easingTimer = 0.0f;
+	bool isEasing = false;
+	const float easingDuration = 1.0f; // 秒単位（1秒で完了）
+
+	// プレイヤーを浮かせる処理
+	bool cameraMode_;
+	Vector3 basePosition_{};
+	Vector3 offset{};
+	int frameCount_ = 0;
+
 };
