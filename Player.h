@@ -10,6 +10,7 @@
 #include "RenderingData.h"
 
 #include "Object3D.h"
+#include<Audio.h>
 
 enum class LRDirecion {
 	kright,
@@ -153,4 +154,9 @@ private:
 	// プレイヤー移動フラグ
 	bool playermoveright = false;
 	bool playermoveleft = false;
+
+	// ジャンプサウンド
+	SoundData jumpSound;
+	// 決定サウンド
+	SoundData ButtonSound;
 };
