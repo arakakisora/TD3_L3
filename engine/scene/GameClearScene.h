@@ -121,5 +121,5 @@ private:
 	// セレクトサウンド
 	SoundData selectSound;
 	// 決定サウンド
-	SoundData ButtonSound;
+	SoundData ButtonSound; 
 };
