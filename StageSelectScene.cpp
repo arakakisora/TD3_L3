@@ -86,6 +86,8 @@ void StageSelectScene::Initialize()
 			newObject->SetModel("StageSelect/Stage03.obj");
 		} else if (i == 9) {
 			newObject->SetModel("StageSelect/Stage01.obj");
+		} else {
+			newObject->SetModel("StageSelect/Stage01.obj");
 		}
 		newObject->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 		newObject->SetLighting(false);
