@@ -45,10 +45,7 @@ void StageSelectScene::Initialize()
 
 	// 背景
 	ModelManager::GetInstans()->LoadModel("SelectSceneBackPlane.obj");
-
-	// セレクト用サウンド
-	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
-
+	
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	currentIndex_ = stageIndex;
@@ -180,6 +177,12 @@ void StageSelectScene::Initialize()
 		1,
 		"Player"
 	);
+
+
+	// セレクト用サウンド
+	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 }
 
 void StageSelectScene::Finalize()
@@ -216,7 +219,8 @@ void StageSelectScene::Update()
 
 	skydome_->Update();
 
-
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&selectSound, 0.2f);
 
 
 
@@ -550,6 +554,9 @@ void StageSelectScene::moveChangeScene() {
 			// 終了位置
 			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
 			easingProgress_ = 0.0f;  // イージング開始
+			
+			// 決定の音声を流す
+			Audio::GetInstance()->SoundPlayWave(ButtonSound);
 		}
 	}
 
