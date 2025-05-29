@@ -158,6 +158,7 @@ void StageSelectScene::Initialize()
 	skydome_->Initialize(Object3DCommon::GetInstance());
 	skydome_->SetModel("SelectSceneBackPlane.obj");
 	Vector3 planePos = { -8.0f,0.0f,135.0f };
+	planePos.x =  -8.0f + initialPos.x;
 	Vector3 planeScale = { 1.0f,0.55f,1.0f };
 	skydome_->SetTranslate(planePos);
 	skydome_->SetScale(planeScale);
@@ -201,6 +202,7 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
+
 #ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
 		Transform transform = skydome_->GetTransform();
@@ -221,12 +223,12 @@ void StageSelectScene::Update()
 	// フェード更新
 	fadeManager_.Update();
 
+
 	skydome_->Update();
 
 	// 音量設定
-	Audio::GetInstance()->SetVolume(&selectSound, 0.2f);
-
-
+	Audio::GetInstance()->SetVolume(&selectSound, 2.0f);
+	Audio::GetInstance()->SetVolume(&ButtonSound, 3.0f);
 
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
@@ -302,6 +304,20 @@ void StageSelectScene::Update()
 	}
 
 #ifdef _DEBUG
+
+	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
+		Transform transform = skydome_->GetTransform();
+
+		if (ImGui::DragFloat3("Skydome Translate", &transform.translate.x, 0.1f)) {
+			skydome_->SetTranslate(transform.translate);
+		}
+		if (ImGui::DragFloat3("Skydome Rotate", &transform.rotate.x, 0.01f)) {
+			skydome_->SetRotate(transform.rotate);
+		}
+		if (ImGui::DragFloat3("Skydome Scale", &transform.scale.x, 0.01f, 0.01f, 10.0f)) {
+			skydome_->SetScale(transform.scale);
+		}
+	}
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {

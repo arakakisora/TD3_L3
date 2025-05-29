@@ -238,3 +238,26 @@ void Audio::SetVolume(SoundData* soundData, float volume)
         }
     }
 }
+
+void Audio::SoundPlayloop(const SoundData& soundData) {
+        HRESULT hr;
+
+        StopSpecificAudio(const_cast<SoundData*>(&soundData));
+
+        IXAudio2SourceVoice* newVoice = nullptr;
+        hr = xAudio2->CreateSourceVoice(&newVoice, &soundData.wfex);
+        assert(SUCCEEDED(hr));
+
+        XAUDIO2_BUFFER buf{};
+        buf.pAudioData = soundData.PBuffer;
+        buf.AudioBytes = soundData.bufferSize;
+        buf.Flags = XAUDIO2_END_OF_STREAM; 
+        buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+        
+        hr = newVoice->SubmitSourceBuffer(&buf);
+        assert(SUCCEEDED(hr));
+        hr = newVoice->Start();
+        assert(SUCCEEDED(hr));
+
+        activeVoices[const_cast<SoundData*>(&soundData)] = newVoice;
+}
