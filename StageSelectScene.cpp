@@ -158,6 +158,7 @@ void StageSelectScene::Initialize()
 	skydome_->Initialize(Object3DCommon::GetInstance());
 	skydome_->SetModel("SelectSceneBackPlane.obj");
 	Vector3 planePos = { -8.0f,0.0f,135.0f };
+	planePos.x =  -8.0f + initialPos.x;
 	Vector3 planeScale = { 1.0f,0.55f,1.0f };
 	skydome_->SetTranslate(planePos);
 	skydome_->SetScale(planeScale);
