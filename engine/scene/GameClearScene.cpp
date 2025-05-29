@@ -57,14 +57,14 @@ void GameClearScene::Initialize()
 
 		if (i == 0) {
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Title.png");
-			newSprite->SetPosition(Vector2(250.0f, 500.0f));
+			newSprite->SetPosition(Vector2(250.0f, 700.0f));
 
 		} else if (i == 1) {
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Stageselect.png");
-			newSprite->SetPosition(Vector2(550.0f, 500.0f));
+			newSprite->SetPosition(Vector2(550.0f, 700.0f));
 		} else if (i == 2) {
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Nextstage.png");
-			newSprite->SetPosition(Vector2(850.0f, 500.0f));
+			newSprite->SetPosition(Vector2(850.0f, 700.0f));
 		}
 
 		newSprite->SetSize({ 200.0f, 50.0f });
@@ -148,9 +148,35 @@ void GameClearScene::Update()
 	EasingMove();
 
 	if (allObjectsFinished) {
+
+		easeT += easeSpeed;
+		if (easeT > 1.0f) easeT = 1.0f;
+
+		for (uint32_t i = 0; i < 3; ++i) {
+			// 透過処理
+			if (nextsneneonthit && i == 2) {
+				TextUI_[i]->setColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+			}
+
+			// 現在の位置
+			Vector2 currentPos = { TextUI_[i]->GetPosition().x,700.0f };
+			Vector2 startPos = currentPos;
+			Vector2 endPos = {currentPos.x, 500.0f };
+
+			// 線形補間で Y軸に移動（イージング）
+			Vector2 newPos = {
+				std::lerp(startPos.x, endPos.x, easeT),
+				std::lerp(startPos.y, endPos.y, easeT)
+			};
+			TextUI_[i]->SetPosition(newPos);
+
+			TextUI_[i]->Update();
+		}
 		Changefige = true;
-		// コントローラー操作
-		ControllerUpdate();
+		if (easeT == 1.0f) {
+			// コントローラー操作
+			ControllerUpdate();
+		}
 	}
 
 	if (Changefige) {
@@ -188,8 +214,9 @@ void GameClearScene::Draw()
 		for (std::unique_ptr<Sprite>& UI : TextUI_) {
 			UI->Draw();
 		}
-
-		ArroTextUI_->Draw();
+		if (easeT == 1.0f) {
+			ArroTextUI_->Draw();
+		}
 	}
 #pragma endregion
 
