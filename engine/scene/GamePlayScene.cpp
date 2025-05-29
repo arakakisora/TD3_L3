@@ -110,7 +110,7 @@ void GamePlayScene::Initialize()
 	case 8: stagePath = "MapData/mapp9.csv"; break;
 	case 9: stagePath = "MapData/mapp10.csv"; break;
 	case 10:stagePath = "MapData/mapp11.csv"; break;
-//	case 11:stagePath = "MapData/mapp12.csv"; break;
+	case 11:stagePath = "MapData/mapp12.csv"; break;
 	}
 
 	skydome_ = make_unique<Object3D>();
@@ -279,7 +279,7 @@ void GamePlayScene::Initialize()
 	Tutorialtext13->SetModel("tutorial/tutorial13.obj");
 	Tutorialtext13->SetScale(Vector3(1.0f, 0.5f, 0.5f));
 	Tutorialtext13->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext13->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	Tutorialtext13->SetTranslate(Vector3(12.46f, 19.5f, 1.0f));
 	Tutorialtext13->SetLighting(false);
 	Tutorialtext13->SetIsTutorialActive(false);
 
@@ -396,7 +396,7 @@ void GamePlayScene::Initialize()
 
 	jumpSprite = std::make_unique<Sprite>();
 	jumpSprite->Initialize(SpriteCommon::GetInstance(), "Resources/jumpsprite.png");
-	jumpSprite->SetPosition(Vector2(275, 121));
+	jumpSprite->SetPosition(Vector2(276, 214));
 	jumpSprite->SetSize(Vector2(45, 45));
 
 	timerSprite = std::make_unique<Sprite>();
@@ -697,6 +697,23 @@ void GamePlayScene::Update()
 		nCopySprite->Update();
 	}
 
+	//チュートリアル表示制御map9
+	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
+	
+			Tutorialtext12->SetIsTutorialActive(true);
+			tutorial12 = true;
+		
+			timerSprite->Update();
+	}
+
+	//チュートリアル表示制御map7
+	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
+		
+			Tutorialtext13->SetIsTutorialActive(true);
+			tutorial13 = true;
+			jumpSprite->Update();
+	}
+
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
 	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
 	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
@@ -708,7 +725,8 @@ void GamePlayScene::Update()
 	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
 	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Update();
 	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Update();
-
+	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Update();
+	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Update();
 	//ui
 	/*
 	if (!photoCamera->GetCameraMode()) {
@@ -836,7 +854,8 @@ void GamePlayScene::Draw()
 	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
 	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Draw();
 	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Draw();
-
+	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Draw();
+	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Draw();
 	//リセットお知らせ
 	if (holdTime > 0.0f) {
 		ResetNotice->Draw();
@@ -901,6 +920,18 @@ void GamePlayScene::Draw()
 	//リセットメーター描画
 	if (holdTime > 0.0f) {
 		resetMeter->Draw();
+	}
+
+	//チュートリアル表示制御map9
+	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
+
+		timerSprite->Draw();
+	}
+
+	//チュートリアル表示制御map9
+	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
+
+		jumpSprite->Draw();
 	}
 
 	nCopySprite->Draw();
@@ -982,6 +1013,9 @@ void GamePlayScene::DrawImgui()
 		Transform text7 = Tutorialtext7->GetTransform();
 		Transform text8 = Tutorialtext8->GetTransform();
 		Transform text9 = Tutorialtext9->GetTransform();
+		Transform text12 = Tutorialtext12->GetTransform();
+		Transform text13 = Tutorialtext13->GetTransform();
+
 		Transform resetnotice = ResetNotice->GetTransform();
 
 		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
@@ -1056,10 +1090,14 @@ void GamePlayScene::DrawImgui()
 		if (ImGui::DragFloat3("resetNoticetranslate", &resetnotice.translate.x), 0.01f) {
 			ResetNotice->SetTransform(resetnotice);
 		}
-		if (ImGui::DragFloat3("resetNoticescale", &resetnotice.scale.x), 0.01f) {
-			ResetNotice->SetTransform(resetnotice);
+		if (ImGui::DragFloat3("text12translate", &text12.translate.x), 0.01f) {
+			Tutorialtext12->SetTransform(text12);
+		}
+		if (ImGui::DragFloat3("text13translate", &text13.translate.x), 0.01f) {
+			Tutorialtext13->SetTransform(text13);
 		}
 
+		
 
 		//UI
 
@@ -1067,6 +1105,10 @@ void GamePlayScene::DrawImgui()
 		Vector2 ncopysize = nCopySprite->GetSize();
 		Vector2 resetmeter = resetMeter->GetPosition();
 		Vector2 resetmetersize = resetMeter->GetSize();
+		Vector2 timer = timerSprite->GetPosition();
+		Vector2 timersize = timerSprite->GetSize();
+		Vector2 jump = jumpSprite->GetPosition();
+		Vector2 jumpsize = jumpSprite->GetSize();
 
 		if (ImGui::DragFloat2("ncopytranslate", &ncopy.x), 0.01f) {
 			nCopySprite->SetPosition(ncopy);
@@ -1079,6 +1121,18 @@ void GamePlayScene::DrawImgui()
 		}
 		if (ImGui::DragFloat2("resetMetersize", &resetmetersize.x), 0.01f) {
 			resetMeter->SetSize(resetmetersize);
+		}
+		if (ImGui::DragFloat2("timertranslate", &timer.x), 0.01f) {
+			timerSprite->SetPosition(timer);
+		}
+		if (ImGui::DragFloat2("timersize", &timersize.x), 0.01f) {
+			timerSprite->SetSize(timersize);
+		}
+		if (ImGui::DragFloat2("jumptranslate", &jump.x), 0.01f) {
+			jumpSprite->SetPosition(jump);
+		}
+		if (ImGui::DragFloat2("jumpMetersize", &jumpsize.x), 0.01f) {
+			jumpSprite->SetSize(jumpsize);
 		}
 
 		/*
