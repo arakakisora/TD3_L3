@@ -197,6 +197,7 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
+
 	// フェード更新
 	fadeManager_.Update();
 	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
