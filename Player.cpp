@@ -22,8 +22,10 @@ void Player::Initialize(Object3D* object3D, const Vector3& position) {
 	object3D_->SetTranslate(position);
 	object3D_->SetRotate({ 0, std::numbers::pi_v<float> / 2.0f , 0 });
 
-
-
+	// ジャンプ用サウンド
+	jumpSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Jump.wav");
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 }
 
 Player::~Player()
@@ -61,6 +63,8 @@ void Player::Update() {
 
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && onGround_) {
 		cameraMode_ = !cameraMode_;
+		// 決定の音声を流す
+		Audio::GetInstance()->SoundPlayWave(ButtonSound);
 	}
 
 	if (!cameraMode_) {
@@ -181,6 +185,9 @@ void Player::PrayerMove() {
 #endif // _DEBUG
 			Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A))
 		{
+			// ジャンプサウンド開始
+			Audio::GetInstance()->SoundPlayWave(jumpSound);
+
 			velocity_.y = kJampAcceleration; // += ではなく = にすることで、ジャンプの初速を一定にする
 		}
 	} else
