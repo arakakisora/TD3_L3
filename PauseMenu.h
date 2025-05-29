@@ -3,6 +3,7 @@
 #include "Object3DCommon.h"
 #include "Input.h"
 #include "Camera.h"
+#include <Audio.h>
 
 class Camera; // 前方宣言
 
@@ -59,5 +60,10 @@ private:
 	bool easingmoveFlag_ = false;
 
 	bool isClosing_ = false;
+
+	// セレクトサウンド
+	SoundData selectSound;
+	// 決定サウンド
+	SoundData ButtonSound;
 };
 
