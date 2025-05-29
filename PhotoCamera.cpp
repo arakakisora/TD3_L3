@@ -105,9 +105,9 @@ void PhotoCamera::Update(Map* map, const bool cameraMode)
 
 
 	// 音量設定
-	Audio::GetInstance()->SetVolume(&moveSound, 0.2f);
-	Audio::GetInstance()->SetVolume(&copeSound, 0.2f);
-	Audio::GetInstance()->SetVolume(&pasteSound, 1.0f);
+	Audio::GetInstance()->SetVolume(&moveSound, 1.5f);
+	Audio::GetInstance()->SetVolume(&copeSound, 2.0f);
+	Audio::GetInstance()->SetVolume(&pasteSound, 3.0f);
 
 	if (CamerMode) {
 		// フォトカメラの移動

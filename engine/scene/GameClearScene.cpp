@@ -114,8 +114,8 @@ void GameClearScene::Update()
 	skydome_->Update();
 
 	// 音量設定
-	Audio::GetInstance()->SetVolume(&selectSound, 0.2f);
-
+	Audio::GetInstance()->SetVolume(&selectSound, 2.0f);
+	Audio::GetInstance()->SetVolume(&ButtonSound, 3.0f);
 #ifdef _DEBUG
 
 

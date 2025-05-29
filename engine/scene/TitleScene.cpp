@@ -91,13 +91,15 @@ void TitleScene::Initialize()
 	// ステージを0からに初期化
 	SceneManager::GetInstance()->SetStageIndex(0);
 
+	// 初期化前に音声を削除
+	Audio::GetInstance()->StopAudio();
+
 	// 決定用サウンド
 	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 	// コピー用サウンド
 	copeSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Camera_copy.wav");
 	// メインサウンド
 	Bgm = Audio::GetInstance()->SoundLoadWave("Resources/Audio/bgm.wav");
-
 }
 
 void TitleScene::Finalize()
@@ -116,7 +118,7 @@ void TitleScene::Update()
 	if (!bgmstart) {
 		bgmstart = true;
 		// メインサウンド開始
-		Audio::GetInstance()->SoundPlayWave(Bgm);
+		Audio::GetInstance()->SoundPlayloop(Bgm);
 	}
 
 	// フェード更新
@@ -151,7 +153,6 @@ void TitleScene::Update()
 			if (fadeManager_.IsFadeOutFinished()) {
 				// シーン切り替え	
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
-				Audio::GetInstance()->StopAudio();
 			}
 
 		}

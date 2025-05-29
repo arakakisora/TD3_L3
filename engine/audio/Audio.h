@@ -46,6 +46,9 @@ public:
 
     // 音の再生・停止
     void SoundPlayWave(const SoundData& soundData);
+    // ループ
+    void SoundPlayloop(const SoundData& soundData);
+    
     void StopAudio(); // 全音停止
     void StopSpecificAudio(SoundData* soundData); // 指定音停止
 
