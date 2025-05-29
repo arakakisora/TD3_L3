@@ -32,7 +32,18 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("Stage01.obj");
 	ModelManager::GetInstans()->LoadModel("Stage02.obj");
 	ModelManager::GetInstans()->LoadModel("Stage03.obj");
+	ModelManager::GetInstans()->LoadModel("Stage04.obj");
+	ModelManager::GetInstans()->LoadModel("Stage05.obj");
 
+	ModelManager::GetInstans()->LoadModel("Stage06.obj");
+	ModelManager::GetInstans()->LoadModel("Stage07.obj");
+	ModelManager::GetInstans()->LoadModel("Stage08.obj");
+	ModelManager::GetInstans()->LoadModel("Stage09.obj");
+	ModelManager::GetInstans()->LoadModel("Stage10.obj");
+
+	ModelManager::GetInstans()->LoadModel("Stage11.obj");
+	ModelManager::GetInstans()->LoadModel("Stage12.obj");
+	ModelManager::GetInstans()->LoadModel("Stage13.obj");
 
 	ModelManager::GetInstans()->LoadModel("Pause.obj");
 
@@ -68,7 +79,28 @@ void StageSelectScene::Initialize()
 			newObject->SetModel("Stage02.obj");
 		} else if (i == 2) {
 			newObject->SetModel("Stage03.obj");
-		} else {
+		} else if (i == 3) {
+			newObject->SetModel("Stage04.obj");
+		} else if (i == 4) {
+			newObject->SetModel("Stage05.obj");
+		} else if (i == 5) {
+			newObject->SetModel("Stage06.obj");
+		} else if (i == 6) {
+			newObject->SetModel("Stage07.obj");
+		} else if (i == 7) {
+			newObject->SetModel("Stage08.obj");
+		} else if (i == 8) {
+			newObject->SetModel("Stage09.obj");
+		} else if (i == 9) {
+			newObject->SetModel("Stage10.obj");
+		} else if (i == 10) {
+			newObject->SetModel("Stage11.obj");
+		} else if (i == 11) {
+			newObject->SetModel("Stage12.obj");
+		} else if (i == 12) {
+			newObject->SetModel("Stage13.obj");
+		}
+		else {
 			newObject->SetModel("Stage01.obj");
 		}
 		newObject->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
