@@ -28,13 +28,11 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 
 	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-1.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-2.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-3.obj");
 
-	ModelManager::GetInstans()->LoadModel("StageSelect/Stage01.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Stage02.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Stage03.obj");
+	ModelManager::GetInstans()->LoadModel("Stage01.obj");
+	ModelManager::GetInstans()->LoadModel("Stage02.obj");
+	ModelManager::GetInstans()->LoadModel("Stage03.obj");
+
 
 	ModelManager::GetInstans()->LoadModel("Pause.obj");
 
@@ -65,31 +63,17 @@ void StageSelectScene::Initialize()
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
 		newObject->Initialize(Object3DCommon::GetInstance());
 		if (i == 0) {
-			newObject->SetModel("StageSelect/Stage01.obj");
-		} else if (i == 1) {
-			newObject->SetModel("StageSelect/Stage02.obj");
+			newObject->SetModel("Stage01.obj");
+		}else if (i == 1) {
+			newObject->SetModel("Stage02.obj");
 		} else if (i == 2) {
-			newObject->SetModel("StageSelect/Stage03.obj");
-		} else if (i == 3) {
-			newObject->SetModel("StageSelect/Stage01.obj");
-		} else if (i == 4) {
-			newObject->SetModel("StageSelect/Stage02.obj");
-		} else if (i == 5) {
-			newObject->SetModel("StageSelect/Stage03.obj");
-		} else if (i == 6) {
-			newObject->SetModel("StageSelect/Stage01.obj");
-		} else if (i == 7) {
-			newObject->SetModel("StageSelect/Stage02.obj");
-		} else if (i == 8) {
-			newObject->SetModel("StageSelect/Stage03.obj");
-		} else if (i == 9) {
-			newObject->SetModel("StageSelect/Stage01.obj");
+			newObject->SetModel("Stage03.obj");
 		} else {
-			newObject->SetModel("StageSelect/Stage01.obj");
+			newObject->SetModel("Stage01.obj");
 		}
 		newObject->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 		newObject->SetLighting(false);
-		newObject->SetScale(Vector3(1.5f, 1.5f, 1.5f));
+		newObject->SetScale(Vector3(2.0f, 1.5f, 1.5f));
 		stageObjects_.push_back(std::move(newObject));
 	}
 
