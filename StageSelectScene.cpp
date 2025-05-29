@@ -12,6 +12,7 @@
 #include <MyMath.h>
 #include <TextureManager.h>
 #include <numbers>
+#include<Audio.h>
 
 void StageSelectScene::Initialize()
 {
@@ -45,8 +46,8 @@ void StageSelectScene::Initialize()
 	// 背景
 	ModelManager::GetInstans()->LoadModel("SelectSceneBackPlane.obj");
 
-
-
+	// セレクト用サウンド
+	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
 
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
@@ -413,6 +414,9 @@ void StageSelectScene::move() {
 		// パーティクルのフラグ設定（右移動）
 		playermoveright = true;
 		playermoveleft = false;
+
+		// セレクト音声を流す
+		Audio::GetInstance()->SoundPlayWave(selectSound);
 	}
 
 	// (左に移動)
@@ -433,6 +437,8 @@ void StageSelectScene::move() {
 		// パーティクルのフラグ設定（左移動）
 		playermoveright = false;
 		playermoveleft = true;
+		// セレクト音声を流す
+		Audio::GetInstance()->SoundPlayWave(selectSound);
 	}
 
 	// イージング処理
