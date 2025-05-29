@@ -12,6 +12,7 @@
 #include <MyMath.h>
 #include <TextureManager.h>
 #include <numbers>
+#include<Audio.h>
 
 void StageSelectScene::Initialize()
 {
@@ -44,10 +45,7 @@ void StageSelectScene::Initialize()
 
 	// 背景
 	ModelManager::GetInstans()->LoadModel("SelectSceneBackPlane.obj");
-
-
-
-
+	
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	currentIndex_ = stageIndex;
@@ -179,6 +177,12 @@ void StageSelectScene::Initialize()
 		1,
 		"Player"
 	);
+
+
+	// セレクト用サウンド
+	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 }
 
 void StageSelectScene::Finalize()
@@ -197,6 +201,7 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
+
 	// フェード更新
 	fadeManager_.Update();
 	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -215,7 +220,8 @@ void StageSelectScene::Update()
 
 	skydome_->Update();
 
-
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&selectSound, 0.2f);
 
 
 
@@ -413,6 +419,9 @@ void StageSelectScene::move() {
 		// パーティクルのフラグ設定（右移動）
 		playermoveright = true;
 		playermoveleft = false;
+
+		// セレクト音声を流す
+		Audio::GetInstance()->SoundPlayWave(selectSound);
 	}
 
 	// (左に移動)
@@ -433,6 +442,8 @@ void StageSelectScene::move() {
 		// パーティクルのフラグ設定（左移動）
 		playermoveright = false;
 		playermoveleft = true;
+		// セレクト音声を流す
+		Audio::GetInstance()->SoundPlayWave(selectSound);
 	}
 
 	// イージング処理
@@ -544,6 +555,9 @@ void StageSelectScene::moveChangeScene() {
 			// 終了位置
 			endPos_ = Vector3(Player_->GetTranslate().x, Player_->GetTranslate().y, 15.0f);
 			easingProgress_ = 0.0f;  // イージング開始
+			
+			// 決定の音声を流す
+			Audio::GetInstance()->SoundPlayWave(ButtonSound);
 		}
 	}
 

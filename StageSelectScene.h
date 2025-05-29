@@ -116,5 +116,8 @@ public:
 	// 背景モデル
 	std::unique_ptr<Object3D> backPlane_;
 
-
+	// セレクトサウンド
+	SoundData selectSound;
+	// 決定サウンド
+	SoundData ButtonSound;
 };
