@@ -328,7 +328,6 @@ Particle ParticleMnager::PlayerMakeNewParticle(std::mt19937& randomEngine, const
 
 	//std::uniform_real_distribution<float>distribution(-0.1f, 0.1f);
 	std::uniform_real_distribution<float>distrotate(-5.0f, 5.0f);
-	//std::uniform_real_distribution<float>distColor(0.0f, 1.0f);
 	float distVelocityX = isRight ? 1.5f : -1.5f;
 	float distVelocityY = 2.0f;
 
