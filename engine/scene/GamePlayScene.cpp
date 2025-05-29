@@ -429,9 +429,8 @@ void GamePlayScene::Initialize()
 	fadeManager_.Initialize("Resources/white.png");
 	fadeManager_.StartFadeIn();
 
-
-	ParticleMnager::GetInstance()->CreateParticleGroup("Goal", "Resources/block.png", "block.obj");
-	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/block.png", "block.obj");
+	ParticleMnager::GetInstance()->CreateParticleGroup("Goal", "Resources/white.png", "block.obj");
+	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/white.png", "block.obj");
 
 	// パーティクル発生器
 	emitter_ = new ParticleEmitter(
