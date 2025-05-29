@@ -72,6 +72,13 @@ void PhotoCamera::Initialize(Map* map)
 	// ビットマップフォント
 	bitmapFont = make_unique<BitmapFont>();
 	bitmapFont->Initialize();
+
+	// 移動用サウンド
+	moveSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
+	// コピー用サウンド
+	copeSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Camera_copy.wav");
+	// ペースト用サウンド
+	pasteSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Camera_paste.wav");
 }
 
 void PhotoCamera::Update(Map* map, const bool cameraMode)
@@ -90,14 +97,17 @@ void PhotoCamera::Update(Map* map, const bool cameraMode)
 	for (auto& shutter : shutterRests_) {
 		shutter->Update();
 	}
-
-
-	shutterEffectUpdate();
+	
+	shutterEffectUpdate();	
 	//sahtter演出用のオブジェクト
 	shuttertopObject->Update();
 	shutterbottomObject->Update();
 
-	
+
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&moveSound, 0.2f);
+	Audio::GetInstance()->SetVolume(&copeSound, 0.2f);
+	Audio::GetInstance()->SetVolume(&pasteSound, 1.0f);
 
 	if (CamerMode) {
 		// フォトカメラの移動
@@ -136,6 +146,8 @@ void PhotoCamera::Update(Map* map, const bool cameraMode)
 					}
 				}
 			}
+			// コピーサウンド開始
+			Audio::GetInstance()->SoundPlayWave(copeSound);
 		}
 		// フォトカメラのペースト / Pキーを押したら
 
@@ -152,7 +164,8 @@ void PhotoCamera::Update(Map* map, const bool cameraMode)
 				// シャッター上限に達しているのでペースト不可
 				return;
 			}
-
+			// ペーストサウンド開始
+			Audio::GetInstance()->SoundPlayWave(pasteSound);
 			Paste();
 		}
 	}
@@ -332,7 +345,8 @@ void PhotoCamera::stickMove()
 				moveTimer = 0.0f;
 				isMoving = true;
 			}
-
+			// 移動サウンド開始
+			Audio::GetInstance()->SoundPlayWave(moveSound);
 			stickCoolTimeX = maxCoolTime;
 		} else {
 			stickCoolTimeX--;
@@ -351,7 +365,8 @@ void PhotoCamera::stickMove()
 				moveTimer = 0.0f;
 				isMoving = true;
 			}
-
+			// 移動サウンド開始
+			Audio::GetInstance()->SoundPlayWave(moveSound);
 			stickCoolTimeY = maxCoolTime;
 		} else {
 			stickCoolTimeY--;

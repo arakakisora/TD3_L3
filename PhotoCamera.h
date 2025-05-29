@@ -5,6 +5,8 @@
 #include "Sprite.h"
 #include "BitmapFont.h"
 #include <memory>
+#include <Audio.h>
+
 using namespace std;
 class PhotoCamera
 {
@@ -123,6 +125,12 @@ private:
 	Object3D* shuttertopObject; // シャッター演出用のオブジェクト
 	Object3D* shutterbottomObject; // シャッター演出用のオブジェクト
 
-	
+
+	// 移動サウンド
+	SoundData moveSound;
+	// コピーサウンド
+	SoundData copeSound;
+	// ペーストサウンド
+	SoundData pasteSound;
 };
 
