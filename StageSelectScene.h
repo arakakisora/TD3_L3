@@ -95,7 +95,7 @@ public:
 
 	std::vector<std::unique_ptr<Sprite>> xboxui;
 	std::vector < std::unique_ptr<Sprite>> pauseui;
-	bool titlefige_ =false;
+	bool titlefige_ = false;
 
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
@@ -106,10 +106,15 @@ public:
 	FadeManager fadeManager_;
 
 	// ステージ選択時のプレイヤーの位置
-	Vector3 playerInitialOffset_; 
+	Vector3 playerInitialOffset_;
 
 	ParticleEmitter* playeremitter_;
 	// プレイヤー移動フラグ
 	bool playermoveright = false;
 	bool playermoveleft = false;
+
+	// 背景モデル
+	std::unique_ptr<Object3D> backPlane_;
+
+
 };
