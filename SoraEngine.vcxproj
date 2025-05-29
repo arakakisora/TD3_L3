@@ -253,6 +253,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <None Include="MapData\blocks.csv" />
     <None Include="MapData\map050.csv" />
     <None Include="MapData\Map1_1.csv" />
+    <None Include="MapData\mapp01.csv" />
     <None Include="MapData\mapp10.csv" />
     <None Include="MapData\mapp11.csv" />
     <None Include="MapData\mapp12.csv" />
