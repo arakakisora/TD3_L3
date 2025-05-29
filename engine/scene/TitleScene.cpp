@@ -90,6 +90,11 @@ void TitleScene::Initialize()
 
 	// ステージを0からに初期化
 	SceneManager::GetInstance()->SetStageIndex(0);
+
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
+	// コピー用サウンド
+	copeSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Camera_copy.wav");
 }
 
 void TitleScene::Finalize()
@@ -99,6 +104,10 @@ void TitleScene::Finalize()
 
 void TitleScene::Update()
 {
+
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&copeSound, 0.4f);
+
 	// フェード更新
 	fadeManager_.Update();
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
@@ -120,6 +129,8 @@ void TitleScene::Update()
 					Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A))
 				{
 					if (currentStep >= 3) {
+						// 決定の音声を流す
+						Audio::GetInstance()->SoundPlayWave(ButtonSound);
 						isnextStep = true;
 						fadeManager_.StartFadeOut();
 					}
@@ -200,6 +211,8 @@ void TitleScene::Update()
 	// ステップ3
 	if (currentStep == 2 && isShutterEffectPlaying == false) {
 		shatterEffect();
+		// コピーサウンド開始
+		Audio::GetInstance()->SoundPlayWave(copeSound);
 	}
 
 
