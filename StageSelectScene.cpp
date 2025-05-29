@@ -205,19 +205,6 @@ void StageSelectScene::Update()
 
 	// フェード更新
 	fadeManager_.Update();
-	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
-		Transform transform = skydome_->GetTransform();
-
-		if (ImGui::DragFloat3("Skydome Translate", &transform.translate.x, 0.1f)) {
-			skydome_->SetTranslate(transform.translate);
-		}
-		if (ImGui::DragFloat3("Skydome Rotate", &transform.rotate.x, 0.01f)) {
-			skydome_->SetRotate(transform.rotate);
-		}
-		if (ImGui::DragFloat3("Skydome Scale", &transform.scale.x, 0.01f, 0.01f, 10.0f)) {
-			skydome_->SetScale(transform.scale);
-		}
-	}
 
 	skydome_->Update();
 
@@ -299,6 +286,20 @@ void StageSelectScene::Update()
 	}
 
 #ifdef _DEBUG
+
+	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
+		Transform transform = skydome_->GetTransform();
+
+		if (ImGui::DragFloat3("Skydome Translate", &transform.translate.x, 0.1f)) {
+			skydome_->SetTranslate(transform.translate);
+		}
+		if (ImGui::DragFloat3("Skydome Rotate", &transform.rotate.x, 0.01f)) {
+			skydome_->SetRotate(transform.rotate);
+		}
+		if (ImGui::DragFloat3("Skydome Scale", &transform.scale.x, 0.01f, 0.01f, 10.0f)) {
+			skydome_->SetScale(transform.scale);
+		}
+	}
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
