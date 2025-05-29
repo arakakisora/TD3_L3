@@ -90,6 +90,14 @@ void TitleScene::Initialize()
 
 	// ステージを0からに初期化
 	SceneManager::GetInstance()->SetStageIndex(0);
+
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
+	// コピー用サウンド
+	copeSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Camera_copy.wav");
+	// メインサウンド
+	Bgm = Audio::GetInstance()->SoundLoadWave("Resources/Audio/bgm.wav");
+
 }
 
 void TitleScene::Finalize()
@@ -99,6 +107,18 @@ void TitleScene::Finalize()
 
 void TitleScene::Update()
 {
+
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&ButtonSound, 3.5f);
+	Audio::GetInstance()->SetVolume(&copeSound, 2.0f);
+	Audio::GetInstance()->SetVolume(&Bgm, 0.2f);
+
+	if (!bgmstart) {
+		bgmstart = true;
+		// メインサウンド開始
+		Audio::GetInstance()->SoundPlayWave(Bgm);
+	}
+
 	// フェード更新
 	fadeManager_.Update();
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
@@ -120,6 +140,8 @@ void TitleScene::Update()
 					Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A))
 				{
 					if (currentStep >= 3) {
+						// 決定の音声を流す
+						Audio::GetInstance()->SoundPlayWave(ButtonSound);
 						isnextStep = true;
 						fadeManager_.StartFadeOut();
 					}
@@ -129,7 +151,7 @@ void TitleScene::Update()
 			if (fadeManager_.IsFadeOutFinished()) {
 				// シーン切り替え	
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
-
+				Audio::GetInstance()->StopAudio();
 			}
 
 		}
@@ -180,26 +202,29 @@ void TitleScene::Update()
 
 #endif // _DEBUG
 
+	// ステップ1(始まり)
 	if (currentStep == -1) {
 		fadeManager_.StartFadeIn();
 		currentStep = 0;
 	}
 
-	// ステップ1
+	// ステップ2
 	if (currentStep == 0) {
 		player_->SetRotate(Vector3{ 0.0f,180.0f * (DirectX::XM_PI / 180.0f),0.0f });
 		player_->SetTranslate(Vector3{ 0.0f,-10.0f,7.0f });
 		currentStep = 1;
 	}
 
-	// ステップ2
+	// ステップ3
 	if (currentStep == 1) {
 		UpdatePlayerPositionByStep(0.01f);
 	}
 
-	// ステップ3
+	// ステップ4
 	if (currentStep == 2 && isShutterEffectPlaying == false) {
 		shatterEffect();
+		// コピーサウンド開始
+		Audio::GetInstance()->SoundPlayWave(copeSound);
 	}
 
 

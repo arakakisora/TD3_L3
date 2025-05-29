@@ -87,7 +87,7 @@ private:
 	float	elapsedFrames_ = 0;
 	float jumpEndTime_[3] = { 0.0f };
 
-	uint32_t MaxStageIndex_ = 13;
+	uint32_t MaxStageIndex_ = 12;
 
 	uint32_t Selectindex = 2;
 
@@ -118,4 +118,8 @@ private:
 	float easeT = 0.0f; // 0.0 ～ 1.0 に進める（別で Update）
 	float easeSpeed = 0.05f; // 進むスピード（毎フレーム加算）
 
+	// セレクトサウンド
+	SoundData selectSound;
+	// 決定サウンド
+	SoundData ButtonSound;
 };

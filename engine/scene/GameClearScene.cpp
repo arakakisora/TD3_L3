@@ -97,7 +97,10 @@ void GameClearScene::Initialize()
 		nextsneneonthit = true;
 		Selectindex = 1;
 	}
-
+	// セレクト用サウンド
+	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 }
 
 void GameClearScene::Finalize()
@@ -109,6 +112,9 @@ void GameClearScene::Update()
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
 	skydome_->Update();
+
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&selectSound, 0.2f);
 
 #ifdef _DEBUG
 
@@ -161,7 +167,7 @@ void GameClearScene::Update()
 			// 現在の位置
 			Vector2 currentPos = { TextUI_[i]->GetPosition().x,700.0f };
 			Vector2 startPos = currentPos;
-			Vector2 endPos = {currentPos.x, 500.0f };
+			Vector2 endPos = { currentPos.x, 500.0f };
 
 			// 線形補間で Y軸に移動（イージング）
 			Vector2 newPos = {
@@ -368,10 +374,14 @@ void GameClearScene::ControllerUpdate() {
 			Selectindex++;
 			wasStickMoved = true;
 			holdTimer_ = 0.0f;
+			// セレクト音声を流す
+			Audio::GetInstance()->SoundPlayWave(selectSound);
 		} else if (rightStickX < -stickThreshold && Selectindex > 0) {
 			Selectindex--;
 			wasStickMoved = true;
 			holdTimer_ = 0.0f;
+			// セレクト音声を流す
+			Audio::GetInstance()->SoundPlayWave(selectSound);
 		}
 	}
 
@@ -390,6 +400,8 @@ void GameClearScene::ControllerUpdate() {
 			}
 #endif // _DEBUG
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+				// 決定の音声を流す
+				Audio::GetInstance()->SoundPlayWave(ButtonSound);
 				SceneManager::GetInstance()->ChangeScene("TITELE");
 			}
 		}
@@ -406,6 +418,8 @@ void GameClearScene::ControllerUpdate() {
 			}
 #endif // _DEBUG
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+				// 決定の音声を流す
+				Audio::GetInstance()->SoundPlayWave(ButtonSound);
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 			}
 		}
@@ -426,6 +440,8 @@ void GameClearScene::ControllerUpdate() {
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 
 				if (nextStage < MaxStageIndex_) {
+					// 決定の音声を流す
+					Audio::GetInstance()->SoundPlayWave(ButtonSound);
 					SceneManager::GetInstance()->SetStageIndex(nextStage);
 					SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 				}
