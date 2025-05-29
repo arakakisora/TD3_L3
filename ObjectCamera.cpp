@@ -144,52 +144,52 @@ void ObjectCamera::GameCamertakeaphoto() {
 }
 
 void ObjectCamera::GameCameraphoto() {
-    for (uint32_t y = 0; y < kRenderHeight; ++y) {
-        for (uint32_t x = 0; x < kRenderWidth; ++x) {
-            // カメラの位置を取得
-            Vector3 cameraPos = gamecameras_[y][x]->GetTranslate();
-            uint32_t currentXIndex = static_cast<uint32_t>(cameraPos.x);
-            uint32_t currentYIndex = static_cast<uint32_t>((map_->GetMapHeight() - 1) - cameraPos.y);
+    //for (uint32_t y = 0; y < kRenderHeight; ++y) {
+    //    for (uint32_t x = 0; x < kRenderWidth; ++x) {
+    //        // カメラの位置を取得
+    //        Vector3 cameraPos = gamecameras_[y][x]->GetTranslate();
+    //        uint32_t currentXIndex = static_cast<uint32_t>(cameraPos.x);
+    //        uint32_t currentYIndex = static_cast<uint32_t>((map_->GetMapHeight() - 1) - cameraPos.y);
 
-            // 範囲チェック
-            if (currentXIndex >= map_->GetNumBlockHorizontal() || currentYIndex >= map_->GetNumBlockVirtical()) {
-                continue; // 範囲外ならスキップ
-            }
+    //        // 範囲チェック
+    //        if (currentXIndex >= map_->GetNumBlockHorizontal() || currentYIndex >= map_->GetNumBlockVirtical()) {
+    //            continue; // 範囲外ならスキップ
+    //        }
 
-            // ENTERキーが押されたときの処理
-            if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
-                // カメラのモデルを取得
-                std::string model = gamecameras_[y][x]->GetModel();
+    //        // ENTERキーが押されたときの処理
+    //        if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+    //            // カメラのモデルを取得
+    //            //std::string model = gamecameras_[y][x]->GetModel();
 
-                // モデルマップから現在のモデルの対応するマップチップタイプを取得
-                auto mapChipIter = std::find_if(mapChipTypemodelMap.begin(), mapChipTypemodelMap.end(),
-                    [&](const std::pair<MapChipType, std::string>& pair) {
-                        return pair.second == model;
-                    });
+    //            // モデルマップから現在のモデルの対応するマップチップタイプを取得
+    //            auto mapChipIter = std::find_if(mapChipTypemodelMap.begin(), mapChipTypemodelMap.end(),
+    //                [&](const std::pair<MapChipType, std::string>& pair) {
+    //                    return pair.second == model;
+    //                });
 
-                 // モデルがマップに存在する場合
-                if (mapChipIter != mapChipTypemodelMap.end()) {
-                    MapChipType mapChipType = mapChipIter->first;
+    //             // モデルがマップに存在する場合
+    //            if (mapChipIter != mapChipTypemodelMap.end()) {
+    //                MapChipType mapChipType = mapChipIter->first;
 
-                    //現在のマップチップ取得
-                    MapChipType existingType = map_->GetMapChipTypeByIndex(currentXIndex, currentYIndex);
+    //                //現在のマップチップ取得
+    //                MapChipType existingType = map_->GetMapChipTypeByIndex(currentXIndex, currentYIndex);
 
-                    //kNCopyBlockを消せない
-                    if (existingType == MapChipType::kNCopyBlock) {
-                        continue;
-                    }
+    //                //kNCopyBlockを消せない
+    //                if (existingType == MapChipType::kNCopyBlock) {
+    //                    continue;
+    //                }
 
-                    //コピペ不可能ブロックの場合スキップ
-                    if (mapChipType == MapChipType::kNCopyBlock) {
-                        continue;
-                    }
+    //                //コピペ不可能ブロックの場合スキップ
+    //                if (mapChipType == MapChipType::kNCopyBlock) {
+    //                    continue;
+    //                }
 
-                    // 生成、削除
-                    HandleMapChip(currentXIndex, currentYIndex,mapChipType);
-                }
-            }
-        }
-    }
+    //                // 生成、削除
+    //                HandleMapChip(currentXIndex, currentYIndex,mapChipType);
+    //            }
+    //        }
+    //    }
+    //}
 }
 
 void ObjectCamera::HandleMapChip(uint32_t currentXIndex, uint32_t currentYIndex, MapChipType mapChipType) {

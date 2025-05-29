@@ -116,6 +116,9 @@ private:	// 各ブロック用の変数
 	bool cameraMode_;
 	Vector3 basePosition_{};
 	Vector3 offset{};
-	int frameCount_ = 0;
+	float frameCount_ = 0;
+
+
+	Vector3 pos;
 };
 

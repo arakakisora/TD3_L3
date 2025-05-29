@@ -18,9 +18,15 @@ struct PixelShaderOutput
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
+    
     // UV座標の変換
     float4 transformdUV = mul(float4(input.texcoord, 0.0, 1.0f), gMaterial.uvTransform);
     float4 textureColor = gTexture.Sample(gSampler, transformdUV.xy);
+    
+    if (textureColor.a <= 0.0)
+    {
+        discard;
+    }
 
     PixelShaderOutput output;
     // 照明を削除し、単純な色とテクスチャの掛け算に変更
