@@ -41,6 +41,13 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
 
+
+	// 背景
+	ModelManager::GetInstans()->LoadModel("SelectSceneBackPlane.obj");
+
+
+
+
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	currentIndex_ = stageIndex;
@@ -54,7 +61,7 @@ void StageSelectScene::Initialize()
 	Player_->SetDirectionalLightEnable(true);
 	Player_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
 	Player_->SetRotate(Vector3(0.0f, 180.0f * (DirectX::XM_PI / 180.0f), 0.0f));
-	
+
 	// 作成してでリストに追加
 	for (uint32_t i = 0; i < MaxSelectIndex_; ++i) {
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
@@ -65,12 +72,26 @@ void StageSelectScene::Initialize()
 			newObject->SetModel("StageSelect/Stage02.obj");
 		} else if (i == 2) {
 			newObject->SetModel("StageSelect/Stage03.obj");
+		} else if (i == 3) {
+			newObject->SetModel("StageSelect/Stage01.obj");
+		} else if (i == 4) {
+			newObject->SetModel("StageSelect/Stage02.obj");
+		} else if (i == 5) {
+			newObject->SetModel("StageSelect/Stage03.obj");
+		} else if (i == 6) {
+			newObject->SetModel("StageSelect/Stage01.obj");
+		} else if (i == 7) {
+			newObject->SetModel("StageSelect/Stage02.obj");
+		} else if (i == 8) {
+			newObject->SetModel("StageSelect/Stage03.obj");
+		} else if (i == 9) {
+			newObject->SetModel("StageSelect/Stage01.obj");
 		} else {
 			newObject->SetModel("StageSelect/Stage01.obj");
 		}
 		newObject->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 		newObject->SetLighting(false);
-		newObject->SetScale(Vector3(1.5f,1.5f,1.5f));
+		newObject->SetScale(Vector3(1.5f, 1.5f, 1.5f));
 		stageObjects_.push_back(std::move(newObject));
 	}
 
@@ -98,11 +119,11 @@ void StageSelectScene::Initialize()
 			newSprite->SetPosition(Vector2(15.0f, 650.0f));
 			newSprite->SetSize(Vector2(70, 60));
 		} else if (i == 1) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png"); 
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
 			newSprite->SetPosition(Vector2(100.0f, 660.0f));
 			newSprite->SetSize(Vector2(60, 50));
 		} else if (i == 2) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_a.png"); 	
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_a.png");
 			newSprite->SetPosition(Vector2(180.0f, 648.0f));
 			newSprite->SetSize(Vector2(70, 70));
 		} else if (i == 3) {
@@ -124,11 +145,11 @@ void StageSelectScene::Initialize()
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_menu.png");
 			newSprite->SetPosition(Vector2(170.0f, 5.0f));
 			newSprite->SetSize(Vector2(70, 70));
-		} 
+		}
 		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		pauseui.push_back(std::move(newSprite));
 	}
-	
+
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
 	pauseMenu->Initialize(Object3DCommon::GetInstance(), PauseType::StageSelectScene);
@@ -137,9 +158,13 @@ void StageSelectScene::Initialize()
 	// 背景
 	skydome_ = std::make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
-	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
-	skydome_->SetModel("backPlane.obj");
+	skydome_->SetModel("SelectSceneBackPlane.obj");
+	Vector3 planePos = { -8.0f,0.0f,135.0f };
+	Vector3 planeScale = { 1.0f,0.55f,1.0f };
+	skydome_->SetTranslate(planePos);
+	skydome_->SetScale(planeScale);
+
+
 
 	fadeManager_.Initialize("Resources/white.png");
 	fadeManager_.StartFadeIn(0.5);
@@ -174,7 +199,26 @@ void StageSelectScene::Update()
 {
 	// フェード更新
 	fadeManager_.Update();
+	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
+		Transform transform = skydome_->GetTransform();
+
+		if (ImGui::DragFloat3("Skydome Translate", &transform.translate.x, 0.1f)) {
+			skydome_->SetTranslate(transform.translate);
+		}
+		if (ImGui::DragFloat3("Skydome Rotate", &transform.rotate.x, 0.01f)) {
+			skydome_->SetRotate(transform.rotate);
+		}
+		if (ImGui::DragFloat3("Skydome Scale", &transform.scale.x, 0.01f, 0.01f, 10.0f)) {
+			skydome_->SetScale(transform.scale);
+		}
+	}
+
 	skydome_->Update();
+
+
+
+
+
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
 		//カメラの更新
@@ -230,7 +274,7 @@ void StageSelectScene::Update()
 		// ←ポーズ中でもカメラだけ更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 	}
-	
+
 	if (!easingsceneFlag_ && !easingmoveFlag_) {
 		// ポーズ
 		pauseMenu->Update();
@@ -292,8 +336,9 @@ void StageSelectScene::Draw() {
 	Object3DCommon::GetInstance()->CommonDraw();
 	skydome_->Draw();
 
+
 	Player_->Draw();
-	
+
 	for (std::unique_ptr<Object3D>& stage : stageObjects_) {
 		stage->Draw();
 	}
@@ -417,7 +462,15 @@ void StageSelectScene::move() {
 			FollowTargetposition.y = 1.0f;
 			FollowTargetposition.z = -20.0f;
 			activeCam->SetFollowTarget(Player_, FollowTargetposition);
+
 		}
+
+		Vector3 planePos = skydome_->GetTranslate();
+
+		planePos = { Player_->GetTransform().translate.x + -8.0f, planePos.y,planePos.z };
+		skydome_->SetTranslate(planePos);
+		skydome_->Update();
+
 
 		// イージング完了
 		if (easingProgress_ >= 1.0f) {
@@ -531,7 +584,7 @@ void StageSelectScene::moveChangeScene() {
 
 			SceneManager::GetInstance()->SetStageIndex(currentIndex_);
 			// シーン変更（必要に応じてシーン変更を実行）
-			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");      
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		}
 	}
 }

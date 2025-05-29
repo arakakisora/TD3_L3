@@ -51,7 +51,7 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("nullBlock.obj");
 	ModelManager::GetInstans()->LoadModel("putTimer.obj");
 	// 天球モデル / 背景のプレーン
-	ModelManager::GetInstans()->LoadModel("backPlane.obj");
+	ModelManager::GetInstans()->LoadModel("PlaySceneBackPlane.obj");
 	// フォトカメラフレーム
 	ModelManager::GetInstans()->LoadModel("Frame.obj");
 
@@ -77,6 +77,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/StageSelect.obj");
 
+	//リセットお知らせ
+	ModelManager::GetInstans()->LoadModel("resetnotice.obj");
 
 	//操作説明UI
 	/*
@@ -107,6 +109,8 @@ void GamePlayScene::Initialize()
 	case 7: stagePath = "MapData/mapp8.csv"; break;
 	case 8: stagePath = "MapData/mapp9.csv"; break;
 	case 9: stagePath = "MapData/mapp10.csv"; break;
+	case 10:stagePath = "MapData/mapp11.csv"; break;
+//	case 11:stagePath = "MapData/mapp12.csv"; break;
 	}
 
 	skydome_ = make_unique<Object3D>();
@@ -114,7 +118,7 @@ void GamePlayScene::Initialize()
 	skydome_->SetTranslate(Vector3{ 17.6f,16.67f,62.72f });
 	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
 	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
-	skydome_->SetModel("backPlane.obj");
+	skydome_->SetModel("PlaySceneBackPlane.obj");
 
 
 	map = new Map;
@@ -279,7 +283,14 @@ void GamePlayScene::Initialize()
 	Tutorialtext13->SetLighting(false);
 	Tutorialtext13->SetIsTutorialActive(false);
 
-
+	//リセットお知らせ
+	ResetNotice = std::make_unique<Object3D>();
+	ResetNotice->Initialize(Object3DCommon::GetInstance());
+	ResetNotice->SetModel("resetnotice.obj");
+	ResetNotice->SetScale(Vector3(0.5f, 0.5f, 0.5f));
+	ResetNotice->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	ResetNotice->SetTranslate(Vector3(12.46f, 23.25f, -1.0f));
+	ResetNotice->SetLighting(false);
 
 	//操作説明UI
 	/*
@@ -466,6 +477,7 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::Update()
 {
+
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
 		// フェード更新
@@ -750,7 +762,11 @@ void GamePlayScene::Update()
 	}
 
 	//リセット
-	if (Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
+	if (
+#ifdef _DEBUG
+		Input::GetInstance()->PushKey(DIK_R) ||
+#endif// _DEBUG
+		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
 		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 
 		holdTime += deltaTime;
@@ -775,6 +791,7 @@ void GamePlayScene::Update()
 		holdTime = 0.0f;
 	}
 	resetMeter->Update();
+	ResetNotice->Update();
 
 	DrawImgui();
 }
@@ -820,6 +837,11 @@ void GamePlayScene::Draw()
 	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
 	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Draw();
 	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Draw();
+
+	//リセットお知らせ
+	if (holdTime > 0.0f) {
+		ResetNotice->Draw();
+	}
 
 	map->Draw();
 
@@ -939,9 +961,6 @@ void GamePlayScene::DrawImgui()
 			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
-
-
-
 		/*
 		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
 			for (int i = 1; i <= tutorialTexts.size(); ++i) {
@@ -964,6 +983,8 @@ void GamePlayScene::DrawImgui()
 		Transform text7 = Tutorialtext7->GetTransform();
 		Transform text8 = Tutorialtext8->GetTransform();
 		Transform text9 = Tutorialtext9->GetTransform();
+		Transform resetnotice = ResetNotice->GetTransform();
+
 		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
 			Tutorialtext1->SetTransform(text);
 		}
@@ -1030,10 +1051,16 @@ void GamePlayScene::DrawImgui()
 		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
 			Tutorialtext8->SetTransform(text8);
 		}
-
 		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
 			Tutorialtext9->SetTransform(text9);
 		}
+		if (ImGui::DragFloat3("resetNoticetranslate", &resetnotice.translate.x), 0.01f) {
+			ResetNotice->SetTransform(resetnotice);
+		}
+		if (ImGui::DragFloat3("resetNoticescale", &resetnotice.scale.x), 0.01f) {
+			ResetNotice->SetTransform(resetnotice);
+		}
+
 
 		//UI
 
