@@ -116,9 +116,9 @@ void GamePlayScene::Initialize()
 
 	skydome_ = make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 17.6f,16.67f,62.72f });
+	skydome_->SetTranslate(Vector3{ 17.6f,15.28f,62.72f });
 	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
-	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
+	skydome_->SetScale(Vector3{ 0.22f, 0.4f, 2.23f });
 	skydome_->SetModel("PlaySceneBackPlane.obj");
 
 
