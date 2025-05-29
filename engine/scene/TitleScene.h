@@ -78,5 +78,6 @@ public:
 
 	bool isnextStep = false;
 	float nextcurrentSteptime = 0;
+	float MaxnextcurrentSteptime = 500;
 
 };

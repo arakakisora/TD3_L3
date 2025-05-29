@@ -114,5 +114,8 @@ private:
 	std::vector<float> cooldownTimers;       // 個々のクールタイム管理
 	std::vector<float> totalElapsedTimes;    // 個々の経過時間（ジャンプのタイミング調整）
 
+	// 外に定義：補間進捗
+	float easeT = 0.0f; // 0.0 ～ 1.0 に進める（別で Update）
+	float easeSpeed = 0.05f; // 進むスピード（毎フレーム加算）
 
 };

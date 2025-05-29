@@ -16,21 +16,23 @@ void TitleScene::Initialize()
 {
 	CameraManager::GetInstans()->Initialize();
 
+	TextureManager::GetInstance()->LoadTexture("Resources/WhiteRooms.png");
 
 	ModelManager::GetInstans()->LoadModel("Text_Title.obj");
 	ModelManager::GetInstans()->LoadModel("UI_Title_Stsrt.obj");
 	ModelManager::GetInstans()->LoadModel("UI_Title_A.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
 	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
+	ModelManager::GetInstans()->LoadModel("backPlane.obj");
+	ModelManager::GetInstans()->LoadModel("WhiteRooms.obj");
 
 	// 背景
-	ModelManager::GetInstans()->LoadModel("backPlane.obj");
 	skydome_ = std::make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 0.0f,0.0f,62.72f });
-	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
-	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
-	skydome_->SetModel("backPlane.obj");
+	skydome_->SetTranslate(Vector3{ 0.0f,0.0f,10.0f });
+	skydome_->SetRotate(Vector3{ 0.0f,0.0f,0.0f });
+	skydome_->SetScale(Vector3{ 1.5f, 1.0f, 1.0f });
+	skydome_->SetModel("WhiteRooms.obj");
 
 	// タイトル生成
 	titileobject_ = std::make_unique<Object3D>();
@@ -232,15 +234,15 @@ void TitleScene::Update()
 
 		float scale = 0.3f + std::sinf(timer * 0.07f) * 0.03f;
 
-		//スタートの動き
-		Transform startTrans = uIbject_start_->GetTransform();
-		startTrans.scale = Vector3(scale, scale, scale);
-		uIbject_start_->SetTransform(startTrans);
+		////スタートの動き
+		//Transform startTrans = uIbject_start_->GetTransform();
+		//startTrans.scale = Vector3(scale, scale, scale);
+		//uIbject_start_->SetTransform(startTrans);
 
-		//Aの動き
-		Transform ATrans = uIbject_A_->GetTransform();
-		ATrans.scale = Vector3(scale, scale, scale);
-		uIbject_A_->SetTransform(ATrans);
+		////Aの動き
+		//Transform ATrans = uIbject_A_->GetTransform();
+		//ATrans.scale = Vector3(scale, scale, scale);
+		//uIbject_A_->SetTransform(ATrans);
 
 		timer++;
 
@@ -248,7 +250,7 @@ void TitleScene::Update()
 
 		if (!isnextStep) {
 			nextcurrentSteptime++;
-			if (nextcurrentSteptime >= 1000) {
+			if (nextcurrentSteptime >= MaxnextcurrentSteptime) {
 				currentStep = -1;
 				nextcurrentSteptime = 0;
 			}
