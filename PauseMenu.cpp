@@ -44,10 +44,19 @@ void PauseMenu::Initialize(Object3DCommon* object3dcommon, PauseType type){
 		TextObjects.push_back(std::move(newObject));
 	}
 
+	// セレクト用サウンド
+	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 }
 
 //更新
 void PauseMenu::Update() {
+
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&selectSound, 0.2f);
+
+
 	object->SetTranslate(transform.translate);
 
 	object->Update();
@@ -217,6 +226,8 @@ void PauseMenu::ControllerUpdate() {
 	// キーを押したらフラグオン
 	if (isPauseAnimationFinished && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_START)) {
 		isPaused_ = !isPaused_;
+		// 決定の音声を流す
+		Audio::GetInstance()->SoundPlayWave(ButtonSound);
 	}
 
 	// スティックのしきい値
@@ -235,11 +246,15 @@ void PauseMenu::ControllerUpdate() {
 		// 上向き
 		if (stickUpPressed && textindex < TextObjects.size() - 1 && !easingmoveFlag_ && !easingsceneFlag_) {
 			textindex++;
+			// セレクト音声を流す
+			Audio::GetInstance()->SoundPlayWave(selectSound);
 		}
 
 		// 下向き
 		if (stickDownPressed && textindex > 0 && !easingmoveFlag_ && !easingsceneFlag_) {
 			textindex--;
+			// セレクト音声を流す
+			Audio::GetInstance()->SoundPlayWave(selectSound);
 		}
 	}
 	// 前フレームの値を保存
@@ -251,14 +266,20 @@ void PauseMenu::ControllerUpdate() {
 		//ポーズ画面を閉じる
 		if (textindex == 0 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 			isPaused_ = !isPaused_;
+			// 決定の音声を流す
+			Audio::GetInstance()->SoundPlayWave(ButtonSound);
 		}
 
 		//ポーズ画面が出ているときTでタイトルへ(仮)
 		if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 			if (pauseType_ == PauseType::GamePlayScene) {
+				// 決定の音声を流す
+				Audio::GetInstance()->SoundPlayWave(ButtonSound);
 				// ゲームプレイ中はステージセレクトに戻る
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 			} else if (pauseType_ == PauseType::StageSelectScene) {
+				// 決定の音声を流す
+				Audio::GetInstance()->SoundPlayWave(ButtonSound);
 				// ステージセレクト中はタイトルに戻る
 				SceneManager::GetInstance()->ChangeScene("TITELE");
 			}

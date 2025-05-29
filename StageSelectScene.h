@@ -118,4 +118,6 @@ public:
 
 	// セレクトサウンド
 	SoundData selectSound;
+	// 決定サウンド
+	SoundData ButtonSound;
 };
