@@ -6,6 +6,7 @@
 #include "TextureManager.h"
 #include "SpriteCommon.h"
 #include "Easing.h"
+#include "ModelManager.h"
 
 // MAPクラスとのループキャストに注意
 void PhotoCamera::Initialize(Map* map)
@@ -27,20 +28,21 @@ void PhotoCamera::Initialize(Map* map)
 	isFirstCopied = false;
 	isFirstPasted = false;
 
+	ModelManager::GetInstans()->LoadModel("shutterEffect.obj");
 	//sahtter演出用のオブジェクト
 	shuttertopObject = new Object3D();
 	shuttertopObject->Initialize(Object3DCommon::GetInstance());
-	shuttertopObject->SetModel("plane.obj");
+	shuttertopObject->SetModel("shutterEffect.obj");
 	//サイズは画面いっぱいにする
-	shuttertopObject->SetScale(Vector3{ 13.0f,4.0f,1.0f });
+	shuttertopObject->SetScale(Vector3{ 13.0f,6.0f,1.0f });
 	shuttertopObject->SetTranslate(Vector3(12.5f, 30.0f, -1.5f));
 	shuttertopObject->SetRotate(Vector3{ 0,0,0 });
 	//bottm
 	shutterbottomObject = new Object3D();
 	shutterbottomObject->Initialize(Object3DCommon::GetInstance());
-	shutterbottomObject->SetModel("plane.obj");
+	shutterbottomObject->SetModel("shutterEffect.obj");
 	//サイズは画面いっぱいにする
-	shutterbottomObject->SetScale(Vector3{ 13.0f,4.0f,1.0f });
+	shutterbottomObject->SetScale(Vector3{ 13.0f,6.0f,1.0f });
 	shutterbottomObject->SetTranslate(Vector3(12.5f, -30.0f, -1.5f));
 	shutterbottomObject->SetRotate(Vector3{ 0,0,0 });
 	
@@ -633,7 +635,7 @@ void PhotoCamera::shatterEffect()
 
 	// 初期位置にリセット
 	shuttertopObject->SetTranslate(Vector3(12.5f, 30.0f, -1.5f));
-	shutterbottomObject->SetTranslate(Vector3(12.5f, 5.0f, -1.5f));
+	shutterbottomObject->SetTranslate(Vector3(12.5f, 4.0f, -1.5f));
 
 	
 
@@ -655,12 +657,12 @@ void PhotoCamera::shutterEffectUpdate()
 		// 閉じるフェーズ（0.0〜0.5）
 		float p = t / 0.5f;
 		topY = Easing::EaseLerp(30.0f, 20.0f, p, Easing::EaseOutQuad);
-		bottomY = Easing::EaseLerp(5.0f, 12.0f, p, Easing::EaseOutQuad);
+		bottomY = Easing::EaseLerp(4.0f, 12.0f, p, Easing::EaseOutQuad);
 	} else {
 		// 開くフェーズ（0.5〜1.0）
 		float p = (t - 0.5f) / 0.5f;
 		topY = Easing::EaseLerp(20.0f, 30.0f, p, Easing::EaseInQuad);
-		bottomY = Easing::EaseLerp(12.0f, 5.0f, p, Easing::EaseInQuad);
+		bottomY = Easing::EaseLerp(12.0f, 4.0f, p, Easing::EaseInQuad);
 	}
 
 	shuttertopObject->SetTranslate(Vector3(12.5f, topY, -1.5f));

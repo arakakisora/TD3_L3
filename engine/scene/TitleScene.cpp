@@ -25,6 +25,7 @@ void TitleScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
 	ModelManager::GetInstans()->LoadModel("backPlane.obj");
 	ModelManager::GetInstans()->LoadModel("WhiteRooms.obj");
+	ModelManager::GetInstans()->LoadModel("shutterEffect.obj");
 
 	// 背景
 	skydome_ = std::make_unique<Object3D>();
@@ -64,7 +65,7 @@ void TitleScene::Initialize()
 	//sahtter演出用のオブジェクト
 	shuttertopObject = std::make_unique<Object3D>();
 	shuttertopObject->Initialize(Object3DCommon::GetInstance());
-	shuttertopObject->SetModel("plane.obj");
+	shuttertopObject->SetModel("shutterEffect.obj");
 	//サイズは画面いっぱいにする
 	shuttertopObject->SetScale(Vector3{ 2.0f,2.0f,1.0f });
 	shuttertopObject->SetTranslate(Vector3(0.0f, 13.0f, -1.0f));
@@ -72,7 +73,7 @@ void TitleScene::Initialize()
 	//bottm
 	shutterbottomObject = std::make_unique<Object3D>();
 	shutterbottomObject->Initialize(Object3DCommon::GetInstance());
-	shutterbottomObject->SetModel("plane.obj");
+	shutterbottomObject->SetModel("shutterEffect.obj");
 	//サイズは画面いっぱいにする
 	shutterbottomObject->SetScale(Vector3{ 2.0f,2.0f,1.0f });
 	shutterbottomObject->SetTranslate(Vector3(0.0f, -10.0f, -1.0f));
@@ -84,6 +85,7 @@ void TitleScene::Initialize()
 	player_->SetModel("playercharacter.obj");
 	player_->SetLighting(true);
 	player_->SetDirectionalLightEnable(true);
+	player_->SetDirectionalLightDirection(Vector3{ -1.8f, -2.0f, -2.0f });
 	player_->SetRotate(Vector3{ 0.0f,180.0f * (DirectX::XM_PI / 180.0f),0.0f });
 	player_->SetScale(Vector3{ 1.0f, 1.0f, 1.0f });
 	player_->SetTranslate(Vector3{ 0.0f,0.0f,7.0f });
@@ -198,6 +200,20 @@ void TitleScene::Update()
 		if (ImGui::DragFloat3("ATransform", &A.translate.x, 0.01f)) {
 			uIbject_A_->SetTransform(A);
 		}
+
+		//plyer
+		Transform playerTrans = player_->GetTransform();
+		if (ImGui::DragFloat3("ATransform", &playerTrans.translate.x, 0.01f)) {
+			player_->SetTransform(playerTrans);
+		}
+
+		//ライト
+		Vector3 playerlight = player_->GetDirectionalLight().direction;
+		if (ImGui::DragFloat3("litto", &playerlight.x, 0.01f)) {
+			player_->SetDirectionalLightDirection(playerlight);
+		}
+
+
 
 	}
 

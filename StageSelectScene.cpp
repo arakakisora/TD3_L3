@@ -5,8 +5,8 @@
 #include "SceneManager.h"
 #include "ImGuiManager.h"
 #ifdef _DEBUG
-#include <imgui.h>
 #endif // _DEBUG
+#include <imgui.h>
 #include <ModelManager.h>
 #include <CameraManager.h>
 #include <MyMath.h>
@@ -203,9 +203,27 @@ void StageSelectScene::Finalize()
 void StageSelectScene::Update()
 {
 
+#ifdef _DEBUG
+	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
+		Transform transform = skydome_->GetTransform();
+
+		if (ImGui::DragFloat3("Skydome Translate", &transform.translate.x, 0.1f)) {
+			skydome_->SetTranslate(transform.translate);
+		}
+		if (ImGui::DragFloat3("Skydome Rotate", &transform.rotate.x, 0.01f)) {
+			skydome_->SetRotate(transform.rotate);
+		}
+		if (ImGui::DragFloat3("Skydome Scale", &transform.scale.x, 0.01f, 0.01f, 10.0f)) {
+			skydome_->SetScale(transform.scale);
+		}
+	}
+
+#endif // _DEBUG
+
 	// フェード更新
 	fadeManager_.Update();
-	
+
+
 	skydome_->Update();
 
 	// 音量設定
