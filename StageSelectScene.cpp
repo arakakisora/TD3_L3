@@ -5,8 +5,8 @@
 #include "SceneManager.h"
 #include "ImGuiManager.h"
 #ifdef _DEBUG
-#include <imgui.h>
 #endif // _DEBUG
+#include <imgui.h>
 #include <ModelManager.h>
 #include <CameraManager.h>
 #include <MyMath.h>
@@ -201,9 +201,7 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
-
-	// フェード更新
-	fadeManager_.Update();
+#ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
 		Transform transform = skydome_->GetTransform();
 
@@ -217,6 +215,11 @@ void StageSelectScene::Update()
 			skydome_->SetScale(transform.scale);
 		}
 	}
+
+#endif // _DEBUG
+
+	// フェード更新
+	fadeManager_.Update();
 
 	skydome_->Update();
 
