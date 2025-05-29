@@ -205,7 +205,7 @@ void StageSelectScene::Update()
 
 	// フェード更新
 	fadeManager_.Update();
-
+	
 	skydome_->Update();
 
 	// 音量設定
