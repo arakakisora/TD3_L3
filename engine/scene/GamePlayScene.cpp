@@ -111,6 +111,7 @@ void GamePlayScene::Initialize()
 	case 9: stagePath = "MapData/mapp10.csv"; break;
 	case 10:stagePath = "MapData/mapp11.csv"; break;
 	case 11:stagePath = "MapData/mapp12.csv"; break;
+	case 12:stagePath = "MapData/mapp13.csv"; break;
 	}
 
 	skydome_ = make_unique<Object3D>();
