@@ -398,5 +398,11 @@
     <None Include="MapData\mapp10.csv">
       <Filter>リソース ファイル</Filter>
     </None>
+    <None Include="MapData\mapp11.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\mapp12.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>

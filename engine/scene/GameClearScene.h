@@ -86,7 +86,9 @@ private:
 	float elapsedTime_;
 	float	elapsedFrames_ = 0;
 	float jumpEndTime_[3] = { 0.0f };
-	uint32_t MaxStageIndex_ = 10;
+
+	uint32_t MaxStageIndex_ = 11;
+
 	uint32_t Selectindex = 2;
 
 	bool nextsneneonthit = false;

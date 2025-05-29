@@ -130,11 +130,11 @@ void Object3D::SetModel(const std::string& filepath)
 	modelFilePath_ = filepath;  // ファイルパスを保存
 }
 
-// GetModel の実装
-std::string Object3D::GetModel() const
-{
-	return modelFilePath_;
-}
+//// GetModel の実装
+//std::string Object3D::GetModel() const
+//{
+//	return modelFilePath_;
+//}
 
 
 

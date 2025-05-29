@@ -30,6 +30,10 @@ public:
 	//色の設定
 	void SetColor(const Vector4& color) { materialData->color = color; }
 
+	//uvトランスフォーム
+	void SetUVTransform(const Matrix4x4& uvTransform) { materialData->uvTransform = uvTransform; }
+	Matrix4x4 GetUVTransform() const { return materialData->uvTransform; }
+
 	MaterialData LoadMaterialTemplateFile(const std::string& directorypath, const std::string& filename);
 	ModelData LoadModelFile(const std::string& ditrectoryPath, const std::string& filename);
 

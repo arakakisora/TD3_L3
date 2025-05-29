@@ -46,6 +46,8 @@ void GamePlayScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
 	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
+	ModelManager::GetInstans()->LoadModel("gall.obj");
+	ModelManager::GetInstans()->LoadModel("goalup.obj");
 	ModelManager::GetInstans()->LoadModel("nullBlock.obj");
 	ModelManager::GetInstans()->LoadModel("putTimer.obj");
 	// 天球モデル / 背景のプレーン
@@ -107,6 +109,8 @@ void GamePlayScene::Initialize()
 	case 7: stagePath = "MapData/mapp8.csv"; break;
 	case 8: stagePath = "MapData/mapp9.csv"; break;
 	case 9: stagePath = "MapData/mapp10.csv"; break;
+	case 10:stagePath = "MapData/mapp11.csv"; break;
+//	case 11:stagePath = "MapData/mapp12.csv"; break;
 	}
 
 	skydome_ = make_unique<Object3D>();
@@ -758,7 +762,11 @@ void GamePlayScene::Update()
 	}
 
 	//リセット
-	if (Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
+	if (
+#ifdef _DEBUG
+		Input::GetInstance()->PushKey(DIK_R) ||
+#endif// _DEBUG
+		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
 		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 
 		holdTime += deltaTime;
@@ -791,6 +799,10 @@ void GamePlayScene::Update()
 
 void GamePlayScene::Draw()
 {
+	SpriteCommon::GetInstance()->CommonDraw();
+
+
+
 #pragma region 3Dオブジェクト描画
 
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む

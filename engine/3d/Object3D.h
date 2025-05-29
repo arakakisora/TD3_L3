@@ -114,8 +114,8 @@ public:
 	
 	Matrix4x4 GetWorldMatrix() { return worldMatrix; }
 
+	Model* GetModel() { return model_; }
 	
-	std::string GetModel() const;  // 追加
 private:
 	Object3DCommon* object3DCommon_ = nullptr;
 
