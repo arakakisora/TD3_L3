@@ -27,7 +27,7 @@ void TitleScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("backPlane.obj");
 	skydome_ = std::make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 17.6f,16.67f,62.72f });
+	skydome_->SetTranslate(Vector3{ 0.0f,0.0f,62.72f });
 	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
 	skydome_->SetScale(Vector3{ 0.2f, 0.4f, 2.23f });
 	skydome_->SetModel("backPlane.obj");
@@ -117,8 +117,10 @@ void TitleScene::Update()
 #endif // _DEBUG
 					Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A))
 				{
-					fadeManager_.StartFadeOut();
-
+					if (currentStep >= 3) {
+						isnextStep = true;
+						fadeManager_.StartFadeOut();
+					}
 				}
 			}
 
@@ -131,7 +133,7 @@ void TitleScene::Update()
 		}
 	}
 #ifdef _DEBUG
-	
+
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
@@ -175,6 +177,11 @@ void TitleScene::Update()
 	}
 
 #endif // _DEBUG
+
+	if (currentStep == -1) {
+		fadeManager_.StartFadeIn();
+		currentStep = 0;
+	}
 
 	// ステップ1
 	if (currentStep == 0) {
@@ -237,6 +244,15 @@ void TitleScene::Update()
 
 		timer++;
 
+
+
+		if (!isnextStep) {
+			nextcurrentSteptime++;
+			if (nextcurrentSteptime >= 1000) {
+				currentStep = -1;
+				nextcurrentSteptime = 0;
+			}
+		}
 	}
 
 
@@ -247,11 +263,11 @@ void TitleScene::Update()
 
 	// シャッター演出の更新
 	shutterEffectUpdate();
-	
+
 	//sahtter演出用のオブジェクト
 	shuttertopObject->Update();
 	shutterbottomObject->Update();
-	
+
 	// プレイヤーの更新処理
 	player_->Update();
 }
@@ -263,7 +279,7 @@ void TitleScene::Draw()
 	Object3DCommon::GetInstance()->CommonDraw();
 
 	skydome_->Draw();
-	
+
 	// 演出後に描画
 	if (currentStep >= 1) {
 
@@ -356,7 +372,7 @@ void TitleScene::UpdatePlayerPositionByStep(float deltaTime) {
 
 		if (t >= 1.0f) {
 			isEasing = false; // 完了したら止める
-			
+
 			// ステップ2へ進める
 			currentStep = 2;
 		}

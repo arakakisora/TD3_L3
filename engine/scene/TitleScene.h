@@ -33,7 +33,7 @@ public:
 	void shatterEffect();
 	// シャッター演出の更新
 	void shutterEffectUpdate();
-	
+
 	// プレイヤーのイージング処理移動
 	void UpdatePlayerPositionByStep(float deltaTime);
 
@@ -74,5 +74,9 @@ public:
 	Vector3 basePosition_{};
 	Vector3 offset{};
 	int frameCount_ = 0;
+
+
+	bool isnextStep = false;
+	float nextcurrentSteptime = 0;
 
 };
