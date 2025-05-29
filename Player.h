@@ -6,10 +6,9 @@
 #include <algorithm>
 #include <numbers>
 #include "MyMath.h"
-
 #include "RenderingData.h"
-
 #include "Object3D.h"
+#include "ParticleEmitter.h"
 
 enum class LRDirecion {
 	kright,
@@ -153,4 +152,6 @@ private:
 	// プレイヤー移動フラグ
 	bool playermoveright = false;
 	bool playermoveleft = false;
+
+	ParticleEmitter* playeremitter_;
 };

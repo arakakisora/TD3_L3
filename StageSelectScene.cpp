@@ -12,6 +12,8 @@
 #include <MyMath.h>
 #include <TextureManager.h>
 #include <numbers>
+#include "AttackBehavior.h"
+#include "MagicCircleBehavior.h"
 
 void StageSelectScene::Initialize()
 {
@@ -170,14 +172,14 @@ void StageSelectScene::Initialize()
 	fadeManager_.StartFadeIn(0.5);
 
 
-	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/block.png", "block.obj");
+	ParticleMnager::GetInstance()->CreateParticleGroup("Playerw1", "Resources/gradationLine.png", VerticesType::Cylinder, std::make_unique<MagicCircleBehavior>());
 
 	playeremitter_ = new ParticleEmitter(
 		{ 0.0f,0.0f,0.0f },
 		5.0f,
 		0.0f,
 		1,
-		"Player"
+		"Player1"
 	);
 }
 
@@ -244,18 +246,18 @@ void StageSelectScene::Update()
 		// 右に移動中
 		if (playermoveright) {
 			// 左方向に設定
-			playeremitter_->SetisRight(false);
+			//playeremitter_->SetisRight(false);
 			Vector3 offset = { -0.3f,0.0f,0.0f };
 			playeremitter_->SetPosition(pos + offset);
-			playeremitter_->PlayerEmit();
+			playeremitter_->Emit();
 		}
 		// 左に移動中
 		if (playermoveleft) {
 			// 右方向に設定
-			playeremitter_->SetisRight(true);
+			//playeremitter_->SetisRight(true);
 			Vector3 offset = { 0.3f,0.0f,0.0f };
 			playeremitter_->SetPosition(pos + offset);
-			playeremitter_->PlayerEmit();
+			playeremitter_->Emit();
 		}
 
 	} else {

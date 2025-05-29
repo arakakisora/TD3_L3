@@ -105,6 +105,14 @@ Vector3 MyMath::Subtraction(const Vector3& v, float scalar) {
 	return Vector3(v.x - scalar, v.y - scalar, v.z - scalar);
 }
 
+Matrix4x4 MyMath::MakeRotateMatrix(const Vector3& rotate)
+{
+	Matrix4x4 rotateX = MakeRotateXMatrix(rotate.x);
+	Matrix4x4 rotateY = MakeRotateYMatrix(rotate.y);
+	Matrix4x4 rotateZ = MakeRotateZMatrix(rotate.z);
+	return rotateX * rotateY * rotateZ;
+}
+
 Matrix4x4 MyMath::MakeRotateXMatrix(float radian)
 
 {

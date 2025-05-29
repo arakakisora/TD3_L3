@@ -164,7 +164,7 @@ private:
 	const float deltaTime = 1.0f / 60.0f;
 
 	ParticleEmitter* emitter_;
-	ParticleEmitter* playeremitter_;
+	
 
 };
 

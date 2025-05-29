@@ -12,6 +12,9 @@
 #include "CameraManager.h"
 #include "ParticleMnager.h"
 #include <Logger.h>
+#include "AttackBehavior.h"
+#include "MagicCircleBehavior.h"
+#include "PlayerDashParticle.h"
 
 void GamePlayScene::Initialize()
 {
@@ -430,9 +433,8 @@ void GamePlayScene::Initialize()
 	fadeManager_.StartFadeIn();
 
 
-	ParticleMnager::GetInstance()->CreateParticleGroup("Goal", "Resources/block.png", "block.obj");
-	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/block.png", "block.obj");
-
+	//ParticleMnager::GetInstance()->CreateParticleGroup("Goal",  "Resources/white.png"  ,VerticesType::Cylinder, std::make_unique<MagicCircleBehavior>());
+	
 	// パーティクル発生器
 	emitter_ = new ParticleEmitter(
 		{ 0.0f,0.0f,0.0f },
@@ -445,14 +447,7 @@ void GamePlayScene::Initialize()
 	Vector3 start = map->FindMapChipPosition(MapChipType::kGoalDown);
 	emitter_->SetPosition(start);
 
-	playeremitter_ = new ParticleEmitter(
-		{ 0.0f,0.0f,0.0f },
-		5.0f,
-		0.0f,
-		1,
-		"Player"
-	);
-	playeroffset = { 0.0f,0.0f,0.0f };
+	
 }
 
 void GamePlayScene::Finalize()
@@ -471,7 +466,7 @@ void GamePlayScene::Finalize()
 	delete photoCamera;
 
 	delete emitter_;
-	delete playeremitter_;
+	
 
 }
 
@@ -507,29 +502,7 @@ void GamePlayScene::Update()
 		//プレイヤーの更新
 		player->Update();
 
-		// プレイヤーが右に移動中
-		if (player->GetPrayerMoveRight()) {
-			playeroffset = { -0.3f,0.0f,0.0f };
-			playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
-			// 左方向に設定
-			playeremitter_->SetisRight(false);
-			// プレイヤーのパーティクルを発生させる
-			playeremitter_->PlayerEmit();
-		}
-
-		// プレイヤーが左に移動中
-		if (player->GetPrayerMoveLeft()) {
-			playeroffset = { 0.3f,0.0f,0.0f };
-			playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
-			// 右方向に設定
-			playeremitter_->SetisRight(true);
-			// プレイヤーのパーティクルを発生させる
-			playeremitter_->PlayerEmit();
-		}
-
-		playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
-		// パーティクルの更新
-		playeremitter_->Update();
+		
 
 		//チュートリアル表示制御map2
 		if (SceneManager::GetInstance()->GetStageIndex() == 1) {

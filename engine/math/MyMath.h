@@ -73,6 +73,7 @@ namespace MyMath {
 	//subtraction
 	Vector3 Subtraction(const Vector3& v, float scalar);
 
+	Matrix4x4 MakeRotateMatrix(const Vector3& rotate);
 	//回転X
 	Matrix4x4 MakeRotateXMatrix(float radian);
 	//回転Y

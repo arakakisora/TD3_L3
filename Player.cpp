@@ -10,6 +10,9 @@
 #include "Object3DCommon.h"
 #include <SceneManager.h>
 #include "Easing.h"
+#include "ParticleMnager.h"
+#include "PlayerDashParticle.h"
+
 
 
 
@@ -22,7 +25,16 @@ void Player::Initialize(Object3D* object3D, const Vector3& position) {
 	object3D_->SetTranslate(position);
 	object3D_->SetRotate({ 0, std::numbers::pi_v<float> / 2.0f , 0 });
 
+	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/white.png", VerticesType::Quad, std::make_unique<PlayerDashParticle>());
 
+	playeremitter_ = new ParticleEmitter(
+		{ 0.0f, 0.0f, 0.0f },  // dummy（実際は毎フレーム更新）
+		0.05f,                // 20回/sec
+		0.0f,
+		8,                    // 一度に8個くらい出すと派手
+		"Player"
+
+	);
 
 }
 
@@ -79,6 +91,23 @@ void Player::Update() {
 		HitWallCollisionMove(collisionMapInfo);// 壁衝突移動
 		PlayerCollisionMove(collisionMapInfo);// プレイヤー衝突移動
 
+	}
+
+
+	// プレイヤーの位置にエミッターを追従
+	Vector3 offset = { 0.0f, 0.0f, 0.0f };  // 中央から出したいならこのままでOK
+
+	if (playermoveright) {
+		offset.x = -0.3f;
+	} else if (playermoveleft) {
+		offset.x = 0.3f;
+	}
+
+	playeremitter_->SetPosition(object3D_->GetTransform().translate + offset);
+
+	// 移動している間はパーティクルを出し続ける
+	if (playermoveright || playermoveleft) {
+		playeremitter_->Update();  // 毎フレームEmitされる
 	}
 
 	////PrayerTurn();

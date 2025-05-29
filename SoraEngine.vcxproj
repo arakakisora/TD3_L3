@@ -115,6 +115,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="engine\camera\CameraManager.cpp" />
+    <ClCompile Include="engine\particle\AttackBehavior.cpp" />
+    <ClCompile Include="engine\particle\IParticleBehavior.cpp" />
+    <ClCompile Include="engine\particle\MagicCircleBehavior.cpp" />
     <ClCompile Include="engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\BaseScene.cpp" />
     <ClCompile Include="engine\camera\Camera.cpp" />
@@ -154,6 +157,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PhotoCamera.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="engine\particle\PlayerDashParticle.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -193,6 +197,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Block.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="engine\camera\CameraManager.h" />
+    <ClInclude Include="engine\particle\AttackBehavior.h" />
+    <ClInclude Include="engine\particle\IParticleBehavior.h" />
+    <ClInclude Include="engine\particle\MagicCircleBehavior.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\BaseScene.h" />
     <ClInclude Include="engine\camera\Camera.h" />
@@ -237,6 +244,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PhotoCamera.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="engine\particle\PlayerDashParticle.h" />
     <ClInclude Include="StageSelectScene.h" />
     <ClInclude Include="WorldTransform.h" />
     <ClInclude Include="Map.h" />
