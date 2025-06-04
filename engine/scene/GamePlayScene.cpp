@@ -16,9 +16,9 @@
 void GamePlayScene::Initialize()
 {
 	//カメラの生成
-camera1 = std::make_unique<Camera>();
-camera1->SetTranslate({ 12,17,-31 });//カメラの位置
-CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
+	camera1 = std::make_unique<Camera>();
+	camera1->SetTranslate({ 12,17,-31 });//カメラの位置
+	CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 	//カメラの生成
 	camera2 = std::make_unique<Camera>();
@@ -33,8 +33,8 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	ModelManager::GetInstans()->LoadModel("axis.obj");
 	ModelManager::GetInstans()->LoadModel("plane.obj");
 	ModelManager::GetInstans()->LoadModel("sphere.obj");
-	ModelManager::GetInstans()->LoadModel("terrain.obj");
 	ModelManager::GetInstans()->LoadModel("cube.obj");
+	ModelManager::GetInstans()->LoadModel("jump.obj");
 
 	//ModelManager::GetInstans()->LoadModel("Player.obj");
 	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
@@ -46,8 +46,12 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
 	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
 	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
-	// 天球モデル
-	ModelManager::GetInstans()->LoadModel("backPlane.obj");
+	ModelManager::GetInstans()->LoadModel("gall.obj");
+	ModelManager::GetInstans()->LoadModel("goalup.obj");
+	ModelManager::GetInstans()->LoadModel("nullBlock.obj");
+	ModelManager::GetInstans()->LoadModel("putTimer.obj");
+	// 天球モデル / 背景のプレーン
+	ModelManager::GetInstans()->LoadModel("PlaySceneBackPlane.obj");
 	// フォトカメラフレーム
 	ModelManager::GetInstans()->LoadModel("Frame.obj");
 
@@ -60,6 +64,11 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial6.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial7.obj");
 	ModelManager::GetInstans()->LoadModel("tutorial/tutorial8.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial9.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial10.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial11.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial12.obj");
+	ModelManager::GetInstans()->LoadModel("tutorial/tutorial13.obj");
 
 	// ポーズテキスト
 	ModelManager::GetInstans()->LoadModel("Pause.obj");
@@ -68,9 +77,11 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
 	ModelManager::GetInstans()->LoadModel("StageSelect/StageSelect.obj");
 
+	//リセットお知らせ
+	ModelManager::GetInstans()->LoadModel("resetnotice.obj");
 
 	//操作説明UI
-
+	/*
 	std::vector<OperationText>spriteInfos = {
 		{"Resources/xbox_stick_l.png",{90,655},{70,70}},
 		{"Resources/xbox_button_color_b.png",{557,655},{70,70}},
@@ -83,18 +94,7 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 		{"Resources/haiti.png",{1143,655},{60,60}},
 		{"Resources/zyanpu.png",{430,655},{60,60}},
 	};
-
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_stick_l.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_b.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_button_color_a.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_lb.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/xbox_rb.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/idou.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/kirikae.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/toru.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/haiti.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/zyanpu.png");
-
+	*/
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	std::string stagePath;
@@ -102,24 +102,39 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	case 0: stagePath = "MapData/mapp1.csv"; break;
 	case 1: stagePath = "MapData/mapp2.csv"; break;
 	case 2: stagePath = "MapData/mapp3.csv"; break;
+	case 3: stagePath = "MapData/mapp4.csv"; break;
+	case 4: stagePath = "MapData/mapp5.csv"; break;
+	case 5: stagePath = "MapData/mapp6.csv"; break;
+	case 6: stagePath = "MapData/mapp7.csv"; break;
+	case 7: stagePath = "MapData/mapp8.csv"; break;
+	case 8: stagePath = "MapData/mapp9.csv"; break;
+	case 9: stagePath = "MapData/mapp10.csv"; break;
+	case 10:stagePath = "MapData/mapp11.csv"; break;
+	case 11:stagePath = "MapData/mapp12.csv"; break;
+	case 12:stagePath = "MapData/mapp13.csv"; break;
 	}
 
 	skydome_ = make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
-	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
-	skydome_->SetModel("backPlane.obj");
+	skydome_->SetTranslate(Vector3{ 17.6f,15.28f,62.72f });
+	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
+	skydome_->SetScale(Vector3{ 0.22f, 0.4f, 2.23f });
+	skydome_->SetModel("PlaySceneBackPlane.obj");
 
 
 	map = new Map;
 	map->LoadMapChipCsv(stagePath);
 	map->Initialize();
 
-
+	//6,3
 	//playerの生成
 	player = std::make_unique<Player>();
 	object3DPlayer = new Object3D();
-	Vector3 playerPostion = Vector3((float)map->GetPlayerStartX(), (float)map->GetPlayerStartY(), 0.0f);
+
+	Vector3 playerPostion = map->GetPlayerStartPosition();
+
+
+
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 
 	object3DPlayer->SetModel("playercharacter.obj");
@@ -224,17 +239,59 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	Tutorialtext8->SetLighting(false);
 	Tutorialtext8->SetIsTutorialActive(false);
 
-	/*
 	Tutorialtext9 = std::make_unique<Object3D>();
 	Tutorialtext9->Initialize(Object3DCommon::GetInstance());
 	Tutorialtext9->SetModel("tutorial/tutorial9.obj");
-	Tutorialtext9->SetScale(Vector3(0.5f,0.5f,0.5f));
-	Tutorialtext9->SetRotate(Vector3(17.3f,12.56f,0.0f));
-	Tutorialtext9->SetTranslate(Vector3(12.46,21.4f,1.0f));
+	Tutorialtext9->SetScale(Vector3(0.5f, 0.5f, 0.5f));
+	Tutorialtext9->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext9->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
 	Tutorialtext9->SetLighting(false);
 	Tutorialtext9->SetIsTutorialActive(false);
-	空白も撮って配置することができるぞ！
-	*/
+
+	Tutorialtext10 = std::make_unique<Object3D>();
+	Tutorialtext10->Initialize(Object3DCommon::GetInstance());
+	Tutorialtext10->SetModel("tutorial/tutorial10.obj");
+	Tutorialtext10->SetScale(Vector3(1.0f, 0.5f, 0.5f));
+	Tutorialtext10->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext10->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	Tutorialtext10->SetLighting(false);
+	Tutorialtext10->SetIsTutorialActive(false);
+
+	Tutorialtext11 = std::make_unique<Object3D>();
+	Tutorialtext11->Initialize(Object3DCommon::GetInstance());
+	Tutorialtext11->SetModel("tutorial/tutorial11.obj");
+	Tutorialtext11->SetScale(Vector3(1.0f, 0.5f, 0.5f));
+	Tutorialtext11->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext11->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	Tutorialtext11->SetLighting(false);
+	Tutorialtext11->SetIsTutorialActive(false);
+
+	Tutorialtext12 = std::make_unique<Object3D>();
+	Tutorialtext12->Initialize(Object3DCommon::GetInstance());
+	Tutorialtext12->SetModel("tutorial/tutorial12.obj");
+	Tutorialtext12->SetScale(Vector3(1.0f, 0.5f, 0.5f));
+	Tutorialtext12->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext12->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
+	Tutorialtext12->SetLighting(false);
+	Tutorialtext12->SetIsTutorialActive(false);
+
+	Tutorialtext13 = std::make_unique<Object3D>();
+	Tutorialtext13->Initialize(Object3DCommon::GetInstance());
+	Tutorialtext13->SetModel("tutorial/tutorial13.obj");
+	Tutorialtext13->SetScale(Vector3(1.0f, 0.5f, 0.5f));
+	Tutorialtext13->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	Tutorialtext13->SetTranslate(Vector3(12.46f, 19.5f, 1.0f));
+	Tutorialtext13->SetLighting(false);
+	Tutorialtext13->SetIsTutorialActive(false);
+
+	//リセットお知らせ
+	ResetNotice = std::make_unique<Object3D>();
+	ResetNotice->Initialize(Object3DCommon::GetInstance());
+	ResetNotice->SetModel("resetnotice.obj");
+	ResetNotice->SetScale(Vector3(0.5f, 0.5f, 0.5f));
+	ResetNotice->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
+	ResetNotice->SetTranslate(Vector3(12.46f, 23.25f, -1.0f));
+	ResetNotice->SetLighting(false);
 
 	//操作説明UI
 	/*
@@ -249,53 +306,110 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 	*/
 	OperationtextStickL = std::make_unique<Sprite>();
 	OperationtextStickL->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
-	OperationtextStickL->SetPosition(Vector2(90, 655));
+	OperationtextStickL->SetPosition(Vector2(43, 655));
 	OperationtextStickL->SetSize(Vector2(70, 70));
 
 	OperationtextButtonB = std::make_unique<Sprite>();
 	OperationtextButtonB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_b.png");
-	OperationtextButtonB->SetPosition(Vector2(557, 655));
+	OperationtextButtonB->SetPosition(Vector2(416, 655));
 	OperationtextButtonB->SetSize(Vector2(70, 70));
 
 	OperationtextButtonA = std::make_unique<Sprite>();
 	OperationtextButtonA->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_a.png");
-	OperationtextButtonA->SetPosition(Vector2(319, 655));
+	OperationtextButtonA->SetPosition(Vector2(228, 655));
 	OperationtextButtonA->SetSize(Vector2(70, 70));
+
+	OperationtextX = std::make_unique<Sprite>();
+	OperationtextX->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_x.png");
+	OperationtextX->SetPosition(Vector2(628, 655));
+	OperationtextX->SetSize(Vector2(70, 70));
+
+	OperationtextY = std::make_unique<Sprite>();
+	OperationtextY->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
+	OperationtextY->SetPosition(Vector2(792, 655));
+	OperationtextY->SetSize(Vector2(70, 70));
 
 	OperationtextLB = std::make_unique<Sprite>();
 	OperationtextLB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_lb.png");
-	OperationtextLB->SetPosition(Vector2(826, 655));
-	OperationtextLB->SetSize(Vector2(70, 70));
+	OperationtextLB->SetPosition(Vector2(964, 655));
+	OperationtextLB->SetSize(Vector2(70, 60));
 
 	OperationtextRB = std::make_unique<Sprite>();
 	OperationtextRB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_rb.png");
-	OperationtextRB->SetPosition(Vector2(1039, 655));
-	OperationtextRB->SetSize(Vector2(70, 70));
+	OperationtextRB->SetPosition(Vector2(1090, 655));
+	OperationtextRB->SetSize(Vector2(70, 60));
 
 	OperationtextIdou = std::make_unique<Sprite>();
 	OperationtextIdou->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
-	OperationtextIdou->SetPosition(Vector2(203, 655));
+	OperationtextIdou->SetPosition(Vector2(135, 655));
 	OperationtextIdou->SetSize(Vector2(60, 60));
 
 	OperationtextKrikae = std::make_unique<Sprite>();
 	OperationtextKrikae->Initialize(SpriteCommon::GetInstance(), "Resources/kirikae.png");
-	OperationtextKrikae->SetPosition(Vector2(672, 655));
+	OperationtextKrikae->SetPosition(Vector2(507, 655));
 	OperationtextKrikae->SetSize(Vector2(100, 60));
 
 	OperationtextToru = std::make_unique<Sprite>();
 	OperationtextToru->Initialize(SpriteCommon::GetInstance(), "Resources/toru.png");
-	OperationtextToru->SetPosition(Vector2(938, 655));
+	OperationtextToru->SetPosition(Vector2(712, 655));
 	OperationtextToru->SetSize(Vector2(60, 60));
 
 	OperationtextHaiti = std::make_unique<Sprite>();
 	OperationtextHaiti->Initialize(SpriteCommon::GetInstance(), "Resources/haiti.png");
-	OperationtextHaiti->SetPosition(Vector2(1143, 655));
+	OperationtextHaiti->SetPosition(Vector2(882, 655));
 	OperationtextHaiti->SetSize(Vector2(60, 60));
 
 	OperationtextZyanpu = std::make_unique<Sprite>();
 	OperationtextZyanpu->Initialize(SpriteCommon::GetInstance(), "Resources/zyanpu.png");
-	OperationtextZyanpu->SetPosition(Vector2(430, 655));
+	OperationtextZyanpu->SetPosition(Vector2(326, 655));
 	OperationtextZyanpu->SetSize(Vector2(60, 60));
+
+	OperationtextReset = std::make_unique<Sprite>();
+	OperationtextReset->Initialize(SpriteCommon::GetInstance(), "Resources/reset.png");
+	OperationtextReset->SetPosition(Vector2(1167, 655));
+	OperationtextReset->SetSize(Vector2(70, 60));
+
+	OperationtextPlus = std::make_unique<Sprite>();
+	OperationtextPlus->Initialize(SpriteCommon::GetInstance(), "Resources/plus.png");
+	OperationtextPlus->SetPosition(Vector2(1031, 655));
+	OperationtextPlus->SetSize(Vector2(60, 60));
+
+	for (uint32_t i = 0; i < 2; ++i) {
+		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
+		if (i == 0) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Pause.png");
+			newSprite->SetPosition(Vector2(1050.0f, 15.0f));
+			newSprite->SetSize(Vector2(150, 50));
+		} else if (i == 1) {
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_menu.png");
+			newSprite->SetPosition(Vector2(1210.0f, 5.0f));
+			newSprite->SetSize(Vector2(70, 70));
+		}
+		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		pauseui.push_back(std::move(newSprite));
+	}
+
+	//ブロックのスプライト
+	nCopySprite = std::make_unique<Sprite>();
+	nCopySprite->Initialize(SpriteCommon::GetInstance(), "Resources/ncopy.png");
+	nCopySprite->SetPosition(Vector2(275, 121));
+	nCopySprite->SetSize(Vector2(45, 45));
+
+	jumpSprite = std::make_unique<Sprite>();
+	jumpSprite->Initialize(SpriteCommon::GetInstance(), "Resources/jumpsprite.png");
+	jumpSprite->SetPosition(Vector2(276, 214));
+	jumpSprite->SetSize(Vector2(45, 45));
+
+	timerSprite = std::make_unique<Sprite>();
+	timerSprite->Initialize(SpriteCommon::GetInstance(), "Resources/timersprite.png");
+	timerSprite->SetPosition(Vector2(275, 121));
+	timerSprite->SetSize(Vector2(45, 45));
+
+	//リセットメーターのスプライト
+	resetMeter = std::make_unique<Sprite>();
+	resetMeter->Initialize(SpriteCommon::GetInstance(), "Resources/resetmeter.png");
+	resetMeter->SetPosition(Vector2(325, 70));
+	resetMeter->SetSize(Vector2(200, 45));
 
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
@@ -310,9 +424,35 @@ CameraManager::GetInstans()->AddCamera("maincam", camera1.get());
 
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
-	pauseMenu->Initialize(Object3DCommon::GetInstance(), true);
+	pauseMenu->Initialize(Object3DCommon::GetInstance(), PauseType::GamePlayScene);
 	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
+	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.StartFadeIn();
+
+	ParticleMnager::GetInstance()->CreateParticleGroup("Goal", "Resources/white.png", "block.obj");
+	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/white.png", "block.obj");
+
+	// パーティクル発生器
+	emitter_ = new ParticleEmitter(
+		{ 0.0f,0.0f,0.0f },
+		3.0f,
+		0.0f,
+		6,
+		"Goal"
+	);
+	// パーティクルの位置
+	Vector3 start = map->FindMapChipPosition(MapChipType::kGoalDown);
+	emitter_->SetPosition(start);
+
+	playeremitter_ = new ParticleEmitter(
+		{ 0.0f,0.0f,0.0f },
+		5.0f,
+		0.0f,
+		1,
+		"Player"
+	);
+	playeroffset = { 0.0f,0.0f,0.0f };
 }
 
 void GamePlayScene::Finalize()
@@ -329,6 +469,10 @@ void GamePlayScene::Finalize()
 	//delete gameCamera_;
 	photoCamera->Finalize();
 	delete photoCamera;
+
+	delete emitter_;
+	delete playeremitter_;
+
 }
 
 void GamePlayScene::Update()
@@ -336,22 +480,92 @@ void GamePlayScene::Update()
 
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
+		// フェード更新
+		fadeManager_.Update();
 
+		//ゲームの経過時間
+		if (tutorial8) {
+			elapsedTime += deltaTime;
+
+			if (elapsedTime >= afterseconds) {
+				secondspassed = true;
+			}
+		}
 		//カメラの更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
 		// 天球の更新
-		skydomerotate += 0.0f;
-		skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
+		//skydomerotate += 0.0f;
+		//skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
 		skydome_->Update();
 
 		// ゲームカメラ更新処理
 		//gameCamera_->Update();
-		photoCamera->Update(map);
-
-		map->Update();
-		////プレイヤーの更新
+		photoCamera->Update(map, player->GetCameraMode());
+		// マップの更新
+		map->Update(player->GetCameraMode());
+		//プレイヤーの更新
 		player->Update();
+
+		// プレイヤーが右に移動中
+		if (player->GetPrayerMoveRight()) {
+			playeroffset = { -0.3f,0.0f,0.0f };
+			playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
+			// 左方向に設定
+			playeremitter_->SetisRight(false);
+			// プレイヤーのパーティクルを発生させる
+			playeremitter_->PlayerEmit();
+		}
+
+		// プレイヤーが左に移動中
+		if (player->GetPrayerMoveLeft()) {
+			playeroffset = { 0.3f,0.0f,0.0f };
+			playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
+			// 右方向に設定
+			playeremitter_->SetisRight(true);
+			// プレイヤーのパーティクルを発生させる
+			playeremitter_->PlayerEmit();
+		}
+
+		playeremitter_->SetPosition(player->GetTranslate() + playeroffset);
+		// パーティクルの更新
+		playeremitter_->Update();
+
+		//チュートリアル表示制御map2
+		if (SceneManager::GetInstance()->GetStageIndex() == 1) {
+			if (!tutorial9) {
+				Tutorialtext9->SetIsTutorialActive(true);
+				tutorial9 = true;
+			}
+		}
+
+		if (player->GetCameraMode()) {
+			// カメラモード時パーティクル解除
+			player->SetPrayerMoveRight(false);
+			player->SetPrayerMoveLeft(false);
+		}
+
+		if (player->GetCheckGoal() && !isfadesense_) {
+
+			// クリアパーティクル発生
+			emitter_->Emit();
+			// フェードアウト開始
+			fadeManager_.StartFadeOut();
+			isfadesense_ = true;  // 一度だけ行う
+		}
+
+		if (isfadesense_) {
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0,0, -7.0f });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
+
+			// クリアパーティクル開始
+			emitter_->Update();
+		}
+
+		if (fadeManager_.IsFadeOutFinished()) {
+			// シーン切り替え
+			SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
+		}
 
 		//チュートリアル表示制御//map1
 		if (SceneManager::GetInstance()->GetStageIndex() == 0) {
@@ -432,32 +646,93 @@ void GamePlayScene::Update()
 				Tutorialtext8->SetIsTutorialActive(true);
 				tutorial8 = true;
 			}
-		}
-		/*
-		//チュートリアル表示制御map2
-		if (SceneManager::GetInstance()->GetStageIndex() == 1) {
-			if (!tutorial9) {
-				Tutorialtext9->SetIsTutorialActive(true);
-				tutorial9 = true;
-			}
-		}
-		*/
-		if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
-		if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
-		if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
-		if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Update();
-		if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Update();
-		if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Update();
-		if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
-		if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
-		//if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
 
-		//ui
-		/*
-		if (!photoCamera->GetCameraMode()) {
-			for (int i : {0, 1, 2, 5, 6, 9}) {
-				operationTexts[i]->Update();
+			if (tutorial8 && secondspassed) {
+				Tutorialtext8->SetIsTutorialActive(false);
+				Tutorialtext10->SetIsTutorialActive(true);
+				tutorial10 = true;
 			}
+
+		}
+
+	} else {
+		player->SetPrayerMoveRight(false);
+		player->SetPrayerMoveLeft(false);
+	}
+
+	//// プレイヤー用のパーティクルの位置を常に更新
+	//Vector3 pos = player->GetTranslate();
+
+	//// 右に移動中
+	//if (player->GetPrayerMoveRight()) {
+	//	// 左方向に設定
+	//	playeremitter_->SetisRight(false);
+	//	Vector3 offset = { -0.3f,0.0f,0.0f };
+	//	playeremitter_->SetPosition(pos + offset);
+	//	playeremitter_->PlayerEmit();
+	//}
+
+	//// 左に移動中
+	//if (player->GetPrayerMoveLeft()) {
+	//	// 右方向に設定
+	//	playeremitter_->SetisRight(true);
+	//	Vector3 offset = { 0.3f,0.0f,0.0f };
+	//	playeremitter_->SetPosition(pos + offset);
+	//	playeremitter_->PlayerEmit();
+	//}
+
+	//チュートリアル表示制御map2
+	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
+		if (!tutorial9) {
+			Tutorialtext9->SetIsTutorialActive(true);
+			tutorial9 = true;
+		}
+	}
+
+	//チュートリアル表示制御map3
+	if (SceneManager::GetInstance()->GetStageIndex() == 2) {
+		if (!tutorial11) {
+			Tutorialtext11->SetIsTutorialActive(true);
+			tutorial11 = true;
+		}
+		nCopySprite->Update();
+	}
+
+	//チュートリアル表示制御map9
+	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
+	
+			Tutorialtext12->SetIsTutorialActive(true);
+			tutorial12 = true;
+		
+			timerSprite->Update();
+	}
+
+	//チュートリアル表示制御map7
+	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
+		
+			Tutorialtext13->SetIsTutorialActive(true);
+			tutorial13 = true;
+			jumpSprite->Update();
+	}
+
+	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
+	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
+	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
+	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Update();
+	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Update();
+	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Update();
+	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
+	if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
+	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
+	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Update();
+	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Update();
+	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Update();
+	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Update();
+	//ui
+	/*
+	if (!photoCamera->GetCameraMode()) {
+		for (int i : {0, 1, 2, 5, 6, 9}) {
+			operationTexts[i]->Update();
 		}
 		else {
 			for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
@@ -465,33 +740,232 @@ void GamePlayScene::Update()
 			}
 		}
 		*/
-		if (!photoCamera->GetCameraMode()) {
-			OperationtextStickL->Update();
-			OperationtextButtonB->Update();
-			OperationtextButtonA->Update();
-			OperationtextIdou->Update();
-			OperationtextKrikae->Update();
-			OperationtextZyanpu->Update();
-		}
-		if (photoCamera->GetCameraMode()) {
-			OperationtextStickL->Update();
-			OperationtextButtonB->Update();
-			OperationtextLB->Update();
-			OperationtextRB->Update();
-			OperationtextIdou->Update();
-			OperationtextKrikae->Update();
-			OperationtextToru->Update();
-			OperationtextHaiti->Update();
-		}
-		//mode切り替え
-		photoCamera->SetcameraMode(player->GetcamerMode());
+	if (!photoCamera->GetCameraMode()) {
+		OperationtextStickL->Update();
+		OperationtextButtonB->Update();
+		OperationtextButtonA->Update();
+		OperationtextLB->Update();
+		OperationtextRB->Update();
+		OperationtextIdou->Update();
+		OperationtextKrikae->Update();
+		OperationtextZyanpu->Update();
+		OperationtextReset->Update();
+		OperationtextPlus->Update();
 	}
-	
-	// ポーズ
-	pauseMenu->Update();
+	if (photoCamera->GetCameraMode()) {
+		OperationtextStickL->Update();
+		OperationtextButtonB->Update();
+		OperationtextX->Update();
+		OperationtextY->Update();
+		OperationtextLB->Update();
+		OperationtextRB->Update();
+		OperationtextIdou->Update();
+		OperationtextKrikae->Update();
+		OperationtextToru->Update();
+		OperationtextHaiti->Update();
+		OperationtextReset->Update();
+		OperationtextPlus->Update();
+	}
+	//mode切り替え
+	photoCamera->SetcameraMode(player->GetCameraMode());
 
+
+	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
+		Uitext->Update();
+	}
+
+	// ポーズ
+	if (!player->GetCheckGoal()) {
+		pauseMenu->Update();
+	}
+
+	//リセット
+	if (
+#ifdef _DEBUG
+		Input::GetInstance()->PushKey(DIK_R) ||
+#endif// _DEBUG
+		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
+		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+
+		holdTime += deltaTime;
+
+		//メーターの進み具合
+		float progress = min(holdTime / holdDuration, 1.0f);
+		float maxWidth = 600.0f;
+		float meterWidth = maxWidth * progress;
+
+		resetMeter->SetSize(Vector2(meterWidth, 45));
+
+		if (holdTime >= holdDuration) {
+			holdTime = 0.0f;
+
+			int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+			SceneManager::GetInstance()->SetStageIndex(stageIndex);
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+		}
+
+	} else {
+		//離されたらタイマーをリセット
+		holdTime = 0.0f;
+	}
+	resetMeter->Update();
+	ResetNotice->Update();
+
+	DrawImgui();
+}
+
+
+void GamePlayScene::Draw()
+{
+	SpriteCommon::GetInstance()->CommonDraw();
+
+
+
+#pragma region 3Dオブジェクト描画
+
+	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
+	Object3DCommon::GetInstance()->CommonDraw();
+
+	// 天球の描画
+	skydome_->Draw();
+
+	// ゲームカメラ
+	//gameCamera_->Draw();
+	photoCamera->Draw3DObject();
+	////プレイヤー
+	player->Draw();
+
+	//チュートリアルテキスト
+	/*
+	for (auto& text : tutorialTexts) {
+		if (text->GetIsTutorialActive()) {
+			text->Draw();
+		}
+	}
+	*/
+
+	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Draw();
+	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Draw();
+	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Draw();
+	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Draw();
+	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Draw();
+	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Draw();
+	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Draw();
+	if (Tutorialtext8->GetIsTutorialActive()) Tutorialtext8->Draw();
+	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
+	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Draw();
+	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Draw();
+	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Draw();
+	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Draw();
+	//リセットお知らせ
+	if (holdTime > 0.0f) {
+		ResetNotice->Draw();
+	}
+
+	map->Draw();
+
+	//ポーズメニュー
+	pauseMenu->Draw();
+
+	ParticleMnager::GetInstance()->Draw();
+
+#pragma endregion
+
+#pragma region スプライト描画
+	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
+	SpriteCommon::GetInstance()->CommonDraw();
+
+	//ui
+	/*
+	if (!photoCamera->GetCameraMode()) {
+		for (int i : {0, 1, 2, 5, 6, 9}) {
+			operationTexts[i]->Draw();
+		}
+	} else {
+		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
+			operationTexts[i]->Draw();
+		}
+	}
+	*/
+	if (!photoCamera->GetCameraMode()) {
+		OperationtextStickL->Draw();
+		OperationtextButtonB->Draw();
+		OperationtextButtonA->Draw();
+		OperationtextLB->Draw();
+		OperationtextRB->Draw();
+		OperationtextIdou->Draw();
+		OperationtextKrikae->Draw();
+		OperationtextZyanpu->Draw();
+		OperationtextReset->Draw();
+		OperationtextPlus->Draw();
+	}
+	if (photoCamera->GetCameraMode()) {
+		OperationtextStickL->Draw();
+		OperationtextButtonB->Draw();
+		OperationtextLB->Draw();
+		OperationtextRB->Draw();
+		OperationtextX->Draw();
+		OperationtextY->Draw();
+		OperationtextIdou->Draw();
+		OperationtextKrikae->Draw();
+		OperationtextToru->Draw();
+		OperationtextHaiti->Draw();
+		OperationtextReset->Draw();
+		OperationtextPlus->Draw();
+	}
+
+	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
+		Uitext->Draw();
+	}
+
+	//リセットメーター描画
+	if (holdTime > 0.0f) {
+		resetMeter->Draw();
+	}
+
+	//チュートリアル表示制御map9
+	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
+
+		timerSprite->Draw();
+	}
+
+	//チュートリアル表示制御map9
+	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
+
+		jumpSprite->Draw();
+	}
+
+	nCopySprite->Draw();
+
+	// フォトカメラ内のスプライト描画
+	photoCamera->DrawSprite();
+
+	// フェード描画
+	fadeManager_.Draw();
+
+#pragma endregion
+}
+
+void GamePlayScene::DrawImgui()
+{
 
 #ifdef _DEBUG
+	ImGui::Begin("Back");
+
+	// Transform構造体を直接編集
+	Transform skydomeTransform = skydome_->GetTransform();
+	bool changed = false;
+
+	changed |= ImGui::DragFloat3("Skydome Scale", &skydomeTransform.scale.x, 0.01f);
+	changed |= ImGui::DragFloat3("Skydome Rotate", &skydomeTransform.rotate.x, 0.01f);
+	changed |= ImGui::DragFloat3("Skydome Position", &skydomeTransform.translate.x, 0.01f);
+
+	if (changed) {
+		skydome_->SetTransform(skydomeTransform);
+	}
+
+	ImGui::End();
+
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
@@ -518,8 +992,6 @@ void GamePlayScene::Update()
 			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
-
-
 		/*
 		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
 			for (int i = 1; i <= tutorialTexts.size(); ++i) {
@@ -541,7 +1013,12 @@ void GamePlayScene::Update()
 		Transform text6 = Tutorialtext6->GetTransform();
 		Transform text7 = Tutorialtext7->GetTransform();
 		Transform text8 = Tutorialtext8->GetTransform();
-		//Transform text9 = Tutorialtext9->GetTransform();
+		Transform text9 = Tutorialtext9->GetTransform();
+		Transform text12 = Tutorialtext12->GetTransform();
+		Transform text13 = Tutorialtext13->GetTransform();
+
+		Transform resetnotice = ResetNotice->GetTransform();
+
 		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
 			Tutorialtext1->SetTransform(text);
 		}
@@ -608,12 +1085,57 @@ void GamePlayScene::Update()
 		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
 			Tutorialtext8->SetTransform(text8);
 		}
-		/*
 		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
 			Tutorialtext9->SetTransform(text9);
 		}
-		*/
+		if (ImGui::DragFloat3("resetNoticetranslate", &resetnotice.translate.x), 0.01f) {
+			ResetNotice->SetTransform(resetnotice);
+		}
+		if (ImGui::DragFloat3("text12translate", &text12.translate.x), 0.01f) {
+			Tutorialtext12->SetTransform(text12);
+		}
+		if (ImGui::DragFloat3("text13translate", &text13.translate.x), 0.01f) {
+			Tutorialtext13->SetTransform(text13);
+		}
+
+		
+
 		//UI
+
+		Vector2 ncopy = nCopySprite->GetPosition();
+		Vector2 ncopysize = nCopySprite->GetSize();
+		Vector2 resetmeter = resetMeter->GetPosition();
+		Vector2 resetmetersize = resetMeter->GetSize();
+		Vector2 timer = timerSprite->GetPosition();
+		Vector2 timersize = timerSprite->GetSize();
+		Vector2 jump = jumpSprite->GetPosition();
+		Vector2 jumpsize = jumpSprite->GetSize();
+
+		if (ImGui::DragFloat2("ncopytranslate", &ncopy.x), 0.01f) {
+			nCopySprite->SetPosition(ncopy);
+		}
+		if (ImGui::DragFloat2("ncopysize", &ncopysize.x), 0.01f) {
+			nCopySprite->SetSize(ncopysize);
+		}
+		if (ImGui::DragFloat2("resetMetertranslate", &resetmeter.x), 0.01f) {
+			resetMeter->SetPosition(resetmeter);
+		}
+		if (ImGui::DragFloat2("resetMetersize", &resetmetersize.x), 0.01f) {
+			resetMeter->SetSize(resetmetersize);
+		}
+		if (ImGui::DragFloat2("timertranslate", &timer.x), 0.01f) {
+			timerSprite->SetPosition(timer);
+		}
+		if (ImGui::DragFloat2("timersize", &timersize.x), 0.01f) {
+			timerSprite->SetSize(timersize);
+		}
+		if (ImGui::DragFloat2("jumptranslate", &jump.x), 0.01f) {
+			jumpSprite->SetPosition(jump);
+		}
+		if (ImGui::DragFloat2("jumpMetersize", &jumpsize.x), 0.01f) {
+			jumpSprite->SetSize(jumpsize);
+		}
+
 		/*
 		if (ImGui::CollapsingHeader("UI Translate")) {
 			for (int i = 0; i < operationTexts.size(); ++i) {
@@ -624,139 +1146,131 @@ void GamePlayScene::Update()
 			}
 		}
 		*/
+		/*
 		Vector2 uistickL = OperationtextStickL->GetPosition();
+		Vector2 uistickLsize = OperationtextStickL->GetSize();
 		Vector2 uibuttonB = OperationtextButtonB->GetPosition();
+		Vector2 uibuttonBsize = OperationtextButtonB->GetSize();
 		Vector2 uibuttonA = OperationtextButtonA->GetPosition();
+		Vector2 uibuttonAsize = OperationtextButtonA->GetSize();
+		Vector2 uiX = OperationtextX->GetPosition();
+		Vector2 uiXsize = OperationtextX->GetSize();
+		Vector2 uiY = OperationtextY->GetPosition();
+		Vector2 uiYsize = OperationtextY->GetSize();
 		Vector2 uiLB = OperationtextLB->GetPosition();
+		Vector2 uiLBsize = OperationtextLB->GetSize();
 		Vector2 uiRB = OperationtextRB->GetPosition();
+		Vector2 uiRBsize = OperationtextRB->GetSize();
 		Vector2 uitoru = OperationtextToru->GetPosition();
+		Vector2 uitorusize = OperationtextToru->GetSize();
 		Vector2 uihaiti = OperationtextHaiti->GetPosition();
+		Vector2 uihaitisize = OperationtextHaiti->GetSize();
 		Vector2 uikirikae = OperationtextKrikae->GetPosition();
+		Vector2 uikirikaesize = OperationtextKrikae->GetSize();
 		Vector2 uiidou = OperationtextIdou->GetPosition();
+		Vector2 uiidousize = OperationtextIdou->GetSize();
 		Vector2 uizyanpu = OperationtextZyanpu->GetPosition();
+		Vector2 uizyanpusize = OperationtextZyanpu->GetSize();
+		Vector2 uireset = OperationtextReset->GetPosition();
+		Vector2 uiresetsize = OperationtextReset->GetSize();
+		Vector2 uiPlus = OperationtextPlus->GetPosition();
+		Vector2 uiPlussize = OperationtextPlus->GetSize();
+
 		if (ImGui::DragFloat2("uiStickLtranslate", &uistickL.x), 0.01f) {
 			OperationtextStickL->SetPosition(uistickL);
+		}
+		if (ImGui::DragFloat2("uiStickLsize", &uistickLsize.x), 0.01f) {
+			OperationtextStickL->SetSize(uistickLsize);
 		}
 		if (ImGui::DragFloat2("uibuttonBtranslate", &uibuttonB.x), 0.01f) {
 			OperationtextButtonB->SetPosition(uibuttonB);
 		}
+		if (ImGui::DragFloat2("uibuttonBsize", &uibuttonBsize.x), 0.01f) {
+			OperationtextButtonB->SetSize(uibuttonBsize);
+		}
 		if (ImGui::DragFloat2("uibuttonAtranslate", &uibuttonA.x), 0.01f) {
 			OperationtextButtonA->SetPosition(uibuttonA);
+		}
+		if (ImGui::DragFloat2("uibuttonAsize", &uibuttonAsize.x), 0.01f) {
+			OperationtextButtonA->SetSize(uibuttonAsize);
+		}
+		if (ImGui::DragFloat2("uiXtranslate", &uiX.x), 0.01f) {
+			OperationtextX->SetPosition(uiX);
+		}
+		if (ImGui::DragFloat2("uiXsize", &uiXsize.x), 0.01f) {
+			OperationtextX->SetSize(uiXsize);
+		}
+		if (ImGui::DragFloat2("uiYtranslate", &uiY.x), 0.01f) {
+			OperationtextY->SetPosition(uiY);
+		}
+		if (ImGui::DragFloat2("uiYsize", &uiYsize.x), 0.01f) {
+			OperationtextY->SetSize(uiYsize);
 		}
 		if (ImGui::DragFloat2("uiLBtranslate", &uiLB.x), 0.01f) {
 			OperationtextLB->SetPosition(uiLB);
 		}
+		if (ImGui::DragFloat2("uiLBsize", &uiLBsize.x), 0.01f) {
+			OperationtextLB->SetSize(uiLBsize);
+		}
 		if (ImGui::DragFloat2("uiRBtranslate", &uiRB.x), 0.01f) {
 			OperationtextRB->SetPosition(uiRB);
+		}
+		if (ImGui::DragFloat2("uiRBsize", &uiRBsize.x), 0.01f) {
+			OperationtextRB->SetSize(uiRBsize);
 		}
 		if (ImGui::DragFloat2("uitorutranslate", &uitoru.x), 0.01f) {
 			OperationtextToru->SetPosition(uitoru);
 		}
+		if (ImGui::DragFloat2("uitorusize", &uitorusize.x), 0.01f) {
+			OperationtextToru->SetSize(uitorusize);
+		}
 		if (ImGui::DragFloat2("uihaititranslate", &uihaiti.x), 0.01f) {
 			OperationtextHaiti->SetPosition(uihaiti);
+		}
+		if (ImGui::DragFloat2("uihaitisize", &uihaitisize.x), 0.01f) {
+			OperationtextHaiti->SetSize(uihaitisize);
 		}
 		if (ImGui::DragFloat2("uikirikaetranslate", &uikirikae.x), 0.01f) {
 			OperationtextKrikae->SetPosition(uikirikae);
 		}
+		if (ImGui::DragFloat2("uikirikaesize", &uikirikaesize.x), 0.01f) {
+			OperationtextKrikae->SetSize(uikirikaesize);
+		}
 		if (ImGui::DragFloat2("uiidoutranslate", &uiidou.x), 0.01f) {
 			OperationtextIdou->SetPosition(uiidou);
+		}
+		if (ImGui::DragFloat2("uiidousize", &uiidousize.x), 0.01f) {
+			OperationtextIdou->SetSize(uiidousize);
 		}
 		if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
 			OperationtextZyanpu->SetPosition(uizyanpu);
 		}
-
+		if (ImGui::DragFloat2("uizyanpusize", &uizyanpusize.x), 0.01f) {
+			OperationtextZyanpu->SetSize(uizyanpusize);
+		}
+		if (ImGui::DragFloat2("uiResettranslate", &uireset.x), 0.01f) {
+			OperationtextReset->SetPosition(uireset);
+		}
+		if (ImGui::DragFloat2("uiResetsize", &uiresetsize.x), 0.01f) {
+			OperationtextReset->SetSize(uiresetsize);
+		}
+		if (ImGui::DragFloat2("uiPlustranslate", &uiPlus.x), 0.01f) {
+			OperationtextPlus->SetPosition(uiPlus);
+		}
+		if (ImGui::DragFloat2("uiPlussize", &uiPlussize.x), 0.01f) {
+			OperationtextPlus->SetSize(uiPlussize);
+		}
+		*/
 	}
 
 #endif // _DEBUG
-
 }
 
-void GamePlayScene::Draw()
+bool GamePlayScene::GetCameraMode()
 {
-#pragma region 3Dオブジェクト描画
-
-	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
-	Object3DCommon::GetInstance()->CommonDraw();
-
-	// 天球の描画
-	skydome_->Draw();
-
-	// ゲームカメラ
-	//gameCamera_->Draw();
-	photoCamera->Draw3DObject();
-	////プレイヤー
-	player->Draw();
-
-	//チュートリアルテキスト
-	/*
-	for (auto& text : tutorialTexts) {
-		if (text->GetIsTutorialActive()) {
-			text->Draw();
-		}
+	if (player) {
+		return player->GetCameraMode();
 	}
-	*/
-
-	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Draw();
-	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Draw();
-	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Draw();
-	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Draw();
-	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Draw();
-	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Draw();
-	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Draw();
-	if (Tutorialtext8->GetIsTutorialActive()) Tutorialtext8->Draw();
-	//if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
-
-	map->Draw();
-
-	//ポーズメニュー
-	pauseMenu->Draw();
-
-	ParticleMnager::GetInstance()->Draw();
-
-#pragma endregion
-
-#pragma region スプライト描画
-	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
-	SpriteCommon::GetInstance()->CommonDraw();
-
-	//ui
-	/*
-	if (!photoCamera->GetCameraMode()) {
-		for (int i : {0, 1, 2, 5, 6, 9}) {
-			operationTexts[i]->Draw();
-		}
-	} else {
-		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
-			operationTexts[i]->Draw();
-		}
-	}
-	*/
-	if (!photoCamera->GetCameraMode()) {
-		OperationtextStickL->Draw();
-		OperationtextButtonB->Draw();
-		OperationtextButtonA->Draw();
-		OperationtextIdou->Draw();
-		OperationtextKrikae->Draw();
-		OperationtextZyanpu->Draw();
-	}
-	if (photoCamera->GetCameraMode()) {
-		OperationtextStickL->Draw();
-		OperationtextButtonB->Draw();
-		OperationtextLB->Draw();
-		OperationtextRB->Draw();
-		OperationtextIdou->Draw();
-		OperationtextKrikae->Draw();
-		OperationtextToru->Draw();
-		OperationtextHaiti->Draw();
-	}
-
-	// フォトカメラ内のスプライト描画
-	photoCamera->DrawSprite();
-
-#pragma endregion
+	return false;
 }
-
-
-
-
 

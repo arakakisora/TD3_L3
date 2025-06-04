@@ -21,7 +21,7 @@
 #include "PauseMenu.h"
 
 #include <array>
-
+#include"FadeManager.h"
 
 struct OperationText {
 	std::string texturePath;
@@ -53,12 +53,19 @@ public:
 	/// </summary>
 	void Draw()override;
 
+	// Imgui描画
+	void DrawImgui();
+
+public:	// Getter
+	bool GetCameraMode();
+
 private:
 	std::unique_ptr<Camera> camera1;
 	std::unique_ptr<Camera> camera2;
 	//プレイヤー
 	std::unique_ptr<Player>player;
 	Object3D* object3DPlayer=nullptr;
+	Vector3 playeroffset{};
 
 	//チュートリアルテキスト
 	//std::array<std::unique_ptr<Object3D>, 8>tutorialTexts;
@@ -71,12 +78,21 @@ private:
 	std::unique_ptr<Object3D>Tutorialtext7;
 	std::unique_ptr<Object3D>Tutorialtext8;
 	std::unique_ptr<Object3D>Tutorialtext9;//空白コピペ
+	std::unique_ptr<Object3D>Tutorialtext10;//リセット
+	std::unique_ptr<Object3D>Tutorialtext11;//×ブロック説明
+	std::unique_ptr<Object3D>Tutorialtext12;//タイマー
+	std::unique_ptr<Object3D>Tutorialtext13;//ジャンプ
+
+	//リセットお知らせ
+	std::unique_ptr<Object3D>ResetNotice;
 
 	//操作説明テキスト
 	//std::vector<std::unique_ptr<Sprite>>operationTexts;
 	std::unique_ptr<Sprite>OperationtextStickL;
 	std::unique_ptr<Sprite>OperationtextButtonB;
 	std::unique_ptr<Sprite>OperationtextButtonA;
+	std::unique_ptr<Sprite>OperationtextX;
+	std::unique_ptr<Sprite>OperationtextY;
 	std::unique_ptr<Sprite>OperationtextLB;
 	std::unique_ptr<Sprite>OperationtextRB;
 	std::unique_ptr<Sprite>OperationtextIdou;
@@ -84,7 +100,18 @@ private:
 	std::unique_ptr<Sprite>OperationtextToru;
 	std::unique_ptr<Sprite>OperationtextHaiti;
 	std::unique_ptr<Sprite>OperationtextZyanpu;
+	std::unique_ptr<Sprite>OperationtextReset;
+	std::unique_ptr<Sprite>OperationtextPlus;
 
+	//ブロックのスプライト
+	std::unique_ptr<Sprite>nCopySprite;
+	std::unique_ptr<Sprite>jumpSprite;
+	std::unique_ptr<Sprite>timerSprite;
+
+	//リセットメータのスプライト
+	std::unique_ptr<Sprite>resetMeter;
+
+	std::vector < std::unique_ptr<Sprite>> pauseui;
 	Map* map=nullptr;
 	
 	// @ 消すAlso delete the ones in the CPP file.
@@ -93,13 +120,16 @@ private:
 
 	PhotoCamera* photoCamera;
 
-
 	bool tutorial1_2 = false;
 	bool tutorial3_4 = false;
 	bool tutorial5 = false;
 	bool tutorial6_7 = false;
 	bool tutorial8 = false;
 	bool tutorial9 = false;
+	bool tutorial10 = false;
+	bool tutorial11 = false;
+	bool tutorial12 = false;
+	bool tutorial13 = false;
 
 	bool cameraStarted = false;
 	bool cameraMoved = false;
@@ -110,8 +140,31 @@ private:
 	unique_ptr<Object3D> skydome_ = nullptr;
 	float skydomerotate;
 
-
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
+
+	// フェードアウト
+	FadeManager fadeManager_;
+	// 切り替えフラグ:
+	bool isfadesense_ = false;
+
+	//リセット用タイマー
+    float holdTime = 0.0f;
+	const float holdDuration = 1.7f;
+
+	//リセットテキスト用タイマー
+
+	//経過時間
+	float elapsedTime = 0.0f;
+	//30秒後に表示
+	const float afterseconds = 30.0f;
+	//30秒経過フラグ
+	bool secondspassed = false;
+
+	const float deltaTime = 1.0f / 60.0f;
+
+	ParticleEmitter* emitter_;
+	ParticleEmitter* playeremitter_;
+
 };
 

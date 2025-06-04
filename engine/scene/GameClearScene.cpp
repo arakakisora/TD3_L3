@@ -14,12 +14,15 @@
 void GameClearScene::Initialize()
 {
 	CameraManager::GetInstans()->Initialize();
-	
+
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_01.obj");
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_02.obj");
 	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_03.obj");
 
 	velocity_.resize(MaxtextIndex_); // すべてのオブジェクトに対応するサイズに設定
+
+	// クリアしたステージのindex
+	nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
 
 	// 作成してリストに追加
 	for (uint32_t i = 0; i < MaxtextIndex_; ++i) {
@@ -32,7 +35,7 @@ void GameClearScene::Initialize()
 		} else if (i == 2) {
 			newObject->SetModel("GameClear/ClearText_03.obj");
 		}
-		newObject->SetTranslate(Vector3(-0.5f + (0.5f * i), 0.0f, 10.0f));
+		newObject->SetTranslate(Vector3(-0.5f + (0.5f * i), 0.3f, 10.0f));
 		newObject->SetScale(Vector3(0.0f, 0.0f, 0.0f));
 		newObject->SetLighting(false);
 		Cleartext_.push_back(std::move(newObject));
@@ -47,21 +50,21 @@ void GameClearScene::Initialize()
 	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Nextstage.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Stageselect.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/ArroUP.png");
-	
+
 	// 作成してリストに追加
 	for (uint32_t i = 0; i < 3; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
-	
+
 		if (i == 0) {
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Title.png");
-			newSprite->SetPosition(Vector2(250.0f, 500.0f));
+			newSprite->SetPosition(Vector2(250.0f, 700.0f));
 
 		} else if (i == 1) {
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Stageselect.png");
-			newSprite->SetPosition(Vector2(550.0f, 500.0f));
+			newSprite->SetPosition(Vector2(550.0f, 700.0f));
 		} else if (i == 2) {
 			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Nextstage.png");
-			newSprite->SetPosition(Vector2(850.0f, 500.0f));
+			newSprite->SetPosition(Vector2(850.0f, 700.0f));
 		}
 
 		newSprite->SetSize({ 200.0f, 50.0f });
@@ -74,12 +77,30 @@ void GameClearScene::Initialize()
 	ArroTextUI_ = std::make_unique<Sprite>();
 
 	ArroTextUI_->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/ArroUP.png");
+
 	ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
 	ArroTextUI_->SetSize({ 50.0f, 50.0f });
 	ArroTextUI_->SetRotation(0.0f);
 	ArroTextUI_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 
 
+
+	// 背景
+	skydome_ = std::make_unique<Object3D>();
+	skydome_->Initialize(Object3DCommon::GetInstance());
+	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
+	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	skydome_->SetModel("backPlane.obj");
+
+	// ラストステージならフラグを立てる
+	if (nextStage == MaxStageIndex_) {
+		nextsneneonthit = true;
+		Selectindex = 1;
+	}
+	// セレクト用サウンド
+	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 }
 
 void GameClearScene::Finalize()
@@ -90,6 +111,11 @@ void GameClearScene::Update()
 {
 	CameraManager::GetInstans()->GetActiveCamera()->Update();
 
+	skydome_->Update();
+
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&selectSound, 2.0f);
+	Audio::GetInstance()->SetVolume(&ButtonSound, 3.0f);
 #ifdef _DEBUG
 
 
@@ -104,7 +130,7 @@ void GameClearScene::Update()
 
 		//ImGui::Checkbox("start", &fige);
 
-	}  
+	}
 
 
 #endif // _DEBUG
@@ -116,20 +142,57 @@ void GameClearScene::Update()
 	}
 
 	// UIの更新
-	for (std::unique_ptr<Sprite>& UI : TextUI_) {
-		UI->Update();
+	for (uint32_t i = 0; i < 3; ++i) {
+		// nextsneneonthit が true ならスプライト2だけ非表示
+		if (nextsneneonthit && i == 2) {
+			TextUI_[i]->setColor({ 1.0f, 1.0f, 1.0f, 0.0f }); // アルファを0にして非表示に
+		}
+		TextUI_[i]->Update();
 	}
-
-	ArroTextUI_->Update();
 
 	// 移動開始
-	EasingMove();	
+	EasingMove();
 
 	if (allObjectsFinished) {
+
+		easeT += easeSpeed;
+		if (easeT > 1.0f) easeT = 1.0f;
+
+		for (uint32_t i = 0; i < 3; ++i) {
+			// 透過処理
+			if (nextsneneonthit && i == 2) {
+				TextUI_[i]->setColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+			}
+
+			// 現在の位置
+			Vector2 currentPos = { TextUI_[i]->GetPosition().x,700.0f };
+			Vector2 startPos = currentPos;
+			Vector2 endPos = { currentPos.x, 500.0f };
+
+			// 線形補間で Y軸に移動（イージング）
+			Vector2 newPos = {
+				std::lerp(startPos.x, endPos.x, easeT),
+				std::lerp(startPos.y, endPos.y, easeT)
+			};
+			TextUI_[i]->SetPosition(newPos);
+
+			TextUI_[i]->Update();
+		}
 		Changefige = true;
-		// コントローラー操作
-		ControllerUpdate();
+		if (easeT == 1.0f) {
+			// コントローラー操作
+			ControllerUpdate();
+		}
 	}
+
+	if (Changefige) {
+		// ジャンプ開始
+		StartJump();
+	}
+
+	// ↑の更新
+	ArroTextUI_->Update();
+
 }
 
 void GameClearScene::Draw()
@@ -139,6 +202,7 @@ void GameClearScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 
+	skydome_->Draw();
 	// クリアの描画処理
 	for (std::unique_ptr<Object3D>& Text : Cleartext_) {
 		Text->Draw();
@@ -156,8 +220,9 @@ void GameClearScene::Draw()
 		for (std::unique_ptr<Sprite>& UI : TextUI_) {
 			UI->Draw();
 		}
-
-		ArroTextUI_->Draw();
+		if (easeT == 1.0f) {
+			ArroTextUI_->Draw();
+		}
 	}
 #pragma endregion
 
@@ -202,64 +267,77 @@ void GameClearScene::EasingMove() {
 }
 
 void GameClearScene::StartJump() {
-	static float acceleration = -9.8f;
-	static float jumpHeight = 2.5f;
-	static float totalElapsedTime = 0.0f;
-	static float jumpInterval = 0.2f;  // 各オブジェクトのジャンプ開始時間差
-	static float cooldownTime = 120.0f;
+	// 初期化（オブジェクト数が変わった時も対応）
+	if (!initialized || jumpStartTimes.size() != Cleartext_.size()) {
+		size_t count = Cleartext_.size();
 
-	static std::vector<float> jumpStartTimes;
-	static std::vector<float> velocities;
-	static std::vector<bool> isJumping;
-	static float cooldownTimer = 0.0f;
+		jumpStartTimes.assign(count, 0.0f);
+		velocities.assign(count, 0.0f);
+		isJumping.assign(count, false);
+		originalYPositions.clear();
+		cooldownTimers.assign(count, 0.0f);
+		totalElapsedTimes.assign(count, 0.0f);
 
-	// 初期化（初回または再ジャンプ時）
-	if (jumpStartTimes.size() != Cleartext_.size()) {
-		jumpStartTimes.clear();
-		velocities.clear();
-		isJumping.clear();
-
-		for (size_t i = 0; i < Cleartext_.size(); ++i) {
-			jumpStartTimes.push_back(i * jumpInterval);
-			velocities.push_back(0.0f);
-			isJumping.push_back(false);
+		for (size_t i = 0; i < count; ++i) {
+			jumpStartTimes[i] = i * jumpInterval;
+			originalYPositions.push_back(Cleartext_[i]->GetTranslate().y);
 		}
-		totalElapsedTime = 0.0f;
-		cooldownTimer = 0.0f;
+
+		initialized = true;
 	}
 
-	totalElapsedTime += deltaTime;
-
 	for (size_t i = 0; i < Cleartext_.size(); ++i) {
+		float baseY = originalYPositions[i];
+
+		// タイマー更新
+		totalElapsedTimes[i] += deltaTime;
+
+		// クールダウン中なら待機
+		if (cooldownTimers[i] > 0.0f) {
+			cooldownTimers[i] -= deltaTime;
+			if (cooldownTimers[i] < 0.0f) cooldownTimers[i] = 0.0f;
+		}
+
 		// ジャンプ開始
-		if (!isJumping[i] && totalElapsedTime >= jumpStartTimes[i]) {
+		if (!isJumping[i] && cooldownTimers[i] <= 0.0f && totalElapsedTimes[i] >= jumpStartTimes[i]) {
 			velocities[i] = jumpHeight;
 			isJumping[i] = true;
 		}
 
-		// ジャンプ処理
+		// ジャンプ中の処理
 		if (isJumping[i]) {
 			velocities[i] += acceleration * deltaTime;
 
 			Vector3 pos = Cleartext_[i]->GetTranslate();
 			pos.y += velocities[i] * deltaTime;
 
-			if (pos.y <= 0.0f) {
-				pos.y = 0.0f;
+			// 着地判定
+			if (pos.y <= baseY) {
+				pos.y = baseY;
 				velocities[i] = 0.0f;
+				isJumping[i] = false;
+
+				// 個別にクールタイム開始
+				cooldownTimers[i] = cooldownTime;
+
+				// 次回ジャンプの遅延タイミングをリセット（オプション）
+				totalElapsedTimes[i] = 0.0f;
 			}
 
 			Cleartext_[i]->SetTranslate(pos);
+		} else {
+			// 非ジャンプ中 → y位置をリセット
+			Vector3 pos = Cleartext_[i]->GetTranslate();
+			if (pos.y != baseY) {
+				pos.y = baseY;
+				Cleartext_[i]->SetTranslate(pos);
+			}
 		}
 	}
 }
+
+
 void GameClearScene::ControllerUpdate() {
-
-	uint32_t nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
-
-	if (nextStage == MaxStageIndex_) {
-		nextsneneonthit = true;
-	}
 
 	// 長押し対応用の遅延時間
 	static float holdDelay_ = 0.2f; // 押しっぱなしで再入力されるまでの時間
@@ -273,18 +351,37 @@ void GameClearScene::ControllerUpdate() {
 	const float stickThreshold = 0.5f;
 
 	// 範囲の最大値
-	const int maxIndex = 2;
-
+	const int maxIndex = nextsneneonthit ? 1 : 2; ;
+#ifdef _DEBUG
+	// キーボード入力
 	// 入力がしきい値を超えた瞬間だけ反応
 	if (!wasStickMoved) {
-		if (rightStickX > stickThreshold && Selectindex < maxIndex) {
+		if (Input::GetInstance()->PushKey(DIK_RIGHT) && Selectindex < (uint32_t)maxIndex) {
 			Selectindex++;
 			wasStickMoved = true;
 			holdTimer_ = 0.0f;
+		} else if (Input::GetInstance()->PushKey(DIK_LEFT) && Selectindex > 0) {
+			Selectindex--;
+			wasStickMoved = true;
+			holdTimer_ = 0.0f;
+		}
+	}
+#endif // _DEBUG
+
+	// 入力がしきい値を超えた瞬間だけ反応
+	if (!wasStickMoved) {
+		if (rightStickX > stickThreshold && Selectindex < (uint32_t)maxIndex) {
+			Selectindex++;
+			wasStickMoved = true;
+			holdTimer_ = 0.0f;
+			// セレクト音声を流す
+			Audio::GetInstance()->SoundPlayWave(selectSound);
 		} else if (rightStickX < -stickThreshold && Selectindex > 0) {
 			Selectindex--;
 			wasStickMoved = true;
 			holdTimer_ = 0.0f;
+			// セレクト音声を流す
+			Audio::GetInstance()->SoundPlayWave(selectSound);
 		}
 	}
 
@@ -292,12 +389,19 @@ void GameClearScene::ControllerUpdate() {
 	if (fabsf(rightStickX) < stickThreshold) {
 		wasStickMoved = false;
 	}
-	
+
 	// タイトルの場合
 	if (Selectindex == 0) {
 		ArroTextUI_->SetPosition(Vector2(325.0f, 570.0f));
 		if (Changefige) {
+#ifdef _DEBUG
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				SceneManager::GetInstance()->ChangeScene("TITELE");
+			}
+#endif // _DEBUG
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+				// 決定の音声を流す
+				Audio::GetInstance()->SoundPlayWave(ButtonSound);
 				SceneManager::GetInstance()->ChangeScene("TITELE");
 			}
 		}
@@ -308,7 +412,14 @@ void GameClearScene::ControllerUpdate() {
 	if (Selectindex == 1) {
 		ArroTextUI_->SetPosition(Vector2(625.0f, 570.0f));
 		if (Changefige) {
+#ifdef _DEBUG
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+			}
+#endif // _DEBUG
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+				// 決定の音声を流す
+				Audio::GetInstance()->SoundPlayWave(ButtonSound);
 				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
 			}
 		}
@@ -318,9 +429,19 @@ void GameClearScene::ControllerUpdate() {
 	if (Selectindex == 2) {
 		ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
 		if (Changefige) {
+#ifdef _DEBUG
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				if (nextStage < MaxStageIndex_) {
+					SceneManager::GetInstance()->SetStageIndex(nextStage);
+					SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+				}
+			}
+#endif // _DEBUG
 			if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
 
 				if (nextStage < MaxStageIndex_) {
+					// 決定の音声を流す
+					Audio::GetInstance()->SoundPlayWave(ButtonSound);
 					SceneManager::GetInstance()->SetStageIndex(nextStage);
 					SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 				}

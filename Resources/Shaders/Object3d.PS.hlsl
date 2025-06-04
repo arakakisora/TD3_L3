@@ -70,10 +70,10 @@ PixelShaderOutput main(VertexShaderOutput input)
     float4 transformedUV = mul(float4(input.texcoord, 0.0, 1.0f), gMaterial.uvTransform); //テクスチャ座標の変換
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy); //テクスチャの色を取得
     
-    if (textureColor.a <= 0.5)
-    {
-        discard;
-    }
+    //if (textureColor.a <= 0.5)
+    //{
+    //    discard;
+    //}
     if (textureColor.a <= 0.0)
     {
         discard;

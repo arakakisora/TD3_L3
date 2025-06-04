@@ -5,6 +5,8 @@
 #include "Sprite.h"
 #include "BitmapFont.h"
 #include <memory>
+#include <Audio.h>
+
 using namespace std;
 class PhotoCamera
 {
@@ -12,7 +14,7 @@ public:
 	// 初期化
 	void Initialize(Map* map);
 	// 更新
-	void Update(Map* map);
+	void Update(Map* map,const bool cameraMode);
 	// 描画 / 3DObject
 	void Draw3DObject();
 	// 描画 / Sprite
@@ -21,6 +23,10 @@ public:
 	void Finalize();
 	// カメラの移動
 	void Move();
+
+	//コントローラー操作
+	void stickMove();
+	
 	// マップデータのコピー
 	void Copy();
 
@@ -29,6 +35,9 @@ public:
 
 	// imguiの描画
 	void DrawImGui();
+
+	void shatterEffect();
+	void shutterEffectUpdate();
 
 public:	// Setter / Getter
 	// 変更したマップデータをmapにセット
@@ -82,7 +91,7 @@ private:
 	MapChipType mapChipType;
 
 	bool CamerMode = false;
-	
+
 	// カメラサイズ
 	uint32_t cameraSizeX = 2;
 	uint32_t cameraSizeY = 2;
@@ -97,6 +106,9 @@ private:
 	// ビットマップフォント
 	unique_ptr<BitmapFont>bitmapFont = nullptr;
 
+	// cameraMode用
+	bool cameraMode_;
+
 
 	//イージング用
 	Vector2 currentPos; // 実際に描画される位置（イージング用）
@@ -105,5 +117,20 @@ private:
 	float moveSpeed = 0.1f;     // 1フレームごとの t 増加量
 	bool isMoving = false;      // 現在移動中かどうか
 
+	//シャッター演出用
+	// シャッター演出制御用
+	bool isShutterEffectPlaying = false;
+	float shutterAnimTime = 0.0f;
+	const float shutterAnimDuration = 0.15f;
+	Object3D* shuttertopObject; // シャッター演出用のオブジェクト
+	Object3D* shutterbottomObject; // シャッター演出用のオブジェクト
+
+
+	// 移動サウンド
+	SoundData moveSound;
+	// コピーサウンド
+	SoundData copeSound;
+	// ペーストサウンド
+	SoundData pasteSound;
 };
 

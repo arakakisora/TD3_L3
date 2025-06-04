@@ -21,7 +21,7 @@ void ParticleEmitter::Update()
 	//発生頻度より大きいなら発生
 	if (frequencyTime > frequency) {
 		//パーティクルを発生
-		ParticleMnager::GetInstance()->Emit(name_, position_, count);
+		//ParticleMnager::GetInstance()->Emit(name_, position_, count);
 		//時間をリセット
 		frequencyTime = 0.0f;
 
@@ -36,5 +36,13 @@ void ParticleEmitter::Emit()
 
 	//パーティクルを発生
 	ParticleMnager::GetInstance()->Emit(name_, position_, count);
+
+}
+
+void ParticleEmitter::PlayerEmit()
+{
+
+	//パーティクルを発生
+	ParticleMnager::GetInstance()->PlayerEmit(name_, position_, count, isRight);
 
 }

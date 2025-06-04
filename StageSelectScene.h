@@ -8,6 +8,9 @@
 #include <cmath>
 #include "ParticleMnager.h"
 #include "PauseMenu.h"
+#include "FadeManager.h"
+#include "ParticleEmitter.h"
+#include "ParticleMnager.h"
 
 class StageSelectScene :public BaseScene
 {
@@ -73,9 +76,9 @@ public:
 	// ステージ選択オブジェクトのリスト
 	std::vector<std::unique_ptr<Object3D>> stageObjects_;
 	// テキストオブジェクトのリスト
-	std::vector<std::unique_ptr<Object3D>> textoObjects_;
+	//std::vector<std::unique_ptr<Object3D>> textoObjects_;
 	// 最大ステージ数
-	uint32_t MaxSelectIndex_ = 3;
+	uint32_t MaxSelectIndex_ = 13;
 	// 現在のステージ
 	uint32_t currentIndex_ = 0;
 
@@ -91,9 +94,30 @@ public:
 	int frameCounter_ = 0;  // フレームカウンター
 
 	std::vector<std::unique_ptr<Sprite>> xboxui;
-
-	bool titlefige_ =false;
+	std::vector < std::unique_ptr<Sprite>> pauseui;
+	bool titlefige_ = false;
 
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
+
+	// 背景
+	std::unique_ptr<Object3D>skydome_;
+
+	FadeManager fadeManager_;
+
+	// ステージ選択時のプレイヤーの位置
+	Vector3 playerInitialOffset_;
+
+	ParticleEmitter* playeremitter_;
+	// プレイヤー移動フラグ
+	bool playermoveright = false;
+	bool playermoveleft = false;
+
+	// 背景モデル
+	std::unique_ptr<Object3D> backPlane_;
+
+	// セレクトサウンド
+	SoundData selectSound;
+	// 決定サウンド
+	SoundData ButtonSound;
 };

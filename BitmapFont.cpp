@@ -23,14 +23,9 @@ void BitmapFont::Initialize()
 		sprite->SetSize(Vector2(75.0f, 75.0f));
 		sprite->SetRotation(0.0f);
 		sprite->setColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		sprite->SetPosition(Vector2(130.0f, 10.0f));
+		sprite->SetPosition(Vector2(180.0f, 27.0f));
 		sprites.push_back(move(sprite));
 	}
-	
-
-	// 下記のコードなら簡略できる
-	
-
 
 
 	
@@ -45,7 +40,7 @@ void BitmapFont::Initialize()
 	spriteMulti->Initialize(SpriteCommon::GetInstance(), "Resources/BitmapFont/x.png");
 	spriteMulti->SetRotation(0.0f);
 	spriteMulti->setColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	spriteMulti->SetPosition(Vector2(85.0f, 35.0f));
+	spriteMulti->SetPosition(Vector2(150.0f, 50.0f));
 	spriteMulti->SetSize(Vector2(40.0f, 40.0f));
 
 #pragma endregion

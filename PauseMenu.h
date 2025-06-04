@@ -3,14 +3,20 @@
 #include "Object3DCommon.h"
 #include "Input.h"
 #include "Camera.h"
+#include <Audio.h>
 
 class Camera; // 前方宣言
+
+enum class PauseType {
+	StageSelectScene,
+	GamePlayScene
+};
 
 class PauseMenu
 {
 public:
 	//初期化
-	void Initialize(Object3DCommon* object3dcommon, bool isPlayScene);
+	void Initialize(Object3DCommon* object3dcommon, PauseType type);
 	//更新
 	void Update();
 	//描画
@@ -22,19 +28,21 @@ public:
 		camera_ = camera;
 	}
 
-
+	// コントローラー操作
 	void ControllerUpdate();
-
+	// イージング移動
+	void PausedStartGamePlay();
+	// イージング移動
+	void PausedStartStageSelect();
 
 private:
+	PauseType pauseType_;
 	Object3DCommon* object3dcommon_;
 	Camera* camera_ = nullptr;
 	Transform transform;
 	Input* input;
 	//ポーズ画面のオブジェクト
 	std::unique_ptr<Object3D>object;
-
-	std::unique_ptr<Object3D>object3;
 
 	// テキストオブジェクトのリスト
 	std::vector<std::unique_ptr<Object3D>> TextObjects;
@@ -44,17 +52,18 @@ private:
 
 	//ポーズ開く
 	bool isPaused_ = false;
-	//操作説明表示
-	bool isOperation_ = false;
+
 	//イージングタイマー
 	float easeTimer_ = 0.0f;
-	float easeTimer2_ = 0.0f;
 
 	bool easingsceneFlag_ = false; 
 	bool easingmoveFlag_ = false;
 
+	bool isClosing_ = false;
 
-	bool scenefige = false;
-
+	// セレクトサウンド
+	SoundData selectSound;
+	// 決定サウンド
+	SoundData ButtonSound;
 };
 

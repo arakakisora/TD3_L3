@@ -31,14 +31,14 @@ public:
     static inline const float kBlockWidth = 1.0f;
     static inline const float kBlockHeight = 1.0f;
     static inline const uint32_t kNumBlockVirtical = 25;
-    static inline const uint32_t kNumBlockHorizontal = 100;
+    static inline const uint32_t kNumBlockHorizontal = 25;
 public:
 	// 初期化
     void Initialize();
 	// 終了処理
     void Finalize();
 	// 更新
-    void Update();
+    void Update(const bool cameraMode= false);
 	// 描画
     void Draw();
 	// 3Dオブジェクト生成
@@ -77,6 +77,10 @@ public: //カメラに使用する
 	uint32_t GetPlayerStartX() const { return playerStartX; }
 	uint32_t GetPlayerStartY() const { return playerStartY; }
 
+
+    // playerPositionInit
+    Vector3 GetPlayerStartPosition() const { return playerStartPosition; }
+
 private: // ブロック関連
 
     // マップチップデータ
@@ -98,7 +102,14 @@ private: // マップデータの読み込み用
     //プレイヤーの初期位置のマップ番号を記録する変数
 	uint32_t playerStartX = 0;
 	uint32_t playerStartY = 0;
-	
+
+    
+    //カメラモードラッパー
+    bool cameraMode_;
+
+    Vector3 playerStartPosition; 
+
+
 public:
     uint32_t GetMapWidth() const { return kNumBlockHorizontal; }
     uint32_t GetMapHeight() const { return kNumBlockVirtical; }
@@ -112,4 +123,5 @@ public: // 新設 Setter / Getter
     std::vector<std::vector<MapChipType>> GetMap() const { return mapChipData_.data; }
 	//void SetMap(std::vector<std::vector<MapChipType>> map) { mapChipData_.data = map; }
 	void SetMap(const MapChipData& map) { mapChipDataNext_ = map; }
+    Vector3 FindMapChipPosition(MapChipType mapChipType);
 };

@@ -11,38 +11,29 @@ double easeInOutCirc(double x) {
 }
 
 //初期化
-void PauseMenu::Initialize(Object3DCommon* object3dcommon, bool isPlayScene) {
+void PauseMenu::Initialize(Object3DCommon* object3dcommon, PauseType type){
 	object3dcommon_ = object3dcommon;
-	scenefige = isPlayScene;
+	pauseType_ = type;
 
-	transform.translate = { -2.6f,1.5f,-2.0f };
+	transform.translate = { -2.6f,1.5f,0.0f };
 	object = std::make_unique<Object3D>();
 	object->Initialize(object3dcommon_);
 	object->SetModel("Pause.obj");
 	object->SetScale({ 1.0f,2.0f,1.0f });
 	input = Input::GetInstance();
 
-	object3 = std::make_unique<Object3D>();
-	object3->Initialize(object3dcommon_);
-	object3->SetModel("plane.obj");
-	object3->SetScale({ 2.0f,2.0f,1.0f });
-
 	// 作成してでリストに追加
-	for (uint32_t i = 0; i < 3; ++i) {	
+	for (uint32_t i = 0; i < 2; ++i) {	
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
 		newObject->Initialize(Object3DCommon::GetInstance());
 		if (i == 0) {
 			newObject->SetModel("StageSelect/return.obj");
 		} else if (i == 1) {
-			newObject->SetModel("StageSelect/explanation.obj");
-		} else if (i == 2) {
-			if (isPlayScene) {
+			if (pauseType_ == PauseType::GamePlayScene) {
 				newObject->SetModel("StageSelect/StageSelect.obj");
-			} else {
+			} else if(pauseType_ == PauseType::StageSelectScene){
 				newObject->SetModel("StageSelect/title.obj");
 			}
-		} else {
-			newObject->SetModel("StageSelect/return.obj");
 		}
 
 		texttransform[i] = { transform.translate };
@@ -53,10 +44,19 @@ void PauseMenu::Initialize(Object3DCommon* object3dcommon, bool isPlayScene) {
 		TextObjects.push_back(std::move(newObject));
 	}
 
+	// セレクト用サウンド
+	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 }
 
 //更新
 void PauseMenu::Update() {
+
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&selectSound, 0.2f);
+
+
 	object->SetTranslate(transform.translate);
 
 	object->Update();
@@ -72,131 +72,27 @@ void PauseMenu::Update() {
 		text->Update();
 	}
 
-	// コントローラの動き
-	ControllerUpdate(); 
-
 	//遷移速度
-	const float easeSpeed = 0.02f;
+	const float easeSpeed = 0.04f;
 
 	if (isPaused_) {
 		easeTimer_ += easeSpeed;
-
-		if (easeTimer_ > 1.0f) {
-			easeTimer_ = 1.0f;
-		}
-	} else
-	{
-		easeTimer_ = 0.0f;
-
+		if (easeTimer_ > 1.0f) easeTimer_ = 1.0f;
+	} else {
+		easeTimer_ -= easeSpeed;
+		if (easeTimer_ < 0.0f) easeTimer_ = 0.0f;
 	}
 
-	if (isPaused_) {
-		float easedValue = float(easeInOutCirc(easeTimer_));
-		// カメラのXYに追従させる（Zはそのまま）
-		Vector3 cameraPos = camera_->GetTransform().translate;
-		transform.translate.x = cameraPos.x;
-		transform.translate.y = cameraPos.y;
-		transform.translate.z = 5.0f + (-6.0f * easedValue);
-
-		//xスケール
-		float minScaleX = 0.0f;
-		float maxScaleX = 1.0f;
-		float currentScaleX = minScaleX + (maxScaleX - minScaleX) * easedValue;
-		//yスケール
-		float minScaleY = 0.0f;
-		float maxScaleY = 1.0f;
-		float currentScaleY = minScaleY + (maxScaleY - minScaleY) * easedValue;
-		//zスケール
-		float minScaleZ = 0.0f;
-		float maxScaleZ = 1.0f;
-		float currentScaleZ = minScaleZ + (maxScaleZ - minScaleZ) * easedValue;
-
-		transform.scale = { currentScaleX, currentScaleY, currentScaleZ };
-
-		object->SetTranslate(transform.translate);
-		object->SetScale(transform.scale);
-		object->Update();
-
-		Vector3 basePos = object->GetTransform().translate;
-
-		float offsetY = 1.8f;
-		for (size_t i = 0; i < TextObjects.size(); ++i) {
-			Vector3 followPos = basePos;
-			followPos.z -= 5.0f;
-			followPos.y += 2.0f + (offsetY * -static_cast<float>(i)); // objectの位置から下方向にずらす
-
-			TextObjects[i]->SetTranslate(followPos);
-
-			// textindex 番号のやつだけスケールを 1.0f にする
-			if (i == textindex && easeTimer_ == 1.0f) {
-				TextObjects[i]->SetScale(Vector3(1.5f, 1.5f, 1.5f));
-			} else {
-				// 通常の最大0.5fスケール
-				Vector3 limitedScale;
-				limitedScale.x = std::min(transform.scale.x, 1.0f);
-				limitedScale.y = std::min(transform.scale.y, 1.0f);
-				limitedScale.z = std::min(transform.scale.z, 1.0f);
-				TextObjects[i]->SetScale(limitedScale);
-			}
-
-			TextObjects[i]->Update();
-		}
+	if (pauseType_ == PauseType::GamePlayScene) {
+		// ゲームシーンのポーズ画面表示
+		PausedStartGamePlay();
 	}
-
-	//ポーズ画面が出ているとき
-	if (isPaused_) {
-		//ポーズ画面を閉じる
-		if (textindex == 0 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
-			isPaused_ = !isPaused_;
-			if (isOperation_) {
-				isOperation_ = false;
-			}
-		}
-
-		//ポーズ画面が出ているときWで操作説明を表示(仮)
-		if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
-			isOperation_ = !isOperation_;
-		}
-
-		//ポーズ画面が出ているときTでタイトルへ(仮)
-		if (textindex == 2 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
-			if (scenefige) {
-				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
-			} else if(!scenefige){
-				SceneManager::GetInstance()->ChangeScene("TITELE");
-			}
-		}
+	if (pauseType_ == PauseType::StageSelectScene) {
+		// ゲームセレクトのポーズ画面表示
+		PausedStartStageSelect();
 	}
-
-	//操作説明
-	if (isOperation_) {
-		easeTimer2_ += easeSpeed;
-		if (easeTimer2_ > 1.0f) {
-			easeTimer2_ = 1.0f;
-		}
-	} else
-	{
-		easeTimer2_ -= easeSpeed;
-		if (easeTimer2_ < 0.0f) {
-			easeTimer2_ = 0.0f;
-		}
-	}
-
-	if (isOperation_) {
-		float operationEasedValue = float(easeInOutCirc(easeTimer2_));
-		Transform operationTransform;
-		operationTransform.translate = { 0.0f,0.0f,6.0f + (-8.0f * operationEasedValue) };
-
-		float opScaleX = 2.0f * operationEasedValue;
-		float opScaleY = 1.0f * operationEasedValue;
-		float opScaleZ = 1.0f * operationEasedValue;
-
-		operationTransform.scale = { opScaleX,opScaleY,opScaleZ };
-
-		object3->SetTranslate(operationTransform.translate);
-		object3->SetScale(operationTransform.scale);
-		object3->Update();
-	}
+	// コントローラの動き
+	ControllerUpdate();
 }
 
 //描画
@@ -205,34 +101,133 @@ void PauseMenu::Draw() {
 	if (isPaused_) {
 		//ポーズ画面
 		object->Draw();
-		if (isOperation_) {
-			//操作説明画面
-			object3->Draw();
-		}
 	}
-
-	for (std::unique_ptr<Object3D>& text : TextObjects) {
-		text->Draw();
+	if (easeTimer_ >= 0.1f) {
+		for (std::unique_ptr<Object3D>& text : TextObjects) {
+			text->Draw();
+		}
 	}
 }
 
 //フラグのゲッター
 bool PauseMenu::IsPaused()const {
-	return isPaused_;
+	// 「ポーズ中」または「イージングがまだ戻っている最中」なら true
+	return isPaused_ || easeTimer_ > 0.0f;
 }
 
+void PauseMenu::PausedStartGamePlay() { 
+	if (isPaused_ || easeTimer_ > 0.0f) {
+		// イージングの値（0.0〜1.0）の計算（※逆再生に対応）
+		float easedValue = float(easeInOutCirc(easeTimer_));
+
+		Vector3 cameraPos = camera_->GetTransform().translate;
+		transform.translate.x = cameraPos.x;
+		transform.translate.y = cameraPos.y;
+		transform.translate.z = 5.0f + (-7.0f * easedValue);
+
+		float minScale = 0.0f;
+		float limitedScale = (easedValue > 1.0f) ? 1.0f :
+			(easedValue < minScale) ? minScale : easedValue;
+
+		// ポーズを閉じている途中なら、0.0f までしっかり戻す
+		if (easeTimer_ < 1.0f && !isPaused_) {
+			limitedScale = (easedValue > 0.0f) ? easedValue : 0.0f;
+		} else if (easeTimer_ >= 1.0f) {
+			limitedScale = 1.0f;
+		}
+
+		transform.scale = { limitedScale, limitedScale, limitedScale };
+
+		object->SetTranslate(transform.translate);
+		object->SetScale(transform.scale);
+		object->Update();
+
+		Vector3 basePos = object->GetTransform().translate;
+
+		float currentScale = (easedValue > minScale) ? easedValue : minScale;	
+		float offsetY = 1.8f;
+		for (size_t i = 0; i < TextObjects.size(); ++i) {
+			Vector3 followPos = basePos;
+			followPos.z -= 5.0f;
+			followPos.y += 1.0f + (offsetY * -static_cast<float>(i));
+
+			TextObjects[i]->SetTranslate(followPos);
+
+			if (i == textindex && easeTimer_ == 1.0f) {
+				if (pauseType_ == PauseType::GamePlayScene) {
+					TextObjects[i]->SetScale(Vector3(1.5f, 1.5f, 1.5f));
+				} else if (pauseType_ == PauseType::StageSelectScene) {
+					TextObjects[i]->SetScale(Vector3(0.8f, 0.8f, 0.8f));
+				}
+			} else {
+				Vector3 limitedScale = { std::min(currentScale, 1.0f), std::min(currentScale, 1.0f), std::min(currentScale, 1.0f) };
+				TextObjects[i]->SetScale(limitedScale);
+			}
+			TextObjects[i]->Update();
+		}
+	}
+}
+
+void PauseMenu::PausedStartStageSelect() {
+	if (isPaused_ || easeTimer_ > 0.0f) {
+		// イージングの値（0.0〜1.0）の計算（※逆再生に対応）
+		float easedValue = float(easeInOutCirc(easeTimer_));
+
+		Vector3 cameraPos = camera_->GetTransform().translate;
+		transform.translate.x = cameraPos.x;
+		transform.translate.y = cameraPos.y;
+		transform.translate.z = 5.0f + (-7.0f * easedValue);
+
+		float minScale = 0.0f;
+		float const maxScale = 0.6f;
+		float limitedScale = (easedValue > maxScale) ? maxScale :
+			(easedValue < minScale) ? minScale : easedValue;
+
+		// ポーズを閉じている途中なら、0.0f までしっかり戻す
+		if (easeTimer_ < maxScale && !isPaused_) {
+			limitedScale = (easedValue > 0.0f) ? easedValue : 0.0f;
+		} else if (easeTimer_ >= maxScale) {
+			limitedScale = maxScale;
+		}
+
+		transform.scale = { limitedScale, limitedScale, limitedScale };
+
+		object->SetTranslate(transform.translate);
+		object->SetScale(transform.scale);
+		object->Update();
+
+		Vector3 basePos = object->GetTransform().translate;
+
+		float currentScale = (easedValue > minScale) ? easedValue : minScale;
+		float offsetY = 1.3f;
+		for (size_t i = 0; i < TextObjects.size(); ++i) {
+			Vector3 followPos = basePos;
+			followPos.z -= 5.0f;
+			followPos.y += 0.8f + (offsetY * -static_cast<float>(i));
+
+			TextObjects[i]->SetTranslate(followPos);
+
+			if (i == textindex && easeTimer_ == 1.0f) {
+				TextObjects[i]->SetScale(Vector3(0.9f, 0.9f, 0.9f));
+			} else {
+				Vector3 limitedScale = { std::min(currentScale, 0.6f), std::min(currentScale, 0.6f), std::min(currentScale, 0.6f) };
+				TextObjects[i]->SetScale(limitedScale);
+			}
+			TextObjects[i]->Update();
+		}
+	}
+}
 
 void PauseMenu::ControllerUpdate() {
 
 	// アニメーションが完了しているかチェック
 	bool isPauseAnimationFinished = (easeTimer_ >= 1.0f || easeTimer_ <= 0.0f);
 
-	// キーを押したらフラグオン(仮)
-	if (isPauseAnimationFinished && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_Y)) {
+	// キーを押したらフラグオン
+	if (isPauseAnimationFinished && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_START)) {
 		isPaused_ = !isPaused_;
-		if (isOperation_) {
-			isOperation_ = false;
-		}
+		// 決定の音声を流す
+		Audio::GetInstance()->SoundPlayWave(ButtonSound);
 	}
 
 	// スティックのしきい値
@@ -247,20 +242,62 @@ void PauseMenu::ControllerUpdate() {
 	// 押し始め検出
 	bool stickUpPressed = (rightStickY < -stickThreshold && prevRightStickY >= -stickThreshold);
 	bool stickDownPressed = (rightStickY > stickThreshold && prevRightStickY <= stickThreshold);
-	if (!isOperation_ && easeTimer_ ==1.0f) {
+	if (easeTimer_ == 1.0f) {
 		// 上向き
 		if (stickUpPressed && textindex < TextObjects.size() - 1 && !easingmoveFlag_ && !easingsceneFlag_) {
 			textindex++;
+			// セレクト音声を流す
+			Audio::GetInstance()->SoundPlayWave(selectSound);
 		}
 
 		// 下向き
 		if (stickDownPressed && textindex > 0 && !easingmoveFlag_ && !easingsceneFlag_) {
 			textindex--;
+			// セレクト音声を流す
+			Audio::GetInstance()->SoundPlayWave(selectSound);
 		}
 	}
 	// 前フレームの値を保存
 	prevRightStickY = rightStickY;
 
 
+	//ポーズ画面が出ているとき
+	if (isPaused_ && easeTimer_ == 1.0f) {
+		//ポーズ画面を閉じる
+		if (textindex == 0 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+			isPaused_ = !isPaused_;
+			// 決定の音声を流す
+			Audio::GetInstance()->SoundPlayWave(ButtonSound);
+		}
 
+		//ポーズ画面が出ているときTでタイトルへ(仮)
+		if (textindex == 1 && Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_A)) {
+			if (pauseType_ == PauseType::GamePlayScene) {
+				// 決定の音声を流す
+				Audio::GetInstance()->SoundPlayWave(ButtonSound);
+				// ゲームプレイ中はステージセレクトに戻る
+				SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+			} else if (pauseType_ == PauseType::StageSelectScene) {
+				// 決定の音声を流す
+				Audio::GetInstance()->SoundPlayWave(ButtonSound);
+				// ステージセレクト中はタイトルに戻る
+				SceneManager::GetInstance()->ChangeScene("TITELE");
+			}
+		}
+		for (size_t i = 0; i < TextObjects.size(); ++i) {
+			// 選択したオブジェクトの色を変更
+			if (textindex == i) {
+				TextObjects[i]->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+			} else {
+				TextObjects[i]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+			}
+		}
+	} else {
+		textindex = 0;
+
+		// カラーリセット
+		for (size_t i = 0; i < TextObjects.size(); ++i) {
+			TextObjects[i]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		}
+	}
 }

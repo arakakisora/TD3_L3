@@ -27,14 +27,15 @@ void Map::Finalize() {
 	blockobject3D.clear();
 }
 
-void Map::Update() {
+void Map::Update(const bool cameraMode) {
+	this->cameraMode_ = cameraMode;
 	GenerateChangeStageBlock(mapChipDataNext_);
 	// 3Dオブジェクトの更新
 	for (std::vector<Block*>& blockLine : blockobject3D) {
 		for (Block* block : blockLine) {
 			if (!block)
 				continue;
-			block->Update();
+			block->Update(cameraMode_);
 		}
 	}
 
@@ -63,8 +64,6 @@ void Map::Update() {
 	ImGui::End();
 #endif // _DEBUG
 }
-
-
 
 void Map::Draw() {
 
@@ -139,7 +138,7 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 
 	// メタ情報の初期化（念のため）
 	photoCameraCount = 0;
-	kameraSizeX = 2; // ← デフォルト値（最小2x2）を明示しておくと安全
+	kameraSizeX = 2; 
 	kameraSizeY = 2;
 
 	std::string line;
@@ -192,21 +191,19 @@ void Map::LoadMapChipCsv(const std::string& filePath) {
 	MapDataToPlayerInitPosition();
 }
 
-
-
 void Map::MapDataToPlayerInitPosition()
 {
-	// プレイヤーの初期位置をマップデータから取得
 	for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
 		for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
 			if (mapChipData_.data[y][x] == MapChipType::kPlayer) {
-				playerStartX = x;
-				playerStartY = y;
+				// マップインデックスからワールド座標に変換して保存
+				playerStartPosition = GetMapChipPostionByIndex(x, y);
 				return;
 			}
 		}
 	}
 }
+
 
 MapChipType Map::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {
 	// マップチップの範囲外の場合は空白を返す
@@ -292,4 +289,16 @@ void Map::RemoveObjectAt(uint32_t x, uint32_t y) {
 
 	// マップデータを更新(削除を反映）
 	SetMapData(x, y, MapChipType::kBlank);
+}
+
+Vector3 Map::FindMapChipPosition(MapChipType mapChipType) {
+	for (uint32_t y = 0; y < kNumBlockVirtical; ++y) {
+		for (uint32_t x = 0; x < kNumBlockHorizontal; ++x) {
+			if (mapChipData_.data[y][x] == mapChipType) {
+				return GetMapChipPostionByIndex(x, y);
+			}
+		}
+	}
+	// 見つからなかった場合は (0, 0, 0) を返す（用途に応じて変更）
+	return Vector3{ 0.0f, 0.0f, 0.0f };
 }
