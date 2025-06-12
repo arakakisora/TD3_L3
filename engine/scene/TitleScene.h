@@ -9,7 +9,6 @@
 
 class TitleScene :public BaseScene
 {
-
 public:
 
 	/// <summary>
@@ -29,18 +28,27 @@ public:
 	/// </summary>
 	void Draw()override;
 
+private:
+	enum ObjectType {
+		Title,       // タイトル
+		Start,       // スタート
+		Player,      // プレイヤー
+		Count        // 要素数
+	};
+
+	// テクスチャの読み込み
+	void LoadAllTextures();
+	// モデルの読み込み
+	void LoadAllModels();
 	// シャッター演出の開始
 	void shatterEffect();
 	// シャッター演出の更新
 	void shutterEffectUpdate();
-
 	// プレイヤーのイージング処理移動
 	void UpdatePlayerPositionByStep(float deltaTime);
-
-public:
-	std::unique_ptr<Object3D> titileobject_;
-	std::unique_ptr<Object3D> uIbject_start_;
-	std::unique_ptr<Object3D> uIbject_A_;
+private:
+	// UIオブジェクト
+	std::array<std::unique_ptr<Object3D>, ObjectType::Count> titleObjects_;
 
 	uint32_t time = 0;
 	bool timehige = false;
@@ -61,9 +69,6 @@ public:
 	std::unique_ptr<Object3D> shuttertopObject; // シャッター演出用のオブジェクト
 	std::unique_ptr<Object3D> shutterbottomObject; // シャッター演出用のオブジェクト
 
-
-	// プレイヤー
-	std::unique_ptr<Object3D> player_;
 	// イージング処理
 	float easingTimer = 0.0f;
 	bool isEasing = false;
