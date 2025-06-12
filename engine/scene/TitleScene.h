@@ -28,6 +28,9 @@ public:
 	/// </summary>
 	void Draw()override;
 
+		
+	std::unique_ptr<Object3D> CreateObject3D(const std::string& modelName, const Vector3& pos, const Vector3& rot = {}, const Vector3& scale = { 1,1,1 }, bool lighting = false);
+	
 private:
 	enum ObjectType {
 		Title,       // タイトル
@@ -46,6 +49,26 @@ private:
 	void shutterEffectUpdate();
 	// プレイヤーのイージング処理移動
 	void UpdatePlayerPositionByStep(float deltaTime);
+
+	// オーディオの更新
+	void UpdateAudio();
+
+	void UpdateFadeAndInput();
+
+	void UpdateStep();
+
+	void DebugGui();
+
+
+	void InitStepTable();  // 関数テーブルの初期化
+    // 各ステップの関数
+    void StepMinus1();
+    void Step0();
+    void Step1();
+    void Step2();
+    void Step3(); // default 相当
+
+
 private:
 	// UIオブジェクト
 	std::array<std::unique_ptr<Object3D>, ObjectType::Count> titleObjects_;
@@ -58,16 +81,13 @@ private:
 	std::unique_ptr<Object3D>skydome_;
 	FadeManager fadeManager_;
 
-	// 演出のステップ
-	int currentStep = 0;
-
 	//シャッター演出用
+	// シャッター用オブジェクト
+	std::vector<std::unique_ptr<Object3D>> shutterObjects_; // [0]=上, [1]=下
 	// シャッター演出制御用
 	bool isShutterEffectPlaying = false;
 	float shutterAnimTime = 0.0f;
 	const float shutterAnimDuration = 0.15f;
-	std::unique_ptr<Object3D> shuttertopObject; // シャッター演出用のオブジェクト
-	std::unique_ptr<Object3D> shutterbottomObject; // シャッター演出用のオブジェクト
 
 	// イージング処理
 	float easingTimer = 0.0f;
@@ -81,17 +101,24 @@ private:
 	int frameCount_ = 0;
 
 
-	bool isnextStep = false;
 	float nextcurrentSteptime = 0;
 	float MaxnextcurrentSteptime = 500;
-
 	// 決定サウンド
 	SoundData ButtonSound;
 	// カメラコピーサウンド
 	SoundData copeSound;
-
 	// メインサウンド
 	SoundData Bgm;
 	// メインサウンド開始フラグ
 	bool bgmstart = false;
+
+
+
+	
+	int currentStep = -1;
+
+
+    std::unordered_map<int, std::function<void()>> stepTable_;
+
+    bool isnextStep = false;
 };

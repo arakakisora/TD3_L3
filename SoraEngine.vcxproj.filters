@@ -19,9 +19,6 @@
     <Filter Include="externals\imgui">
       <UniqueIdentifier>{e5654a7a-c419-49bf-9192-921cd488e63b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NewFilter1">
-      <UniqueIdentifier>{6ffedc53-9443-4cf0-9168-c59c8eb8375f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\engin">
       <UniqueIdentifier>{55f1385b-f7a0-447f-8a6b-c508d34c0db5}</UniqueIdentifier>
     </Filter>
@@ -60,6 +57,18 @@
     </Filter>
     <Filter Include="shader">
       <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\engin\scene">
+      <UniqueIdentifier>{6ffedc53-9443-4cf0-9168-c59c8eb8375f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\engin\scene">
+      <UniqueIdentifier>{8b69fd1b-82bc-46d4-80af-f0630f8224c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application">
+      <UniqueIdentifier>{e864db34-4ba6-44df-a705-c5bcf8058d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application">
+      <UniqueIdentifier>{e34cc80a-b2a0-4670-ba68-11567672a999}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,34 +135,7 @@
     <ClCompile Include="engine\base\SrvManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\Game.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="engine\base\Framework.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\GamePlayScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\TitleScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\BaseScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\SceneManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\AbstractSceneFactory.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\SceneFactory.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\GameClearScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\GameOverScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="engine\camera\CameraManager.cpp">
@@ -183,9 +165,6 @@
     <ClCompile Include="ObjectCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="StageSelectScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="PhotoCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -200,6 +179,36 @@
     </ClCompile>
     <ClCompile Include="FadeManager.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GameClearScene.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GamePlayScene.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\AbstractSceneFactory.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\BaseScene.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\Game.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelectScene.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\TitleScene.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\SceneManager.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\SceneFactory.cpp">
+      <Filter>ソース ファイル\engin\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -293,34 +302,7 @@
     <ClInclude Include="engine\base\SrvManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\Game.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="engine\base\Framework.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\GamePlayScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\TitleScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\BaseScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\SceneManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\AbstractSceneFactory.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\SceneFactory.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\GameClearScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="engine\camera\CameraManager.h">
@@ -350,9 +332,6 @@
     <ClInclude Include="ObjectCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="StageSelectScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="PhotoCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -367,6 +346,36 @@
     </ClInclude>
     <ClInclude Include="FadeManager.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\AbstractSceneFactory.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\Game.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameClearScene.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GamePlayScene.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\BaseScene.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelectScene.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\SceneManager.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\SceneFactory.h">
+      <Filter>ヘッダー ファイル\engin\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
