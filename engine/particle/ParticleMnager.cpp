@@ -291,7 +291,8 @@ Particle ParticleMnager::MakeNewParticle(std::mt19937& randomEngine, const Vecto
 	//particle.transform.rotate = { 0.0f,3.0f,0.0f };
 	particle.transform.translate = translate + randomTranslate;
 	particle.Velocity = { distribution(randomEngine),distribution(randomEngine) ,distribution(randomEngine) };
-	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	//particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	particle.color = { 1.0f,1.0f,1.0f,1.0f };
 	particle.lifetime = distTime(randomEngine);
 	particle.currentTime = 0;
 	return particle;

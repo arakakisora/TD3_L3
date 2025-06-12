@@ -5,8 +5,8 @@
 #include "SceneManager.h"
 #include "ImGuiManager.h"
 #ifdef _DEBUG
-#include <imgui.h>
 #endif // _DEBUG
+#include <imgui.h>
 #include <ModelManager.h>
 #include <CameraManager.h>
 #include <MyMath.h>
@@ -28,13 +28,22 @@ void StageSelectScene::Initialize()
 	ModelManager::GetInstans()->LoadModel("terrain.obj");
 
 	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-1.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-2.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Text_1-3.obj");
 
-	ModelManager::GetInstans()->LoadModel("StageSelect/Stage01.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Stage02.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/Stage03.obj");
+	ModelManager::GetInstans()->LoadModel("Stage01.obj");
+	ModelManager::GetInstans()->LoadModel("Stage02.obj");
+	ModelManager::GetInstans()->LoadModel("Stage03.obj");
+	ModelManager::GetInstans()->LoadModel("Stage04.obj");
+	ModelManager::GetInstans()->LoadModel("Stage05.obj");
+
+	ModelManager::GetInstans()->LoadModel("Stage06.obj");
+	ModelManager::GetInstans()->LoadModel("Stage07.obj");
+	ModelManager::GetInstans()->LoadModel("Stage08.obj");
+	ModelManager::GetInstans()->LoadModel("Stage09.obj");
+	ModelManager::GetInstans()->LoadModel("Stage10.obj");
+
+	ModelManager::GetInstans()->LoadModel("Stage11.obj");
+	ModelManager::GetInstans()->LoadModel("Stage12.obj");
+	ModelManager::GetInstans()->LoadModel("Stage13.obj");
 
 	ModelManager::GetInstans()->LoadModel("Pause.obj");
 
@@ -65,31 +74,38 @@ void StageSelectScene::Initialize()
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
 		newObject->Initialize(Object3DCommon::GetInstance());
 		if (i == 0) {
-			newObject->SetModel("StageSelect/Stage01.obj");
-		} else if (i == 1) {
-			newObject->SetModel("StageSelect/Stage02.obj");
+			newObject->SetModel("Stage01.obj");
+		}else if (i == 1) {
+			newObject->SetModel("Stage02.obj");
 		} else if (i == 2) {
-			newObject->SetModel("StageSelect/Stage03.obj");
+			newObject->SetModel("Stage03.obj");
 		} else if (i == 3) {
-			newObject->SetModel("StageSelect/Stage01.obj");
+			newObject->SetModel("Stage04.obj");
 		} else if (i == 4) {
-			newObject->SetModel("StageSelect/Stage02.obj");
+			newObject->SetModel("Stage05.obj");
 		} else if (i == 5) {
-			newObject->SetModel("StageSelect/Stage03.obj");
+			newObject->SetModel("Stage06.obj");
 		} else if (i == 6) {
-			newObject->SetModel("StageSelect/Stage01.obj");
+			newObject->SetModel("Stage07.obj");
 		} else if (i == 7) {
-			newObject->SetModel("StageSelect/Stage02.obj");
+			newObject->SetModel("Stage08.obj");
 		} else if (i == 8) {
-			newObject->SetModel("StageSelect/Stage03.obj");
+			newObject->SetModel("Stage09.obj");
 		} else if (i == 9) {
-			newObject->SetModel("StageSelect/Stage01.obj");
-		} else {
-			newObject->SetModel("StageSelect/Stage01.obj");
+			newObject->SetModel("Stage10.obj");
+		} else if (i == 10) {
+			newObject->SetModel("Stage11.obj");
+		} else if (i == 11) {
+			newObject->SetModel("Stage12.obj");
+		} else if (i == 12) {
+			newObject->SetModel("Stage13.obj");
+		}
+		else {
+			newObject->SetModel("Stage01.obj");
 		}
 		newObject->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 		newObject->SetLighting(false);
-		newObject->SetScale(Vector3(1.5f, 1.5f, 1.5f));
+		newObject->SetScale(Vector3(2.0f, 1.5f, 1.5f));
 		stageObjects_.push_back(std::move(newObject));
 	}
 
@@ -158,6 +174,7 @@ void StageSelectScene::Initialize()
 	skydome_->Initialize(Object3DCommon::GetInstance());
 	skydome_->SetModel("SelectSceneBackPlane.obj");
 	Vector3 planePos = { -8.0f,0.0f,135.0f };
+	planePos.x =  -8.0f + initialPos.x;
 	Vector3 planeScale = { 1.0f,0.55f,1.0f };
 	skydome_->SetTranslate(planePos);
 	skydome_->SetScale(planeScale);
@@ -201,8 +218,8 @@ void StageSelectScene::Finalize()
 
 void StageSelectScene::Update()
 {
-	// フェード更新
-	fadeManager_.Update();
+
+#ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
 		Transform transform = skydome_->GetTransform();
 
@@ -217,12 +234,17 @@ void StageSelectScene::Update()
 		}
 	}
 
+#endif // _DEBUG
+
+	// フェード更新
+	fadeManager_.Update();
+
+
 	skydome_->Update();
 
 	// 音量設定
-	Audio::GetInstance()->SetVolume(&selectSound, 0.2f);
-
-
+	Audio::GetInstance()->SetVolume(&selectSound, 2.0f);
+	Audio::GetInstance()->SetVolume(&ButtonSound, 3.0f);
 
 	//ポーズ画面が出ている間は停止
 	if (!pauseMenu->IsPaused()) {
@@ -298,6 +320,20 @@ void StageSelectScene::Update()
 	}
 
 #ifdef _DEBUG
+
+	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
+		Transform transform = skydome_->GetTransform();
+
+		if (ImGui::DragFloat3("Skydome Translate", &transform.translate.x, 0.1f)) {
+			skydome_->SetTranslate(transform.translate);
+		}
+		if (ImGui::DragFloat3("Skydome Rotate", &transform.rotate.x, 0.01f)) {
+			skydome_->SetRotate(transform.rotate);
+		}
+		if (ImGui::DragFloat3("Skydome Scale", &transform.scale.x, 0.01f, 0.01f, 10.0f)) {
+			skydome_->SetScale(transform.scale);
+		}
+	}
 
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
