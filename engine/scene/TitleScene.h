@@ -103,10 +103,12 @@ private:
 
 	float nextcurrentSteptime = 0;
 	float MaxnextcurrentSteptime = 500;
+
 	// 決定サウンド
 	SoundData ButtonSound;
 	// カメラコピーサウンド
 	SoundData copeSound;
+
 	// メインサウンド
 	SoundData Bgm;
 	// メインサウンド開始フラグ

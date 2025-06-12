@@ -106,6 +106,11 @@ void TitleScene::Initialize()
 	// ステージを0からに初期化
 	SceneManager::GetInstance()->SetStageIndex(0);
 
+	// 決定用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
+	// コピー用サウンド
+	copeSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Camera_copy.wav");
+
 	// 初期化前に音声を削除(重複予防)
 	Audio::GetInstance()->StopAudio();
 	

@@ -11,7 +11,7 @@
 #include <ModelManager.h>
 #include <TextureManager.h>
 
-void GameClearScene::Initialize()
+void GameClearScene::Initialize() 
 {
 	CameraManager::GetInstans()->Initialize();
 
