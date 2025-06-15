@@ -111,5 +111,8 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(const std::string& f
 	return textureDatas.at(filepath).srvHandleGPU;
 }
 
-
-
+void TextureManager::LoadAllTextures(const std::vector<std::string> TextureNames) {
+	for (const auto& name : TextureNames) {			
+		TextureManager::GetInstance()->LoadTexture("Resources/" + name + ".png");		// テクスチャ読み込み
+	}
+}
