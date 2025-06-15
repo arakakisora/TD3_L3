@@ -70,6 +70,18 @@
     <Filter Include="ヘッダー ファイル\engin\audio">
       <UniqueIdentifier>{b478965b-5b4d-4c43-93f2-a3f047ea8c1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application">
+      <UniqueIdentifier>{e89552dc-d767-4ded-ba3f-3c3b5225b9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application">
+      <UniqueIdentifier>{a11bb3ee-f106-4b01-8d15-c40f89693a1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\scene">
+      <UniqueIdentifier>{cc17ab14-9743-4c5f-89d7-06c4fd69f6a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene">
+      <UniqueIdentifier>{929a729b-b882-41e2-a549-ec4307cbbc21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -159,9 +171,6 @@
     <ClCompile Include="ObjectCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="StageSelectScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="PhotoCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -209,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="engine\audio\Audio.cpp">
       <Filter>ソース ファイル\engin\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="application\scene\StageSelectScene.cpp">
+      <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -326,9 +338,6 @@
     <ClInclude Include="ObjectCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="StageSelectScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="PhotoCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -376,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="engine\scene\TitleScene.h">
       <Filter>ヘッダー ファイル\engin\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="application\scene\StageSelectScene.h">
+      <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
