@@ -53,3 +53,13 @@ Model* ModelManager::FindModel(const std::string& filePath)
 	//ファイル名一致なし
 	return nullptr;
 }
+
+void ModelManager::LoadAllModels(const std::vector<std::string>& modelNames) {
+	for (const auto& name : modelNames) {
+		std::string fileName = name;
+		if (fileName.length() < 4 || fileName.substr(fileName.length() - 4) != ".obj") {
+			fileName += ".obj";
+		}
+		LoadModel(fileName);
+	}
+}

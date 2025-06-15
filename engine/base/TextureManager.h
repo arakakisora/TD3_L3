@@ -6,8 +6,6 @@
 #include "SrvManager.h"
 #include <unordered_map>
 
-
-
 class TextureManager
 {
 private:
@@ -42,8 +40,11 @@ public:
 	//メタデータを取得
 	const DirectX::TexMetadata& GetMetaData(const std::string&filepath);
 	
-	//テクスチャファイルの読み込み
+	// テクスチャファイルの読み込み
 	void LoadTexture(const std::string& filePath);
+
+	// 複数テクスチャファイルの読み込み
+	void LoadAllTextures(const std::vector<std::string> TextureNames);
 
 	//SRVインデックスの開始番号
 	uint32_t GetTextureIndexByFilePath(const std::string& filePath);
@@ -64,4 +65,3 @@ private:
 	SrvManager* srvmanager = nullptr;
 
 };
-
