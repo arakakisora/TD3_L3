@@ -12,6 +12,8 @@
 #endif // _DEBUG
 #include <Easing.h>
 
+using namespace Easing;
+
 void TitleScene::Initialize() {
 	// カメラの初期化
 	CameraManager::GetInstans()->Initialize();
@@ -191,13 +193,13 @@ void TitleScene::shutterEffectUpdate() {
 	if (t < 0.5f) {
 		// 閉じるフェーズ（0.0〜0.5）
 		float p = t / 0.5f;
-		topY = Easing::EaseLerp(13.0f, 1.9f, p, Easing::EaseOutQuad);
-		bottomY = Easing::EaseLerp(-10.0f, -1.9f, p, Easing::EaseOutQuad);
+		topY = EaseLerp(13.0f, 1.9f, p, EaseOutQuad);
+		bottomY = EaseLerp(-10.0f, -1.9f, p, EaseOutQuad);
 	} else {
 		// 開くフェーズ（0.5〜1.0）
 		float p = (t - 0.5f) / 0.5f;
-		topY = Easing::EaseLerp(1.9f, 13.0f, p, Easing::EaseInQuad);
-		bottomY = Easing::EaseLerp(-1.9f, -10.0f, p, Easing::EaseInQuad);
+		topY = EaseLerp(1.9f, 13.0f, p, EaseInQuad);
+		bottomY = EaseLerp(-1.9f, -10.0f, p, EaseInQuad);
 		// ステップを移行
 		if (PhaseIndex_ == Shutter) {
 			PhaseIndex_ = LoopAnimation;
@@ -227,7 +229,7 @@ void TitleScene::UpdatePlayerPositionByStep() {
 		float t = std::clamp(easingTimer / easingDuration, 0.0f, 1.0f);
 
 		// EaseOutQuad
-		float easedY = Easing::EaseLerp(-10.0f, 0.0f, t, Easing::EaseOutQuad);
+		float easedY = EaseLerp(-10.0f, 0.0f, t, EaseOutQuad);
 		std::unique_ptr<Object3D>& player = titleObjects_[ObjectType::Player];
 		if (player) {   // プレイヤーの現在の座標を更新
 			Vector3 currentPos = player->GetTranslate();
