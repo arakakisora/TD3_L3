@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include "Model.h"
+
 class ModelManager
 {
 	static ModelManager* instance;
@@ -25,6 +26,11 @@ public:
 /// モデルの読み込み
 /// </summary>
 	void LoadModel(const std::string& filePath);
+/// <summary>
+/// 複数のモデル読み込み
+/// </summary>
+	void LoadAllModels(const std::vector<std::string>& modelNames);
+
 /// <summary>
 ///	モデル検索
 /// </summary>
