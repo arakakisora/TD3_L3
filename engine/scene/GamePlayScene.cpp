@@ -29,57 +29,19 @@ void GamePlayScene::Initialize()
 	// デフォルトカメラを設定
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
 
-	//モデルの読み込み
-	ModelManager::GetInstans()->LoadModel("axis.obj");
-	ModelManager::GetInstans()->LoadModel("plane.obj");
-	ModelManager::GetInstans()->LoadModel("sphere.obj");
-	ModelManager::GetInstans()->LoadModel("cube.obj");
-	ModelManager::GetInstans()->LoadModel("jump.obj");
-
-	//ModelManager::GetInstans()->LoadModel("Player.obj");
-	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
-
-	// ブロック関連モデル
-	ModelManager::GetInstans()->LoadModel("block.obj");
-	ModelManager::GetInstans()->LoadModel("Timer.obj");
-	ModelManager::GetInstans()->LoadModel("fallblock.obj");
-	ModelManager::GetInstans()->LoadModel("ncopyblock.obj");
-	ModelManager::GetInstans()->LoadModel("GoalBase.obj");
-	ModelManager::GetInstans()->LoadModel("GoreFag.obj");
-	ModelManager::GetInstans()->LoadModel("gall.obj");
-	ModelManager::GetInstans()->LoadModel("goalup.obj");
-	ModelManager::GetInstans()->LoadModel("nullBlock.obj");
-	ModelManager::GetInstans()->LoadModel("putTimer.obj");
-	// 天球モデル / 背景のプレーン
-	ModelManager::GetInstans()->LoadModel("PlaySceneBackPlane.obj");
-	// フォトカメラフレーム
-	ModelManager::GetInstans()->LoadModel("Frame.obj");
-
-	//チュートリアルテキスト
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial1.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial2.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial3.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial4.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial5.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial6.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial7.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial8.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial9.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial10.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial11.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial12.obj");
-	ModelManager::GetInstans()->LoadModel("tutorial/tutorial13.obj");
-
-	// ポーズテキスト
-	ModelManager::GetInstans()->LoadModel("Pause.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/title.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/StageSelect.obj");
-
-	//リセットお知らせ
-	ModelManager::GetInstans()->LoadModel("resetnotice.obj");
-
+	// モデル名
+	const std::vector<std::string> modelNames = {
+	 "axis","plane", "sphere", "cube", "jump", "playercharacter",
+	"block", "Timer", "fallblock", "ncopyblock", "GoalBase", "GoreFag",
+	"gall", "goalup", "nullBlock", "putTimer", "PlaySceneBackPlane",
+	"Frame", "Pause", "resetnotice",
+	"StageSelect/return", "StageSelect/title", "StageSelect/explanation","StageSelect/StageSelect",
+	"tutorial/tutorial1",	"tutorial/tutorial2",	"tutorial/tutorial3",	"tutorial/tutorial4",	"tutorial/tutorial5",
+	"tutorial/tutorial6",	"tutorial/tutorial7",	"tutorial/tutorial8",	"tutorial/tutorial9",	"tutorial/tutorial10",
+	"tutorial/tutorial11",	"tutorial/tutorial12",	"tutorial/tutorial13",
+	};
+	// モデルの読み込み
+	ModelManager::GetInstans()->LoadAllModels(modelNames);
 
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
