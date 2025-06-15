@@ -82,6 +82,42 @@
     <Filter Include="ヘッダー ファイル\application\scene">
       <UniqueIdentifier>{929a729b-b882-41e2-a549-ec4307cbbc21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\engin\camera">
+      <UniqueIdentifier>{3ec11cac-aa1a-460c-be3c-d8844d09e0d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\engin\camera">
+      <UniqueIdentifier>{5c47a81c-bf8e-44f3-b1c5-a7f673345949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\engin\particle">
+      <UniqueIdentifier>{0ddd9c68-5810-4698-a8f9-4938b26cee46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\engin\particle">
+      <UniqueIdentifier>{eaa4a8e3-3bf7-4ab4-b20f-a7d1b8aae633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\camera">
+      <UniqueIdentifier>{735fcb52-771b-471c-8318-0211d45a3c38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\map">
+      <UniqueIdentifier>{90209f0e-23a1-4b33-8964-40a7f03f8e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\ui">
+      <UniqueIdentifier>{113fb3b7-dfed-41d0-b589-f5a2f82eda49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\3d">
+      <UniqueIdentifier>{098c6e1e-60c1-44e5-aa80-b4a3044feb12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\camera">
+      <UniqueIdentifier>{fe18197c-92c2-415f-8dcb-b38d3d753e0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\map">
+      <UniqueIdentifier>{055aac1a-d404-47e8-82e8-9e5466842207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\3d">
+      <UniqueIdentifier>{e9d47399-4131-49af-89ac-ce0bd42b143e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\ui">
+      <UniqueIdentifier>{6b3c7636-909e-4337-aeac-142a8d520d9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -135,51 +171,6 @@
     <ClCompile Include="engine\base\WinApp.cpp">
       <Filter>ソース ファイル\engin\base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\ImGuiManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\camera\Camera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\SrvManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\Framework.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\camera\CameraManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\particle\ParticleMnager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\base\GraphicsPipeline.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\particle\ParticleEmitter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Block.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="PhotoCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="BitmapFont.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseMenu.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="engine\math\Easing.cpp">
       <Filter>ソース ファイル\engin\math</Filter>
     </ClCompile>
@@ -221,6 +212,51 @@
     </ClCompile>
     <ClCompile Include="application\scene\StageSelectScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\camera\Camera.cpp">
+      <Filter>ソース ファイル\engin\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\camera\CameraManager.cpp">
+      <Filter>ソース ファイル\engin\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\GraphicsPipeline.cpp">
+      <Filter>ソース ファイル\engin\base</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\ImGuiManager.cpp">
+      <Filter>ソース ファイル\engin\base</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\Framework.cpp">
+      <Filter>ソース ファイル\engin\base</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\particle\ParticleMnager.cpp">
+      <Filter>ソース ファイル\engin\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\particle\ParticleEmitter.cpp">
+      <Filter>ソース ファイル\engin\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\SrvManager.cpp">
+      <Filter>ソース ファイル\engin\base</Filter>
+    </ClCompile>
+    <ClCompile Include="application\camera\ObjectCamera.cpp">
+      <Filter>ソース ファイル\application\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="application\camera\PhotoCamera.cpp">
+      <Filter>ソース ファイル\application\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="application\map\Map.cpp">
+      <Filter>ソース ファイル\application\map</Filter>
+    </ClCompile>
+    <ClCompile Include="application\3d\Block.cpp">
+      <Filter>ソース ファイル\application\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="application\3d\Player.cpp">
+      <Filter>ソース ファイル\application\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="application\uI\PauseMenu.cpp">
+      <Filter>ソース ファイル\application\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="application\uI\BitmapFont.cpp">
+      <Filter>ソース ファイル\application\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -302,51 +338,6 @@
     <ClInclude Include="engine\math\RenderingData.h">
       <Filter>ヘッダー ファイル\engin\math</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\ImGuiManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\camera\Camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\SrvManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\Framework.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\camera\CameraManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\base\GraphicsPipeline.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\particle\ParticleEmitter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\particle\ParticleMnager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Block.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="PhotoCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="BitmapFont.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseMenu.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="engine\base\FadeManager.h">
       <Filter>ヘッダー ファイル\engin\base</Filter>
     </ClInclude>
@@ -388,6 +379,51 @@
     </ClInclude>
     <ClInclude Include="application\scene\StageSelectScene.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\camera\Camera.h">
+      <Filter>ヘッダー ファイル\engin\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\camera\CameraManager.h">
+      <Filter>ヘッダー ファイル\engin\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\GraphicsPipeline.h">
+      <Filter>ヘッダー ファイル\engin\base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\ImGuiManager.h">
+      <Filter>ヘッダー ファイル\engin\base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\Framework.h">
+      <Filter>ヘッダー ファイル\engin\base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\particle\ParticleMnager.h">
+      <Filter>ヘッダー ファイル\engin\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\particle\ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\engin\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\SrvManager.h">
+      <Filter>ヘッダー ファイル\engin\base</Filter>
+    </ClInclude>
+    <ClInclude Include="application\camera\ObjectCamera.h">
+      <Filter>ヘッダー ファイル\application\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="application\camera\PhotoCamera.h">
+      <Filter>ヘッダー ファイル\application\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="application\map\Map.h">
+      <Filter>ヘッダー ファイル\application\map</Filter>
+    </ClInclude>
+    <ClInclude Include="application\3d\Block.h">
+      <Filter>ヘッダー ファイル\application\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="application\3d\Player.h">
+      <Filter>ヘッダー ファイル\application\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="application\uI\PauseMenu.h">
+      <Filter>ヘッダー ファイル\application\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="application\uI\BitmapFont.h">
+      <Filter>ヘッダー ファイル\application\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
