@@ -237,9 +237,6 @@
     <ClCompile Include="engine\base\SrvManager.cpp">
       <Filter>ソース ファイル\engin\base</Filter>
     </ClCompile>
-    <ClCompile Include="application\camera\ObjectCamera.cpp">
-      <Filter>ソース ファイル\application\camera</Filter>
-    </ClCompile>
     <ClCompile Include="application\camera\PhotoCamera.cpp">
       <Filter>ソース ファイル\application\camera</Filter>
     </ClCompile>
@@ -403,9 +400,6 @@
     </ClInclude>
     <ClInclude Include="engine\base\SrvManager.h">
       <Filter>ヘッダー ファイル\engin\base</Filter>
-    </ClInclude>
-    <ClInclude Include="application\camera\ObjectCamera.h">
-      <Filter>ヘッダー ファイル\application\camera</Filter>
     </ClInclude>
     <ClInclude Include="application\camera\PhotoCamera.h">
       <Filter>ヘッダー ファイル\application\camera</Filter>
