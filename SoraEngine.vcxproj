@@ -113,7 +113,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="BitmapFont.cpp" />
     <ClCompile Include="Block.cpp" />
-    <ClCompile Include="Easing.cpp" />
+    <ClCompile Include="engine\math\Easing.cpp" />
     <ClCompile Include="engine\camera\CameraManager.cpp" />
     <ClCompile Include="engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\BaseScene.cpp" />
@@ -130,7 +130,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\scene\GameClearScene.cpp" />
     <ClCompile Include="engine\scene\GameOverScene.cpp" />
     <ClCompile Include="engine\base\GraphicsPipeline.cpp" />
-    <ClCompile Include="FadeManager.cpp" />
+    <ClCompile Include="engine\base\FadeManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelCommon.cpp" />
@@ -155,7 +155,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="PhotoCamera.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
-    <ClCompile Include="WorldTransform.cpp" />
+    <ClCompile Include="engine\math\WorldTransform.cpp" />
     <ClCompile Include="Map.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -191,7 +191,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="BitmapFont.h" />
     <ClInclude Include="Block.h" />
-    <ClInclude Include="Easing.h" />
+    <ClInclude Include="engine\math\Easing.h" />
     <ClInclude Include="engine\camera\CameraManager.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\BaseScene.h" />
@@ -232,13 +232,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\base\GraphicsPipeline.h" />
     <ClInclude Include="engine\particle\ParticleEmitter.h" />
     <ClInclude Include="engine\particle\ParticleMnager.h" />
-    <ClInclude Include="FadeManager.h" />
+    <ClInclude Include="engine\base\FadeManager.h" />
     <ClInclude Include="ObjectCamera.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PhotoCamera.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StageSelectScene.h" />
-    <ClInclude Include="WorldTransform.h" />
+    <ClInclude Include="engine\math\WorldTransform.h" />
     <ClInclude Include="Map.h" />
   </ItemGroup>
   <ItemGroup>
