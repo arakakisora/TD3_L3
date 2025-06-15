@@ -80,21 +80,7 @@ void GamePlayScene::Initialize()
 	//リセットお知らせ
 	ModelManager::GetInstans()->LoadModel("resetnotice.obj");
 
-	//操作説明UI
-	/*
-	std::vector<OperationText>spriteInfos = {
-		{"Resources/xbox_stick_l.png",{90,655},{70,70}},
-		{"Resources/xbox_button_color_b.png",{557,655},{70,70}},
-		{"Resources/xbox_button_color_a.png",{319,655},{70,70}},
-		{"Resources/xbox_lb.png",{826,655}, {70,70}},
-		{"Resources/xbox_rb.png",{1039,655},{70,70}},
-		{"Resources/idou.png",{203,655},{60,60}},
-		{"Resources/kirikae.png",{672,655},{100,60}},
-		{"Resources/toru.png",{938,655},{60,60}},
-		{"Resources/haiti.png",{1143,655},{60,60}},
-		{"Resources/zyanpu.png",{430,655},{60,60}},
-	};
-	*/
+
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	std::string stagePath;
@@ -147,26 +133,7 @@ void GamePlayScene::Initialize()
 	player->Initialize(object3DPlayer, playerPostion);
 	player->SetDeathHeight(0.0f);
 
-	//チュートリアルテキスト
-	/*
-	for (int i = 1; i <= 8; ++i) {
-		tutorialTexts[i] = std::make_unique<Object3D>();
-		tutorialTexts[i]->Initialize(Object3DCommon::GetInstance());
-		tutorialTexts[i]->SetModel("tutorial/tutorial" + std::to_string(i) + ".obj");
-		tutorialTexts[i]->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-		tutorialTexts[i]->SetRotate(Vector3(17.3f, 12.57f, 0.0f));
-		tutorialTexts[i]->SetLighting(false);
-		tutorialTexts[i]->SetIsTutorialActive(false);
-	}
-	tutorialTexts[1]->SetTranslate(Vector3(8.5f, 21.44f, 1.0f));
-	tutorialTexts[2]->SetTranslate(Vector3(15.3f, 21.4f, 0.75f));
-	tutorialTexts[3]->SetTranslate(Vector3(8.5f, 21.45f, 1.0f));
-	tutorialTexts[4]->SetTranslate(Vector3(15.46f, 21.4f, 0.69f));
-	tutorialTexts[5]->SetTranslate(Vector3(12.24f, 21.45f, 1.0f));
-	tutorialTexts[6]->SetTranslate(Vector3(8.5f, 21.4f, 1.0f));
-	tutorialTexts[7]->SetTranslate(Vector3(15.46f, 21.4f, 1.0f));
-	tutorialTexts[8]->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	*/
+
 	Tutorialtext1 = std::make_unique<Object3D>();
 	Tutorialtext1->Initialize(Object3DCommon::GetInstance());
 	Tutorialtext1->SetModel("tutorial/tutorial1.obj");
@@ -293,17 +260,6 @@ void GamePlayScene::Initialize()
 	ResetNotice->SetTranslate(Vector3(12.46f, 23.25f, -1.0f));
 	ResetNotice->SetLighting(false);
 
-	//操作説明UI
-	/*
-	operationTexts.clear();
-	for (const auto& info : spriteInfos) {
-		auto sprite = std::make_unique<Sprite>();
-		sprite->Initialize(SpriteCommon::GetInstance(), info.texturePath);
-		sprite->SetPosition(info.position);
-		sprite->SetSize(info.size);
-		operationTexts.emplace_back(std::move(sprite));
-	}
-	*/
 	OperationtextStickL = std::make_unique<Sprite>();
 	OperationtextStickL->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
 	OperationtextStickL->SetPosition(Vector2(43, 655));
@@ -569,48 +525,6 @@ void GamePlayScene::Update()
 
 		//チュートリアル表示制御//map1
 		if (SceneManager::GetInstance()->GetStageIndex() == 0) {
-			/*
-
-			if (!tutorial1_2) {
-				tutorialTexts[1]->SetIsTutorialActive(true);
-				tutorialTexts[2]->SetIsTutorialActive(true);
-				tutorial1_2 = true;
-			}
-
-			if(photoCamera->HasStarted()&&!turorial3_4){
-			   tutorialTexts[1]->SetIsTutorialActive(false);
-			   tutorialTexts[2]->SetIsTutorialActive(false);
-			   tutorialTexts[3]->SetIsTutorialActive(true);
-			   tutorialTexts[4]->SetIsTutorialActive(true);
-			   tutorial3_4 = true;
-			   }
-
-			if (photoCamera->HasMoved() && !tutorial5) {
-				tutorialtext[3]->SetIsTutorialActive(false);
-				tutorialtext[4]->SetIsTutorialActive(false);
-				tutorialtext[5]->SetIsTutorialActive(true);
-				tutorial5 = true;
-			}
-
-			if (photoCamera->isFirstCopied && !tutorial6_7) {
-				tutorialtext[5]->SetIsTutorialActive(false);
-				tutorialtext[6]->SetIsTutorialActive(true);
-				tutorialtext[7]->SetIsTutorialActive(true);
-				tutorial6_7 = true;
-			}
-			if (photoCamera->isFirstPasted && !tutorial8) {
-				tutorialtext[6]->SetIsTutorialActive(false);
-				tutorialtext[7]->SetIsTutorialActive(false);
-				tutorialtext[8]->SetIsTutorialActive(true);
-				tutorial8 = true;
-			}
-
-			for (auto& text : tutorialTexts) {
-				if (text->GetIsTutorialActive()) {
-					text->Update();
-				}
-			}
-			*/
 
 			if (!tutorial1_2) {
 				// text1,2を表示
@@ -660,27 +574,6 @@ void GamePlayScene::Update()
 		player->SetPrayerMoveLeft(false);
 	}
 
-	//// プレイヤー用のパーティクルの位置を常に更新
-	//Vector3 pos = player->GetTranslate();
-
-	//// 右に移動中
-	//if (player->GetPrayerMoveRight()) {
-	//	// 左方向に設定
-	//	playeremitter_->SetisRight(false);
-	//	Vector3 offset = { -0.3f,0.0f,0.0f };
-	//	playeremitter_->SetPosition(pos + offset);
-	//	playeremitter_->PlayerEmit();
-	//}
-
-	//// 左に移動中
-	//if (player->GetPrayerMoveLeft()) {
-	//	// 右方向に設定
-	//	playeremitter_->SetisRight(true);
-	//	Vector3 offset = { 0.3f,0.0f,0.0f };
-	//	playeremitter_->SetPosition(pos + offset);
-	//	playeremitter_->PlayerEmit();
-	//}
-
 	//チュートリアル表示制御map2
 	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
 		if (!tutorial9) {
@@ -729,17 +622,7 @@ void GamePlayScene::Update()
 	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Update();
 	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Update();
 	//ui
-	/*
-	if (!photoCamera->GetCameraMode()) {
-		for (int i : {0, 1, 2, 5, 6, 9}) {
-			operationTexts[i]->Update();
-		}
-		else {
-			for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
-				operationTexts[i]->Update();
-			}
-		}
-		*/
+
 	if (!photoCamera->GetCameraMode()) {
 		OperationtextStickL->Update();
 		OperationtextButtonB->Update();
@@ -836,13 +719,6 @@ void GamePlayScene::Draw()
 	player->Draw();
 
 	//チュートリアルテキスト
-	/*
-	for (auto& text : tutorialTexts) {
-		if (text->GetIsTutorialActive()) {
-			text->Draw();
-		}
-	}
-	*/
 
 	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Draw();
 	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Draw();
@@ -876,17 +752,6 @@ void GamePlayScene::Draw()
 	SpriteCommon::GetInstance()->CommonDraw();
 
 	//ui
-	/*
-	if (!photoCamera->GetCameraMode()) {
-		for (int i : {0, 1, 2, 5, 6, 9}) {
-			operationTexts[i]->Draw();
-		}
-	} else {
-		for (int i : {0, 1, 3, 4, 5, 6, 7, 8}) {
-			operationTexts[i]->Draw();
-		}
-	}
-	*/
 	if (!photoCamera->GetCameraMode()) {
 		OperationtextStickL->Draw();
 		OperationtextButtonB->Draw();
@@ -992,19 +857,6 @@ void GamePlayScene::DrawImgui()
 			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
-		/*
-		if (ImGui::CollapsingHeader("Tutorial Text Transforms")) {
-			for (int i = 1; i <= tutorialTexts.size(); ++i) {
-				std::string label = "text" + std::to_string(i);
-				Transform t = tutorialTexts[i]->GetTransform();
-				if (ImGui::DragFloat3((label + "scale").c_str(), &t.scale.x, 0.01f) ||
-					ImGui::DragFloat3((label + "rotate").c_str(), &t.rotate.x, 0.01f) ||
-					ImGui::DragFloat3((label + "translate").c_str(), &t.translate.x, 0.01f)) {
-					tutorialTexts[i]->SetTransform(t);
-				}
-			}
-		}
-		*/
 		Transform text = Tutorialtext1->GetTransform();
 		Transform text2 = Tutorialtext2->GetTransform();
 		Transform text3 = Tutorialtext3->GetTransform();
@@ -1135,132 +987,6 @@ void GamePlayScene::DrawImgui()
 		if (ImGui::DragFloat2("jumpMetersize", &jumpsize.x), 0.01f) {
 			jumpSprite->SetSize(jumpsize);
 		}
-
-		/*
-		if (ImGui::CollapsingHeader("UI Translate")) {
-			for (int i = 0; i < operationTexts.size(); ++i) {
-				Vector2 pos = operationTexts[i]->GetPosition();
-				if (ImGui::DragFloat2(("Sprite" + std::to_string(i)).c_str(), &pos.x, 0.01f)) {
-					operationTexts[i]->SetPosition(pos);
-				}
-			}
-		}
-		*/
-		/*
-		Vector2 uistickL = OperationtextStickL->GetPosition();
-		Vector2 uistickLsize = OperationtextStickL->GetSize();
-		Vector2 uibuttonB = OperationtextButtonB->GetPosition();
-		Vector2 uibuttonBsize = OperationtextButtonB->GetSize();
-		Vector2 uibuttonA = OperationtextButtonA->GetPosition();
-		Vector2 uibuttonAsize = OperationtextButtonA->GetSize();
-		Vector2 uiX = OperationtextX->GetPosition();
-		Vector2 uiXsize = OperationtextX->GetSize();
-		Vector2 uiY = OperationtextY->GetPosition();
-		Vector2 uiYsize = OperationtextY->GetSize();
-		Vector2 uiLB = OperationtextLB->GetPosition();
-		Vector2 uiLBsize = OperationtextLB->GetSize();
-		Vector2 uiRB = OperationtextRB->GetPosition();
-		Vector2 uiRBsize = OperationtextRB->GetSize();
-		Vector2 uitoru = OperationtextToru->GetPosition();
-		Vector2 uitorusize = OperationtextToru->GetSize();
-		Vector2 uihaiti = OperationtextHaiti->GetPosition();
-		Vector2 uihaitisize = OperationtextHaiti->GetSize();
-		Vector2 uikirikae = OperationtextKrikae->GetPosition();
-		Vector2 uikirikaesize = OperationtextKrikae->GetSize();
-		Vector2 uiidou = OperationtextIdou->GetPosition();
-		Vector2 uiidousize = OperationtextIdou->GetSize();
-		Vector2 uizyanpu = OperationtextZyanpu->GetPosition();
-		Vector2 uizyanpusize = OperationtextZyanpu->GetSize();
-		Vector2 uireset = OperationtextReset->GetPosition();
-		Vector2 uiresetsize = OperationtextReset->GetSize();
-		Vector2 uiPlus = OperationtextPlus->GetPosition();
-		Vector2 uiPlussize = OperationtextPlus->GetSize();
-
-		if (ImGui::DragFloat2("uiStickLtranslate", &uistickL.x), 0.01f) {
-			OperationtextStickL->SetPosition(uistickL);
-		}
-		if (ImGui::DragFloat2("uiStickLsize", &uistickLsize.x), 0.01f) {
-			OperationtextStickL->SetSize(uistickLsize);
-		}
-		if (ImGui::DragFloat2("uibuttonBtranslate", &uibuttonB.x), 0.01f) {
-			OperationtextButtonB->SetPosition(uibuttonB);
-		}
-		if (ImGui::DragFloat2("uibuttonBsize", &uibuttonBsize.x), 0.01f) {
-			OperationtextButtonB->SetSize(uibuttonBsize);
-		}
-		if (ImGui::DragFloat2("uibuttonAtranslate", &uibuttonA.x), 0.01f) {
-			OperationtextButtonA->SetPosition(uibuttonA);
-		}
-		if (ImGui::DragFloat2("uibuttonAsize", &uibuttonAsize.x), 0.01f) {
-			OperationtextButtonA->SetSize(uibuttonAsize);
-		}
-		if (ImGui::DragFloat2("uiXtranslate", &uiX.x), 0.01f) {
-			OperationtextX->SetPosition(uiX);
-		}
-		if (ImGui::DragFloat2("uiXsize", &uiXsize.x), 0.01f) {
-			OperationtextX->SetSize(uiXsize);
-		}
-		if (ImGui::DragFloat2("uiYtranslate", &uiY.x), 0.01f) {
-			OperationtextY->SetPosition(uiY);
-		}
-		if (ImGui::DragFloat2("uiYsize", &uiYsize.x), 0.01f) {
-			OperationtextY->SetSize(uiYsize);
-		}
-		if (ImGui::DragFloat2("uiLBtranslate", &uiLB.x), 0.01f) {
-			OperationtextLB->SetPosition(uiLB);
-		}
-		if (ImGui::DragFloat2("uiLBsize", &uiLBsize.x), 0.01f) {
-			OperationtextLB->SetSize(uiLBsize);
-		}
-		if (ImGui::DragFloat2("uiRBtranslate", &uiRB.x), 0.01f) {
-			OperationtextRB->SetPosition(uiRB);
-		}
-		if (ImGui::DragFloat2("uiRBsize", &uiRBsize.x), 0.01f) {
-			OperationtextRB->SetSize(uiRBsize);
-		}
-		if (ImGui::DragFloat2("uitorutranslate", &uitoru.x), 0.01f) {
-			OperationtextToru->SetPosition(uitoru);
-		}
-		if (ImGui::DragFloat2("uitorusize", &uitorusize.x), 0.01f) {
-			OperationtextToru->SetSize(uitorusize);
-		}
-		if (ImGui::DragFloat2("uihaititranslate", &uihaiti.x), 0.01f) {
-			OperationtextHaiti->SetPosition(uihaiti);
-		}
-		if (ImGui::DragFloat2("uihaitisize", &uihaitisize.x), 0.01f) {
-			OperationtextHaiti->SetSize(uihaitisize);
-		}
-		if (ImGui::DragFloat2("uikirikaetranslate", &uikirikae.x), 0.01f) {
-			OperationtextKrikae->SetPosition(uikirikae);
-		}
-		if (ImGui::DragFloat2("uikirikaesize", &uikirikaesize.x), 0.01f) {
-			OperationtextKrikae->SetSize(uikirikaesize);
-		}
-		if (ImGui::DragFloat2("uiidoutranslate", &uiidou.x), 0.01f) {
-			OperationtextIdou->SetPosition(uiidou);
-		}
-		if (ImGui::DragFloat2("uiidousize", &uiidousize.x), 0.01f) {
-			OperationtextIdou->SetSize(uiidousize);
-		}
-		if (ImGui::DragFloat2("uizyanputranslate", &uizyanpu.x), 0.01f) {
-			OperationtextZyanpu->SetPosition(uizyanpu);
-		}
-		if (ImGui::DragFloat2("uizyanpusize", &uizyanpusize.x), 0.01f) {
-			OperationtextZyanpu->SetSize(uizyanpusize);
-		}
-		if (ImGui::DragFloat2("uiResettranslate", &uireset.x), 0.01f) {
-			OperationtextReset->SetPosition(uireset);
-		}
-		if (ImGui::DragFloat2("uiResetsize", &uiresetsize.x), 0.01f) {
-			OperationtextReset->SetSize(uiresetsize);
-		}
-		if (ImGui::DragFloat2("uiPlustranslate", &uiPlus.x), 0.01f) {
-			OperationtextPlus->SetPosition(uiPlus);
-		}
-		if (ImGui::DragFloat2("uiPlussize", &uiPlussize.x), 0.01f) {
-			OperationtextPlus->SetSize(uiPlussize);
-		}
-		*/
 	}
 
 #endif // _DEBUG
@@ -1273,4 +999,3 @@ bool GamePlayScene::GetCameraMode()
 	}
 	return false;
 }
-
