@@ -8,6 +8,8 @@
 #include "Easing.h"
 #include "ModelManager.h"
 
+using namespace Easing;
+
 // MAPクラスとのループキャストに注意
 void PhotoCamera::Initialize(Map* map)
 {
@@ -304,7 +306,7 @@ void PhotoCamera::Move()
 			isMoving = false;
 			currentPos = targetPos;
 		} else {
-			currentPos = Easing::EaseLerp(currentPos, targetPos, moveTimer, Easing::EaseOutQuad);
+			currentPos = EaseLerp(currentPos, targetPos, moveTimer, EaseOutQuad);
 		}
 	}
 
@@ -656,13 +658,13 @@ void PhotoCamera::shutterEffectUpdate()
 	if (t < 0.5f) {
 		// 閉じるフェーズ（0.0〜0.5）
 		float p = t / 0.5f;
-		topY = Easing::EaseLerp(30.0f, 20.0f, p, Easing::EaseOutQuad);
-		bottomY = Easing::EaseLerp(4.0f, 12.0f, p, Easing::EaseOutQuad);
+		topY = EaseLerp(30.0f, 20.0f, p, EaseOutQuad);
+		bottomY = EaseLerp(4.0f, 12.0f, p, EaseOutQuad);
 	} else {
 		// 開くフェーズ（0.5〜1.0）
 		float p = (t - 0.5f) / 0.5f;
-		topY = Easing::EaseLerp(20.0f, 30.0f, p, Easing::EaseInQuad);
-		bottomY = Easing::EaseLerp(12.0f, 4.0f, p, Easing::EaseInQuad);
+		topY = EaseLerp(20.0f, 30.0f, p, EaseInQuad);
+		bottomY = EaseLerp(12.0f, 4.0f, p, EaseInQuad);
 	}
 
 	shuttertopObject->SetTranslate(Vector3(12.5f, topY, -1.5f));
@@ -671,28 +673,4 @@ void PhotoCamera::shutterEffectUpdate()
 	if (t >= 1.0f) {
 		isShutterEffectPlaying = false;
 	}
-
-	//for (int i = 0; i < kShutterBladeCount; ++i) {
-	//	float angle = (360.0f / kShutterBladeCount) * i;
-	//	float rad = DirectX::XMConvertToRadians(angle);
-
-	//	float radius = Easing::EaseLerp(10.0f, 0.0f, t, Easing::EaseInOutQuad); // 中心に集まる
-
-	//	Vector3 pos = {
-	//		std::cos(rad) * radius + 12.5f,
-	//		std::sin(rad) * radius + 17.5f,
-	//		-1.5f
-	//	};
-	//	float bladeAngle = Easing::EaseLerp(angle, angle + 30.0f, t, Easing::EaseInOutQuad); // 回転
-
-	//	shutterBlades_[i]->SetTranslate(pos);
-	//	shutterBlades_[i]->SetRotate(Vector3{ 0, 0, bladeAngle });
-	//}
-
-	//if (t >= 1.0f) {
-	//	isShutterEffectPlaying = false;
-	//}
-
-
-
 }

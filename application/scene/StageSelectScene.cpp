@@ -13,47 +13,32 @@
 #include <TextureManager.h>
 #include <numbers>
 #include<Audio.h>
+#include <Easing.h>
 
-void StageSelectScene::Initialize()
-{
+using namespace Easing;
+
+void StageSelectScene::Initialize(){
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetTranslate({ 0,0,-50, });//カメラの位置
 	CameraManager::GetInstans()->AddCamera("maincam", camera_.get());
 
-	//モデルの読み込み				
-	ModelManager::GetInstans()->LoadModel("axis.obj");
-	ModelManager::GetInstans()->LoadModel("plane.obj");
-	ModelManager::GetInstans()->LoadModel("sphere.obj");
-	ModelManager::GetInstans()->LoadModel("terrain.obj");
-
-	ModelManager::GetInstans()->LoadModel("playercharacter.obj");
-
-	ModelManager::GetInstans()->LoadModel("Stage01.obj");
-	ModelManager::GetInstans()->LoadModel("Stage02.obj");
-	ModelManager::GetInstans()->LoadModel("Stage03.obj");
-	ModelManager::GetInstans()->LoadModel("Stage04.obj");
-	ModelManager::GetInstans()->LoadModel("Stage05.obj");
-
-	ModelManager::GetInstans()->LoadModel("Stage06.obj");
-	ModelManager::GetInstans()->LoadModel("Stage07.obj");
-	ModelManager::GetInstans()->LoadModel("Stage08.obj");
-	ModelManager::GetInstans()->LoadModel("Stage09.obj");
-	ModelManager::GetInstans()->LoadModel("Stage10.obj");
-
-	ModelManager::GetInstans()->LoadModel("Stage11.obj");
-	ModelManager::GetInstans()->LoadModel("Stage12.obj");
-	ModelManager::GetInstans()->LoadModel("Stage13.obj");
-
-	ModelManager::GetInstans()->LoadModel("Pause.obj");
-
-	ModelManager::GetInstans()->LoadModel("StageSelect/title.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/explanation.obj");
-	ModelManager::GetInstans()->LoadModel("StageSelect/return.obj");
-
-
-	// 背景
-	ModelManager::GetInstans()->LoadModel("SelectSceneBackPlane.obj");
+	// モデル名
+	const std::vector<std::string> modelNames = {
+    "axis",
+    "plane",
+    "sphere",
+    "terrain",
+    "playercharacter",
+    "Stage01","Stage02","Stage03","Stage04","Stage05",
+	"Stage06","Stage07","Stage08","Stage09","Stage10",
+    "Stage11","Stage12","Stage13",
+    "Pause",
+    "StageSelect/title","StageSelect/explanation","StageSelect/return",
+    "SelectSceneBackPlane",
+	};
+	// モデルの読み込み
+	ModelManager::GetInstans()->LoadAllModels(modelNames);
 	
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
@@ -111,6 +96,7 @@ void StageSelectScene::Initialize()
 
 	FollowTargetposition = { 0.0f,1.0f,-20.0f };
 
+	// プレイヤーのカメラをセット
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(Player_, FollowTargetposition);
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 	CameraManager::GetInstans()->SetActiveCamera("maincam");

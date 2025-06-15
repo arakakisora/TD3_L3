@@ -1,7 +1,7 @@
 #pragma once
 #include "Camera.h"	
 #include "Model.h"
-#include"Sprite.h"
+#include "Sprite.h"
 #include "Object3D.h"
 #include "Audio.h"
 #include "BaseScene.h"
@@ -10,7 +10,6 @@
 #include "PauseMenu.h"
 #include "FadeManager.h"
 #include "ParticleEmitter.h"
-#include "ParticleMnager.h"
 
 class StageSelectScene :public BaseScene
 {
@@ -40,11 +39,6 @@ public:
 	// シーン遷移
 	void moveChangeScene();
 
-	// イージング関数（EaseInOutQuad）
-	float EaseInOutQuad(float t) {
-		return t < 0.5f ? 2.0f * t * t : 1.0f - static_cast<float>(pow(-2.0f * t + 2.0f, 2)) / 2.0f;
-	}
-
 	float EaseInOutBack(float x) {
 		const float c1 = 1.70158f;
 		const float c2 = c1 * 1.525f;
@@ -70,17 +64,15 @@ public:
 	}
 
 public:
+	// ポインタ
 	std::unique_ptr<Camera> camera_;
-	// メインオブジェクト
 	Object3D* Player_;
 	// ステージ選択オブジェクトのリスト
 	std::vector<std::unique_ptr<Object3D>> stageObjects_;
-	// テキストオブジェクトのリスト
-	//std::vector<std::unique_ptr<Object3D>> textoObjects_;
-	// 最大ステージ数
-	uint32_t MaxSelectIndex_ = 13;
-	// 現在のステージ
-	uint32_t currentIndex_ = 0;
+	//std::array<std::unique_ptr<Object3D>, ObjectType::Count> titleObjects_;
+
+	uint32_t MaxSelectIndex_ = 13;	// 最大ステージ数
+	uint32_t currentIndex_ = 0;	// 現在のステージ
 
 	// イージング
 	bool easingmoveFlag_;
@@ -116,8 +108,6 @@ public:
 	// 背景モデル
 	std::unique_ptr<Object3D> backPlane_;
 
-	// セレクトサウンド
-	SoundData selectSound;
-	// 決定サウンド
-	SoundData ButtonSound;
+	SoundData selectSound;	// セレクトサウンド
+	SoundData ButtonSound;	// 決定サウンド
 };

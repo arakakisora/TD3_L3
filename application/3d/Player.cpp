@@ -11,7 +11,7 @@
 #include <SceneManager.h>
 #include "Easing.h"
 
-
+using namespace Easing;
 
 void Player::Initialize(Object3D* object3D, const Vector3& position) {
 
@@ -206,7 +206,7 @@ void Player::PlayerTurn()
 		turnTimer_ -= 1.0f / 30.0f;
 
 		float t = std::clamp(1.0f - turnTimer_ / 1.0f, 0.0f, 1.0f);
-		float easedT = Easing::EaseOutQuad(t);
+		float easedT = EaseOutQuad(t);
 
 		float destinationRotationYTable[] = {
 			std::numbers::pi_v<float> / 2.0f,
@@ -214,7 +214,7 @@ void Player::PlayerTurn()
 		};
 		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 
-		float newY = Easing::Lerp(turnFirstRotationY_, destinationRotationY, easedT);
+		float newY = Lerp(turnFirstRotationY_, destinationRotationY, easedT);
 		object3D_->SetRotate({ 0, newY, 0 });
 	}
 
