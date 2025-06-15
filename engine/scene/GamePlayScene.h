@@ -8,7 +8,6 @@
 #include "Object3DCommon.h"
 #include "Audio.h"
 #include "BaseScene.h"
-#include"ObjectCamera.h"
 
 #include "SceneManager.h"
 #include "ParticleEmitter.h"
