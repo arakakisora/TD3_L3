@@ -150,7 +150,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="engine\scene\TitleScene.cpp" />
     <ClCompile Include="engine\particle\ParticleEmitter.cpp" />
     <ClCompile Include="engine\particle\ParticleMnager.cpp" />
-    <ClCompile Include="application\camera\ObjectCamera.cpp" />
     <ClCompile Include="application\uI\PauseMenu.cpp" />
     <ClCompile Include="application\camera\PhotoCamera.cpp" />
     <ClCompile Include="application\3d\Player.cpp" />
@@ -233,7 +232,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="engine\particle\ParticleEmitter.h" />
     <ClInclude Include="engine\particle\ParticleMnager.h" />
     <ClInclude Include="engine\base\FadeManager.h" />
-    <ClInclude Include="application\camera\ObjectCamera.h" />
     <ClInclude Include="application\uI\PauseMenu.h" />
     <ClInclude Include="application\camera\PhotoCamera.h" />
     <ClInclude Include="application\3d\Player.h" />
