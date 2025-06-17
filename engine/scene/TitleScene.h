@@ -27,7 +27,7 @@ public:
 	/// </summary>
 	void Draw()override;
 private:
-	enum ObjectType {
+	enum ObjectType { // オブジェクトの種類
 		Title,                            // タイトル
 		Start,                            // スタート
 		Player,                           // プレイヤー
@@ -60,7 +60,7 @@ private:
 	// ポインタ
 	FadeManager fadeManager_;	// 背景
 	// オブジェクトのリスト
-	std::array<std::unique_ptr<Object3D>, ObjectType::Count> titleObjects_;
+	std::array<std::unique_ptr<Object3D>, ObjectType::Count> objects_;	
 	// シャッター演出制御用
 	bool isShutterEffectPlaying = false;      // シャッター開始フラグ
 	float shutterAnimTime = 0.0f;             // シャッターの経過時間
@@ -76,9 +76,10 @@ private:
 	bool bgmstart = false;	
 	SoundData BgmSound_;	// メインサウンド
 	SoundData ButtonSound_;	// 決定サウンド
-	SoundData copeSound;	// シャッターサウンド
+	SoundData copeSound;	// シャッターサウンド	
+	// フェーズ関連
+	int PhaseIndex_;  // フェーズインデックス
+    bool isnextStep = false; // 次のステップへの有無	
 	float nextcurrentSteptime = 0; // フェーズリセットの経過時間
 	int timer = 0; // タイトルロゴ用タイマー
-    bool isnextStep = false; // 次のステップへの有無	
-	int PhaseIndex_;  // フェーズインデックス
 };
