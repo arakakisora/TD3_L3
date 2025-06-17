@@ -4,9 +4,6 @@
 #include "Input.h"
 #include "SceneManager.h"
 #include "ImGuiManager.h"
-#ifdef _DEBUG
-#endif // _DEBUG
-#include <imgui.h>
 #include <ModelManager.h>
 #include <CameraManager.h>
 #include <MyMath.h>
@@ -14,6 +11,9 @@
 #include <numbers>
 #include<Audio.h>
 #include <Easing.h>
+#ifdef _DEBUG
+#endif // _DEBUG
+#include <imgui.h>
 
 using namespace Easing;
 
@@ -25,24 +25,42 @@ void StageSelectScene::Initialize(){
 
 	// モデル名
 	const std::vector<std::string> modelNames = {
-    "axis",
-    "plane",
-    "sphere",
-    "terrain",
-    "playercharacter",
-    "Stage01","Stage02","Stage03","Stage04","Stage05",
+	"axis",
+	"plane",
+	"sphere",
+	"terrain",
+	"playercharacter",
+	"Pause",
+	"StageSelect/title","StageSelect/explanation","StageSelect/return",
+	"SelectSceneBackPlane",
+	};
+	// ステージモデル名
+	const std::vector<std::string> stageNames = {
+	"Stage01","Stage02","Stage03","Stage04","Stage05",
 	"Stage06","Stage07","Stage08","Stage09","Stage10",
-    "Stage11","Stage12","Stage13",
-    "Pause",
-    "StageSelect/title","StageSelect/explanation","StageSelect/return",
-    "SelectSceneBackPlane",
+	"Stage11","Stage12","Stage13",
 	};
 	// モデルの読み込み
 	ModelManager::GetInstans()->LoadAllModels(modelNames);
-	
-	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+	ModelManager::GetInstans()->LoadAllModels(stageNames);	
+	// サウンドの読み込み
+	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");    // セレクト用サウンド
+	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");	// 決定用サウンド
 
-	currentIndex_ = stageIndex;
+	// ステージのインデックスを取得
+	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+	currentIndex_ = stageIndex;	// 現在のステージを設定	 (ステージ1)
+
+	// ステージオブジェクトの生成
+	for (size_t i = 0; i < std::min(stages_.size(), stageNames.size()); ++i) {
+		// 共通の処理
+		stages_[i] = std::make_unique<Object3D>();
+		stages_[i]->Initialize(Object3DCommon::GetInstance());
+		stages_[i]->SetModel(stageNames[i] + ".obj");
+		stages_[i]->SetLighting(false);
+		stages_[i]->SetScale(Vector3(2.0f, 1.5f, 1.5f));
+		stages_[i]->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
+	}
 
 	Player_ = new Object3D();
 	Player_->Initialize(Object3DCommon::GetInstance());
@@ -53,46 +71,7 @@ void StageSelectScene::Initialize(){
 	Player_->SetDirectionalLightEnable(true);
 	Player_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
 	Player_->SetRotate(Vector3(0.0f, 180.0f * (DirectX::XM_PI / 180.0f), 0.0f));
-
-	// 作成してでリストに追加
-	for (uint32_t i = 0; i < MaxSelectIndex_; ++i) {
-		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
-		newObject->Initialize(Object3DCommon::GetInstance());
-		if (i == 0) {
-			newObject->SetModel("Stage01.obj");
-		}else if (i == 1) {
-			newObject->SetModel("Stage02.obj");
-		} else if (i == 2) {
-			newObject->SetModel("Stage03.obj");
-		} else if (i == 3) {
-			newObject->SetModel("Stage04.obj");
-		} else if (i == 4) {
-			newObject->SetModel("Stage05.obj");
-		} else if (i == 5) {
-			newObject->SetModel("Stage06.obj");
-		} else if (i == 6) {
-			newObject->SetModel("Stage07.obj");
-		} else if (i == 7) {
-			newObject->SetModel("Stage08.obj");
-		} else if (i == 8) {
-			newObject->SetModel("Stage09.obj");
-		} else if (i == 9) {
-			newObject->SetModel("Stage10.obj");
-		} else if (i == 10) {
-			newObject->SetModel("Stage11.obj");
-		} else if (i == 11) {
-			newObject->SetModel("Stage12.obj");
-		} else if (i == 12) {
-			newObject->SetModel("Stage13.obj");
-		}
-		else {
-			newObject->SetModel("Stage01.obj");
-		}
-		newObject->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
-		newObject->SetLighting(false);
-		newObject->SetScale(Vector3(2.0f, 1.5f, 1.5f));
-		stageObjects_.push_back(std::move(newObject));
-	}
+		
 
 	FollowTargetposition = { 0.0f,1.0f,-20.0f };
 
@@ -101,12 +80,11 @@ void StageSelectScene::Initialize(){
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
 
-
 	// イージングに必要な変数
 	easingmoveFlag_ = false;  // イージングフラグ
 	easingProgress_ = 0.0f; // イージングの進行具合
-	startPos_ = stageObjects_.front()->GetTranslate();  // 移動開始位置
-	endPos_ = stageObjects_.at(1)->GetTranslate();  // 移動終了位置（例えば2番目のオブジェクトへ）
+	startPos_ = stages_[StageType::stage_01]->GetTranslate();  // 初期のステージの位置に設定
+	endPos_ = stages_[StageType::stage_02]->GetTranslate();    // 次のステージの位置に設定
 	easingDuration_ = 2.0f;  // イージングの期間（秒）
 
 
@@ -180,12 +158,6 @@ void StageSelectScene::Initialize(){
 		1,
 		"Player"
 	);
-
-
-	// セレクト用サウンド
-	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");
-	// 決定用サウンド
-	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 }
 
 void StageSelectScene::Finalize()
@@ -293,10 +265,11 @@ void StageSelectScene::Update()
 		pauseMenu->Update();
 	}
 
-	for (std::unique_ptr<Object3D>& stage : stageObjects_) {
-		stage->Update();
+	for (size_t i = 0; i < stages_.size(); ++i) {
+		stages_[i]->Update();		// ステージの更新
 	}
 
+		
 	// UI
 	for (std::unique_ptr<Sprite>& Uitext : xboxui) {
 		Uitext->Update();
@@ -343,36 +316,27 @@ void StageSelectScene::Update()
 	}
 
 #endif // _DEBUG
-
-	//// ステージを決定していないなら
-	//if (!easingsceneFlag_ && !easingmoveFlag_) {
-	//	// タイトルへシーン遷移
-	//	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_X)) {
-	//		titlefige_ = true;
-	//	}
-
-	//	if (titlefige_) {
-	//		SceneManager::GetInstance()->ChangeScene("TITELE");
-	//	}
-	//}
 }
 
 void StageSelectScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
-	skydome_->Draw();
+	//skydome_->Draw();
 
 
-	Player_->Draw();
+	//Player_->Draw();
 
-	for (std::unique_ptr<Object3D>& stage : stageObjects_) {
-		stage->Draw();
-	}
+	//for (std::unique_ptr<Object3D>& stage : stageObjects_) {
+	//	stage->Draw();
+	//}
 
+	//for (size_t i = 0; i < stages_.size(); ++i) {
+	//	stages_[i]->Draw();		// ステージの描画
+	//}
 
-	//ポーズメニュー
-	pauseMenu->Draw();
+	////ポーズメニュー
+	//pauseMenu->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 
@@ -428,8 +392,8 @@ void StageSelectScene::move() {
 
 		currentIndex_++;
 		easingmoveFlag_ = true;
-		startPos_ = stageObjects_[currentIndex_ - 1]->GetTranslate();  // 直前の位置
-		endPos_ = stageObjects_[currentIndex_]->GetTranslate();        // 新しい位置
+		startPos_ = stages_ [currentIndex_ - 1]->GetTranslate();  // 直前の位置
+		endPos_ = stages_ [currentIndex_]->GetTranslate();        // 新しい位置
 		easingProgress_ = 0.0f;  // イージング開始
 		holdTimer_ = 0.0f; // 長押しリセット
 
@@ -451,8 +415,8 @@ void StageSelectScene::move() {
 
 		currentIndex_--;
 		easingmoveFlag_ = true;
-		startPos_ = stageObjects_[currentIndex_ + 1]->GetTranslate();  // 直前の位置
-		endPos_ = stageObjects_[currentIndex_]->GetTranslate();        // 新しい位置
+		startPos_ = stages_ [currentIndex_ + 1]->GetTranslate();  // 直前の位置
+		endPos_ = stages_ [currentIndex_]->GetTranslate();        // 新しい位置
 		easingProgress_ = 0.0f;  // イージング開始
 		holdTimer_ = 0.0f; // 長押しリセット
 
@@ -543,11 +507,11 @@ void StageSelectScene::moveChangeScene() {
 			easingmoveFlag_ = true;
 
 			// stageObjects_ の現在位置にカメラを移動
-			Vector3 selectObjectPos = stageObjects_[currentIndex_]->GetTranslate();
+			Vector3 selectObjectPos = stages_ [currentIndex_]->GetTranslate();
 			// mainObject の位置を stageObjects_ の位置に設定
 			Player_->SetTranslate(selectObjectPos);
 			// カメラのターゲットを現在選択されているオブジェクトに設定
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stageObjects_[currentIndex_].get(), { 0, 0, -15 });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stages_ [currentIndex_].get(), { 0, 0, -15 });
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 
 			// 開始位置
@@ -564,11 +528,11 @@ void StageSelectScene::moveChangeScene() {
 			easingmoveFlag_ = true;
 
 			// stageObjects_ の現在位置にカメラを移動
-			Vector3 selectObjectPos = stageObjects_[currentIndex_]->GetTranslate();
+			Vector3 selectObjectPos = stages_ [currentIndex_]->GetTranslate();
 			// mainObject の位置を stageObjects_ の位置に設定
 			Player_->SetTranslate(selectObjectPos);
 			// カメラのターゲットを現在選択されているオブジェクトに設定
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stageObjects_[currentIndex_].get(), { 0, 0, -15 });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(stages_ [currentIndex_].get(), { 0, 0, -15 });
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 
 			// 開始位置
@@ -592,7 +556,7 @@ void StageSelectScene::moveChangeScene() {
 		// カメラの位置をイージングで移動
 		Camera* activeCam = CameraManager::GetInstans()->GetActiveCamera();
 		if (activeCam == CameraManager::GetInstans()->GetCamera("maincam")) {
-			activeCam->SetFollowTarget(stageObjects_[currentIndex_].get(), Vector3(0.0f, 0.0f, -15.0f));
+			activeCam->SetFollowTarget(stages_ [currentIndex_].get(), Vector3(0.0f, 0.0f, -15.0f));
 
 			// イージングの進行状況を更新
 			easingProgress_ += (1.0f / (easingDuration_ * 120.0f));

@@ -11,11 +11,8 @@
 #include "FadeManager.h"
 #include "ParticleEmitter.h"
 
-class StageSelectScene :public BaseScene
-{
-
+class StageSelectScene :public BaseScene{
 public:
-
 	/// <summary>
 	/// シーンの初期化
 	/// </summary>
@@ -32,44 +29,25 @@ public:
 	/// シーンの描画
 	/// </summary>
 	void Draw()override;
+private:
+	enum StageType { // ステージの種類
+		stage_01, stage_02, stage_03, stage_04, stage_05,
+		stage_06, stage_07, stage_08, stage_09, stage_10,
+		stage_11, stage_12, stage_13,
+		Count                             // 要素数
+	};
+
 
 	// 移動
 	void move();
-
 	// シーン遷移
 	void moveChangeScene();
-
-	float EaseInOutBack(float x) {
-		const float c1 = 1.70158f;
-		const float c2 = c1 * 1.525f;
-
-		if (x < 0.5f) {
-			return (powf(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2;
-		} else {
-			return (powf(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
-		}
-	}
-
-	float EaseInQuad(float t, float b, float c, float d) {
-		t /= d;  // t を 0 から 1 の範囲に正規化
-		return c * t * t + b;  // 二次イージング（遅く始まり、加速する）
-	}
-
-	Vector3 SmoothLerp(const Vector3& a, const Vector3& b, float t) {
-		Vector3 ans;
-		ans.x = a.x + t * (b.x - a.x);
-		ans.y = a.y + t * (b.y - a.y);
-		ans.z = a.z + t * (b.z - a.z);
-		return ans;
-	}
-
-public:
+private:
 	// ポインタ
 	std::unique_ptr<Camera> camera_;
 	Object3D* Player_;
-	// ステージ選択オブジェクトのリスト
-	std::vector<std::unique_ptr<Object3D>> stageObjects_;
-	//std::array<std::unique_ptr<Object3D>, ObjectType::Count> titleObjects_;
+	// ステージオブジェクトのリスト
+	std::array<std::unique_ptr<Object3D>, StageType::Count> stages_;
 
 	uint32_t MaxSelectIndex_ = 13;	// 最大ステージ数
 	uint32_t currentIndex_ = 0;	// 現在のステージ
