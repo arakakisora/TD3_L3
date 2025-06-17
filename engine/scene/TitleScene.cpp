@@ -53,39 +53,39 @@ void TitleScene::Initialize() {
 	PhaseIndex_ = FadeIn;
 
 	// オブジェクトの生成
-	for (size_t i = 0; i < titleObjects_.size(); ++i) {
+	for (size_t i = 0; i < objects_.size(); ++i) {
 		// 共通の処理
-		titleObjects_[i] = std::make_unique<Object3D>();
-		titleObjects_[i]->Initialize(Object3DCommon::GetInstance());
-		titleObjects_[i]->SetLighting(false);
+		objects_[i] = std::make_unique<Object3D>();
+		objects_[i]->Initialize(Object3DCommon::GetInstance());
+		objects_[i]->SetLighting(false);
 		if (i == ObjectType::Title) {                                              	                     // タイトルの生成
-			titleObjects_[i]->SetTranslate(Vector3(0.0f, 0.5f, 0.0f));
-			titleObjects_[i]->SetRotate(Vector3(0.0f, 3.3f, 0.0f));
-			titleObjects_[i]->SetModel("Text_Title.obj");
+			objects_[i]->SetTranslate(Vector3(0.0f, 0.5f, 0.0f));
+			objects_[i]->SetRotate(Vector3(0.0f, 3.3f, 0.0f));
+			objects_[i]->SetModel("Text_Title.obj");
 		} else if (i == ObjectType::Start) {                                                             // startの生成
-			titleObjects_[i]->SetTranslate(Vector3(-0.53f, -0.5f, 0.0f));
-			titleObjects_[i]->SetScale(Vector3(0.3f, 0.3f, 0.3f));
-			titleObjects_[i]->SetModel("UI_Title_Stsrt.obj");
+			objects_[i]->SetTranslate(Vector3(-0.53f, -0.5f, 0.0f));
+			objects_[i]->SetScale(Vector3(0.3f, 0.3f, 0.3f));
+			objects_[i]->SetModel("UI_Title_Stsrt.obj");
 		} else if (i == ObjectType::Player) {                                            	             // プレイヤーの生成
-			titleObjects_[i]->SetModel("playercharacter.obj");
-			titleObjects_[i]->SetLighting(true);
-			titleObjects_[i]->SetDirectionalLightEnable(true);
-			titleObjects_[i]->SetDirectionalLightDirection(Vector3{ -1.8f, -2.0f, -2.0f });
-			titleObjects_[i]->SetRotate(Vector3{ 0.0f,180.0f * (DirectX::XM_PI / 180.0f),0.0f });
-			titleObjects_[i]->SetScale(Vector3{ 1.0f, 1.0f, 1.0f });
-			titleObjects_[i]->SetTranslate(Vector3{ 0.0f,0.0f,7.0f });
+			objects_[i]->SetModel("playercharacter.obj");
+			objects_[i]->SetLighting(true);
+			objects_[i]->SetDirectionalLightEnable(true);
+			objects_[i]->SetDirectionalLightDirection(Vector3{ -1.8f, -2.0f, -2.0f });
+			objects_[i]->SetRotate(Vector3{ 0.0f,180.0f * (DirectX::XM_PI / 180.0f),0.0f });
+			objects_[i]->SetScale(Vector3{ 1.0f, 1.0f, 1.0f });
+			objects_[i]->SetTranslate(Vector3{ 0.0f,0.0f,7.0f });
 		} else if (i == ObjectType::Skydome) {                                              	         // 背景の生成
-			titleObjects_[i]->SetTranslate(Vector3{ 0.0f,0.0f,10.0f });
-			titleObjects_[i]->SetScale(Vector3{ 1.5f, 1.0f, 1.0f });
-			titleObjects_[i]->SetModel("WhiteRooms.obj");
+			objects_[i]->SetTranslate(Vector3{ 0.0f,0.0f,10.0f });
+			objects_[i]->SetScale(Vector3{ 1.5f, 1.0f, 1.0f });
+			objects_[i]->SetModel("WhiteRooms.obj");
 		} else if (i == ObjectType::Shuttertop) {                                            	         // シャッター 上の生成
-			titleObjects_[i]->SetScale(Vector3{ 2.0f,2.0f,1.0f });
-			titleObjects_[i]->SetTranslate(Vector3(0.0f, 13.0f, -1.0f));
-			titleObjects_[i]->SetModel("shutterEffect.obj");
+			objects_[i]->SetScale(Vector3{ 2.0f,2.0f,1.0f });
+			objects_[i]->SetTranslate(Vector3(0.0f, 13.0f, -1.0f));
+			objects_[i]->SetModel("shutterEffect.obj");
 		} else if (i == ObjectType::Shutterbottom) {                                           	         // シャッター 下の生成
-			titleObjects_[i]->SetScale(Vector3{ 2.0f,2.0f,1.0f });
-			titleObjects_[i]->SetTranslate(Vector3(0.0f, -10.0f, -1.0f));
-			titleObjects_[i]->SetModel("shutterEffect.obj");
+			objects_[i]->SetScale(Vector3{ 2.0f,2.0f,1.0f });
+			objects_[i]->SetTranslate(Vector3(0.0f, -10.0f, -1.0f));
+			objects_[i]->SetModel("shutterEffect.obj");
 		}
 	}
 }
@@ -106,7 +106,7 @@ void TitleScene::Update() {
 	// フェード更新
 	fadeManager_.Update();
 	// 全オブジェクトの更新
-	for (const std::unique_ptr<Object3D>& object : titleObjects_) {
+	for (const std::unique_ptr<Object3D>& object : objects_) {
 		if (object) {
 			object->Update();			// オブジェクトの更新
 		}
@@ -150,16 +150,16 @@ void TitleScene::Draw()
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
 	// 背景の描画
-	titleObjects_[ObjectType::Skydome]->Draw();
+	objects_[ObjectType::Skydome]->Draw();
 
 	// 演出のフェーズによって描画
 	if (PhaseIndex_ >= PlayerEasing) {
-		titleObjects_[ObjectType::Player]->Draw();		// プレイヤーの描画	
+		objects_[ObjectType::Player]->Draw();		// プレイヤーの描画	
 		if (PhaseIndex_ >= LoopAnimation) {
-			for (size_t i = 0; i < titleObjects_.size(); ++i) {
+			for (size_t i = 0; i < objects_.size(); ++i) {
 				if (i == ObjectType::Player || i == ObjectType::Skydome) continue; // プレイヤーとは背景はもう描画済み
-				if (titleObjects_[i]) {
-					titleObjects_[i]->Draw();
+				if (objects_[i]) {
+					objects_[i]->Draw();
 				}
 			}
 		}
@@ -175,8 +175,8 @@ void TitleScene::shatterEffect() {
 	isShutterEffectPlaying = true;
 	shutterAnimTime = 0.0f;
 	// 初期位置にリセット
-	titleObjects_[ObjectType::Shuttertop]->SetTranslate(Vector3(0.0f, 13.0f, -1.0f));
-	titleObjects_[ObjectType::Shutterbottom]->SetTranslate(Vector3(0.0f, -10.0f, -1.0f));
+	objects_[ObjectType::Shuttertop]->SetTranslate(Vector3(0.0f, 13.0f, -1.0f));
+	objects_[ObjectType::Shutterbottom]->SetTranslate(Vector3(0.0f, -10.0f, -1.0f));
 }
 
 void TitleScene::shutterEffectUpdate() {
@@ -206,8 +206,8 @@ void TitleScene::shutterEffectUpdate() {
 		}
 	}
 	// シャッターオブジェクトの位置の更新
-	titleObjects_[ObjectType::Shuttertop]->SetTranslate(Vector3(0.0f, topY, -1.0f));
-	titleObjects_[ObjectType::Shutterbottom]->SetTranslate(Vector3(0.0f, bottomY, -1.0f));
+	objects_[ObjectType::Shuttertop]->SetTranslate(Vector3(0.0f, topY, -1.0f));
+	objects_[ObjectType::Shutterbottom]->SetTranslate(Vector3(0.0f, bottomY, -1.0f));
 	if (t >= 1.0f) {
 		isShutterEffectPlaying = false;		// 挙動の終了
 	}
@@ -218,9 +218,9 @@ void TitleScene::UpdatePlayerPositionByStep() {
 	if (PhaseIndex_ == PlayerEasing && !isPhaseEasing) {
 		isPhaseEasing = true;     // イージングを開始
 		easingTimer = 0.0f;  // タイマーを初期化
-		if (titleObjects_[ObjectType::Player]) {     // プレイヤーを開始位置に移動
-			titleObjects_[ObjectType::Player]->SetRotate(Vector3{ 0.0f, DirectX::XMConvertToRadians(180.0f), 0.0f });
-			titleObjects_[ObjectType::Player]->SetTranslate(Vector3{ 0.0f, -10.0f, 7.0f });
+		if (objects_[ObjectType::Player]) {     // プレイヤーを開始位置に移動
+			objects_[ObjectType::Player]->SetRotate(Vector3{ 0.0f, DirectX::XMConvertToRadians(180.0f), 0.0f });
+			objects_[ObjectType::Player]->SetTranslate(Vector3{ 0.0f, -10.0f, 7.0f });
 		}
 	}
 
@@ -230,7 +230,7 @@ void TitleScene::UpdatePlayerPositionByStep() {
 
 		// EaseOutQuad
 		float easedY = EaseLerp(-10.0f, 0.0f, t, EaseOutQuad);
-		std::unique_ptr<Object3D>& player = titleObjects_[ObjectType::Player];
+		std::unique_ptr<Object3D>& player = objects_[ObjectType::Player];
 		if (player) {   // プレイヤーの現在の座標を更新
 			Vector3 currentPos = player->GetTranslate();
 			currentPos.y = easedY;   // Y座標のみ変更
@@ -310,7 +310,7 @@ void TitleScene::UpdatePhase() {
 		playeroffset_ = { 0.0f, -0.7f + floatY, 0.0f };
 
 		// 新しいプレイヤー位置（X,Zは固定、Yのみ動く）
-		if (auto& player = titleObjects_[ObjectType::Player]) {
+		if (auto& player = objects_[ObjectType::Player]) {
 			Vector3 newPos = {
 				-2.5f,
 				playeroffset_.y,
@@ -321,7 +321,7 @@ void TitleScene::UpdatePhase() {
 		}
 
 		// タイトルロゴの上下揺れ＆回転
-		if (auto& title = titleObjects_[ObjectType::Title]) {
+		if (auto& title = objects_[ObjectType::Title]) {
 			float yOffset = std::sinf(timer * 0.05f) * 0.1f;
 			Transform trans = title->GetTransform();
 			trans.translate = Vector3(0.0f, 0.5f + yOffset, 0.0f); // 浮遊

@@ -16,6 +16,7 @@ namespace Easing {
     float EaseInCubic(float t);
     float EaseOutCubic(float t);
     float EaseInOutCubic(float t);
+    float EaseInOutBack(float t);
 
     // 線形補間（Lerp）
     float Lerp(float a, float b, float t);
@@ -28,4 +29,7 @@ namespace Easing {
 
     // Vector3のイージング付き補間
     Vector3 EaseLerp(const Vector3& a, const Vector3& b, float t, EasingFunction easingFunc);
+
+    // 2つのベクトル a と b を、補間率 t（0.0 ～ 1.0）に基づいて線形補間（Lerp）
+    Vector3 SmoothLerp(const Vector3& a, const Vector3& b, float t);
 };
