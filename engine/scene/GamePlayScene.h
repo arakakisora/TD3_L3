@@ -66,7 +66,6 @@ private:
 	std::unique_ptr<Camera> camera2;
 	//プレイヤー
 	std::unique_ptr<Player>player;
-	Object3D* object3DPlayer=nullptr;
 	Vector3 playeroffset{};
 
 	//チュートリアルテキスト
