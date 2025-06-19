@@ -52,6 +52,9 @@ public:
 	/// </summary>
 	void Draw()override;
 
+	//リセット
+	void Reset();
+
 	// Imgui描画
 	void DrawImgui();
 
