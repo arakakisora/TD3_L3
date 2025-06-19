@@ -41,6 +41,8 @@ void TitleScene::Initialize() {
 	ButtonSound_ = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");	   // 決定用サウンド
 	copeSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Camera_copy.wav");	   // コピー用サウンド
 	BgmSound_ = Audio::GetInstance()->SoundLoadWave("Resources/Audio/bgm.wav");                  // メインサウンド
+	// オーディオのリセット
+	Audio::GetInstance()->StopAudio();
 
 	// フェードインの初期化
 	fadeManager_.Initialize("Resources/white.png");
