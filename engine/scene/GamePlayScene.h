@@ -58,6 +58,30 @@ public:
 	// Imgui描画
 	void DrawImgui();
 
+	enum TutorialTextType { // チュートリアルの種類
+		Text1,                            // チュートリアル_01 
+		Text2,						      // チュートリアル_02
+		Text3,							  // チュートリアル_03
+		Text4,						      // チュートリアル_04
+		Text5,					    	  // チュートリアル_05
+		Text6,				    		  // チュートリアル_06
+		Text7,			    			  // チュートリアル_07
+		Text8,		     				  // チュートリアル_08
+		Text9,                            // 空白コピペ
+		Text10,                           // リセット
+		Text11,                           // ×ブロック説明
+		Text12,                           // タイマー
+		Text13,                           // ジャンプ
+		Count                             // 要素数
+	};
+	// チュートリアルテキストのパラメータ
+	struct TutorialTextParam {
+		const char* modelPath;
+		Vector3 scale;
+		Vector3 rotate;
+		Vector3 translate;
+	};
+
 public:	// Getter
 	bool GetCameraMode();
 
@@ -67,23 +91,8 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player>player;
 	Vector3 playeroffset{};
-
 	//チュートリアルテキスト
-	//std::array<std::unique_ptr<Object3D>, 8>tutorialTexts;
-	std::unique_ptr<Object3D> Tutorialtext1;
-	std::unique_ptr<Object3D>Tutorialtext2;
-	std::unique_ptr<Object3D>Tutorialtext3;
-	std::unique_ptr<Object3D>Tutorialtext4;
-	std::unique_ptr<Object3D>Tutorialtext5;
-	std::unique_ptr<Object3D>Tutorialtext6;
-	std::unique_ptr<Object3D>Tutorialtext7;
-	std::unique_ptr<Object3D>Tutorialtext8;
-	std::unique_ptr<Object3D>Tutorialtext9;//空白コピペ
-	std::unique_ptr<Object3D>Tutorialtext10;//リセット
-	std::unique_ptr<Object3D>Tutorialtext11;//×ブロック説明
-	std::unique_ptr<Object3D>Tutorialtext12;//タイマー
-	std::unique_ptr<Object3D>Tutorialtext13;//ジャンプ
-
+	std::array<std::unique_ptr<Object3D>, Count>tutorialTexts;	
 	//リセットお知らせ
 	std::unique_ptr<Object3D>ResetNotice;
 

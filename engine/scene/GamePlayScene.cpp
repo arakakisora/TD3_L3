@@ -72,123 +72,36 @@ void GamePlayScene::Initialize()
 	player->Initialize(playerPostion); //プレイヤーの初期位置を設定
 	player->SetDeathHeight(0.0f);
 
+	const std::array<TutorialTextParam, TutorialTextType::Count> tutorialTextParams = { {
+	{"tutorial/tutorial1.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.57f, 0.0f}, {8.5f, 21.44f, 1.0f}},
+	{"tutorial/tutorial2.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.57f, 0.0f}, {15.3f, 21.4f, 0.75f}},
+	{"tutorial/tutorial3.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {8.5f, 21.45f, 1.0f} },
+	{"tutorial/tutorial4.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {15.46f, 21.4f, 0.69f} },
+	{"tutorial/tutorial5.obj",  {0.75f, 0.5f, 0.5f}, {17.3f, 12.57f, 0.0f}, {12.24f, 21.45f, 1.0f} },
+	{"tutorial/tutorial6.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {8.5f, 21.4f, 1.0f} },
+	{"tutorial/tutorial7.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {15.46f, 21.4f, 1.0f} },
+	{"tutorial/tutorial8.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
+	{"tutorial/tutorial9.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
+	{"tutorial/tutorial10.obj", {1.0f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
+	{"tutorial/tutorial11.obj", {1.0f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
+	{"tutorial/tutorial12.obj", {1.0f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
+	{"tutorial/tutorial13.obj", {1.0f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 19.5f, 1.0f} }} };
 
-	Tutorialtext1 = std::make_unique<Object3D>();
-	Tutorialtext1->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext1->SetModel("tutorial/tutorial1.obj");
-	Tutorialtext1->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext1->SetRotate(Vector3(17.3f, 12.57f, 0.0f));
-	Tutorialtext1->SetTranslate(Vector3(8.5f, 21.44f, 1.0f));
-	Tutorialtext1->SetLighting(false);
-	Tutorialtext1->SetIsTutorialActive(false);
-
-	Tutorialtext2 = std::make_unique<Object3D>();
-	Tutorialtext2->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext2->SetModel("tutorial/tutorial2.obj");
-	Tutorialtext2->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext2->SetRotate(Vector3(17.3f, 12.57f, 0.0f));
-	Tutorialtext2->SetTranslate(Vector3(15.3f, 21.4f, 0.75f));
-	Tutorialtext2->SetLighting(false);
-	Tutorialtext2->SetIsTutorialActive(false);
-
-	Tutorialtext3 = std::make_unique<Object3D>();
-	Tutorialtext3->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext3->SetModel("tutorial/tutorial3.obj");
-	Tutorialtext3->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext3->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext3->SetTranslate(Vector3(8.5f, 21.45f, 1.0f));
-	Tutorialtext3->SetLighting(false);
-	Tutorialtext3->SetIsTutorialActive(false);
-
-	Tutorialtext4 = std::make_unique<Object3D>();
-	Tutorialtext4->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext4->SetModel("tutorial/tutorial4.obj");
-	Tutorialtext4->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext4->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext4->SetTranslate(Vector3(15.46f, 21.4f, 0.69f));
-	Tutorialtext4->SetLighting(false);
-	Tutorialtext4->SetIsTutorialActive(false);
-
-	Tutorialtext5 = std::make_unique<Object3D>();
-	Tutorialtext5->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext5->SetModel("tutorial/tutorial5.obj");
-	Tutorialtext5->SetScale(Vector3(0.75f, 0.5f, 0.5f));
-	Tutorialtext5->SetRotate(Vector3(17.3f, 12.57f, 0.0f));
-	Tutorialtext5->SetTranslate(Vector3(12.24f, 21.45f, 1.0f));
-	Tutorialtext5->SetLighting(false);
-	Tutorialtext5->SetIsTutorialActive(false);
-
-	Tutorialtext6 = std::make_unique<Object3D>();
-	Tutorialtext6->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext6->SetModel("tutorial/tutorial6.obj");
-	Tutorialtext6->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext6->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext6->SetTranslate(Vector3(8.5f, 21.4f, 1.0f));
-	Tutorialtext6->SetLighting(false);
-	Tutorialtext6->SetIsTutorialActive(false);
-
-	Tutorialtext7 = std::make_unique<Object3D>();
-	Tutorialtext7->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext7->SetModel("tutorial/tutorial7.obj");
-	Tutorialtext7->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext7->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext7->SetTranslate(Vector3(15.46f, 21.4f, 1.0f));
-	Tutorialtext7->SetLighting(false);
-	Tutorialtext7->SetIsTutorialActive(false);
-
-	Tutorialtext8 = std::make_unique<Object3D>();
-	Tutorialtext8->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext8->SetModel("tutorial/tutorial8.obj");
-	Tutorialtext8->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext8->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext8->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext8->SetLighting(false);
-	Tutorialtext8->SetIsTutorialActive(false);
-
-	Tutorialtext9 = std::make_unique<Object3D>();
-	Tutorialtext9->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext9->SetModel("tutorial/tutorial9.obj");
-	Tutorialtext9->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext9->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext9->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext9->SetLighting(false);
-	Tutorialtext9->SetIsTutorialActive(false);
-
-	Tutorialtext10 = std::make_unique<Object3D>();
-	Tutorialtext10->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext10->SetModel("tutorial/tutorial10.obj");
-	Tutorialtext10->SetScale(Vector3(1.0f, 0.5f, 0.5f));
-	Tutorialtext10->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext10->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext10->SetLighting(false);
-	Tutorialtext10->SetIsTutorialActive(false);
-
-	Tutorialtext11 = std::make_unique<Object3D>();
-	Tutorialtext11->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext11->SetModel("tutorial/tutorial11.obj");
-	Tutorialtext11->SetScale(Vector3(1.0f, 0.5f, 0.5f));
-	Tutorialtext11->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext11->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext11->SetLighting(false);
-	Tutorialtext11->SetIsTutorialActive(false);
-
-	Tutorialtext12 = std::make_unique<Object3D>();
-	Tutorialtext12->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext12->SetModel("tutorial/tutorial12.obj");
-	Tutorialtext12->SetScale(Vector3(1.0f, 0.5f, 0.5f));
-	Tutorialtext12->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext12->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext12->SetLighting(false);
-	Tutorialtext12->SetIsTutorialActive(false);
-
-	Tutorialtext13 = std::make_unique<Object3D>();
-	Tutorialtext13->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext13->SetModel("tutorial/tutorial13.obj");
-	Tutorialtext13->SetScale(Vector3(1.0f, 0.5f, 0.5f));
-	Tutorialtext13->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext13->SetTranslate(Vector3(12.46f, 19.5f, 1.0f));
-	Tutorialtext13->SetLighting(false);
-	Tutorialtext13->SetIsTutorialActive(false);
+	// forでチュートリアルテキストの初期化
+	for (int i = 0; i < TutorialTextType::Count; ++i) {	
+		// 共通処理
+		tutorialTexts[i] = std::make_unique<Object3D>();
+		tutorialTexts[i]->Initialize(Object3DCommon::GetInstance());
+		// 固有のパラメータを設定
+		const auto& param = tutorialTextParams[i];
+		tutorialTexts[i]->SetModel(param.modelPath);
+		tutorialTexts[i]->SetScale(param.scale);
+		tutorialTexts[i]->SetRotate(param.rotate);
+		tutorialTexts[i]->SetTranslate(param.translate);
+		// 共通処理
+		tutorialTexts[i]->SetLighting(false);
+		tutorialTexts[i]->SetIsTutorialActive(false);
+	}
 
 	//リセットお知らせ
 	ResetNotice = std::make_unique<Object3D>();
@@ -312,8 +225,6 @@ void GamePlayScene::Initialize()
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(false);
 
 	// ゲームカメラの生成
-	//gameCamera_ = new ObjectCamera();
-	//gameCamera_->Initialize(map);
 	photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
 
@@ -427,7 +338,7 @@ void GamePlayScene::Update()
 		//チュートリアル表示制御map2
 		if (SceneManager::GetInstance()->GetStageIndex() == 1) {
 			if (!tutorial9) {
-				Tutorialtext9->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text9]->SetIsTutorialActive(true);
 				tutorial9 = true;
 			}
 		}
@@ -465,42 +376,42 @@ void GamePlayScene::Update()
 
 			if (!tutorial1_2) {
 				// text1,2を表示
-				Tutorialtext1->SetIsTutorialActive(true);
-				Tutorialtext2->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text1]->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text2]->SetIsTutorialActive(true);
 				tutorial1_2 = true;
 			}
 
 			if (photoCamera->HasStarted() && !tutorial3_4) {
-				Tutorialtext1->SetIsTutorialActive(false);
-				Tutorialtext2->SetIsTutorialActive(false);
-				Tutorialtext3->SetIsTutorialActive(true);
-				Tutorialtext4->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text1]->SetIsTutorialActive(false);
+				tutorialTexts[TutorialTextType::Text2]->SetIsTutorialActive(false);
+				tutorialTexts[TutorialTextType::Text3]->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text4]->SetIsTutorialActive(true);
 				tutorial3_4 = true;
 			}
 
 			if (photoCamera->HasMoved() && !tutorial5) {
-				Tutorialtext3->SetIsTutorialActive(false);
-				Tutorialtext4->SetIsTutorialActive(false);
-				Tutorialtext5->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text3]->SetIsTutorialActive(false);
+				tutorialTexts[TutorialTextType::Text4]->SetIsTutorialActive(false);
+				tutorialTexts[TutorialTextType::Text5]->SetIsTutorialActive(true);
 				tutorial5 = true;
 			}
 
 			if (photoCamera->isFirstCopied && !tutorial6_7) {
-				Tutorialtext5->SetIsTutorialActive(false);
-				Tutorialtext6->SetIsTutorialActive(true);
-				Tutorialtext7->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text5]->SetIsTutorialActive(false);
+				tutorialTexts[TutorialTextType::Text6]->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text7]->SetIsTutorialActive(true);
 				tutorial6_7 = true;
 			}
 			if (photoCamera->isFirstPasted && !tutorial8) {
-				Tutorialtext6->SetIsTutorialActive(false);
-				Tutorialtext7->SetIsTutorialActive(false);
-				Tutorialtext8->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text6]->SetIsTutorialActive(false);
+				tutorialTexts[TutorialTextType::Text7]->SetIsTutorialActive(false);
+				tutorialTexts[TutorialTextType::Text8]->SetIsTutorialActive(true);
 				tutorial8 = true;
 			}
 
 			if (tutorial8 && secondspassed) {
-				Tutorialtext8->SetIsTutorialActive(false);
-				Tutorialtext10->SetIsTutorialActive(true);
+				tutorialTexts[TutorialTextType::Text8]->SetIsTutorialActive(false);
+				tutorialTexts[TutorialTextType::Text10]->SetIsTutorialActive(true);
 				tutorial10 = true;
 			}
 
@@ -514,7 +425,7 @@ void GamePlayScene::Update()
 	//チュートリアル表示制御map2
 	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
 		if (!tutorial9) {
-			Tutorialtext9->SetIsTutorialActive(true);
+			tutorialTexts[TutorialTextType::Text9]->SetIsTutorialActive(true);
 			tutorial9 = true;
 		}
 	}
@@ -522,7 +433,7 @@ void GamePlayScene::Update()
 	//チュートリアル表示制御map3
 	if (SceneManager::GetInstance()->GetStageIndex() == 2) {
 		if (!tutorial11) {
-			Tutorialtext11->SetIsTutorialActive(true);
+			tutorialTexts[TutorialTextType::Text11]->SetIsTutorialActive(true);
 			tutorial11 = true;
 		}
 		nCopySprite->Update();
@@ -530,36 +441,24 @@ void GamePlayScene::Update()
 
 	//チュートリアル表示制御map9
 	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
-	
-			Tutorialtext12->SetIsTutorialActive(true);
-			tutorial12 = true;
-		
-			timerSprite->Update();
+		tutorialTexts[TutorialTextType::Text12]->SetIsTutorialActive(true);
+		tutorial12 = true;
+		timerSprite->Update();
 	}
 
 	//チュートリアル表示制御map7
 	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
-		
-			Tutorialtext13->SetIsTutorialActive(true);
-			tutorial13 = true;
-			jumpSprite->Update();
+		tutorialTexts[TutorialTextType::Text13]->SetIsTutorialActive(true);
+		tutorial13 = true;
+		jumpSprite->Update();
 	}
 
-	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
-	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
-	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
-	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Update();
-	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Update();
-	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Update();
-	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
-	if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
-	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
-	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Update();
-	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Update();
-	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Update();
-	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Update();
-	//ui
+	//チュートリアルテキストの更新
+	for (int i = 0; i < TutorialTextType::Count; ++i) {
+		tutorialTexts[i]->Update();
+	}
 
+	//ui
 	if (!photoCamera->GetCameraMode()) {
 		OperationtextStickL->Update();
 		OperationtextButtonB->Update();
@@ -629,21 +528,11 @@ void GamePlayScene::Draw()
 	////プレイヤー
 	player->Draw();
 
-	//チュートリアルテキスト
+	//チュートリアルテキストの描画
+	for (int i = 0; i < TutorialTextType::Count; ++i) {
+		tutorialTexts[i]->Draw();
+	}
 
-	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Draw();
-	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Draw();
-	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Draw();
-	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Draw();
-	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Draw();
-	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Draw();
-	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Draw();
-	if (Tutorialtext8->GetIsTutorialActive()) Tutorialtext8->Draw();
-	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
-	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Draw();
-	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Draw();
-	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Draw();
-	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Draw();
 	//リセットお知らせ
 	if (holdTime > 0.0f) {
 		ResetNotice->Draw();
@@ -800,100 +689,25 @@ void GamePlayScene::DrawImgui()
 			player->GetObject3D()->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
-		Transform text = Tutorialtext1->GetTransform();
-		Transform text2 = Tutorialtext2->GetTransform();
-		Transform text3 = Tutorialtext3->GetTransform();
-		Transform text4 = Tutorialtext4->GetTransform();
-		Transform text5 = Tutorialtext5->GetTransform();
-		Transform text6 = Tutorialtext6->GetTransform();
-		Transform text7 = Tutorialtext7->GetTransform();
-		Transform text8 = Tutorialtext8->GetTransform();
-		Transform text9 = Tutorialtext9->GetTransform();
-		Transform text12 = Tutorialtext12->GetTransform();
-		Transform text13 = Tutorialtext13->GetTransform();
+		// チュートリアルテキストの表示制御
+		for (int i = 0; i < TutorialTextType::Count; ++i) {
+			if (!tutorialTexts[i]) continue;
 
-		Transform resetnotice = ResetNotice->GetTransform();
+			Transform transform = tutorialTexts[i]->GetTransform();
+			
+			// ラベル名を作る
+			std::string labelPrefix = "text" + std::to_string(i + 1);
+			
+			// スケール・回転・位置を編集
+			bool changed = false;
+			changed |= ImGui::DragFloat3((labelPrefix + " scale").c_str(), &transform.scale.x, 0.01f);
+			changed |= ImGui::DragFloat3((labelPrefix + " rotate").c_str(), &transform.rotate.x, 0.01f);
+			changed |= ImGui::DragFloat3((labelPrefix + " translate").c_str(), &transform.translate.x, 0.01f);
 
-		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text1rotate", &text.rotate.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text1translate", &text.translate.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text2scale", &text2.scale.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text2rotate", &text2.rotate.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text2translate", &text2.translate.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text3scale", &text3.scale.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text3rotate", &text3.rotate.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text3translate", &text3.translate.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text4scale", &text4.scale.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text4rotate", &text4.rotate.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text4translate", &text4.translate.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text5scale", &text5.scale.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text5rotate", &text5.rotate.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text5translate", &text5.translate.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text6scale", &text6.scale.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text6rotate", &text6.rotate.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text6translate", &text6.translate.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text7scale", &text7.scale.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text7rotate", &text7.rotate.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text7translate", &text7.translate.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
-			Tutorialtext8->SetTransform(text8);
-		}
-		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
-			Tutorialtext9->SetTransform(text9);
-		}
-		if (ImGui::DragFloat3("resetNoticetranslate", &resetnotice.translate.x), 0.01f) {
-			ResetNotice->SetTransform(resetnotice);
-		}
-		if (ImGui::DragFloat3("text12translate", &text12.translate.x), 0.01f) {
-			Tutorialtext12->SetTransform(text12);
-		}
-		if (ImGui::DragFloat3("text13translate", &text13.translate.x), 0.01f) {
-			Tutorialtext13->SetTransform(text13);
-		}
-
-		
+			if (changed) {
+				tutorialTexts[i]->SetTransform(transform);
+			}
+		}		
 
 		//UI
 
