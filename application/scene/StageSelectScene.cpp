@@ -42,10 +42,14 @@ void StageSelectScene::Initialize(){
 	};
 	// モデルの読み込み
 	ModelManager::GetInstans()->LoadAllModels(modelNames);
-	ModelManager::GetInstans()->LoadAllModels(stageNames);	
+	ModelManager::GetInstans()->LoadAllModels(stageNames);
 	// サウンドの読み込み
 	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");    // セレクト用サウンド
 	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");	// 決定用サウンド
+	
+	// フェードインの初期化
+	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.StartFadeIn(0.5);
 
 	// ステージのインデックスを取得
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
@@ -62,7 +66,7 @@ void StageSelectScene::Initialize(){
 		stages_[i]->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
 	}
 
-	Player_ = new Object3D();
+	Player_ = std::make_unique<Object3D>();
 	Player_->Initialize(Object3DCommon::GetInstance());
 	Player_->SetModel("playercharacter.obj");
 	Vector3 initialPos = Vector3(9.0f * currentIndex_, -2.5f, 0.0f);
@@ -71,12 +75,12 @@ void StageSelectScene::Initialize(){
 	Player_->SetDirectionalLightEnable(true);
 	Player_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
 	Player_->SetRotate(Vector3(0.0f, 180.0f * (DirectX::XM_PI / 180.0f), 0.0f));
-		
+	FollowTargetposition = { 0.0f,1.0f,-20.0f };		
 
-	FollowTargetposition = { 0.0f,1.0f,-20.0f };
+
 
 	// プレイヤーのカメラをセット
-	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(Player_, FollowTargetposition);
+	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(Player_.get(), FollowTargetposition);
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
 
@@ -143,16 +147,10 @@ void StageSelectScene::Initialize(){
 	skydome_->SetTranslate(planePos);
 	skydome_->SetScale(planeScale);
 
-
-
-	fadeManager_.Initialize("Resources/white.png");
-	fadeManager_.StartFadeIn(0.5);
-
-
+	// プレイヤーに追従するパーティクルの設定
 	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/block.png", "block.obj");
-
-	playeremitter_ = new ParticleEmitter(
-		{ 0.0f,0.0f,0.0f },
+	playeremitter_ = std::make_unique<ParticleEmitter>(
+		Vector3{ 0.0f,0.0f,0.0f },
 		5.0f,
 		0.0f,
 		1,
@@ -160,116 +158,37 @@ void StageSelectScene::Initialize(){
 	);
 }
 
-void StageSelectScene::Finalize()
-{
+void StageSelectScene::Finalize(){
 	CameraManager::GetInstans()->RemoveCamera("maincam");
 	CameraManager::GetInstans()->RemoveCamera("subcam");
 	CameraManager::GetInstans()->Finalize();
-
 	CameraManager::GetInstans()->Finalize();
-
-	delete Player_;
-
-	delete playeremitter_;
 }
 
-
-void StageSelectScene::Update()
-{
-
-#ifdef _DEBUG
-	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
-		Transform transform = skydome_->GetTransform();
-
-		if (ImGui::DragFloat3("Skydome Translate", &transform.translate.x, 0.1f)) {
-			skydome_->SetTranslate(transform.translate);
-		}
-		if (ImGui::DragFloat3("Skydome Rotate", &transform.rotate.x, 0.01f)) {
-			skydome_->SetRotate(transform.rotate);
-		}
-		if (ImGui::DragFloat3("Skydome Scale", &transform.scale.x, 0.01f, 0.01f, 10.0f)) {
-			skydome_->SetScale(transform.scale);
-		}
-	}
-
-#endif // _DEBUG
-
+void StageSelectScene::Update(){
 	// フェード更新
 	fadeManager_.Update();
-
-
-	skydome_->Update();
-
-	// 音量設定
-	Audio::GetInstance()->SetVolume(&selectSound, 2.0f);
-	Audio::GetInstance()->SetVolume(&ButtonSound, 3.0f);
-
-	//ポーズ画面が出ている間は停止
+	// オーディオの更新
+	UpdateAudio(); 
+	// ポーズ中かどうかで変わる処理
 	if (!pauseMenu->IsPaused()) {
-		//カメラの更新
-		CameraManager::GetInstans()->GetActiveCamera()->Update();
-
-		// 移動処理			
-		move();
-
-		// 10フレーム経過するまでシーン遷移禁止
-		if (frameCounter_ < 10) {
-			frameCounter_++;
-		} else
-		{
-			frameCounter_ = 10;
-			// シーン遷移
-			moveChangeScene();
-		}
-
-		Player_->Update();
-		// プレイヤー用のパーティクルの位置を常に更新
-		Vector3 pos = Player_->GetTranslate();
-
-		// 右に移動中
-		if (playermoveright) {
-			// 左方向に設定
-			playeremitter_->SetisRight(false);
-			Vector3 offset = { -0.3f,0.0f,0.0f };
-			playeremitter_->SetPosition(pos + offset);
-			playeremitter_->PlayerEmit();
-		}
-		// 左に移動中
-		if (playermoveleft) {
-			// 右方向に設定
-			playeremitter_->SetisRight(true);
-			Vector3 offset = { 0.3f,0.0f,0.0f };
-			playeremitter_->SetPosition(pos + offset);
-			playeremitter_->PlayerEmit();
-		}
-
-	} else {
-		// ▼ カメラを引く処理をここにも追加 ▼
-		FollowTargetposition.y = 1.0f;
-		FollowTargetposition.z = -20.0f;
-		Camera* activeCam = CameraManager::GetInstans()->GetActiveCamera();
-		if (activeCam == CameraManager::GetInstans()->GetCamera("maincam")) {
-			activeCam->SetFollowTarget(Player_, FollowTargetposition);
-		}
-
-		Player_->Update();
-		// プレイヤー用のパーティクルの位置を常に更新
-		Vector3 pos = Player_->GetTranslate();
-
-		// ←ポーズ中でもカメラだけ更新
-		CameraManager::GetInstans()->GetActiveCamera()->Update();
-	}
-
+		// ポーズ中の処理
+        UpdateDuringPlay();
+    } else {
+		// 非ポーズ中の処理
+        UpdateDuringPause();
+    }
+	// キー入力しない限り更新
 	if (!easingsceneFlag_ && !easingmoveFlag_) {
 		// ポーズ
 		pauseMenu->Update();
 	}
+	
+	skydome_->Update();	
 
 	for (size_t i = 0; i < stages_.size(); ++i) {
 		stages_[i]->Update();		// ステージの更新
-	}
-
-		
+	}		
 	// UI
 	for (std::unique_ptr<Sprite>& Uitext : xboxui) {
 		Uitext->Update();
@@ -278,8 +197,11 @@ void StageSelectScene::Update()
 		Uitext->Update();
 	}
 
-#ifdef _DEBUG
+	DebugimgGui();	// デバッグ用のImGui描画
+}
 
+void StageSelectScene::DebugimgGui() {
+#ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Skydome SRT", ImGuiTreeNodeFlags_DefaultOpen)) {
 		Transform transform = skydome_->GetTransform();
 
@@ -311,10 +233,7 @@ void StageSelectScene::Update()
 		if (ImGui::DragFloat3("Camera Rotation", &cameraTransform.rotate.x, 0.01f)) {
 			CameraManager::GetInstans()->GetActiveCamera()->SetRotate(cameraTransform.rotate);
 		}
-
-
 	}
-
 #endif // _DEBUG
 }
 
@@ -322,26 +241,21 @@ void StageSelectScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	//3dオブジェクトの描画準備。3Dオブジェクトの描画に共通のグラフィックスコマンドを積む
 	Object3DCommon::GetInstance()->CommonDraw();
-	//skydome_->Draw();
+	skydome_->Draw();
 
 
-	//Player_->Draw();
+	Player_->Draw();
 
-	//for (std::unique_ptr<Object3D>& stage : stageObjects_) {
-	//	stage->Draw();
-	//}
+	for (size_t i = 0; i < stages_.size(); ++i) {
+		stages_[i]->Draw();		// ステージの描画
+	}		
 
-	//for (size_t i = 0; i < stages_.size(); ++i) {
-	//	stages_[i]->Draw();		// ステージの描画
-	//}
-
-	////ポーズメニュー
-	//pauseMenu->Draw();
+	//ポーズメニュー
+	pauseMenu->Draw();
 
 	ParticleMnager::GetInstance()->Draw();
 
 #pragma endregion
-
 
 #pragma region スプライト描画
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
@@ -359,22 +273,15 @@ void StageSelectScene::Draw() {
 	fadeManager_.Draw();
 
 #pragma endregion
-
 }
 
 void StageSelectScene::move() {
 	// 長押し対応用の遅延時間
-	static float holdDelay_ = 0.1f; // 0.1秒（調整可能）
-	static float holdTimer_ = 0.0f; // 長押し判定用のタイマー
-
-	// 長押し時の処理継続
-	bool continueMove = (holdTimer_ > holdDelay_);
-
-	// 右スティックのX軸入力を取得
-	float rightStickX = Input::GetInstance()->GetGamePadStickX(); // 右スティックのX軸入力
-
-	// スティックのしきい値（デッドゾーンを超えたときのみ反応）
-	const float stickThreshold = 0.5f;
+	static float holdDelay_ = 0.1f; 	                              // 長押しと認識するための値 0.1秒（調整可能）
+	static float holdTimer_ = 0.0f;	                                  // 入力が続いた時間を測る判定用のタイマー
+	bool continueMove = (holdTimer_ > holdDelay_);                    // 一定時間（0.1秒）スティックが倒されたままなら長押しと判定。
+	float rightStickX = Input::GetInstance()->GetGamePadStickX();     // 右スティックのX方向の値（-1.0〜1.0）を取得。
+	const float stickThreshold = 0.5f;	                              // スティックのしきい値（デッドゾーンを超えたときのみ反応）
 
 	Vector3 Rotate = Player_->GetRotate();
 #ifdef _DEBUG
@@ -386,87 +293,68 @@ void StageSelectScene::move() {
 	}
 #endif // _DEBUG
 
-	// (右に移動)
-	if ((rightStickX > stickThreshold || (continueMove && rightStickX > stickThreshold))
+	if ((rightStickX > stickThreshold || (continueMove && rightStickX > stickThreshold))             // 右かつ長押しも考慮した移動
 		&& currentIndex_ < MaxSelectIndex_ - 1 && !easingmoveFlag_ && !easingsceneFlag_) {
-
+		// プレイヤーのイージング移動準備
 		currentIndex_++;
 		easingmoveFlag_ = true;
+		// ステージの位置を取得してイージング開始
 		startPos_ = stages_ [currentIndex_ - 1]->GetTranslate();  // 直前の位置
 		endPos_ = stages_ [currentIndex_]->GetTranslate();        // 新しい位置
 		easingProgress_ = 0.0f;  // イージング開始
 		holdTimer_ = 0.0f; // 長押しリセット
-
 		// プレイヤーを右に90度回転
 		Rotate.y -= 90.0f * (DirectX::XM_PI / 180.0f);
 		Player_->SetRotate(Rotate);
-
 		// パーティクルのフラグ設定（右移動）
 		playermoveright = true;
 		playermoveleft = false;
-
-		// セレクト音声を流す
-		Audio::GetInstance()->SoundPlayWave(selectSound);
-	}
-
-	// (左に移動)
-	if ((rightStickX < -stickThreshold || (continueMove && rightStickX < -stickThreshold))
+		Audio::GetInstance()->SoundPlayWave(selectSound);		// セレクト音声を流す
+	} else if ((rightStickX < -stickThreshold || (continueMove && rightStickX < -stickThreshold))     // 左かつ長押しも考慮した移動
 		&& currentIndex_ > 0 && !easingmoveFlag_ && !easingsceneFlag_) {
-
+		// プレイヤーのイージング移動準備
 		currentIndex_--;
 		easingmoveFlag_ = true;
-		startPos_ = stages_ [currentIndex_ + 1]->GetTranslate();  // 直前の位置
-		endPos_ = stages_ [currentIndex_]->GetTranslate();        // 新しい位置
+		// ステージの位置を取得してイージング開始
+		startPos_ = stages_[currentIndex_ + 1]->GetTranslate();  // 直前の位置
+		endPos_ = stages_[currentIndex_]->GetTranslate();        // 新しい位置
 		easingProgress_ = 0.0f;  // イージング開始
 		holdTimer_ = 0.0f; // 長押しリセット
-
 		// プレイヤーを左に-90度回転
 		Rotate.y += 90.0f * (DirectX::XM_PI / 180.0f);
 		Player_->SetRotate(Rotate);
-
 		// パーティクルのフラグ設定（左移動）
 		playermoveright = false;
 		playermoveleft = true;
-		// セレクト音声を流す
-		Audio::GetInstance()->SoundPlayWave(selectSound);
+		Audio::GetInstance()->SoundPlayWave(selectSound);		// セレクト音声を流す
 	}
 
-	// イージング処理
-	if (easingmoveFlag_) {
-
+	if (easingmoveFlag_) {	// プレイヤーのイージング移動処理
 		// フレーム毎秒
 		easingProgress_ += (1.0f / (easingDuration_ * 20.0f));
-
 		if (easingProgress_ > 1.0f) {
 			easingProgress_ = 1.0f;
 		}
 
 		// 線形補間		
 		float easedValue = EaseInOutQuad(easingProgress_);
-
 		Vector3 newPos = SmoothLerp(startPos_, endPos_, easedValue);
-
-		// mainObject の y 座標を常に -2.0f に設定
+		// プレイヤーのY座標を固定
 		newPos.y = -2.5f;
-
 		// メインオブジェクトを移動
 		Player_->SetTranslate(newPos);
-
 		// カメラが "main" のときだけカメラの位置更新
 		Camera* activeCam = CameraManager::GetInstans()->GetActiveCamera();
 		if (activeCam == CameraManager::GetInstans()->GetCamera("maincam")) {
 			FollowTargetposition.y = 1.0f;
 			FollowTargetposition.z = -20.0f;
-			activeCam->SetFollowTarget(Player_, FollowTargetposition);
-
+			activeCam->SetFollowTarget(Player_.get(), FollowTargetposition);
 		}
 
 		Vector3 planePos = skydome_->GetTranslate();
-
 		planePos = { Player_->GetTransform().translate.x + -8.0f, planePos.y,planePos.z };
 		skydome_->SetTranslate(planePos);
 		skydome_->Update();
-
 
 		// イージング完了
 		if (easingProgress_ >= 1.0f) {
@@ -481,7 +369,7 @@ void StageSelectScene::move() {
 				FollowTargetposition.z = -20.0f;
 			}
 			// フォローターゲットを再設定（Z位置が変わったときのみでもOK）
-			activeCam->SetFollowTarget(Player_, FollowTargetposition);
+			activeCam->SetFollowTarget(Player_.get(), FollowTargetposition);
 
 			// パーティクルのフラグリセット
 			playermoveright = false;
@@ -497,9 +385,7 @@ void StageSelectScene::move() {
 	}
 }
 
-
 void StageSelectScene::moveChangeScene() {
-
 	if (!easingsceneFlag_ && !easingmoveFlag_) {
 #ifdef _DEBUG
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
@@ -585,5 +471,67 @@ void StageSelectScene::moveChangeScene() {
 			// シーン変更（必要に応じてシーン変更を実行）
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		}
+	}
+}
+
+void StageSelectScene::UpdateAudio() {	
+	// 音量設定
+	Audio::GetInstance()->SetVolume(&selectSound, 2.0f);
+	Audio::GetInstance()->SetVolume(&ButtonSound, 3.0f);
+}
+
+void StageSelectScene::UpdateDuringPlay() {
+	const int MaxframeCounter = 10;
+	//カメラの更新
+	CameraManager::GetInstans()->GetActiveCamera()->Update();
+	// 移動処理			
+	move();
+	// 10フレーム経過するまでシーン遷移禁止
+	if (frameCounter_ < MaxframeCounter) {
+		frameCounter_++;
+	} else {
+		frameCounter_ = MaxframeCounter;
+		// シーン遷移
+		moveChangeScene();
+	}
+	Player_->Update();
+	// パーティクルの更新
+	UpdatePlayerParticle();
+}
+
+void StageSelectScene::UpdateDuringPause() {
+	// ▼ カメラを引く処理をここにも追加 ▼
+	FollowTargetposition.y = 1.0f;
+	FollowTargetposition.z = -20.0f;
+	Camera* activeCam = CameraManager::GetInstans()->GetActiveCamera();
+	if (activeCam == CameraManager::GetInstans()->GetCamera("maincam")) {
+		activeCam->SetFollowTarget(Player_.get(), FollowTargetposition);
+	}
+
+	Player_->Update();
+
+	// パーティクルの更新
+	UpdatePlayerParticle();
+
+	// ポーズ中でもカメラだけ更新
+	CameraManager::GetInstans()->GetActiveCamera()->Update();
+}
+
+void StageSelectScene::UpdatePlayerParticle() {	
+	// プレイヤー用のパーティクルの位置を常に更新
+	Vector3 pos = Player_->GetTranslate();
+
+	if (playermoveright) {         // 右に移動中
+		// 左方向に設定
+		playeremitter_->SetisRight(false);
+		Vector3 offset = { -0.3f,0.0f,0.0f };
+		playeremitter_->SetPosition(pos + offset);
+		playeremitter_->PlayerEmit();
+	}else if (playermoveleft) {	   // 左に移動中
+		// 右方向に設定
+		playeremitter_->SetisRight(true);
+		Vector3 offset = { 0.3f,0.0f,0.0f };
+		playeremitter_->SetPosition(pos + offset);
+		playeremitter_->PlayerEmit();
 	}
 }
