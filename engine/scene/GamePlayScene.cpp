@@ -46,20 +46,10 @@ void GamePlayScene::Initialize()
 	int stageIndex = SceneManager::GetInstance()->GetStageIndex();
 
 	std::string stagePath;
-	switch (stageIndex) {
-	case 0: stagePath = "MapData/mapp1.csv"; break;
-	case 1: stagePath = "MapData/mapp2.csv"; break;
-	case 2: stagePath = "MapData/mapp3.csv"; break;
-	case 3: stagePath = "MapData/mapp4.csv"; break;
-	case 4: stagePath = "MapData/mapp5.csv"; break;
-	case 5: stagePath = "MapData/mapp6.csv"; break;
-	case 6: stagePath = "MapData/mapp7.csv"; break;
-	case 7: stagePath = "MapData/mapp8.csv"; break;
-	case 8: stagePath = "MapData/mapp9.csv"; break;
-	case 9: stagePath = "MapData/mapp10.csv"; break;
-	case 10:stagePath = "MapData/mapp11.csv"; break;
-	case 11:stagePath = "MapData/mapp12.csv"; break;
-	case 12:stagePath = "MapData/mapp13.csv"; break;
+	if (stageIndex >= 0 && stageIndex <= 12) {
+		stagePath = "MapData/mapp" + std::to_string(stageIndex + 1) + ".csv";
+	} else {
+		stagePath = "MapData/mapp1.csv";
 	}
 
 	skydome_ = make_unique<Object3D>();
@@ -625,34 +615,8 @@ void GamePlayScene::Update()
 	}
 
 	//リセット
-	if (
-#ifdef _DEBUG
-		Input::GetInstance()->PushKey(DIK_R) ||
-#endif// _DEBUG
-		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
-		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+	Reset();
 
-		holdTime += deltaTime;
-
-		//メーターの進み具合
-		float progress = min(holdTime / holdDuration, 1.0f);
-		float maxWidth = 600.0f;
-		float meterWidth = maxWidth * progress;
-
-		resetMeter->SetSize(Vector2(meterWidth, 45));
-
-		if (holdTime >= holdDuration) {
-			holdTime = 0.0f;
-
-			int stageIndex = SceneManager::GetInstance()->GetStageIndex();
-			SceneManager::GetInstance()->SetStageIndex(stageIndex);
-			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
-		}
-
-	} else {
-		//離されたらタイマーをリセット
-		holdTime = 0.0f;
-	}
 	resetMeter->Update();
 	ResetNotice->Update();
 
@@ -771,6 +735,38 @@ void GamePlayScene::Draw()
 	fadeManager_.Draw();
 
 #pragma endregion
+}
+
+//リセット
+void GamePlayScene::Reset() {
+	if (
+#ifdef _DEBUG
+		Input::GetInstance()->PushKey(DIK_R) ||
+#endif// _DEBUG
+		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
+		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+
+		holdTime += deltaTime;
+
+		//メーターの進み具合
+		float progress = min(holdTime / holdDuration, 1.0f);
+		float maxWidth = 600.0f;
+		float meterWidth = maxWidth * progress;
+
+		resetMeter->SetSize(Vector2(meterWidth, 45));
+
+		if (holdTime >= holdDuration) {
+			holdTime = 0.0f;
+
+			int stageIndex = SceneManager::GetInstance()->GetStageIndex();
+			SceneManager::GetInstance()->SetStageIndex(stageIndex);
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+		}
+
+	} else {
+		//離されたらタイマーをリセット
+		holdTime = 0.0f;
+	}
 }
 
 void GamePlayScene::DrawImgui()
