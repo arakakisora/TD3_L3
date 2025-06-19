@@ -41,6 +41,8 @@ void TitleScene::Initialize() {
 	ButtonSound_ = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");	   // 決定用サウンド
 	copeSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Camera_copy.wav");	   // コピー用サウンド
 	BgmSound_ = Audio::GetInstance()->SoundLoadWave("Resources/Audio/bgm.wav");                  // メインサウンド
+	// オーディオのリセット
+	Audio::GetInstance()->StopAudio();
 
 	// フェードインの初期化
 	fadeManager_.Initialize("Resources/white.png");
@@ -112,10 +114,10 @@ void TitleScene::Update() {
 		}
 	}
 	// imguiの更新
-	DebugGui();
+	DebugimgGui();
 }
 
-void TitleScene::DebugGui(){
+void TitleScene::DebugimgGui(){
 #ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {

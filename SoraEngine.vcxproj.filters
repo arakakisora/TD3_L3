@@ -55,9 +55,6 @@
     <Filter Include="ヘッダー ファイル\engin\math">
       <UniqueIdentifier>{5f21e2d0-86b9-48be-b367-f2db0dafc37c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="shader">
-      <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\engin\scene">
       <UniqueIdentifier>{30d9abdf-a510-405a-8a75-38be9d9aebad}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\application\ui">
       <UniqueIdentifier>{6b3c7636-909e-4337-aeac-142a8d520d9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\shader">
+      <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -258,15 +258,23 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3d.VS.hlsl">
-      <Filter>shader</Filter>
+      <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Object3d.PS.hlsl">
-      <Filter>shader</Filter>
+      <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle.PS.hlsl" />
-    <FxCompile Include="Resources\Shaders\Particle.VS.hlsl" />
-    <FxCompile Include="Resources\Shaders\Sprite.PS.hlsl" />
-    <FxCompile Include="Resources\Shaders\Sprite.VS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Sprite.VS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Sprite.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle.VS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\2d\Sprite.h">
@@ -422,17 +430,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Object3d.hlsli">
-      <Filter>shader</Filter>
+      <Filter>リソース ファイル\shader</Filter>
     </None>
-    <None Include="Resources\Shaders\Particle.hlsli" />
-    <None Include="Resources\Shaders\Sprite.hlsli" />
     <None Include="MapData\Map1_1.csv" />
     <None Include="MapData\blocks.csv" />
-    <None Include="MapData\mapp1.csv" />
-    <None Include="MapData\mapp2.csv" />
-    <None Include="MapData\mapp3.csv" />
-    <None Include="MapData\mapp4.csv" />
-    <None Include="MapData\mapp5.csv" />
     <None Include="MapData\map050.csv" />
     <None Include="MapData\mapp6.csv">
       <Filter>リソース ファイル</Filter>
@@ -455,6 +456,29 @@
     <None Include="MapData\mapp13.csv">
       <Filter>リソース ファイル</Filter>
     </None>
-    <None Include="MapData\mapp9.csv" />
+    <None Include="Resources\Shaders\Sprite.hlsli">
+      <Filter>リソース ファイル\shader</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle.hlsli">
+      <Filter>リソース ファイル\shader</Filter>
+    </None>
+    <None Include="MapData\mapp1.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\mapp2.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\mapp3.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\mapp5.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\mapp4.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\mapp9.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>
