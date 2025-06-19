@@ -67,22 +67,9 @@ void GamePlayScene::Initialize()
 	//6,3
 	//playerの生成
 	player = std::make_unique<Player>();
-	object3DPlayer = new Object3D();
-
-	Vector3 playerPostion = map->GetPlayerStartPosition();
-
-
-
-	object3DPlayer->Initialize(Object3DCommon::GetInstance());
-
-	object3DPlayer->SetModel("playercharacter.obj");
-	object3DPlayer->SetScale(Vector3{ 1.0f,1.0f,1.0f });
-	object3DPlayer->SetLighting(true);
-	object3DPlayer->SetDirectionalLightEnable(true);
-	object3DPlayer->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
-
 	player->SetMapChipField(map);
-	player->Initialize(object3DPlayer, playerPostion);
+	Vector3 playerPostion = map->GetPlayerStartPosition();
+	player->Initialize(playerPostion); //プレイヤーの初期位置を設定
 	player->SetDeathHeight(0.0f);
 
 
@@ -320,7 +307,7 @@ void GamePlayScene::Initialize()
 	resetMeter->SetSize(Vector2(200, 45));
 
 	//フォローカメラ設定
-	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0, 0, -15 });
+	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(player->GetObject3D(), {0, 0, -15});
 
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(false);
 
@@ -371,8 +358,6 @@ void GamePlayScene::Finalize()
 
 	map->Finalize();
 	delete map;
-
-	delete object3DPlayer;
 
 	//delete gameCamera_;
 	photoCamera->Finalize();
@@ -463,7 +448,7 @@ void GamePlayScene::Update()
 		}
 
 		if (isfadesense_) {
-			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(object3DPlayer, { 0,0, -7.0f });
+			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(player->GetObject3D(), { 0,0, -7.0f });
 			CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(true);
 
 			// クリアパーティクル開始
@@ -810,9 +795,9 @@ void GamePlayScene::DrawImgui()
 
 
 		//プレイヤーディレクれくしょなるライト
-		DirectionalLight directionalLight = object3DPlayer->GetDirectionalLight();
+		DirectionalLight directionalLight = player->GetObject3D()->GetDirectionalLight();
 		if (ImGui::DragFloat3("Player Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
-			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
+			player->GetObject3D()->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
 		Transform text = Tutorialtext1->GetTransform();
