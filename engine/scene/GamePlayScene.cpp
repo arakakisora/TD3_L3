@@ -93,7 +93,7 @@ void GamePlayScene::Initialize()
 		tutorialTexts[i] = std::make_unique<Object3D>();
 		tutorialTexts[i]->Initialize(Object3DCommon::GetInstance());
 		// 固有のパラメータを設定
-		const auto& param = tutorialTextParams[i];
+		const TutorialTextParam& param = tutorialTextParams[i];
 		tutorialTexts[i]->SetModel(param.modelPath);
 		tutorialTexts[i]->SetScale(param.scale);
 		tutorialTexts[i]->SetRotate(param.rotate);
@@ -112,75 +112,33 @@ void GamePlayScene::Initialize()
 	ResetNotice->SetTranslate(Vector3(12.46f, 23.25f, -1.0f));
 	ResetNotice->SetLighting(false);
 
-	OperationtextStickL = std::make_unique<Sprite>();
-	OperationtextStickL->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
-	OperationtextStickL->SetPosition(Vector2(43, 655));
-	OperationtextStickL->SetSize(Vector2(70, 70));
+	const std::array<OperationSpriteParam, OperationTextCount> operationSpriteParams = { {
+		{"Resources/xbox_stick_l.png", {43, 655}, {70, 70}},
+		{"Resources/xbox_button_color_b.png", {416, 655}, {70, 70}},
+		{"Resources/xbox_button_color_a.png", {228, 655}, {70, 70}},
+		{"Resources/xbox_button_color_x.png", {628, 655}, {70, 70}},
+		{"Resources/xbox_button_color_y.png", {792, 655}, {70, 70}},
+		{"Resources/xbox_lb.png", {964, 655}, {70, 60}},
+		{"Resources/xbox_rb.png", {1090, 655}, {70, 60}},
+		{"Resources/idou.png", {135, 655}, {60, 60}},
+		{"Resources/kirikae.png", {507, 655}, {100, 60}},
+		{"Resources/toru.png", {712, 655}, {60, 60}},
+		{"Resources/haiti.png", {882, 655}, {60, 60}},
+		{"Resources/zyanpu.png", {326, 655}, {60, 60}},
+		{"Resources/reset.png", {1167, 655}, {70, 60}},
+		{"Resources/plus.png", {1031, 655}, {60, 60}}
+		} };
 
-	OperationtextButtonB = std::make_unique<Sprite>();
-	OperationtextButtonB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_b.png");
-	OperationtextButtonB->SetPosition(Vector2(416, 655));
-	OperationtextButtonB->SetSize(Vector2(70, 70));
-
-	OperationtextButtonA = std::make_unique<Sprite>();
-	OperationtextButtonA->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_a.png");
-	OperationtextButtonA->SetPosition(Vector2(228, 655));
-	OperationtextButtonA->SetSize(Vector2(70, 70));
-
-	OperationtextX = std::make_unique<Sprite>();
-	OperationtextX->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_x.png");
-	OperationtextX->SetPosition(Vector2(628, 655));
-	OperationtextX->SetSize(Vector2(70, 70));
-
-	OperationtextY = std::make_unique<Sprite>();
-	OperationtextY->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_y.png");
-	OperationtextY->SetPosition(Vector2(792, 655));
-	OperationtextY->SetSize(Vector2(70, 70));
-
-	OperationtextLB = std::make_unique<Sprite>();
-	OperationtextLB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_lb.png");
-	OperationtextLB->SetPosition(Vector2(964, 655));
-	OperationtextLB->SetSize(Vector2(70, 60));
-
-	OperationtextRB = std::make_unique<Sprite>();
-	OperationtextRB->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_rb.png");
-	OperationtextRB->SetPosition(Vector2(1090, 655));
-	OperationtextRB->SetSize(Vector2(70, 60));
-
-	OperationtextIdou = std::make_unique<Sprite>();
-	OperationtextIdou->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
-	OperationtextIdou->SetPosition(Vector2(135, 655));
-	OperationtextIdou->SetSize(Vector2(60, 60));
-
-	OperationtextKrikae = std::make_unique<Sprite>();
-	OperationtextKrikae->Initialize(SpriteCommon::GetInstance(), "Resources/kirikae.png");
-	OperationtextKrikae->SetPosition(Vector2(507, 655));
-	OperationtextKrikae->SetSize(Vector2(100, 60));
-
-	OperationtextToru = std::make_unique<Sprite>();
-	OperationtextToru->Initialize(SpriteCommon::GetInstance(), "Resources/toru.png");
-	OperationtextToru->SetPosition(Vector2(712, 655));
-	OperationtextToru->SetSize(Vector2(60, 60));
-
-	OperationtextHaiti = std::make_unique<Sprite>();
-	OperationtextHaiti->Initialize(SpriteCommon::GetInstance(), "Resources/haiti.png");
-	OperationtextHaiti->SetPosition(Vector2(882, 655));
-	OperationtextHaiti->SetSize(Vector2(60, 60));
-
-	OperationtextZyanpu = std::make_unique<Sprite>();
-	OperationtextZyanpu->Initialize(SpriteCommon::GetInstance(), "Resources/zyanpu.png");
-	OperationtextZyanpu->SetPosition(Vector2(326, 655));
-	OperationtextZyanpu->SetSize(Vector2(60, 60));
-
-	OperationtextReset = std::make_unique<Sprite>();
-	OperationtextReset->Initialize(SpriteCommon::GetInstance(), "Resources/reset.png");
-	OperationtextReset->SetPosition(Vector2(1167, 655));
-	OperationtextReset->SetSize(Vector2(70, 60));
-
-	OperationtextPlus = std::make_unique<Sprite>();
-	OperationtextPlus->Initialize(SpriteCommon::GetInstance(), "Resources/plus.png");
-	OperationtextPlus->SetPosition(Vector2(1031, 655));
-	OperationtextPlus->SetSize(Vector2(60, 60));
+	// forで操作説明テキストの初期化
+	for (int i = 0; i < OperationTextCount; ++i) {
+		// 共通処理
+		operationTexts[i] = std::make_unique<Sprite>();
+		// 固有のパラメータを設定
+		const OperationSpriteParam& param = operationSpriteParams[i];
+		operationTexts[i]->Initialize(SpriteCommon::GetInstance(), param.texturePath);
+		operationTexts[i]->SetPosition(param.position);
+		operationTexts[i]->SetSize(param.size);
+	}
 
 	for (uint32_t i = 0; i < 2; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
@@ -458,33 +416,37 @@ void GamePlayScene::Update()
 		tutorialTexts[i]->Update();
 	}
 
-	//ui
+	// 操作説明テキストの更新
 	if (!photoCamera->GetCameraMode()) {
-		OperationtextStickL->Update();
-		OperationtextButtonB->Update();
-		OperationtextButtonA->Update();
-		OperationtextLB->Update();
-		OperationtextRB->Update();
-		OperationtextIdou->Update();
-		OperationtextKrikae->Update();
-		OperationtextZyanpu->Update();
-		OperationtextReset->Update();
-		OperationtextPlus->Update();
+		// 通常モードのときに表示するスプライト
+		const std::vector<OperationTextType> visibleSprites = {
+			StickL, ButtonB, ButtonA,
+			LB, RB,
+			Idou, Kirikae, Zyanpu,
+			Reset, Plus
+		};
+
+		for (auto type : visibleSprites) {
+			if (operationTexts[type]) {
+				operationTexts[type]->Update();
+			}
+		}
+	} else {
+		// カメラモードのときに表示するスプライト
+		const std::vector<OperationTextType> visibleSprites = {
+			StickL, ButtonB, ButtonX, ButtonY,
+			LB, RB,
+			Idou, Kirikae, Toru, Haiti,
+			Reset, Plus
+		};
+
+		for (auto type : visibleSprites) {
+			if (operationTexts[type]) {
+				operationTexts[type]->Update();
+			}
+		}
 	}
-	if (photoCamera->GetCameraMode()) {
-		OperationtextStickL->Update();
-		OperationtextButtonB->Update();
-		OperationtextX->Update();
-		OperationtextY->Update();
-		OperationtextLB->Update();
-		OperationtextRB->Update();
-		OperationtextIdou->Update();
-		OperationtextKrikae->Update();
-		OperationtextToru->Update();
-		OperationtextHaiti->Update();
-		OperationtextReset->Update();
-		OperationtextPlus->Update();
-	}
+
 	//mode切り替え
 	photoCamera->SetcameraMode(player->GetCameraMode());
 
@@ -499,7 +461,7 @@ void GamePlayScene::Update()
 	}
 
 	//リセット
-	Reset();
+	GameReset();
 
 	resetMeter->Update();
 	ResetNotice->Update();
@@ -511,8 +473,6 @@ void GamePlayScene::Update()
 void GamePlayScene::Draw()
 {
 	SpriteCommon::GetInstance()->CommonDraw();
-
-
 
 #pragma region 3Dオブジェクト描画
 
@@ -551,32 +511,35 @@ void GamePlayScene::Draw()
 	//Spriteの描画準備。spriteの描画に共通のグラフィックスコマンドを積む
 	SpriteCommon::GetInstance()->CommonDraw();
 
-	//ui
+	// 操作説明テキストの更新
 	if (!photoCamera->GetCameraMode()) {
-		OperationtextStickL->Draw();
-		OperationtextButtonB->Draw();
-		OperationtextButtonA->Draw();
-		OperationtextLB->Draw();
-		OperationtextRB->Draw();
-		OperationtextIdou->Draw();
-		OperationtextKrikae->Draw();
-		OperationtextZyanpu->Draw();
-		OperationtextReset->Draw();
-		OperationtextPlus->Draw();
-	}
-	if (photoCamera->GetCameraMode()) {
-		OperationtextStickL->Draw();
-		OperationtextButtonB->Draw();
-		OperationtextLB->Draw();
-		OperationtextRB->Draw();
-		OperationtextX->Draw();
-		OperationtextY->Draw();
-		OperationtextIdou->Draw();
-		OperationtextKrikae->Draw();
-		OperationtextToru->Draw();
-		OperationtextHaiti->Draw();
-		OperationtextReset->Draw();
-		OperationtextPlus->Draw();
+		// 通常モードのときに表示するスプライト
+		const std::vector<OperationTextType> visibleSprites = {
+			StickL, ButtonB, ButtonA,
+			LB, RB,
+			Idou, Kirikae, Zyanpu,
+			Reset, Plus
+		};
+
+		for (auto type : visibleSprites) {
+			if (operationTexts[type]) {
+				operationTexts[type]->Draw();
+			}
+		}
+	} else {
+		// カメラモードのときに表示するスプライト
+		const std::vector<OperationTextType> visibleSprites = {
+			StickL, ButtonB, ButtonX, ButtonY,
+			LB, RB,
+			Idou, Kirikae, Toru, Haiti,
+			Reset, Plus
+		};
+
+		for (auto type : visibleSprites) {
+			if (operationTexts[type]) {
+				operationTexts[type]->Draw();
+			}
+		}
 	}
 
 	for (std::unique_ptr<Sprite>& Uitext : pauseui) {
@@ -612,7 +575,7 @@ void GamePlayScene::Draw()
 }
 
 //リセット
-void GamePlayScene::Reset() {
+void GamePlayScene::GameReset() {
 	if (
 #ifdef _DEBUG
 		Input::GetInstance()->PushKey(DIK_R) ||

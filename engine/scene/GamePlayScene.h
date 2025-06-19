@@ -53,7 +53,7 @@ public:
 	void Draw()override;
 
 	//リセット
-	void Reset();
+	void GameReset();
 
 	// Imgui描画
 	void DrawImgui();
@@ -81,7 +81,30 @@ public:
 		Vector3 rotate;
 		Vector3 translate;
 	};
-
+	
+	enum OperationTextType { // 操作説明の種類
+		StickL,
+		ButtonB,
+		ButtonA,
+		ButtonX,
+		ButtonY,
+		LB,
+		RB,
+		Idou,
+		Kirikae,
+		Toru,
+		Haiti,
+		Zyanpu,
+		Reset,
+		Plus,
+		OperationTextCount // 要素数
+	};
+	// 操作説明のパラメータ
+	struct OperationSpriteParam {
+		const char* texturePath;
+		Vector2 position;
+		Vector2 size;
+	};
 public:	// Getter
 	bool GetCameraMode();
 
@@ -90,29 +113,13 @@ private:
 	std::unique_ptr<Camera> camera2;
 	//プレイヤー
 	std::unique_ptr<Player>player;
-	Vector3 playeroffset{};
-	//チュートリアルテキスト
-	std::array<std::unique_ptr<Object3D>, Count>tutorialTexts;	
+	Vector3 playeroffset{};	
 	//リセットお知らせ
 	std::unique_ptr<Object3D>ResetNotice;
-
+	//チュートリアルテキスト
+	std::array<std::unique_ptr<Object3D>, Count>tutorialTexts;		
 	//操作説明テキスト
-	//std::vector<std::unique_ptr<Sprite>>operationTexts;
-	std::unique_ptr<Sprite>OperationtextStickL;
-	std::unique_ptr<Sprite>OperationtextButtonB;
-	std::unique_ptr<Sprite>OperationtextButtonA;
-	std::unique_ptr<Sprite>OperationtextX;
-	std::unique_ptr<Sprite>OperationtextY;
-	std::unique_ptr<Sprite>OperationtextLB;
-	std::unique_ptr<Sprite>OperationtextRB;
-	std::unique_ptr<Sprite>OperationtextIdou;
-	std::unique_ptr<Sprite>OperationtextKrikae;
-	std::unique_ptr<Sprite>OperationtextToru;
-	std::unique_ptr<Sprite>OperationtextHaiti;
-	std::unique_ptr<Sprite>OperationtextZyanpu;
-	std::unique_ptr<Sprite>OperationtextReset;
-	std::unique_ptr<Sprite>OperationtextPlus;
-
+	std::array<std::unique_ptr<Sprite>, OperationTextCount>operationTexts;	
 	//ブロックのスプライト
 	std::unique_ptr<Sprite>nCopySprite;
 	std::unique_ptr<Sprite>jumpSprite;
