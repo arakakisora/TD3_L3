@@ -112,10 +112,10 @@ void TitleScene::Update() {
 		}
 	}
 	// imguiの更新
-	DebugGui();
+	DebugimgGui();
 }
 
-void TitleScene::DebugGui(){
+void TitleScene::DebugimgGui(){
 #ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Camera Control", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::Button("Switch to Main Camera")) {
