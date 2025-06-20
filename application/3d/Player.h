@@ -40,7 +40,7 @@ class Player {
 
 public:
 	// 初期化
-	void Initialize(Object3D* object3D, const Vector3& position);
+	void Initialize(const Vector3& position);
 
 	~Player();
 
@@ -107,6 +107,9 @@ public:
 	bool GetPrayerMoveLeft() { return playermoveleft; }
 	void SetPrayerMoveRight(bool right) { playermoveright = right; }
 	void SetPrayerMoveLeft(bool left) { playermoveleft = left; }
+
+
+	Object3D* GetObject3D() { return object3D_; } // Object3D取得
 
 private:
 

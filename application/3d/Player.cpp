@@ -13,14 +13,19 @@
 
 using namespace Easing;
 
-void Player::Initialize(Object3D* object3D, const Vector3& position) {
-
+void Player::Initialize(const Vector3& position) {
 
 	// モデルの初期化
-	object3D_ = object3D;
-	// プレイヤーの初期位置
-	object3D_->SetTranslate(position);
-	object3D_->SetRotate({ 0, std::numbers::pi_v<float> / 2.0f , 0 });
+	object3D_ = new Object3D();
+	object3D_->Initialize(Object3DCommon::GetInstance());
+	object3D_->SetModel("playercharacter.obj");
+	object3D_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
+	object3D_->SetLighting(true);
+	object3D_->SetDirectionalLightEnable(true);
+	object3D_->SetDirectionalLightDirection({ -1.3f,-1.82f,-4.77f });
+	object3D_->SetTranslate(position);	// プレイヤーの初期位置
+	object3D_->SetRotate({ 0, std::numbers::pi_v<float> / 2.0f , 0 });	
+	SetDeathHeight(0.0f);
 
 	// ジャンプ用サウンド
 	jumpSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Jump.wav");
@@ -30,9 +35,8 @@ void Player::Initialize(Object3D* object3D, const Vector3& position) {
 
 Player::~Player()
 {
+	delete object3D_;
 }
-
-
 
 void Player::Update() {
 
@@ -87,11 +91,6 @@ void Player::Update() {
 
 	////PrayerTurn();
 	object3D_->Update();
-
-	//// ゴールフラグがたったらクリアシーンに移動
-	//if (CheckGoal) {
-	//	//SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
-	//}
 }
 
 void Player::Draw() {
@@ -100,26 +99,6 @@ void Player::Draw() {
 }
 
 void Player::PrayerMove() {
-
-
-	//溜めVersion
-	/*
-	if (isAccumulateJump_) {
-		AccumulateJumpTimer_ += 1.0f / 60.0f;
-		if (AccumulateJumpTimer_ >= kAccumulateJumpTime_) {
-			// ジャンプ実行
-			velocity_.y = kJampBlockAcceleration;
-			onGround_ = false;
-			isAccumulateJump_ = false;
-			AccumulateJumpTimer_ = 0.0f;
-		}
-	}
-	*/
-
-
-
-
-
 	// コントローラー操作（左右移動）
 	if (
 #ifdef _DEBUG
@@ -685,6 +664,3 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		info.hitWall = true;
 	}
 }
-
-
-

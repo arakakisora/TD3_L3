@@ -41,11 +41,21 @@ private:
 	// 移動
 	void move();
 	// シーン遷移
-	void moveChangeScene();
+	void moveChangeScene();	
+	// オーディオの更新
+	void UpdateAudio();
+	// 非ポーズ中の更新
+	void UpdateDuringPlay();
+	// ポーズ中の更新
+	void UpdateDuringPause();
+	// パーティクルの更新
+	void UpdatePlayerParticle();
+	// デバッグ用の ImGui 
+	void DebugimgGui();
 private:
 	// ポインタ
 	std::unique_ptr<Camera> camera_;
-	Object3D* Player_;
+	std::unique_ptr<Object3D> Player_;
 	// ステージオブジェクトのリスト
 	std::array<std::unique_ptr<Object3D>, StageType::Count> stages_;
 
@@ -77,11 +87,11 @@ private:
 
 	// ステージ選択時のプレイヤーの位置
 	Vector3 playerInitialOffset_;
-
-	ParticleEmitter* playeremitter_;
+	// プレイヤーのパーティクルエミッター
+	std::unique_ptr<ParticleEmitter> playeremitter_;
 	// プレイヤー移動フラグ
-	bool playermoveright = false;
-	bool playermoveleft = false;
+	bool playermoveright = false; // 右移動フラグ
+	bool playermoveleft = false;  // 左移動フラグ
 
 	// 背景モデル
 	std::unique_ptr<Object3D> backPlane_;

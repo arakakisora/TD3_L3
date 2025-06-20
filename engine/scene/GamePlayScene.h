@@ -54,11 +54,58 @@ public:
 	void Draw()override;
 
 	//リセット
-	void Reset();
+	void GameReset();
 
 	// Imgui描画
 	void DrawImgui();
 
+	enum TutorialTextType { // チュートリアルの種類
+		Text1,                            // チュートリアル_01 
+		Text2,						      // チュートリアル_02
+		Text3,							  // チュートリアル_03
+		Text4,						      // チュートリアル_04
+		Text5,					    	  // チュートリアル_05
+		Text6,				    		  // チュートリアル_06
+		Text7,			    			  // チュートリアル_07
+		Text8,		     				  // チュートリアル_08
+		Text9,                            // 空白コピペ
+		Text10,                           // リセット
+		Text11,                           // ×ブロック説明
+		Text12,                           // タイマー
+		Text13,                           // ジャンプ
+		Count                             // 要素数
+	};
+	// チュートリアルテキストのパラメータ
+	struct TutorialTextParam {
+		const char* modelPath;
+		Vector3 scale;
+		Vector3 rotate;
+		Vector3 translate;
+	};
+	
+	enum OperationTextType { // 操作説明の種類
+		StickL,
+		ButtonB,
+		ButtonA,
+		ButtonX,
+		ButtonY,
+		LB,
+		RB,
+		Idou,
+		Kirikae,
+		Toru,
+		Haiti,
+		Zyanpu,
+		Reset,
+		Plus,
+		OperationTextCount // 要素数
+	};
+	// 操作説明のパラメータ
+	struct OperationSpriteParam {
+		const char* texturePath;
+		Vector2 position;
+		Vector2 size;
+	};
 public:	// Getter
 	bool GetCameraMode();
 
@@ -67,31 +114,13 @@ private:
 	std::unique_ptr<Camera> camera2;
 	//プレイヤー
 	std::unique_ptr<Player>player;
-	Object3D* object3DPlayer=nullptr;
-	Vector3 playeroffset{};
-
-	//チュートリアルテキスト
+	Vector3 playeroffset{};	
+  //チュートリアルテキスト
 	std::unique_ptr<Tutorial>tutorial;
-
 	//リセットお知らせ
 	std::unique_ptr<Object3D>ResetNotice;
-
 	//操作説明テキスト
-	//std::vector<std::unique_ptr<Sprite>>operationTexts;
-	std::unique_ptr<Sprite>OperationtextStickL;
-	std::unique_ptr<Sprite>OperationtextButtonB;
-	std::unique_ptr<Sprite>OperationtextButtonA;
-	std::unique_ptr<Sprite>OperationtextX;
-	std::unique_ptr<Sprite>OperationtextY;
-	std::unique_ptr<Sprite>OperationtextLB;
-	std::unique_ptr<Sprite>OperationtextRB;
-	std::unique_ptr<Sprite>OperationtextIdou;
-	std::unique_ptr<Sprite>OperationtextKrikae;
-	std::unique_ptr<Sprite>OperationtextToru;
-	std::unique_ptr<Sprite>OperationtextHaiti;
-	std::unique_ptr<Sprite>OperationtextZyanpu;
-	std::unique_ptr<Sprite>OperationtextReset;
-	std::unique_ptr<Sprite>OperationtextPlus;
+	std::array<std::unique_ptr<Sprite>, OperationTextCount>operationTexts;	
 
 	//リセットメータのスプライト
 	std::unique_ptr<Sprite>resetMeter;

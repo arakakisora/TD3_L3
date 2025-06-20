@@ -55,7 +55,7 @@ private:
 	// アニメーションフェーズの更新処理
 	void UpdatePhase();
 	// デバッグ用の ImGui 描画
-	void DebugGui();
+	void DebugimgGui();
 private:
 	// ポインタ
 	FadeManager fadeManager_;	// 背景
