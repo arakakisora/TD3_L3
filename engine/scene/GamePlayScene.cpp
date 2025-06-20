@@ -85,123 +85,9 @@ void GamePlayScene::Initialize()
 	player->Initialize(object3DPlayer, playerPostion);
 	player->SetDeathHeight(0.0f);
 
-
-	Tutorialtext1 = std::make_unique<Object3D>();
-	Tutorialtext1->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext1->SetModel("tutorial/tutorial1.obj");
-	Tutorialtext1->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext1->SetRotate(Vector3(17.3f, 12.57f, 0.0f));
-	Tutorialtext1->SetTranslate(Vector3(8.5f, 21.44f, 1.0f));
-	Tutorialtext1->SetLighting(false);
-	Tutorialtext1->SetIsTutorialActive(false);
-
-	Tutorialtext2 = std::make_unique<Object3D>();
-	Tutorialtext2->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext2->SetModel("tutorial/tutorial2.obj");
-	Tutorialtext2->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext2->SetRotate(Vector3(17.3f, 12.57f, 0.0f));
-	Tutorialtext2->SetTranslate(Vector3(15.3f, 21.4f, 0.75f));
-	Tutorialtext2->SetLighting(false);
-	Tutorialtext2->SetIsTutorialActive(false);
-
-	Tutorialtext3 = std::make_unique<Object3D>();
-	Tutorialtext3->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext3->SetModel("tutorial/tutorial3.obj");
-	Tutorialtext3->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext3->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext3->SetTranslate(Vector3(8.5f, 21.45f, 1.0f));
-	Tutorialtext3->SetLighting(false);
-	Tutorialtext3->SetIsTutorialActive(false);
-
-	Tutorialtext4 = std::make_unique<Object3D>();
-	Tutorialtext4->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext4->SetModel("tutorial/tutorial4.obj");
-	Tutorialtext4->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext4->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext4->SetTranslate(Vector3(15.46f, 21.4f, 0.69f));
-	Tutorialtext4->SetLighting(false);
-	Tutorialtext4->SetIsTutorialActive(false);
-
-	Tutorialtext5 = std::make_unique<Object3D>();
-	Tutorialtext5->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext5->SetModel("tutorial/tutorial5.obj");
-	Tutorialtext5->SetScale(Vector3(0.75f, 0.5f, 0.5f));
-	Tutorialtext5->SetRotate(Vector3(17.3f, 12.57f, 0.0f));
-	Tutorialtext5->SetTranslate(Vector3(12.24f, 21.45f, 1.0f));
-	Tutorialtext5->SetLighting(false);
-	Tutorialtext5->SetIsTutorialActive(false);
-
-	Tutorialtext6 = std::make_unique<Object3D>();
-	Tutorialtext6->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext6->SetModel("tutorial/tutorial6.obj");
-	Tutorialtext6->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext6->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext6->SetTranslate(Vector3(8.5f, 21.4f, 1.0f));
-	Tutorialtext6->SetLighting(false);
-	Tutorialtext6->SetIsTutorialActive(false);
-
-	Tutorialtext7 = std::make_unique<Object3D>();
-	Tutorialtext7->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext7->SetModel("tutorial/tutorial7.obj");
-	Tutorialtext7->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext7->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext7->SetTranslate(Vector3(15.46f, 21.4f, 1.0f));
-	Tutorialtext7->SetLighting(false);
-	Tutorialtext7->SetIsTutorialActive(false);
-
-	Tutorialtext8 = std::make_unique<Object3D>();
-	Tutorialtext8->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext8->SetModel("tutorial/tutorial8.obj");
-	Tutorialtext8->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext8->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext8->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext8->SetLighting(false);
-	Tutorialtext8->SetIsTutorialActive(false);
-
-	Tutorialtext9 = std::make_unique<Object3D>();
-	Tutorialtext9->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext9->SetModel("tutorial/tutorial9.obj");
-	Tutorialtext9->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	Tutorialtext9->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext9->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext9->SetLighting(false);
-	Tutorialtext9->SetIsTutorialActive(false);
-
-	Tutorialtext10 = std::make_unique<Object3D>();
-	Tutorialtext10->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext10->SetModel("tutorial/tutorial10.obj");
-	Tutorialtext10->SetScale(Vector3(1.0f, 0.5f, 0.5f));
-	Tutorialtext10->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext10->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext10->SetLighting(false);
-	Tutorialtext10->SetIsTutorialActive(false);
-
-	Tutorialtext11 = std::make_unique<Object3D>();
-	Tutorialtext11->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext11->SetModel("tutorial/tutorial11.obj");
-	Tutorialtext11->SetScale(Vector3(1.0f, 0.5f, 0.5f));
-	Tutorialtext11->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext11->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext11->SetLighting(false);
-	Tutorialtext11->SetIsTutorialActive(false);
-
-	Tutorialtext12 = std::make_unique<Object3D>();
-	Tutorialtext12->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext12->SetModel("tutorial/tutorial12.obj");
-	Tutorialtext12->SetScale(Vector3(1.0f, 0.5f, 0.5f));
-	Tutorialtext12->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext12->SetTranslate(Vector3(12.46f, 21.4f, 1.0f));
-	Tutorialtext12->SetLighting(false);
-	Tutorialtext12->SetIsTutorialActive(false);
-
-	Tutorialtext13 = std::make_unique<Object3D>();
-	Tutorialtext13->Initialize(Object3DCommon::GetInstance());
-	Tutorialtext13->SetModel("tutorial/tutorial13.obj");
-	Tutorialtext13->SetScale(Vector3(1.0f, 0.5f, 0.5f));
-	Tutorialtext13->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	Tutorialtext13->SetTranslate(Vector3(12.46f, 19.5f, 1.0f));
-	Tutorialtext13->SetLighting(false);
-	Tutorialtext13->SetIsTutorialActive(false);
+	//チュートリアル
+	tutorial = std::make_unique<Tutorial>();
+	tutorial->Initialize();
 
 	//リセットお知らせ
 	ResetNotice = std::make_unique<Object3D>();
@@ -297,22 +183,6 @@ void GamePlayScene::Initialize()
 		pauseui.push_back(std::move(newSprite));
 	}
 
-	//ブロックのスプライト
-	nCopySprite = std::make_unique<Sprite>();
-	nCopySprite->Initialize(SpriteCommon::GetInstance(), "Resources/ncopy.png");
-	nCopySprite->SetPosition(Vector2(275, 121));
-	nCopySprite->SetSize(Vector2(45, 45));
-
-	jumpSprite = std::make_unique<Sprite>();
-	jumpSprite->Initialize(SpriteCommon::GetInstance(), "Resources/jumpsprite.png");
-	jumpSprite->SetPosition(Vector2(276, 214));
-	jumpSprite->SetSize(Vector2(45, 45));
-
-	timerSprite = std::make_unique<Sprite>();
-	timerSprite->Initialize(SpriteCommon::GetInstance(), "Resources/timersprite.png");
-	timerSprite->SetPosition(Vector2(275, 121));
-	timerSprite->SetSize(Vector2(45, 45));
-
 	//リセットメーターのスプライト
 	resetMeter = std::make_unique<Sprite>();
 	resetMeter->Initialize(SpriteCommon::GetInstance(), "Resources/resetmeter.png");
@@ -391,14 +261,7 @@ void GamePlayScene::Update()
 		// フェード更新
 		fadeManager_.Update();
 
-		//ゲームの経過時間
-		if (tutorial8) {
-			elapsedTime += deltaTime;
-
-			if (elapsedTime >= afterseconds) {
-				secondspassed = true;
-			}
-		}
+		
 		//カメラの更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
@@ -439,14 +302,6 @@ void GamePlayScene::Update()
 		// パーティクルの更新
 		playeremitter_->Update();
 
-		//チュートリアル表示制御map2
-		if (SceneManager::GetInstance()->GetStageIndex() == 1) {
-			if (!tutorial9) {
-				Tutorialtext9->SetIsTutorialActive(true);
-				tutorial9 = true;
-			}
-		}
-
 		if (player->GetCameraMode()) {
 			// カメラモード時パーティクル解除
 			player->SetPrayerMoveRight(false);
@@ -475,104 +330,13 @@ void GamePlayScene::Update()
 			SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 		}
 
-		//チュートリアル表示制御//map1
-		if (SceneManager::GetInstance()->GetStageIndex() == 0) {
-
-			if (!tutorial1_2) {
-				// text1,2を表示
-				Tutorialtext1->SetIsTutorialActive(true);
-				Tutorialtext2->SetIsTutorialActive(true);
-				tutorial1_2 = true;
-			}
-
-			if (photoCamera->HasStarted() && !tutorial3_4) {
-				Tutorialtext1->SetIsTutorialActive(false);
-				Tutorialtext2->SetIsTutorialActive(false);
-				Tutorialtext3->SetIsTutorialActive(true);
-				Tutorialtext4->SetIsTutorialActive(true);
-				tutorial3_4 = true;
-			}
-
-			if (photoCamera->HasMoved() && !tutorial5) {
-				Tutorialtext3->SetIsTutorialActive(false);
-				Tutorialtext4->SetIsTutorialActive(false);
-				Tutorialtext5->SetIsTutorialActive(true);
-				tutorial5 = true;
-			}
-
-			if (photoCamera->isFirstCopied && !tutorial6_7) {
-				Tutorialtext5->SetIsTutorialActive(false);
-				Tutorialtext6->SetIsTutorialActive(true);
-				Tutorialtext7->SetIsTutorialActive(true);
-				tutorial6_7 = true;
-			}
-			if (photoCamera->isFirstPasted && !tutorial8) {
-				Tutorialtext6->SetIsTutorialActive(false);
-				Tutorialtext7->SetIsTutorialActive(false);
-				Tutorialtext8->SetIsTutorialActive(true);
-				tutorial8 = true;
-			}
-
-			if (tutorial8 && secondspassed) {
-				Tutorialtext8->SetIsTutorialActive(false);
-				Tutorialtext10->SetIsTutorialActive(true);
-				tutorial10 = true;
-			}
-
-		}
-
 	} else {
 		player->SetPrayerMoveRight(false);
 		player->SetPrayerMoveLeft(false);
 	}
 
-	//チュートリアル表示制御map2
-	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
-		if (!tutorial9) {
-			Tutorialtext9->SetIsTutorialActive(true);
-			tutorial9 = true;
-		}
-	}
+	tutorial->Update();
 
-	//チュートリアル表示制御map3
-	if (SceneManager::GetInstance()->GetStageIndex() == 2) {
-		if (!tutorial11) {
-			Tutorialtext11->SetIsTutorialActive(true);
-			tutorial11 = true;
-		}
-		nCopySprite->Update();
-	}
-
-	//チュートリアル表示制御map9
-	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
-	
-			Tutorialtext12->SetIsTutorialActive(true);
-			tutorial12 = true;
-		
-			timerSprite->Update();
-	}
-
-	//チュートリアル表示制御map7
-	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
-		
-			Tutorialtext13->SetIsTutorialActive(true);
-			tutorial13 = true;
-			jumpSprite->Update();
-	}
-
-	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Update();
-	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Update();
-	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Update();
-	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Update();
-	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Update();
-	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Update();
-	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Update();
-	if (Tutorialtext8->GetIsTutorialActive())Tutorialtext8->Update();
-	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Update();
-	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Update();
-	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Update();
-	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Update();
-	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Update();
 	//ui
 
 	if (!photoCamera->GetCameraMode()) {
@@ -620,7 +384,7 @@ void GamePlayScene::Update()
 	resetMeter->Update();
 	ResetNotice->Update();
 
-	DrawImgui();
+	//DrawImgui();
 }
 
 
@@ -645,20 +409,7 @@ void GamePlayScene::Draw()
 	player->Draw();
 
 	//チュートリアルテキスト
-
-	if (Tutorialtext1->GetIsTutorialActive()) Tutorialtext1->Draw();
-	if (Tutorialtext2->GetIsTutorialActive()) Tutorialtext2->Draw();
-	if (Tutorialtext3->GetIsTutorialActive()) Tutorialtext3->Draw();
-	if (Tutorialtext4->GetIsTutorialActive()) Tutorialtext4->Draw();
-	if (Tutorialtext5->GetIsTutorialActive()) Tutorialtext5->Draw();
-	if (Tutorialtext6->GetIsTutorialActive()) Tutorialtext6->Draw();
-	if (Tutorialtext7->GetIsTutorialActive()) Tutorialtext7->Draw();
-	if (Tutorialtext8->GetIsTutorialActive()) Tutorialtext8->Draw();
-	if (Tutorialtext9->GetIsTutorialActive())Tutorialtext9->Draw();
-	if (Tutorialtext10->GetIsTutorialActive())Tutorialtext10->Draw();
-	if (Tutorialtext11->GetIsTutorialActive())Tutorialtext11->Draw();
-	if (Tutorialtext12->GetIsTutorialActive())Tutorialtext12->Draw();
-	if (Tutorialtext13->GetIsTutorialActive())Tutorialtext13->Draw();
+	tutorial->TextDraw();
 	//リセットお知らせ
 	if (holdTime > 0.0f) {
 		ResetNotice->Draw();
@@ -714,19 +465,7 @@ void GamePlayScene::Draw()
 		resetMeter->Draw();
 	}
 
-	//チュートリアル表示制御map9
-	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
-
-		timerSprite->Draw();
-	}
-
-	//チュートリアル表示制御map9
-	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
-
-		jumpSprite->Draw();
-	}
-
-	nCopySprite->Draw();
+	tutorial->SpriteDraw();
 
 	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();

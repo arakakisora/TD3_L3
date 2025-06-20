@@ -21,6 +21,7 @@
 
 #include <array>
 #include"FadeManager.h"
+#include "Tutorial.h"
 
 struct OperationText {
 	std::string texturePath;
@@ -70,6 +71,8 @@ private:
 	Vector3 playeroffset{};
 
 	//チュートリアルテキスト
+	std::unique_ptr<Tutorial>tutorial;
+
 	//std::array<std::unique_ptr<Object3D>, 8>tutorialTexts;
 	std::unique_ptr<Object3D> Tutorialtext1;
 	std::unique_ptr<Object3D>Tutorialtext2;
