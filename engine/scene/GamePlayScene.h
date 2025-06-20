@@ -123,7 +123,7 @@ private:
 	// ゲームカメラ
 	//ObjectCamera* gameCamera_;
 
-	PhotoCamera* photoCamera;
+	std::unique_ptr<PhotoCamera>photoCamera;
 
 	bool tutorial1_2 = false;
 	bool tutorial3_4 = false;

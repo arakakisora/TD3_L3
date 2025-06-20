@@ -197,7 +197,8 @@ void GamePlayScene::Initialize()
 	// ゲームカメラの生成
 	//gameCamera_ = new ObjectCamera();
 	//gameCamera_->Initialize(map);
-	photoCamera = new PhotoCamera;
+	photoCamera = std::make_unique<PhotoCamera>();
+	//photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
 
 	//ポーズメニュー
@@ -246,7 +247,7 @@ void GamePlayScene::Finalize()
 
 	//delete gameCamera_;
 	photoCamera->Finalize();
-	delete photoCamera;
+
 
 	delete emitter_;
 	delete playeremitter_;
