@@ -1,6 +1,7 @@
 #pragma once
 #include "Object3D.h"
 #include "Object3DCommon.h"
+#include "PhotoCamera.h"
 #include "Sprite.h"
 #include <array>
 #include <memory>
@@ -32,11 +33,15 @@ public:
 	void TextDraw();
 	//スプライト描画
 	void SpriteDraw();
+public:
+	void SetPhotoCamera(PhotoCamera* camera);
 private:
 	//チュートリアルテキスト
 	std::array<std::unique_ptr<Object3D>, 13>tutorialTexts;
 	//ブロックスプライト
 	std::array<std::unique_ptr<Sprite>, 3> blockSprites;
+	//フォトカメラ
+	PhotoCamera* photoCamera = nullptr;
 	//描画フラグ
 	bool tutorial1_2 = false;
 	bool tutorial3_4 = false;

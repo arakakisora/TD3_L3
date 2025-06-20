@@ -73,21 +73,6 @@ private:
 	//チュートリアルテキスト
 	std::unique_ptr<Tutorial>tutorial;
 
-	//std::array<std::unique_ptr<Object3D>, 8>tutorialTexts;
-	std::unique_ptr<Object3D> Tutorialtext1;
-	std::unique_ptr<Object3D>Tutorialtext2;
-	std::unique_ptr<Object3D>Tutorialtext3;
-	std::unique_ptr<Object3D>Tutorialtext4;
-	std::unique_ptr<Object3D>Tutorialtext5;
-	std::unique_ptr<Object3D>Tutorialtext6;
-	std::unique_ptr<Object3D>Tutorialtext7;
-	std::unique_ptr<Object3D>Tutorialtext8;
-	std::unique_ptr<Object3D>Tutorialtext9;//空白コピペ
-	std::unique_ptr<Object3D>Tutorialtext10;//リセット
-	std::unique_ptr<Object3D>Tutorialtext11;//×ブロック説明
-	std::unique_ptr<Object3D>Tutorialtext12;//タイマー
-	std::unique_ptr<Object3D>Tutorialtext13;//ジャンプ
-
 	//リセットお知らせ
 	std::unique_ptr<Object3D>ResetNotice;
 
@@ -108,11 +93,6 @@ private:
 	std::unique_ptr<Sprite>OperationtextReset;
 	std::unique_ptr<Sprite>OperationtextPlus;
 
-	//ブロックのスプライト
-	std::unique_ptr<Sprite>nCopySprite;
-	std::unique_ptr<Sprite>jumpSprite;
-	std::unique_ptr<Sprite>timerSprite;
-
 	//リセットメータのスプライト
 	std::unique_ptr<Sprite>resetMeter;
 
@@ -124,22 +104,6 @@ private:
 	//ObjectCamera* gameCamera_;
 
 	std::unique_ptr<PhotoCamera>photoCamera;
-
-	bool tutorial1_2 = false;
-	bool tutorial3_4 = false;
-	bool tutorial5 = false;
-	bool tutorial6_7 = false;
-	bool tutorial8 = false;
-	bool tutorial9 = false;
-	bool tutorial10 = false;
-	bool tutorial11 = false;
-	bool tutorial12 = false;
-	bool tutorial13 = false;
-
-	bool cameraStarted = false;
-	bool cameraMoved = false;
-	bool cameraCopied = false;
-	bool cameraPaseted = false;
 
 	// 天球モデル
 	unique_ptr<Object3D> skydome_ = nullptr;

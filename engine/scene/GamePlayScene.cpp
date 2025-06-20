@@ -71,8 +71,6 @@ void GamePlayScene::Initialize()
 
 	Vector3 playerPostion = map->GetPlayerStartPosition();
 
-
-
 	object3DPlayer->Initialize(Object3DCommon::GetInstance());
 
 	object3DPlayer->SetModel("playercharacter.obj");
@@ -84,10 +82,6 @@ void GamePlayScene::Initialize()
 	player->SetMapChipField(map);
 	player->Initialize(object3DPlayer, playerPostion);
 	player->SetDeathHeight(0.0f);
-
-	//チュートリアル
-	tutorial = std::make_unique<Tutorial>();
-	tutorial->Initialize();
 
 	//リセットお知らせ
 	ResetNotice = std::make_unique<Object3D>();
@@ -195,11 +189,13 @@ void GamePlayScene::Initialize()
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(false);
 
 	// ゲームカメラの生成
-	//gameCamera_ = new ObjectCamera();
-	//gameCamera_->Initialize(map);
 	photoCamera = std::make_unique<PhotoCamera>();
-	//photoCamera = new PhotoCamera;
 	photoCamera->Initialize(map);
+
+	//チュートリアル
+	tutorial = std::make_unique<Tutorial>();
+	tutorial->Initialize();
+	tutorial->SetPhotoCamera(photoCamera.get());
 
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
@@ -555,136 +551,6 @@ void GamePlayScene::DrawImgui()
 			object3DPlayer->SetDirectionalLightDirection(directionalLight.direction);
 		}
 
-		Transform text = Tutorialtext1->GetTransform();
-		Transform text2 = Tutorialtext2->GetTransform();
-		Transform text3 = Tutorialtext3->GetTransform();
-		Transform text4 = Tutorialtext4->GetTransform();
-		Transform text5 = Tutorialtext5->GetTransform();
-		Transform text6 = Tutorialtext6->GetTransform();
-		Transform text7 = Tutorialtext7->GetTransform();
-		Transform text8 = Tutorialtext8->GetTransform();
-		Transform text9 = Tutorialtext9->GetTransform();
-		Transform text12 = Tutorialtext12->GetTransform();
-		Transform text13 = Tutorialtext13->GetTransform();
-
-		Transform resetnotice = ResetNotice->GetTransform();
-
-		if (ImGui::DragFloat3("text1scale", &text.scale.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text1rotate", &text.rotate.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text1translate", &text.translate.x, 0.01f)) {
-			Tutorialtext1->SetTransform(text);
-		}
-		if (ImGui::DragFloat3("text2scale", &text2.scale.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text2rotate", &text2.rotate.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text2translate", &text2.translate.x, 0.01f)) {
-			Tutorialtext2->SetTransform(text2);
-		}
-		if (ImGui::DragFloat3("text3scale", &text3.scale.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text3rotate", &text3.rotate.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text3translate", &text3.translate.x, 0.01f)) {
-			Tutorialtext3->SetTransform(text3);
-		}
-		if (ImGui::DragFloat3("text4scale", &text4.scale.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text4rotate", &text4.rotate.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text4translate", &text4.translate.x, 0.01f)) {
-			Tutorialtext4->SetTransform(text4);
-		}
-		if (ImGui::DragFloat3("text5scale", &text5.scale.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text5rotate", &text5.rotate.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text5translate", &text5.translate.x, 0.01f)) {
-			Tutorialtext5->SetTransform(text5);
-		}
-		if (ImGui::DragFloat3("text6scale", &text6.scale.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text6rotate", &text6.rotate.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text6translate", &text6.translate.x, 0.01f)) {
-			Tutorialtext6->SetTransform(text6);
-		}
-		if (ImGui::DragFloat3("text7scale", &text7.scale.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text7rotate", &text7.rotate.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text7translate", &text7.translate.x, 0.01f)) {
-			Tutorialtext7->SetTransform(text7);
-		}
-		if (ImGui::DragFloat3("text8translate", &text8.translate.x), 0.01f) {
-			Tutorialtext8->SetTransform(text8);
-		}
-		if (ImGui::DragFloat3("text9translate", &text9.translate.x), 0.01f) {
-			Tutorialtext9->SetTransform(text9);
-		}
-		if (ImGui::DragFloat3("resetNoticetranslate", &resetnotice.translate.x), 0.01f) {
-			ResetNotice->SetTransform(resetnotice);
-		}
-		if (ImGui::DragFloat3("text12translate", &text12.translate.x), 0.01f) {
-			Tutorialtext12->SetTransform(text12);
-		}
-		if (ImGui::DragFloat3("text13translate", &text13.translate.x), 0.01f) {
-			Tutorialtext13->SetTransform(text13);
-		}
-
-		
-
-		//UI
-
-		Vector2 ncopy = nCopySprite->GetPosition();
-		Vector2 ncopysize = nCopySprite->GetSize();
-		Vector2 resetmeter = resetMeter->GetPosition();
-		Vector2 resetmetersize = resetMeter->GetSize();
-		Vector2 timer = timerSprite->GetPosition();
-		Vector2 timersize = timerSprite->GetSize();
-		Vector2 jump = jumpSprite->GetPosition();
-		Vector2 jumpsize = jumpSprite->GetSize();
-
-		if (ImGui::DragFloat2("ncopytranslate", &ncopy.x), 0.01f) {
-			nCopySprite->SetPosition(ncopy);
-		}
-		if (ImGui::DragFloat2("ncopysize", &ncopysize.x), 0.01f) {
-			nCopySprite->SetSize(ncopysize);
-		}
-		if (ImGui::DragFloat2("resetMetertranslate", &resetmeter.x), 0.01f) {
-			resetMeter->SetPosition(resetmeter);
-		}
-		if (ImGui::DragFloat2("resetMetersize", &resetmetersize.x), 0.01f) {
-			resetMeter->SetSize(resetmetersize);
-		}
-		if (ImGui::DragFloat2("timertranslate", &timer.x), 0.01f) {
-			timerSprite->SetPosition(timer);
-		}
-		if (ImGui::DragFloat2("timersize", &timersize.x), 0.01f) {
-			timerSprite->SetSize(timersize);
-		}
-		if (ImGui::DragFloat2("jumptranslate", &jump.x), 0.01f) {
-			jumpSprite->SetPosition(jump);
-		}
-		if (ImGui::DragFloat2("jumpMetersize", &jumpsize.x), 0.01f) {
-			jumpSprite->SetSize(jumpsize);
-		}
 	}
 
 #endif // _DEBUG

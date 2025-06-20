@@ -1,5 +1,4 @@
 #include "Tutorial.h"
-#include "PhotoCamera.h"
 #include "SceneManager.h"
 
 //初期化
@@ -61,7 +60,7 @@ void Tutorial::Update() {
             tutorial1_2 = true;
         }
 
-        if (PhotoCamera::GetInstance()->HasStarted() && !tutorial3_4) {
+        if (photoCamera->HasStarted() && !tutorial3_4) {
             tutorialTexts[0]->SetIsTutorialActive(false);
             tutorialTexts[1]->SetIsTutorialActive(false);
             tutorialTexts[2]->SetIsTutorialActive(true);
@@ -69,21 +68,21 @@ void Tutorial::Update() {
             tutorial3_4 = true;
         }
 
-        if (PhotoCamera::GetInstance()->HasMoved() && !tutorial5) {
+        if (photoCamera->HasMoved() && !tutorial5) {
             tutorialTexts[2]->SetIsTutorialActive(false);
             tutorialTexts[3]->SetIsTutorialActive(false);
             tutorialTexts[4]->SetIsTutorialActive(true);
             tutorial5 = true;
         }
 
-        if (PhotoCamera::GetInstance()->isFirstCopied && !tutorial6_7) {
+        if (photoCamera->isFirstCopied && !tutorial6_7) {
             tutorialTexts[4]->SetIsTutorialActive(false);
             tutorialTexts[5]->SetIsTutorialActive(true);
             tutorialTexts[6]->SetIsTutorialActive(true);
             tutorial6_7 = true;
         }
 
-        if (PhotoCamera::GetInstance()->isFirstPasted && !tutorial8) {
+        if (photoCamera->isFirstPasted && !tutorial8) {
             tutorialTexts[5]->SetIsTutorialActive(false);
             tutorialTexts[6]->SetIsTutorialActive(false);
             tutorialTexts[7]->SetIsTutorialActive(true);
@@ -164,4 +163,8 @@ void Tutorial::SpriteDraw() {
     if (stageIndex == 8 && blockSprites[2]) {
         blockSprites[2]->Draw();//timer
     }
+}
+
+void Tutorial::SetPhotoCamera(PhotoCamera* camera) {
+    photoCamera = camera;
 }
