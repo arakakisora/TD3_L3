@@ -72,37 +72,6 @@ void GamePlayScene::Initialize()
 	player->Initialize(playerPostion); //プレイヤーの初期位置を設定
 	player->SetDeathHeight(0.0f);
 
-	const std::array<TutorialTextParam, TutorialTextType::Count> tutorialTextParams = { {
-	{"tutorial/tutorial1.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.57f, 0.0f}, {8.5f, 21.44f, 1.0f}},
-	{"tutorial/tutorial2.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.57f, 0.0f}, {15.3f, 21.4f, 0.75f}},
-	{"tutorial/tutorial3.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {8.5f, 21.45f, 1.0f} },
-	{"tutorial/tutorial4.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {15.46f, 21.4f, 0.69f} },
-	{"tutorial/tutorial5.obj",  {0.75f, 0.5f, 0.5f}, {17.3f, 12.57f, 0.0f}, {12.24f, 21.45f, 1.0f} },
-	{"tutorial/tutorial6.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {8.5f, 21.4f, 1.0f} },
-	{"tutorial/tutorial7.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {15.46f, 21.4f, 1.0f} },
-	{"tutorial/tutorial8.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
-	{"tutorial/tutorial9.obj",  {0.5f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
-	{"tutorial/tutorial10.obj", {1.0f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
-	{"tutorial/tutorial11.obj", {1.0f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
-	{"tutorial/tutorial12.obj", {1.0f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 21.4f, 1.0f} },
-	{"tutorial/tutorial13.obj", {1.0f, 0.5f, 0.5f}, {17.3f, 12.56f, 0.0f}, {12.46f, 19.5f, 1.0f} }} };
-
-	// forでチュートリアルテキストの初期化
-	for (int i = 0; i < TutorialTextType::Count; ++i) {	
-		// 共通処理
-		tutorialTexts[i] = std::make_unique<Object3D>();
-		tutorialTexts[i]->Initialize(Object3DCommon::GetInstance());
-		// 固有のパラメータを設定
-		const TutorialTextParam& param = tutorialTextParams[i];
-		tutorialTexts[i]->SetModel(param.modelPath);
-		tutorialTexts[i]->SetScale(param.scale);
-		tutorialTexts[i]->SetRotate(param.rotate);
-		tutorialTexts[i]->SetTranslate(param.translate);
-		// 共通処理
-		tutorialTexts[i]->SetLighting(false);
-		tutorialTexts[i]->SetIsTutorialActive(false);
-	}
-
 	//リセットお知らせ
 	ResetNotice = std::make_unique<Object3D>();
 	ResetNotice->Initialize(Object3DCommon::GetInstance());
@@ -155,22 +124,6 @@ void GamePlayScene::Initialize()
 		pauseui.push_back(std::move(newSprite));
 	}
 
-	//ブロックのスプライト
-	nCopySprite = std::make_unique<Sprite>();
-	nCopySprite->Initialize(SpriteCommon::GetInstance(), "Resources/ncopy.png");
-	nCopySprite->SetPosition(Vector2(275, 121));
-	nCopySprite->SetSize(Vector2(45, 45));
-
-	jumpSprite = std::make_unique<Sprite>();
-	jumpSprite->Initialize(SpriteCommon::GetInstance(), "Resources/jumpsprite.png");
-	jumpSprite->SetPosition(Vector2(276, 214));
-	jumpSprite->SetSize(Vector2(45, 45));
-
-	timerSprite = std::make_unique<Sprite>();
-	timerSprite->Initialize(SpriteCommon::GetInstance(), "Resources/timersprite.png");
-	timerSprite->SetPosition(Vector2(275, 121));
-	timerSprite->SetSize(Vector2(45, 45));
-
 	//リセットメーターのスプライト
 	resetMeter = std::make_unique<Sprite>();
 	resetMeter->Initialize(SpriteCommon::GetInstance(), "Resources/resetmeter.png");
@@ -183,8 +136,13 @@ void GamePlayScene::Initialize()
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowMode(false);
 
 	// ゲームカメラの生成
-	photoCamera = new PhotoCamera;
+	photoCamera = std::make_unique<PhotoCamera>();
 	photoCamera->Initialize(map);
+
+	//チュートリアル
+	tutorial = std::make_unique<Tutorial>();
+	tutorial->Initialize();
+	tutorial->SetPhotoCamera(photoCamera.get());
 
 	//ポーズメニュー
 	pauseMenu = std::make_unique<PauseMenu>();
@@ -230,7 +188,7 @@ void GamePlayScene::Finalize()
 
 	//delete gameCamera_;
 	photoCamera->Finalize();
-	delete photoCamera;
+
 
 	delete emitter_;
 	delete playeremitter_;
@@ -245,14 +203,7 @@ void GamePlayScene::Update()
 		// フェード更新
 		fadeManager_.Update();
 
-		//ゲームの経過時間
-		if (tutorial8) {
-			elapsedTime += deltaTime;
-
-			if (elapsedTime >= afterseconds) {
-				secondspassed = true;
-			}
-		}
+		
 		//カメラの更新
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
@@ -293,14 +244,6 @@ void GamePlayScene::Update()
 		// パーティクルの更新
 		playeremitter_->Update();
 
-		//チュートリアル表示制御map2
-		if (SceneManager::GetInstance()->GetStageIndex() == 1) {
-			if (!tutorial9) {
-				tutorialTexts[TutorialTextType::Text9]->SetIsTutorialActive(true);
-				tutorial9 = true;
-			}
-		}
-
 		if (player->GetCameraMode()) {
 			// カメラモード時パーティクル解除
 			player->SetPrayerMoveRight(false);
@@ -329,92 +272,12 @@ void GamePlayScene::Update()
 			SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 		}
 
-		//チュートリアル表示制御//map1
-		if (SceneManager::GetInstance()->GetStageIndex() == 0) {
-
-			if (!tutorial1_2) {
-				// text1,2を表示
-				tutorialTexts[TutorialTextType::Text1]->SetIsTutorialActive(true);
-				tutorialTexts[TutorialTextType::Text2]->SetIsTutorialActive(true);
-				tutorial1_2 = true;
-			}
-
-			if (photoCamera->HasStarted() && !tutorial3_4) {
-				tutorialTexts[TutorialTextType::Text1]->SetIsTutorialActive(false);
-				tutorialTexts[TutorialTextType::Text2]->SetIsTutorialActive(false);
-				tutorialTexts[TutorialTextType::Text3]->SetIsTutorialActive(true);
-				tutorialTexts[TutorialTextType::Text4]->SetIsTutorialActive(true);
-				tutorial3_4 = true;
-			}
-
-			if (photoCamera->HasMoved() && !tutorial5) {
-				tutorialTexts[TutorialTextType::Text3]->SetIsTutorialActive(false);
-				tutorialTexts[TutorialTextType::Text4]->SetIsTutorialActive(false);
-				tutorialTexts[TutorialTextType::Text5]->SetIsTutorialActive(true);
-				tutorial5 = true;
-			}
-
-			if (photoCamera->isFirstCopied && !tutorial6_7) {
-				tutorialTexts[TutorialTextType::Text5]->SetIsTutorialActive(false);
-				tutorialTexts[TutorialTextType::Text6]->SetIsTutorialActive(true);
-				tutorialTexts[TutorialTextType::Text7]->SetIsTutorialActive(true);
-				tutorial6_7 = true;
-			}
-			if (photoCamera->isFirstPasted && !tutorial8) {
-				tutorialTexts[TutorialTextType::Text6]->SetIsTutorialActive(false);
-				tutorialTexts[TutorialTextType::Text7]->SetIsTutorialActive(false);
-				tutorialTexts[TutorialTextType::Text8]->SetIsTutorialActive(true);
-				tutorial8 = true;
-			}
-
-			if (tutorial8 && secondspassed) {
-				tutorialTexts[TutorialTextType::Text8]->SetIsTutorialActive(false);
-				tutorialTexts[TutorialTextType::Text10]->SetIsTutorialActive(true);
-				tutorial10 = true;
-			}
-
-		}
-
 	} else {
 		player->SetPrayerMoveRight(false);
 		player->SetPrayerMoveLeft(false);
 	}
 
-	//チュートリアル表示制御map2
-	if (SceneManager::GetInstance()->GetStageIndex() == 1) {
-		if (!tutorial9) {
-			tutorialTexts[TutorialTextType::Text9]->SetIsTutorialActive(true);
-			tutorial9 = true;
-		}
-	}
-
-	//チュートリアル表示制御map3
-	if (SceneManager::GetInstance()->GetStageIndex() == 2) {
-		if (!tutorial11) {
-			tutorialTexts[TutorialTextType::Text11]->SetIsTutorialActive(true);
-			tutorial11 = true;
-		}
-		nCopySprite->Update();
-	}
-
-	//チュートリアル表示制御map9
-	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
-		tutorialTexts[TutorialTextType::Text12]->SetIsTutorialActive(true);
-		tutorial12 = true;
-		timerSprite->Update();
-	}
-
-	//チュートリアル表示制御map7
-	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
-		tutorialTexts[TutorialTextType::Text13]->SetIsTutorialActive(true);
-		tutorial13 = true;
-		jumpSprite->Update();
-	}
-
-	//チュートリアルテキストの更新
-	for (int i = 0; i < TutorialTextType::Count; ++i) {
-		tutorialTexts[i]->Update();
-	}
+	tutorial->Update();
 
 	// 操作説明テキストの更新
 	if (!photoCamera->GetCameraMode()) {
@@ -466,7 +329,7 @@ void GamePlayScene::Update()
 	resetMeter->Update();
 	ResetNotice->Update();
 
-	DrawImgui();
+	//DrawImgui();
 }
 
 
@@ -488,10 +351,8 @@ void GamePlayScene::Draw()
 	////プレイヤー
 	player->Draw();
 
-	//チュートリアルテキストの描画
-	for (int i = 0; i < TutorialTextType::Count; ++i) {
-		tutorialTexts[i]->Draw();
-	}
+	//チュートリアルテキスト
+	tutorial->TextDraw();
 
 	//リセットお知らせ
 	if (holdTime > 0.0f) {
@@ -551,19 +412,7 @@ void GamePlayScene::Draw()
 		resetMeter->Draw();
 	}
 
-	//チュートリアル表示制御map9
-	if (SceneManager::GetInstance()->GetStageIndex() == 8) {
-
-		timerSprite->Draw();
-	}
-
-	//チュートリアル表示制御map9
-	if (SceneManager::GetInstance()->GetStageIndex() == 6) {
-
-		jumpSprite->Draw();
-	}
-
-	nCopySprite->Draw();
+	tutorial->SpriteDraw();
 
 	// フォトカメラ内のスプライト描画
 	photoCamera->DrawSprite();
@@ -649,64 +498,10 @@ void GamePlayScene::DrawImgui()
 		//プレイヤーディレクれくしょなるライト
 		DirectionalLight directionalLight = player->GetObject3D()->GetDirectionalLight();
 		if (ImGui::DragFloat3("Player Directional Light Direction", &directionalLight.direction.x, 0.01f)) {
+
 			player->GetObject3D()->SetDirectionalLightDirection(directionalLight.direction);
 		}
-
-		// チュートリアルテキストの表示制御
-		for (int i = 0; i < TutorialTextType::Count; ++i) {
-			if (!tutorialTexts[i]) continue;
-
-			Transform transform = tutorialTexts[i]->GetTransform();
-			
-			// ラベル名を作る
-			std::string labelPrefix = "text" + std::to_string(i + 1);
-			
-			// スケール・回転・位置を編集
-			bool changed = false;
-			changed |= ImGui::DragFloat3((labelPrefix + " scale").c_str(), &transform.scale.x, 0.01f);
-			changed |= ImGui::DragFloat3((labelPrefix + " rotate").c_str(), &transform.rotate.x, 0.01f);
-			changed |= ImGui::DragFloat3((labelPrefix + " translate").c_str(), &transform.translate.x, 0.01f);
-
-			if (changed) {
-				tutorialTexts[i]->SetTransform(transform);
-			}
-		}		
-
-		//UI
-
-		Vector2 ncopy = nCopySprite->GetPosition();
-		Vector2 ncopysize = nCopySprite->GetSize();
-		Vector2 resetmeter = resetMeter->GetPosition();
-		Vector2 resetmetersize = resetMeter->GetSize();
-		Vector2 timer = timerSprite->GetPosition();
-		Vector2 timersize = timerSprite->GetSize();
-		Vector2 jump = jumpSprite->GetPosition();
-		Vector2 jumpsize = jumpSprite->GetSize();
-
-		if (ImGui::DragFloat2("ncopytranslate", &ncopy.x), 0.01f) {
-			nCopySprite->SetPosition(ncopy);
-		}
-		if (ImGui::DragFloat2("ncopysize", &ncopysize.x), 0.01f) {
-			nCopySprite->SetSize(ncopysize);
-		}
-		if (ImGui::DragFloat2("resetMetertranslate", &resetmeter.x), 0.01f) {
-			resetMeter->SetPosition(resetmeter);
-		}
-		if (ImGui::DragFloat2("resetMetersize", &resetmetersize.x), 0.01f) {
-			resetMeter->SetSize(resetmetersize);
-		}
-		if (ImGui::DragFloat2("timertranslate", &timer.x), 0.01f) {
-			timerSprite->SetPosition(timer);
-		}
-		if (ImGui::DragFloat2("timersize", &timersize.x), 0.01f) {
-			timerSprite->SetSize(timersize);
-		}
-		if (ImGui::DragFloat2("jumptranslate", &jump.x), 0.01f) {
-			jumpSprite->SetPosition(jump);
-		}
-		if (ImGui::DragFloat2("jumpMetersize", &jumpsize.x), 0.01f) {
-			jumpSprite->SetSize(jumpsize);
-		}
+	
 	}
 
 #endif // _DEBUG

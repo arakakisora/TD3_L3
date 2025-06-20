@@ -10,6 +10,16 @@
 
 using namespace Easing;
 
+PhotoCamera* PhotoCamera::instance_ = nullptr;
+
+//シングルトンインスタンス
+PhotoCamera* PhotoCamera::GetInstance() {
+	if (instance_ == nullptr) {
+		instance_ = new PhotoCamera();
+	}
+	return instance_;
+}
+
 // MAPクラスとのループキャストに注意
 void PhotoCamera::Initialize(Map* map)
 {

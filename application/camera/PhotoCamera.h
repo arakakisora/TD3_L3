@@ -11,6 +11,8 @@ using namespace std;
 class PhotoCamera
 {
 public:
+	//シングルトンインスタンス
+	static PhotoCamera* GetInstance();
 	// 初期化
 	void Initialize(Map* map);
 	// 更新
@@ -69,6 +71,7 @@ public:
 	//初回ペーストしたか
 	bool isFirstPasted = false;
 private:
+	static PhotoCamera* instance_;
 	Map* map;
 	MapChipData mapData;
 	// カメラの位置

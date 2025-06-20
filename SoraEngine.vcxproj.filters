@@ -115,6 +115,18 @@
     <Filter Include="ヘッダー ファイル\application\ui">
       <UniqueIdentifier>{6b3c7636-909e-4337-aeac-142a8d520d9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\tutorial">
+      <UniqueIdentifier>{261e3ecd-9827-43b8-a54e-7d9f8b954ee6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\operate">
+      <UniqueIdentifier>{59244d3b-6f59-44e7-adf7-3dba3eebcae9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\operate">
+      <UniqueIdentifier>{b1e6ebb7-5257-4b17-95ae-50aba84717b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\tutorial">
+      <UniqueIdentifier>{a14f07d3-66a7-4e91-a6c4-69e6ae4936d6}</UniqueIdentifier>
+　　</Filter>
     <Filter Include="リソース ファイル\shader">
       <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
     </Filter>
@@ -254,6 +266,12 @@
     </ClCompile>
     <ClCompile Include="application\uI\BitmapFont.cpp">
       <Filter>ソース ファイル\application\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Operate.cpp">
+      <Filter>ソース ファイル\application\operate</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial.cpp">
+      <Filter>ソース ファイル\application\tutorial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -426,6 +444,12 @@
     </ClInclude>
     <ClInclude Include="application\uI\BitmapFont.h">
       <Filter>ヘッダー ファイル\application\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial.h">
+      <Filter>ヘッダー ファイル\application\tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Operate.h">
+      <Filter>ヘッダー ファイル\application\operate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

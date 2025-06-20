@@ -21,6 +21,7 @@
 
 #include <array>
 #include"FadeManager.h"
+#include "Tutorial.h"
 
 struct OperationText {
 	std::string texturePath;
@@ -114,16 +115,12 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player>player;
 	Vector3 playeroffset{};	
+  //チュートリアルテキスト
+	std::unique_ptr<Tutorial>tutorial;
 	//リセットお知らせ
 	std::unique_ptr<Object3D>ResetNotice;
-	//チュートリアルテキスト
-	std::array<std::unique_ptr<Object3D>, Count>tutorialTexts;		
 	//操作説明テキスト
 	std::array<std::unique_ptr<Sprite>, OperationTextCount>operationTexts;	
-	//ブロックのスプライト
-	std::unique_ptr<Sprite>nCopySprite;
-	std::unique_ptr<Sprite>jumpSprite;
-	std::unique_ptr<Sprite>timerSprite;
 
 	//リセットメータのスプライト
 	std::unique_ptr<Sprite>resetMeter;
@@ -135,23 +132,7 @@ private:
 	// ゲームカメラ
 	//ObjectCamera* gameCamera_;
 
-	PhotoCamera* photoCamera;
-
-	bool tutorial1_2 = false;
-	bool tutorial3_4 = false;
-	bool tutorial5 = false;
-	bool tutorial6_7 = false;
-	bool tutorial8 = false;
-	bool tutorial9 = false;
-	bool tutorial10 = false;
-	bool tutorial11 = false;
-	bool tutorial12 = false;
-	bool tutorial13 = false;
-
-	bool cameraStarted = false;
-	bool cameraMoved = false;
-	bool cameraCopied = false;
-	bool cameraPaseted = false;
+	std::unique_ptr<PhotoCamera>photoCamera;
 
 	// 天球モデル
 	unique_ptr<Object3D> skydome_ = nullptr;
