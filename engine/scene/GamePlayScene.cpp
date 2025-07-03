@@ -161,9 +161,7 @@ void GamePlayScene::Finalize()
 	CameraManager::GetInstans()->Finalize();
 
 	map->Finalize();
-	delete map;
 
-	//delete gameCamera_;
 	photoCamera->Finalize();
 
 
@@ -185,8 +183,6 @@ void GamePlayScene::Update()
 		CameraManager::GetInstans()->GetActiveCamera()->Update();
 
 		// 天球の更新
-		//skydomerotate += 0.0f;
-		//skydome_->SetRotate(Vector3{ 0.0f,0.0f,skydomerotate });
 		skydome_->Update();
 
 		// ゲームカメラ更新処理
@@ -279,8 +275,6 @@ void GamePlayScene::Update()
 
 	resetMeter->Update();
 	ResetNotice->Update();
-
-	//DrawImgui();
 }
 
 
@@ -297,7 +291,6 @@ void GamePlayScene::Draw()
 	skydome_->Draw();
 
 	// ゲームカメラ
-	//gameCamera_->Draw();
 	photoCamera->Draw3DObject();
 	////プレイヤー
 	player->Draw();

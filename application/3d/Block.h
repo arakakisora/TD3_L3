@@ -70,11 +70,6 @@ public:
 	// 一定時間経過後に消えるブロックの貼り付け後（PutFixedTime）
 	void PutFixedTimeBlock();
 
-	//ジャンプブロック
-	void JumpBlock();
-
-	// SetPosition
-
 	//落下フラグセット
 	void SetFalling(bool falling);
 
