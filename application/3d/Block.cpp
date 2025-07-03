@@ -22,7 +22,6 @@ void Block::Initialize(MapChipType type, const Vector3& position, Map* map) {
 	object3D->Initialize(Object3DCommon::GetInstance());
 	object3D->SetTranslate(position);
 	velocity = 0.0f;
-	//isFalling = false;
 
 	switch ((type))
 	{
@@ -289,9 +288,4 @@ void Block::PutFixedTimeBlock()
 		map->RemoveObjectAt(index.xIndex, index.yIndex);
 		isAlive = false;
 	}
-}
-
-//ジャンプブロック
-void Block::JumpBlock() {
-
 }

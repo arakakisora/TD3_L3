@@ -81,10 +81,6 @@ private:
 
 	std::vector < std::unique_ptr<Sprite>> pauseui;
 	Map* map=nullptr;
-	
-	// @ 消すAlso delete the ones in the CPP file.
-	// ゲームカメラ
-	//ObjectCamera* gameCamera_;
 
 	std::unique_ptr<PhotoCamera>photoCamera;
 

@@ -127,9 +127,6 @@ void GameClearScene::Update()
 			SceneManager::GetInstance()->ChangeScene("TITELE");
 		}
 
-
-		//ImGui::Checkbox("start", &fige);
-
 	}
 
 
