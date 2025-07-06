@@ -1,0 +1,102 @@
+#pragma once
+#include <map>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+
+enum class MapChipType {
+
+	kBlank,			 	// 空白				No.0
+	kPlayer,		    // Player初期位置		No.1
+	kNCopyBlock,		// コピー不可			No.2
+	kCopyBlock,    		// コピー可能			No.3
+	kGoalUp,       		// ゴール上			No.4
+	kGoalDown,			// ゴール下			No.5
+	kFallBlock,			// 重力の影響受		No.6
+	kFixedTimeBlock,	// 貼り付け前一定時間	No.7
+	kPutFixedTimeBlock,	// 貼り付け後一定時間　	No.8
+	kjumpBlock,         // プレイヤーの上昇 No.9
+};
+
+namespace {
+
+	std::map<std::string, MapChipType> mapChipTable = {
+		{"0", MapChipType::kBlank},
+		{"1", MapChipType::kPlayer},
+		{"2", MapChipType::kNCopyBlock},
+		{"3", MapChipType::kCopyBlock},
+		{"4", MapChipType::kGoalUp},
+		{"5", MapChipType::kGoalDown},
+		{"6", MapChipType::kFallBlock},
+		{"7", MapChipType::kFixedTimeBlock },
+		{"8",MapChipType::kPutFixedTimeBlock},
+		{"9",MapChipType::kjumpBlock},
+
+		/*０：空
+	１：プレイヤーの初期位置
+	２：コピー不可能ブロック
+	３：コピー可能ブロック
+	４：ゴール（上）
+	５：ゴール（下）
+	６：重力の影響を受けるブロック（FallBlock）
+	７：一定時間経過したら消えるブロック（FixedTime）*/
+	};
+}
+
+// MapChipType に対応するモデル名
+static const std::unordered_map<MapChipType, std::string> modelTable = {
+	{ MapChipType::kBlank, "nullBlock.obj" },
+	{ MapChipType::kNCopyBlock, "ncopyblock.obj" },
+	{ MapChipType::kCopyBlock, "block.obj" },
+	{ MapChipType::kGoalUp, "goalup.obj" },
+	{ MapChipType::kGoalDown, "gall.obj" },
+	{ MapChipType::kFallBlock, "fallblock.obj" },
+	{ MapChipType::kFixedTimeBlock, "Timer.obj" },
+	{ MapChipType::kPutFixedTimeBlock, "putTimer.obj" },
+	{ MapChipType::kjumpBlock, "jump.obj" },
+};
+
+static const std::unordered_set<MapChipType> simpleUpdateTypes = {
+		MapChipType::kCopyBlock,
+		MapChipType::kGoalUp,
+		MapChipType::kNCopyBlock,
+		MapChipType::kFixedTimeBlock,
+		MapChipType::kPutFixedTimeBlock,
+		MapChipType::kFallBlock,
+		MapChipType::kjumpBlock,
+};
+
+static const std::unordered_set<MapChipType> drawTypes = {
+	MapChipType::kCopyBlock,
+	MapChipType::kGoalUp,
+	MapChipType::kGoalDown,
+	MapChipType::kNCopyBlock,
+	MapChipType::kFixedTimeBlock,
+	MapChipType::kPutFixedTimeBlock,
+	MapChipType::kFallBlock,
+	MapChipType::kjumpBlock
+};
+
+
+
+
+struct MapChipMeta {
+	std::string modelName;
+	bool needsUpdate = false;
+	bool needsDraw = false;
+};
+
+
+
+static const std::unordered_map<MapChipType, MapChipMeta> mapChipMetaTable = {
+	{ MapChipType::kBlank, { "nullBlock.obj", false, false } },
+	{ MapChipType::kPlayer, { "", false, false } }, // モデルなし（配置専用）
+	{ MapChipType::kNCopyBlock, { "ncopyblock.obj", true, true } },
+	{ MapChipType::kCopyBlock,  { "block.obj",      true, true } },
+	{ MapChipType::kGoalUp,     { "goalup.obj",     true, true } },
+	{ MapChipType::kGoalDown,   { "gall.obj",       true, true } },
+	{ MapChipType::kFallBlock,  { "fallblock.obj",  true, true } },
+	{ MapChipType::kFixedTimeBlock,    { "Timer.obj",     true, true } },
+	{ MapChipType::kPutFixedTimeBlock, { "putTimer.obj",  true, true } },
+	{ MapChipType::kjumpBlock,         { "jump.obj",      true, true } },
+};
