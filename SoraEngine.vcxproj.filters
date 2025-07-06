@@ -451,6 +451,9 @@
     <ClInclude Include="Operate.h">
       <Filter>ヘッダー ファイル\application\operate</Filter>
     </ClInclude>
+    <ClInclude Include="application\3d\MapChipType.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Object3d.hlsli">

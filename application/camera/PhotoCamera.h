@@ -42,8 +42,6 @@ public:
 	void shutterEffectUpdate();
 
 public:	// Setter / Getter
-	// 変更したマップデータをmapにセット
-	//void SetMap(Map* map) { this->map = map; }
 
 	// カメラの位置を取得
 	Vector2 GetPosition() { return position; }
