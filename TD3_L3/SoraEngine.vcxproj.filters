@@ -192,13 +192,7 @@
     <ClCompile Include="engine\scene\Game.cpp">
       <Filter>ソース ファイル\engin\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\GameClearScene.cpp">
-      <Filter>ソース ファイル\engin\scene</Filter>
-    </ClCompile>
     <ClCompile Include="engine\scene\GameOverScene.cpp">
-      <Filter>ソース ファイル\engin\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\GamePlayScene.cpp">
       <Filter>ソース ファイル\engin\scene</Filter>
     </ClCompile>
     <ClCompile Include="engine\scene\BaseScene.cpp">
@@ -211,9 +205,6 @@
       <Filter>ソース ファイル\engin\scene</Filter>
     </ClCompile>
     <ClCompile Include="engine\scene\SceneManager.cpp">
-      <Filter>ソース ファイル\engin\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\TitleScene.cpp">
       <Filter>ソース ファイル\engin\scene</Filter>
     </ClCompile>
     <ClCompile Include="engine\math\WorldTransform.cpp">
@@ -267,11 +258,20 @@
     <ClCompile Include="application\uI\BitmapFont.cpp">
       <Filter>ソース ファイル\application\ui</Filter>
     </ClCompile>
-    <ClCompile Include="Operate.cpp">
+    <ClCompile Include="application\operate\Operate.cpp">
       <Filter>ソース ファイル\application\operate</Filter>
     </ClCompile>
-    <ClCompile Include="Tutorial.cpp">
+    <ClCompile Include="application\tutorial\Tutorial.cpp">
       <Filter>ソース ファイル\application\tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="application\scene\TitleScene.cpp">
+      <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="application\scene\GameClearScene.cpp">
+      <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="application\scene\GamePlayScene.cpp">
+      <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -379,25 +379,16 @@
     <ClInclude Include="engine\scene\BaseScene.h">
       <Filter>ヘッダー ファイル\engin\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\GameClearScene.h">
-      <Filter>ヘッダー ファイル\engin\scene</Filter>
-    </ClInclude>
     <ClInclude Include="engine\scene\Game.h">
       <Filter>ヘッダー ファイル\engin\scene</Filter>
     </ClInclude>
     <ClInclude Include="engine\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル\engin\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\GamePlayScene.h">
-      <Filter>ヘッダー ファイル\engin\scene</Filter>
-    </ClInclude>
     <ClInclude Include="engine\scene\SceneFactory.h">
       <Filter>ヘッダー ファイル\engin\scene</Filter>
     </ClInclude>
     <ClInclude Include="engine\scene\SceneManager.h">
-      <Filter>ヘッダー ファイル\engin\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\TitleScene.h">
       <Filter>ヘッダー ファイル\engin\scene</Filter>
     </ClInclude>
     <ClInclude Include="application\scene\StageSelectScene.h">
@@ -445,14 +436,23 @@
     <ClInclude Include="application\uI\BitmapFont.h">
       <Filter>ヘッダー ファイル\application\ui</Filter>
     </ClInclude>
-    <ClInclude Include="Tutorial.h">
+    <ClInclude Include="application\tutorial\Tutorial.h">
       <Filter>ヘッダー ファイル\application\tutorial</Filter>
     </ClInclude>
-    <ClInclude Include="Operate.h">
+    <ClInclude Include="application\operate\Operate.h">
       <Filter>ヘッダー ファイル\application\operate</Filter>
     </ClInclude>
+    <ClInclude Include="application\scene\GamePlayScene.h">
+      <Filter>ヘッダー ファイル\application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="application\scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="application\scene\GameClearScene.h">
+      <Filter>ヘッダー ファイル\application\scene</Filter>
+    </ClInclude>
     <ClInclude Include="application\3d\MapChipType.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\application\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
