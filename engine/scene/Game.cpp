@@ -1,11 +1,8 @@
 #include "Game.h"
 #include "SceneFactory.h"
 
-
-
 void Game::Initialize()
 {
-	
 	//初期化
 	Framework::Initialize();
 	
@@ -18,19 +15,14 @@ void Game::Initialize()
 	//"GAMEPLAY"
 	//GAMEOVER
 	//"GAMECLEAR"
-
 	SceneManager::GetInstance()->ChangeScene("TITELE");
-
 
 }
 
-void Game::Finalize()
+void Game::Finalize() 
 {
 	//終了
 	Framework::Finalize();
-	
-	
-
 }
 
 void Game::Update()
@@ -42,8 +34,6 @@ void Game::Update()
 #endif // _DEBUG
 	//更新
 	Framework::Update();
-
-
 	
 #ifdef _DEBUG
 	imGuiMnager->End();
