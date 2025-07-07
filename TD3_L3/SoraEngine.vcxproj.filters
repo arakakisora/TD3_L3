@@ -258,10 +258,10 @@
     <ClCompile Include="application\uI\BitmapFont.cpp">
       <Filter>ソース ファイル\application\ui</Filter>
     </ClCompile>
-    <ClCompile Include="Operate.cpp">
+    <ClCompile Include="application\operate\Operate.cpp">
       <Filter>ソース ファイル\application\operate</Filter>
     </ClCompile>
-    <ClCompile Include="Tutorial.cpp">
+    <ClCompile Include="application\tutorial\Tutorial.cpp">
       <Filter>ソース ファイル\application\tutorial</Filter>
     </ClCompile>
     <ClCompile Include="application\scene\TitleScene.cpp">
@@ -436,10 +436,10 @@
     <ClInclude Include="application\uI\BitmapFont.h">
       <Filter>ヘッダー ファイル\application\ui</Filter>
     </ClInclude>
-    <ClInclude Include="Tutorial.h">
+    <ClInclude Include="application\tutorial\Tutorial.h">
       <Filter>ヘッダー ファイル\application\tutorial</Filter>
     </ClInclude>
-    <ClInclude Include="Operate.h">
+    <ClInclude Include="application\operate\Operate.h">
       <Filter>ヘッダー ファイル\application\operate</Filter>
     </ClInclude>
     <ClInclude Include="application\scene\GamePlayScene.h">
