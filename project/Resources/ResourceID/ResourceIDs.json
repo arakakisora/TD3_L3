@@ -1,0 +1,86 @@
+{
+    "Models": {
+        "Resource": {
+            "axis": "axis.obj",
+            "block": "block.obj",
+            "bunny": "bunny.obj",
+            "ClearText_02": "ClearText_02.obj",
+            "ClearText_03": "ClearText_03.obj",
+            "cube": "cube.obj",
+            "fallblock": "fallblock.obj",
+            "Frame": "Frame.obj",
+            "gall": "gall.obj",
+            "GoalBase": "GoalBase.obj",
+            "goalup": "goalup.obj",
+            "GoreFag": "GoreFag.obj",
+            "jump": "jump.obj",
+            "multiMaterial": "multiMaterial.obj",
+            "multiMesh": "multiMesh.obj",
+            "ncopyblock": "ncopyblock.obj",
+            "nullBlock": "nullBlock.obj",
+            "Pause": "Pause.obj",
+            "plane": "plane.obj",
+            "Player": "Player.obj",
+            "Player2": "Player2.obj",
+            "PlaySceneBackPlane": "PlaySceneBackPlane.obj",
+            "putTimer": "putTimer.obj",
+            "resetnotice": "resetnotice.obj",
+            "SelectSceneBackPlane": "SelectSceneBackPlane.obj",
+            "skydome": "skydome.obj",
+            "sphere": "sphere.obj",
+            "Stage01": "Stage01.obj",
+            "Stage02": "Stage02.obj",
+            "Stage03": "Stage03.obj",
+            "Stage04": "Stage04.obj",
+            "Stage05": "Stage05.obj",
+            "Stage06": "Stage06.obj",
+            "Stage07": "Stage07.obj",
+            "Stage08": "Stage08.obj",
+            "Stage09": "Stage09.obj",
+            "Stage10": "Stage10.obj",
+            "Stage11": "Stage11.obj",
+            "Stage12": "Stage12.obj",
+            "Stage13": "Stage13.obj",
+            "terrain": "terrain.obj",
+            "Timer": "Timer.obj"
+        },
+        "GameClear": {
+            "ClearText_01": "GameClear/ClearText_01.obj",
+            "ClearText_02": "GameClear/ClearText_02.obj",
+            "ClearText_03": "GameClear/ClearText_03.obj"
+        },
+        "originFrame": {
+            "Frame": "originFrame/Frame.obj"
+        },
+        "StageSelect": {
+            "explanation": "StageSelect/explanation.obj",
+            "return": "StageSelect/return.obj",
+            "Stage01": "StageSelect/Stage01.obj",
+            "StageSelect": "StageSelect/StageSelect.obj",
+            "title": "StageSelect/title.obj"
+        },
+        "Titlescene": {
+            "backPlane": "Titlescene/backPlane.obj",
+            "playercharacter": "Titlescene/playercharacter.obj",
+            "shutterEffect": "Titlescene/shutterEffect.obj",
+            "Text_Title": "Titlescene/Text_Title.obj",
+            "UI_Title_Stsrt": "Titlescene/UI_Title_Stsrt.obj",
+            "WhiteRooms": "Titlescene/WhiteRooms.obj"
+        },
+        "tutorial": {
+            "tutorial1": "tutorial/tutorial1.obj",
+            "tutorial10": "tutorial/tutorial10.obj",
+            "tutorial11": "tutorial/tutorial11.obj",
+            "tutorial12": "tutorial/tutorial12.obj",
+            "tutorial13": "tutorial/tutorial13.obj",
+            "tutorial2": "tutorial/tutorial2.obj",
+            "tutorial3": "tutorial/tutorial3.obj",
+            "tutorial4": "tutorial/tutorial4.obj",
+            "tutorial5": "tutorial/tutorial5.obj",
+            "tutorial6": "tutorial/tutorial6.obj",
+            "tutorial7": "tutorial/tutorial7.obj",
+            "tutorial8": "tutorial/tutorial8.obj",
+            "tutorial9": "tutorial/tutorial9.obj"
+        }
+    }
+}
