@@ -54,6 +54,10 @@ public:
 
 	void PlayerTurn(); // 自機の向き
 
+	void PlayerDebug(); // 自機の死亡処理
+
+	void PlayerMode(); // 自機のモード
+
 
 
 	void CalculateCollisionBounds(CollisionMapInfo& info);
@@ -109,12 +113,12 @@ public:
 	void SetPrayerMoveLeft(bool left) { playermoveleft = left; }
 
 
-	Object3D* GetObject3D() { return object3D_; } // Object3D取得
+	Object3D* GetObject3D() { return object3D_.get(); } // Object3D取得
 
 private:
 
 	//objec3D
-	Object3D* object3D_ = nullptr;
+	std::unique_ptr<Object3D> object3D_ = nullptr; // Object3D
 
 
 	Vector3 velocity_ = {};                          // 速度
