@@ -130,6 +130,12 @@
     <Filter Include="リソース ファイル\shader">
       <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\application\resource">
+      <UniqueIdentifier>{fccb425c-8b00-4872-a247-2561880f2818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\resource">
+      <UniqueIdentifier>{e84018b6-c977-4619-aaac-8b86bcf3c663}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -272,6 +278,12 @@
     </ClCompile>
     <ClCompile Include="application\scene\GamePlayScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="application\Resource\ResourceIDManager.cpp">
+      <Filter>ソース ファイル\application\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="application\Resource\TitleResourceID.cpp">
+      <Filter>ソース ファイル\application\resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -453,6 +465,12 @@
     </ClInclude>
     <ClInclude Include="application\3d\MapChipType.h">
       <Filter>ヘッダー ファイル\application\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="application\resource\TitleResourceID.h">
+      <Filter>ヘッダー ファイル\application\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="application\Resource\ResourceIDManager.h">
+      <Filter>ヘッダー ファイル\application\resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

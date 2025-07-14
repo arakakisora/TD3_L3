@@ -82,13 +82,6 @@ Node Model::ReadNode(aiNode* node)
 	return result;
 }
 
-
-
-
-
-
-
-
 MaterialData Model::LoadMaterialTemplateFile(const std::string& directorypath, const std::string& filename)
 {
 

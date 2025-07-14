@@ -1,4 +1,5 @@
 #include "ModelManager.h"
+#include <filesystem>
 ModelManager* ModelManager::instance = nullptr;
 
 ModelManager* ModelManager::GetInstans()
@@ -34,13 +35,17 @@ void ModelManager::LoadModel(const std::string& filePath)
 		//読み込み済みなら早期return
 		return;
 	}
+	
+	std::filesystem::path fullPath = "Resources/" + filePath;	
+	std::string directorypath = fullPath.parent_path().string();  // → "Resources/Title"
+	std::string filename = fullPath.filename().string();          // → "UI_Title_Stsrt.obj"
+
 	//モデルの生成とファイル読み込み、初期化
-	std::unique_ptr<Model>model = std::make_unique<Model>();
-	model->Initialize(modelCommon.get(), "Resources", filePath);
+	std::unique_ptr<Model> model = std::make_unique<Model>();
+	model->Initialize(modelCommon.get(), directorypath, filename);
 
 	//モデルをmapコンテナに格納する
 	models.insert(std::make_pair(filePath, std::move(model)));
-
 }
 
 Model* ModelManager::FindModel(const std::string& filePath)

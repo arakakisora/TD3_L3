@@ -67,7 +67,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\audio;$(ProjectDir)engine\base;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir)engine\camera;$(ProjectDir)engine\particle;$(ProjectDir)externals\assimp\include;$(ProjectDir)application\scene;$(ProjectDir)application\3d;$(ProjectDir)application\camera;$(ProjectDir)application\map;$(ProjectDir)application\ui;$(ProjectDir)application\operate;$(ProjectDir)application\tutorial;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\audio;$(ProjectDir)engine\base;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir)engine\camera;$(ProjectDir)engine\particle;$(ProjectDir)externals\assimp\include;$(ProjectDir)application\scene;$(ProjectDir)application\3d;$(ProjectDir)application\camera;$(ProjectDir)application\map;$(ProjectDir)application\ui;$(ProjectDir)application\operate;$(ProjectDir)application\tutorial;$(ProjectDir)externals\nlohmann;$(ProjectDir)application\resource;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -94,7 +94,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\audio;$(ProjectDir)engine\base;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir)engine\camera;$(ProjectDir)engine\particle;$(ProjectDir)externals\assimp\include;$(ProjectDir)application\scene;$(ProjectDir)application\3d;$(ProjectDir)application\camera;$(ProjectDir)application\map;$(ProjectDir)application\ui;$(ProjectDir)application\operate;$(ProjectDir)application\tutorial;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\audio;$(ProjectDir)engine\base;$(ProjectDir)engine\input;$(ProjectDir)engine\math;$(ProjectDir)engine\scene;$(ProjectDir)engine\camera;$(ProjectDir)engine\particle;$(ProjectDir)externals\assimp\include;$(ProjectDir)application\scene;$(ProjectDir)application\3d;$(ProjectDir)application\camera;$(ProjectDir)application\map;$(ProjectDir)application\ui;$(ProjectDir)application\operate;$(ProjectDir)application\tutorial;$(ProjectDir)externals\nlohmann;$(ProjectDir)application\resource;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -111,6 +111,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\Resource\TitleResourceID.cpp" />
     <ClCompile Include="application\uI\BitmapFont.cpp" />
     <ClCompile Include="application\3d\Block.cpp" />
     <ClCompile Include="engine\math\Easing.cpp" />
@@ -158,6 +159,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\map\Map.cpp" />
     <ClCompile Include="application\operate\Operate.cpp" />
     <ClCompile Include="application\tutorial\Tutorial.cpp" />
+    <ClCompile Include="application\Resource\ResourceIDManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3d.PS.hlsl">
@@ -190,6 +192,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\resource\TitleResourceID.h" />
     <ClInclude Include="application\uI\BitmapFont.h" />
     <ClInclude Include="application\3d\Block.h" />
     <ClInclude Include="engine\math\Easing.h" />
@@ -243,6 +246,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\3d\MapChipType.h" />
     <ClInclude Include="application\operate\Operate.h" />
     <ClInclude Include="application\tutorial\Tutorial.h" />
+    <ClInclude Include="application\Resource\ResourceIDManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
