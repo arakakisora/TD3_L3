@@ -11,6 +11,9 @@
 
 #include "Object3D.h"
 #include<Audio.h>
+#include "Map.h"
+
+
 
 enum class LRDirecion {
 	kright,
@@ -33,12 +36,22 @@ enum Corner {
 	kNumCorner // 要素数
 };
 
+enum class CollisionType {
+	Top,
+	Bottom,
+	Left,
+	Right
+};
 
 class Enemy;
-class Map;
+//class Map;
 class Player {
 
 public:
+
+
+
+
 	// 初期化
 	void Initialize(const Vector3& position);
 
@@ -58,28 +71,36 @@ public:
 
 	void PlayerMode(); // 自機のモード
 
+	bool IsHittableBlock(MapChipType type);
+
+	bool CheckCollisionPoints(
+		const std::array<Vector3, 2>& posList,
+		CollisionType type,
+		CollisionMapInfo& info
+	);
+
+	void CollisionMapInfoDirection(
+		CollisionMapInfo& info,
+		CollisionType dir,
+		const std::array<Corner, 2>& checkCorners,
+		const Vector3& offset,
+		std::function<bool(const CollisionMapInfo&)> moveCondition
+	);
+	
+	void MapCollision(CollisionMapInfo& info); //ポインタ関数std::functionを使って、当たり判定の方向を指定する
 
 
-	void CalculateCollisionBounds(CollisionMapInfo& info);
-
-	// 当たり判定
-	void CollisionMapInfoTop(CollisionMapInfo& info);// 天井衝突
-	void CollisionMapInfoBootm(CollisionMapInfo& info);// 床衝突
-	void CollisionMapInfoRight(CollisionMapInfo& info);// 右壁衝突
-	void CollisionMapInfoLeft(CollisionMapInfo& info);// 左壁衝突
 
 	void PlayerCollisionMove(const CollisionMapInfo& inffo);// プレイヤー衝突移動
 	void CeilingCollisionMove(const CollisionMapInfo& info);// 天井衝突移動
 	void OnGroundSwitching(CollisionMapInfo& info);// 着地判定
 	void HitWallCollisionMove(const CollisionMapInfo& info);// 壁衝突移動
-	
+
 	// Blockクラスへのカメラモード 
 	bool SetCameraMode(bool cameraMode) { return cameraMode = cameraMode_; }
 
 	Vector3 CornerPosition(const Vector3& centor, Corner corner);// 4つの角の位置を計算yo
-	// map衝突判定
-	void MapCollision(CollisionMapInfo& info);// マップ衝突判定
-
+	
 
 	//アクセッサ
 	//死ぬ系
