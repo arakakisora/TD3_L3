@@ -11,28 +11,31 @@
 #include <imgui.h>
 #endif // _DEBUG
 #include <Easing.h>
+#include <ResourceIDManager.h>
+#include <TitleResourceID.h>
 
 using namespace Easing;
+using TitleModelID = TitlesceneModelID;
 
 void TitleScene::Initialize() {
 	// カメラの初期化
 	CameraManager::GetInstans()->Initialize();
 
 	// テクスチャ名
-	const std::vector<std::string> textureNames = { "WhiteRooms" };
+	const std::vector<std::string> textureNames = { "Titlescene/WhiteRooms" };
 	// テクスチャの読み込み
 	TextureManager::GetInstance()->LoadAllTextures(textureNames);
 
-	// モデル名
-	const std::vector<std::string> modelNames = {
-	 "Text_Title",
-	 "UI_Title_Stsrt",
-	 "UI_Title_A",
-	 "plane",
-	 "playercharacter",
-	 "backPlane",
-	 "WhiteRooms",
-	 "shutterEffect"
+	// .objのファルダパスを読み込む
+	ResourceIDManager::Load("Resources/ResourceID/ResourceIDs.json");
+	// 必要なモデルのパスをリストで取得
+	std::vector<std::string> modelNames = {
+	TitleResourceID(TitleModelID::Text_Title),
+	TitleResourceID(TitleModelID::BackPlane),
+	TitleResourceID(TitleModelID::PlayerCharacter),
+	TitleResourceID(TitleModelID::ShutterEffect),
+	TitleResourceID(TitleModelID::UI_Title_Stsrt),
+	TitleResourceID(TitleModelID::WhiteRooms),
 	};
 	// モデルの読み込み
 	ModelManager::GetInstans()->LoadAllModels(modelNames);
@@ -45,7 +48,7 @@ void TitleScene::Initialize() {
 	Audio::GetInstance()->StopAudio();
 
 	// フェードインの初期化
-	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.Initialize("Resources/Titlescene/white.png");
 	fadeManager_.StartFadeIn();
 
 	// ステージを0からに初期化
@@ -63,13 +66,13 @@ void TitleScene::Initialize() {
 		if (i == ObjectType::Title) {                                              	                     // タイトルの生成
 			objects_[i]->SetTranslate(Vector3(0.0f, 0.5f, 0.0f));
 			objects_[i]->SetRotate(Vector3(0.0f, 3.3f, 0.0f));
-			objects_[i]->SetModel("Text_Title.obj");
+			objects_[i]->SetModel(TitleResourceID(TitleModelID::Text_Title));
 		} else if (i == ObjectType::Start) {                                                             // startの生成
 			objects_[i]->SetTranslate(Vector3(-0.53f, -0.5f, 0.0f));
 			objects_[i]->SetScale(Vector3(0.3f, 0.3f, 0.3f));
-			objects_[i]->SetModel("UI_Title_Stsrt.obj");
+			objects_[i]->SetModel(TitleResourceID(TitleModelID::UI_Title_Stsrt));
 		} else if (i == ObjectType::Player) {                                            	             // プレイヤーの生成
-			objects_[i]->SetModel("playercharacter.obj");
+			objects_[i]->SetModel(TitleResourceID(TitleModelID::PlayerCharacter));
 			objects_[i]->SetLighting(true);
 			objects_[i]->SetDirectionalLightEnable(true);
 			objects_[i]->SetDirectionalLightDirection(Vector3{ -1.8f, -2.0f, -2.0f });
@@ -79,15 +82,15 @@ void TitleScene::Initialize() {
 		} else if (i == ObjectType::Skydome) {                                              	         // 背景の生成
 			objects_[i]->SetTranslate(Vector3{ 0.0f,0.0f,10.0f });
 			objects_[i]->SetScale(Vector3{ 1.5f, 1.0f, 1.0f });
-			objects_[i]->SetModel("WhiteRooms.obj");
+			objects_[i]->SetModel(TitleResourceID(TitleModelID::WhiteRooms));
 		} else if (i == ObjectType::Shuttertop) {                                            	         // シャッター 上の生成
 			objects_[i]->SetScale(Vector3{ 2.0f,2.0f,1.0f });
 			objects_[i]->SetTranslate(Vector3(0.0f, 13.0f, -1.0f));
-			objects_[i]->SetModel("shutterEffect.obj");
+			objects_[i]->SetModel(TitleResourceID(TitleModelID::ShutterEffect));
 		} else if (i == ObjectType::Shutterbottom) {                                           	         // シャッター 下の生成
 			objects_[i]->SetScale(Vector3{ 2.0f,2.0f,1.0f });
 			objects_[i]->SetTranslate(Vector3(0.0f, -10.0f, -1.0f));
-			objects_[i]->SetModel("shutterEffect.obj");
+			objects_[i]->SetModel(TitleResourceID(TitleModelID::ShutterEffect));
 		}
 	}
 }
@@ -334,7 +337,7 @@ void TitleScene::UpdatePhase() {
 		// タイトルロゴのスケーリング揺れ
 		float scale = 0.3f + std::sinf(timer * 0.07f) * 0.03f;
 		
-		// スキップされなかったら時間経過でフェーズ戻す
+		// シーン遷移されなかったら時間経過でフェーズ戻す
 		if (!isnextStep) {	
 			constexpr int kMaxStepResetThreshold = 500;
 			if (++nextcurrentSteptime >= kMaxStepResetThreshold) {
