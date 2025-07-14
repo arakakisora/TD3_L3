@@ -249,7 +249,7 @@
     <ClCompile Include="application\3d\Block.cpp">
       <Filter>ソース ファイル\application\3d</Filter>
     </ClCompile>
-    <ClCompile Include="application\3d\Player.cpp">
+    <ClCompile Include="application\player\Player.cpp">
       <Filter>ソース ファイル\application\3d</Filter>
     </ClCompile>
     <ClCompile Include="application\uI\PauseMenu.cpp">
@@ -427,7 +427,7 @@
     <ClInclude Include="application\3d\Block.h">
       <Filter>ヘッダー ファイル\application\3d</Filter>
     </ClInclude>
-    <ClInclude Include="application\3d\Player.h">
+    <ClInclude Include="application\player\Player.h">
       <Filter>ヘッダー ファイル\application\3d</Filter>
     </ClInclude>
     <ClInclude Include="application\uI\PauseMenu.h">

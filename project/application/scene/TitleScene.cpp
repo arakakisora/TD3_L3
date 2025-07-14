@@ -144,6 +144,23 @@ void TitleScene::DebugimgGui(){
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		}
 	}
+
+	// 入力可能状態かつフェーズが 3 以降なら
+	if (PhaseIndex_ >= LoopAnimation) {
+		// Aボタンが押されたときに開始
+		if (!fadeManager_.IsFading() && Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			// 決定の音声を流す
+			Audio::GetInstance()->SoundPlayWave(ButtonSound_);
+			isnextStep = true;
+			fadeManager_.StartFadeOut();
+		}
+
+		// フェードアウトが完了したらシーン切り替え
+		if (fadeManager_.IsFadeOutFinished()) {
+			SceneManager::GetInstance()->ChangeScene("STAGESELECTSCENE");
+		}
+	}
+
 #endif // _DEBUG
 }
 

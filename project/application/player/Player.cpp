@@ -16,7 +16,7 @@ using namespace Easing;
 void Player::Initialize(const Vector3& position) {
 
 	// モデルの初期化
-	object3D_ = new Object3D();
+	object3D_ = std::make_unique<Object3D>();
 	object3D_->Initialize(Object3DCommon::GetInstance());
 	object3D_->SetModel("playercharacter.obj");
 	object3D_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
@@ -35,34 +35,13 @@ void Player::Initialize(const Vector3& position) {
 
 Player::~Player()
 {
-	delete object3D_;
+	
 }
 
 void Player::Update() {
 
-#ifdef _DEBUG
 
-	if (ImGui::CollapsingHeader("Player", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		Transform transform = object3D_->GetTransform();
-
-		//ImGui::DragFloat3("*ModelScale", &transform.scale.x, 0.01f);
-		ImGui::DragFloat3("*PlayerRotate", &transform.rotate.x, 0.01f);
-		ImGui::DragFloat3("*PlayerTransrate", &transform.translate.x, 0.01f);
-		object3D_->SetTransform(transform);
-
-		//カメラフラグ
-		ImGui::Text("CameraMode %d", cameraMode_);
-	}
-#endif // DEBUG_
-
-#ifdef _DEBUG
-
-	//Cキーを押してカメラモードへ
-	if (Input::GetInstance()->TriggerKey(DIK_C)) {
-		cameraMode_ = !cameraMode_;
-	}
-#endif // _DEBUG
+	PlayerDebug();
 
 
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && onGround_) {
@@ -71,25 +50,14 @@ void Player::Update() {
 		Audio::GetInstance()->SoundPlayWave(ButtonSound);
 	}
 
+	//カメらモードがoffならプレイヤーモード
 	if (!cameraMode_) {
 
-		PrayerMove();
-		PlayerTurn();
-		// 衝突判定を初期化
-		CollisionMapInfo collisionMapInfo;
-		// 移動量に速度の値をコピー
-		collisionMapInfo.move = velocity_;
-		// マップ衝突チェック
-		MapCollision(collisionMapInfo);
-		// 移動
-		CeilingCollisionMove(collisionMapInfo);// 天井衝突移動
-		OnGroundSwitching(collisionMapInfo);// 着地判定
-		HitWallCollisionMove(collisionMapInfo);// 壁衝突移動
-		PlayerCollisionMove(collisionMapInfo);// プレイヤー衝突移動
+		PlayerMode();
 
 	}
 
-	////PrayerTurn();
+	
 	object3D_->Update();
 }
 
@@ -199,6 +167,48 @@ void Player::PlayerTurn()
 
 }
 
+void Player::PlayerDebug()
+{
+#ifdef _DEBUG
+
+	if (ImGui::CollapsingHeader("Player", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		Transform transform = object3D_->GetTransform();
+
+		//ImGui::DragFloat3("*ModelScale", &transform.scale.x, 0.01f);
+		ImGui::DragFloat3("*PlayerRotate", &transform.rotate.x, 0.01f);
+		ImGui::DragFloat3("*PlayerTransrate", &transform.translate.x, 0.01f);
+		object3D_->SetTransform(transform);
+
+		//カメラフラグ
+		ImGui::Text("CameraMode %d", cameraMode_);
+	}
+	//Cキーを押してカメラモードへ
+	if (Input::GetInstance()->TriggerKey(DIK_C)) {
+		cameraMode_ = !cameraMode_;
+	}
+#endif // DEBUG_
+
+
+}
+
+void Player::PlayerMode()
+{
+	PrayerMove();
+	PlayerTurn();
+	// 衝突判定を初期化
+	CollisionMapInfo collisionMapInfo;
+	// 移動量に速度の値をコピー
+	collisionMapInfo.move = velocity_;
+	// マップ衝突チェック
+	MapCollision(collisionMapInfo);
+	// 移動
+	CeilingCollisionMove(collisionMapInfo);// 天井衝突移動
+	OnGroundSwitching(collisionMapInfo);// 着地判定
+	HitWallCollisionMove(collisionMapInfo);// 壁衝突移動
+	PlayerCollisionMove(collisionMapInfo);// プレイヤー衝突移動
+}
+
 void Player::MapCollision(CollisionMapInfo& info) {
 
 	CollisionMapInfoRight(info);
@@ -277,15 +287,6 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 			
 				velocity_.y = kJampBlockAcceleration;
 				onGround_ = false;
-
-				//溜めVersion
-				/*
-				if (!isAccumulateJump_) {
-					isAccumulateJump_ = true;
-					AccumulateJumpTimer_ = 0.0f;
-					velocity_.y = 0.0f;
-				}
-				*/
 				return;
 			} else if (mapChipType == MapChipType::kGoalUp) {
 				CheckGoal = true;
@@ -309,15 +310,6 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 			} else if (mapChipType == MapChipType::kjumpBlock) {
 				velocity_.y = kJampBlockAcceleration;
 				onGround_ = false;
-
-				//溜めVersion
-				/*
-				if (!isAccumulateJump_) {
-					isAccumulateJump_ = true;
-					AccumulateJumpTimer_ = 0.0f;
-					velocity_.y = 0.0f;
-				}
-				*/
 				return;
 			} else if (mapChipType == MapChipType::kGoalUp) {
 				CheckGoal = true;
@@ -358,7 +350,7 @@ void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
 		Vector3 position = object3D_->GetTransform().translate;
 		position += info.move;
 		positionsNew[i] = CornerPosition(position, static_cast<Corner>(i));
-		//positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+		
 	}
 	MapChipType mapChipType;
 	// 真下の当たり判定
@@ -445,7 +437,6 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 		position += info.move;
 		positionsNew[i] = CornerPosition(position, static_cast<Corner>(i));
 
-		//positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
 
 	MapChipType mapChipType;
@@ -524,7 +515,6 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 		position += info.move;
 		positionsNew[i] = CornerPosition(position, static_cast<Corner>(i));
 
-		//positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
 
 	MapChipType mapChipType;
@@ -577,7 +567,6 @@ void Player::CollisionMapInfoRight(CollisionMapInfo& info) {
 	// hit
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
-		//DebugText::GetInstance()->ConsolePrintf("hit hitwall\n");
 
 		Logger::Log("hit hitwall\n");
 
@@ -601,7 +590,6 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		Vector3 position = object3D_->GetTransform().translate;
 		position += info.move;
 		positionsNew[i] = CornerPosition(position, static_cast<Corner>(i));
-		//positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
 
 	MapChipType mapChipType;
@@ -653,7 +641,6 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 	// hit
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
-		//DebugText::GetInstance()->ConsolePrintf("hit hitwall\n");
 		Vector3 position = object3D_->GetTransform().translate;
 		Logger::Log("hit hitwall\n");
 		indexSet = mapChipFild_->GetMapChipIndexSetByPosition(position + Vector3(+kWidth / 2.0f, 0, 0));
