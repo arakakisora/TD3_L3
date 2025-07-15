@@ -44,6 +44,7 @@ void Player::Update() {
 
 
 	PlayerDebug();
+	
 
 
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && onGround_) {
