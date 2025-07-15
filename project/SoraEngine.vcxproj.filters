@@ -130,6 +130,9 @@
     <Filter Include="リソース ファイル\shader">
       <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\player">
+      <UniqueIdentifier>{135e8192-a6ff-4c69-a037-f13579ce1cea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -249,9 +252,6 @@
     <ClCompile Include="application\3d\Block.cpp">
       <Filter>ソース ファイル\application\3d</Filter>
     </ClCompile>
-    <ClCompile Include="application\player\Player.cpp">
-      <Filter>ソース ファイル\application\3d</Filter>
-    </ClCompile>
     <ClCompile Include="application\uI\PauseMenu.cpp">
       <Filter>ソース ファイル\application\ui</Filter>
     </ClCompile>
@@ -272,6 +272,9 @@
     </ClCompile>
     <ClCompile Include="application\scene\GamePlayScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="application\player\Player.cpp">
+      <Filter>ソース ファイル\application\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
