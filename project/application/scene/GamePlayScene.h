@@ -24,6 +24,7 @@
 #include "Tutorial.h"
 #include "Operate.h"
 #include "SkyDome.h"
+#include "Reset.h"
 
 struct OperationText {
 	std::string texturePath;
@@ -55,12 +56,9 @@ public:
 	/// </summary>
 	void Draw()override;
 
-	//リセット
-	void GameReset();
-
 	// Imgui描画
 	void DrawImgui();
-	
+
 public:	// Getter
 	bool GetCameraMode();
 
@@ -69,19 +67,15 @@ private:
 	std::unique_ptr<Camera> camera2;
 	//プレイヤー
 	std::unique_ptr<Player>player;
-	Vector3 playeroffset{};	
-  //チュートリアルテキスト
+	Vector3 playeroffset{};
+	//チュートリアルテキスト
 	std::unique_ptr<Tutorial>tutorial;
-	//リセットお知らせ
-	std::unique_ptr<Object3D>ResetNotice;
 	//操作説明テキスト
 	std::unique_ptr<Operate>operate;
-
-	//リセットメータのスプライト
-	std::unique_ptr<Sprite>resetMeter;
-
+	//リセット
+	std::unique_ptr<Reset>reset;
 	std::vector < std::unique_ptr<Sprite>> pauseui;
-	Map* map=nullptr;
+	Map* map = nullptr;
 
 	std::unique_ptr<PhotoCamera>photoCamera;
 
