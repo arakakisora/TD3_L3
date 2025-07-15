@@ -77,9 +77,6 @@ static const std::unordered_set<MapChipType> drawTypes = {
 	MapChipType::kjumpBlock
 };
 
-
-
-
 struct MapChipMeta {
 	std::string modelName;
 	bool needsUpdate = false;
@@ -88,15 +85,3 @@ struct MapChipMeta {
 
 
 
-static const std::unordered_map<MapChipType, MapChipMeta> mapChipMetaTable = {
-	{ MapChipType::kBlank, { "nullBlock.obj", false, false } },
-	{ MapChipType::kPlayer, { "", false, false } }, // モデルなし（配置専用）
-	{ MapChipType::kNCopyBlock, { "ncopyblock.obj", true, true } },
-	{ MapChipType::kCopyBlock,  { "block.obj",      true, true } },
-	{ MapChipType::kGoalUp,     { "goalup.obj",     true, true } },
-	{ MapChipType::kGoalDown,   { "gall.obj",       true, true } },
-	{ MapChipType::kFallBlock,  { "fallblock.obj",  true, true } },
-	{ MapChipType::kFixedTimeBlock,    { "Timer.obj",     true, true } },
-	{ MapChipType::kPutFixedTimeBlock, { "putTimer.obj",  true, true } },
-	{ MapChipType::kjumpBlock,         { "jump.obj",      true, true } },
-};

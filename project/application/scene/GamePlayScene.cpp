@@ -52,14 +52,10 @@ void GamePlayScene::Initialize()
 		stagePath = "MapData/mapp1.csv";
 	}
 
-	skydome_ = make_unique<Object3D>();
-	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetTranslate(Vector3{ 17.6f,15.28f,62.72f });
-	skydome_->SetRotate(Vector3{ 0.0f,0.0f,-1.57f });
-	skydome_->SetScale(Vector3{ 0.22f, 0.4f, 2.23f });
-	skydome_->SetModel("PlaySceneBackPlane.obj");
-
-
+	// スカイドームの生成
+	skydome_ = std::make_unique<SkyDome>();
+	skydome_->Initialize();
+	
 	map = new Map;
 	map->LoadMapChipCsv(stagePath);
 	map->Initialize();
@@ -150,8 +146,6 @@ void GamePlayScene::Finalize()
 	CameraManager::GetInstans()->Finalize();
 
 	map->Finalize();
-
-	photoCamera->Finalize();
 
 
 	delete emitter_;
@@ -328,18 +322,7 @@ void GamePlayScene::DrawImgui()
 
 #ifdef _DEBUG
 	ImGui::Begin("Back");
-
-	// Transform構造体を直接編集
-	Transform skydomeTransform = skydome_->GetTransform();
-	bool changed = false;
-
-	changed |= ImGui::DragFloat3("Skydome Scale", &skydomeTransform.scale.x, 0.01f);
-	changed |= ImGui::DragFloat3("Skydome Rotate", &skydomeTransform.rotate.x, 0.01f);
-	changed |= ImGui::DragFloat3("Skydome Position", &skydomeTransform.translate.x, 0.01f);
-
-	if (changed) {
-		skydome_->SetTransform(skydomeTransform);
-	}
+	
 
 	ImGui::End();
 

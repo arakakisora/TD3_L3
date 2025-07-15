@@ -158,6 +158,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\map\Map.cpp" />
     <ClCompile Include="application\operate\Operate.cpp" />
     <ClCompile Include="application\tutorial\Tutorial.cpp" />
+
+    <ClCompile Include="application\3d\SkyDome.cpp" />
     <ClCompile Include="application\reset\Reset.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +246,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\3d\MapChipType.h" />
     <ClInclude Include="application\operate\Operate.h" />
     <ClInclude Include="application\tutorial\Tutorial.h" />
+    <ClInclude Include="application\3d\SkyDome.h" />
     <ClInclude Include="application\reset\Reset.h" />
   </ItemGroup>
   <ItemGroup>
