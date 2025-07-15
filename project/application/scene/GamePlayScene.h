@@ -23,6 +23,7 @@
 #include"FadeManager.h"
 #include "Tutorial.h"
 #include "Operate.h"
+#include "SkyDome.h"
 
 struct OperationText {
 	std::string texturePath;
@@ -84,9 +85,6 @@ private:
 
 	std::unique_ptr<PhotoCamera>photoCamera;
 
-	// 天球モデル
-	unique_ptr<Object3D> skydome_ = nullptr;
-	float skydomerotate;
 
 	//ポーズメニュー
 	std::unique_ptr<PauseMenu>pauseMenu;
@@ -100,8 +98,7 @@ private:
     float holdTime = 0.0f;
 	const float holdDuration = 1.7f;
 
-	//リセットテキスト用タイマー
-
+	
 	//経過時間
 	float elapsedTime = 0.0f;
 	//30秒後に表示
@@ -113,6 +110,8 @@ private:
 
 	ParticleEmitter* emitter_;
 	ParticleEmitter* playeremitter_;
+	// 天球モデル
+	std::unique_ptr<SkyDome> skydome_ = nullptr;
 
 };
 
