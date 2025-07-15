@@ -59,13 +59,13 @@
             "StageSelect": "StageSelect/StageSelect.obj",
             "title": "StageSelect/title.obj"
         },
-        "Titlescene": {
-            "backPlane": "Titlescene/backPlane.obj",
-            "playercharacter": "Titlescene/playercharacter.obj",
-            "shutterEffect": "Titlescene/shutterEffect.obj",
-            "Text_Title": "Titlescene/Text_Title.obj",
-            "UI_Title_Stsrt": "Titlescene/UI_Title_Stsrt.obj",
-            "WhiteRooms": "Titlescene/WhiteRooms.obj"
+        "Title": {
+            "backPlane": "Title/backPlane.obj",
+            "playercharacter": "Title/playercharacter.obj",
+            "shutterEffect": "Title/shutterEffect.obj",
+            "Text_Title": "Title/Text_Title.obj",
+            "UI_Title_Stsrt": "Title/UI_Title_Stsrt.obj",
+            "WhiteRooms": "Title/WhiteRooms.obj"
         },
         "tutorial": {
             "tutorial1": "tutorial/tutorial1.obj",
