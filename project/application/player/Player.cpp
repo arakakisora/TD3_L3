@@ -46,7 +46,6 @@ void Player::Update() {
 	PlayerDebug();
 
 
-
 	if (Input::GetInstance()->TriggerGamePadButton(XINPUT_GAMEPAD_B) && onGround_) {
 		cameraMode_ = !cameraMode_;
 		// 決定の音声を流す
