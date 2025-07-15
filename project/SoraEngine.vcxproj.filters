@@ -276,8 +276,14 @@
     <ClCompile Include="application\scene\GamePlayScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
+
     <ClCompile Include="application\player\Player.cpp">
       <Filter>ソース ファイル\application\player</Filter>
+
+    <ClCompile Include="application\3d\SkyDome.cpp">
+    <ClCompile Include="application\reset\Reset.cpp">
+      <Filter>ソース ファイル</Filter>
+
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -457,8 +463,14 @@
     <ClInclude Include="application\3d\MapChipType.h">
       <Filter>ヘッダー ファイル\application\3d</Filter>
     </ClInclude>
+
     <ClInclude Include="application\player\Player.h">
       <Filter>ヘッダー ファイル\application\player</Filter>
+
+    <ClInclude Include="application\3d\SkyDome.h">
+    <ClInclude Include="application\reset\Reset.h">
+      <Filter>ヘッダー ファイル</Filter>
+
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

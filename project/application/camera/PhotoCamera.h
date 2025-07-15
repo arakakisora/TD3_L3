@@ -11,8 +11,11 @@ using namespace std;
 class PhotoCamera
 {
 public:
-	//シングルトンインスタンス
-	static PhotoCamera* GetInstance();
+	// コンストラクタ
+	PhotoCamera();
+	// デストラクタ
+	~PhotoCamera();
+
 	// 初期化
 	void Initialize(Map* map);
 	// 更新
