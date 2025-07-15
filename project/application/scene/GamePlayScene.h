@@ -23,6 +23,7 @@
 #include"FadeManager.h"
 #include "Tutorial.h"
 #include "Operate.h"
+#include "Reset.h"
 
 struct OperationText {
 	std::string texturePath;
@@ -54,12 +55,9 @@ public:
 	/// </summary>
 	void Draw()override;
 
-	//リセット
-	void GameReset();
-
 	// Imgui描画
 	void DrawImgui();
-	
+
 public:	// Getter
 	bool GetCameraMode();
 
@@ -68,19 +66,15 @@ private:
 	std::unique_ptr<Camera> camera2;
 	//プレイヤー
 	std::unique_ptr<Player>player;
-	Vector3 playeroffset{};	
-  //チュートリアルテキスト
+	Vector3 playeroffset{};
+	//チュートリアルテキスト
 	std::unique_ptr<Tutorial>tutorial;
-	//リセットお知らせ
-	std::unique_ptr<Object3D>ResetNotice;
 	//操作説明テキスト
 	std::unique_ptr<Operate>operate;
-
-	//リセットメータのスプライト
-	std::unique_ptr<Sprite>resetMeter;
-
+	//リセット
+	std::unique_ptr<Reset>reset;
 	std::vector < std::unique_ptr<Sprite>> pauseui;
-	Map* map=nullptr;
+	Map* map = nullptr;
 
 	std::unique_ptr<PhotoCamera>photoCamera;
 
@@ -95,19 +89,6 @@ private:
 	FadeManager fadeManager_;
 	// 切り替えフラグ:
 	bool isfadesense_ = false;
-
-	//リセット用タイマー
-    float holdTime = 0.0f;
-	const float holdDuration = 1.7f;
-
-	//リセットテキスト用タイマー
-
-	//経過時間
-	float elapsedTime = 0.0f;
-	//30秒後に表示
-	const float afterseconds = 30.0f;
-	//30秒経過フラグ
-	bool secondspassed = false;
 
 	const float deltaTime = 1.0f / 60.0f;
 
