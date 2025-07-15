@@ -192,6 +192,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\resource\GameClearResourceID.h" />
     <ClInclude Include="application\resource\TitleResourceID.h" />
     <ClInclude Include="application\uI\BitmapFont.h" />
     <ClInclude Include="application\3d\Block.h" />

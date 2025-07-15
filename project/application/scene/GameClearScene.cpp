@@ -10,63 +10,87 @@
 #include "CameraManager.h"
 #include <ModelManager.h>
 #include <TextureManager.h>
+#include<Easing.h>
+
+// 省略
+using namespace Easing;
+using ModelID = GameClearModelID;
+using TextureID = GameClearTextureID;
+
+// テクスチャIDと位置をまとめた構造体
+struct SpriteInfo {
+    TextureID textureID;
+    Vector2 position;
+};
+
 
 void GameClearScene::Initialize()
 {
+	// カメラマネージャの初期化
 	CameraManager::GetInstans()->Initialize();
+    // 使用テクスチャ一覧
+    std::vector<TextureID> textureIDs = {
+        TextureID::Title,
+        TextureID::NextStage,
+        TextureID::StageSelect,
+        TextureID::ArrowUp
+    };
+	// テクスチャの読み込み
+    LoadTextures(textureIDs);
 
-	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_01.obj");
-	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_02.obj");
-	ModelManager::GetInstans()->LoadModel("GameClear/ClearText_03.obj");
-
-	velocity_.resize(MaxtextIndex_); // すべてのオブジェクトに対応するサイズに設定
+    // 使用モデル一覧
+    std::vector<ModelID> modelIDs = {
+        ModelID::ClearText_01,
+        ModelID::ClearText_02,
+        ModelID::ClearText_03,
+        ModelID::backPlane
+    };	
+	// モデルの読み込み
+    LoadModels(modelIDs);
 
 	// クリアしたステージのindex
 	nextStage = SceneManager::GetInstance()->GetStageIndex() + 1;
 
-	// 作成してリストに追加
+	// テキストIDのリスト
+	const std::array<ModelID, MaxtextIndex_> textIDs = {
+		ModelID::ClearText_01,
+		ModelID::ClearText_02,
+		ModelID::ClearText_03
+	};
+
+	// 各クリアテキストのvelocityのサイズを設定
+	velocity_.resize(MaxtextIndex_);
+
+	// オブジェクトを作成してリストに追加
 	for (uint32_t i = 0; i < MaxtextIndex_; ++i) {
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
 		newObject->Initialize(Object3DCommon::GetInstance());
-		if (i == 0) {
-			newObject->SetModel("GameClear/ClearText_01.obj");
-		} else if (i == 1) {
-			newObject->SetModel("GameClear/ClearText_02.obj");
-		} else if (i == 2) {
-			newObject->SetModel("GameClear/ClearText_03.obj");
+		// 別々のモデルをセット
+		if (i < textIDs.size()) {
+			newObject->SetModel(GameClearResourceID::GetModelPath(textIDs[i]));
 		}
+		// 値を設定
 		newObject->SetTranslate(Vector3(-0.5f + (0.5f * i), 0.3f, 10.0f));
 		newObject->SetScale(Vector3(0.0f, 0.0f, 0.0f));
 		newObject->SetLighting(false);
 		Cleartext_.push_back(std::move(newObject));
-
 		objecttime_[i] = i * 1.0f;
 		startDelay[i] = 0.0f;
-
 		velocity_[i] = Vector3(0.0f, 0.0f, 0.0f); // 初期速度はゼロに設定（x, y, z）
 	}
 
-
-	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Nextstage.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/TextUI_Stageselect.png");
-	TextureManager::GetInstance()->LoadTexture("Resources/GameClear/ArroUP.png");
-
-	// 作成してリストに追加
-	for (uint32_t i = 0; i < 3; ++i) {
+	// 初期化用のテーブル
+	std::array<SpriteInfo, 3> spriteInfos = {
+		SpriteInfo{TextureID::Title,       {250.0f, 700.0f}},
+		SpriteInfo{TextureID::StageSelect, {550.0f, 700.0f}},
+		SpriteInfo{TextureID::NextStage,   {850.0f, 700.0f}},
+	};
+	
+	// Spriteを作成してリストに追加
+	for (const auto& info : spriteInfos) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
-
-		if (i == 0) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Title.png");
-			newSprite->SetPosition(Vector2(250.0f, 700.0f));
-
-		} else if (i == 1) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Stageselect.png");
-			newSprite->SetPosition(Vector2(550.0f, 700.0f));
-		} else if (i == 2) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/TextUI_Nextstage.png");
-			newSprite->SetPosition(Vector2(850.0f, 700.0f));
-		}
-
+		newSprite->Initialize(SpriteCommon::GetInstance(), GameClearResourceID::GetTexturePath(info.textureID));
+		newSprite->SetPosition(info.position);
 		newSprite->SetSize({ 200.0f, 50.0f });
 		newSprite->SetRotation(0.0f);
 		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -74,23 +98,20 @@ void GameClearScene::Initialize()
 		TextUI_.push_back(std::move(newSprite));
 	}
 
+	// 選択矢印
 	ArroTextUI_ = std::make_unique<Sprite>();
-
-	ArroTextUI_->Initialize(SpriteCommon::GetInstance(), "Resources/GameClear/ArroUP.png");
-
+	ArroTextUI_->Initialize(SpriteCommon::GetInstance(), GameClearResourceID::GetTexturePath(TextureID::ArrowUp));
 	ArroTextUI_->SetPosition(Vector2(925.0f, 570.0f));
 	ArroTextUI_->SetSize({ 50.0f, 50.0f });
 	ArroTextUI_->SetRotation(0.0f);
 	ArroTextUI_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-
-
 
 	// 背景
 	skydome_ = std::make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
 	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
 	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
-	skydome_->SetModel("backPlane.obj");
+	skydome_->SetModel(GameClearResourceID::GetModelPath(ModelID::backPlane));
 
 	// ラストステージならフラグを立てる
 	if (nextStage == MaxStageIndex_) {
@@ -445,4 +466,22 @@ void GameClearScene::ControllerUpdate() {
 			}
 		}
 	}
+}
+
+void GameClearScene::LoadTextures(const std::vector<GameClearTextureID>& textureIDs) {
+    std::vector<std::string> textureNames;
+    textureNames.reserve(textureIDs.size());
+    for (const auto& id : textureIDs) {
+        textureNames.push_back(GameClearResourceID::GetTexturePath(id));
+    }
+    TextureManager::GetInstance()->LoadAllTextures(textureNames);
+}
+
+void GameClearScene::LoadModels(const std::vector<GameClearModelID>& modelIDs) {
+    std::vector<std::string> modelNames;
+    modelNames.reserve(modelIDs.size());
+    for (const auto& id : modelIDs) {
+        modelNames.push_back(GameClearResourceID::GetModelPath(id));
+    }
+    ModelManager::GetInstans()->LoadAllModels(modelNames);
 }

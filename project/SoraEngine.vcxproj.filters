@@ -472,6 +472,9 @@
     <ClInclude Include="application\Resource\ResourceIDManager.h">
       <Filter>ヘッダー ファイル\application\resource</Filter>
     </ClInclude>
+    <ClInclude Include="application\resource\GameClearResourceID.h">
+      <Filter>ヘッダー ファイル\application\resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Object3d.hlsli">
