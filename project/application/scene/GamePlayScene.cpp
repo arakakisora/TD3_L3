@@ -73,13 +73,8 @@ void GamePlayScene::Initialize()
 	player->SetDeathHeight(0.0f);
 
 	//リセットお知らせ
-	ResetNotice = std::make_unique<Object3D>();
-	ResetNotice->Initialize(Object3DCommon::GetInstance());
-	ResetNotice->SetModel("resetnotice.obj");
-	ResetNotice->SetScale(Vector3(0.5f, 0.5f, 0.5f));
-	ResetNotice->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
-	ResetNotice->SetTranslate(Vector3(12.46f, 23.25f, -1.0f));
-	ResetNotice->SetLighting(false);
+	reset = std::make_unique<Reset>();
+	reset->Initialize();
 	
 	for (uint32_t i = 0; i < 2; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
@@ -95,12 +90,6 @@ void GamePlayScene::Initialize()
 		newSprite->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		pauseui.push_back(std::move(newSprite));
 	}
-
-	//リセットメーターのスプライト
-	resetMeter = std::make_unique<Sprite>();
-	resetMeter->Initialize(SpriteCommon::GetInstance(), "Resources/resetmeter.png");
-	resetMeter->SetPosition(Vector2(325, 70));
-	resetMeter->SetSize(Vector2(200, 45));
 
 	//フォローカメラ設定
 	CameraManager::GetInstans()->GetCamera("maincam")->SetFollowTarget(player->GetObject3D(), {0, 0, -15});
@@ -270,11 +259,10 @@ void GamePlayScene::Update()
 		pauseMenu->Update();
 	}
 
-	//リセット
-	GameReset();
-
-	resetMeter->Update();
-	ResetNotice->Update();
+	//ステージリセット
+	reset->StageReset();
+	//リセット更新
+	reset->Update();
 }
 
 
@@ -298,10 +286,8 @@ void GamePlayScene::Draw()
 	//チュートリアルテキスト
 	tutorial->TextDraw();
 
-	//リセットお知らせ
-	if (holdTime > 0.0f) {
-		ResetNotice->Draw();
-	}
+	//リセットお知らせ描画
+	reset->DrawResetNotice();
 
 	map->Draw();
 
@@ -324,10 +310,8 @@ void GamePlayScene::Draw()
 	}
 
 	//リセットメーター描画
-	if (holdTime > 0.0f) {
-		resetMeter->Draw();
-	}
-
+	reset->DrawResetMeter();
+	//チュートリアル描画
 	tutorial->SpriteDraw();
 
 	// フォトカメラ内のスプライト描画
@@ -337,38 +321,6 @@ void GamePlayScene::Draw()
 	fadeManager_.Draw();
 
 #pragma endregion
-}
-
-//リセット
-void GamePlayScene::GameReset() {
-	if (
-#ifdef _DEBUG
-		Input::GetInstance()->PushKey(DIK_R) ||
-#endif// _DEBUG
-		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) &&
-		Input::GetInstance()->PushGamePadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
-
-		holdTime += deltaTime;
-
-		//メーターの進み具合
-		float progress = min(holdTime / holdDuration, 1.0f);
-		float maxWidth = 600.0f;
-		float meterWidth = maxWidth * progress;
-
-		resetMeter->SetSize(Vector2(meterWidth, 45));
-
-		if (holdTime >= holdDuration) {
-			holdTime = 0.0f;
-
-			int stageIndex = SceneManager::GetInstance()->GetStageIndex();
-			SceneManager::GetInstance()->SetStageIndex(stageIndex);
-			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
-		}
-
-	} else {
-		//離されたらタイマーをリセット
-		holdTime = 0.0f;
-	}
 }
 
 void GamePlayScene::DrawImgui()
