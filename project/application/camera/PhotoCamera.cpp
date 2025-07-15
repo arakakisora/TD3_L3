@@ -10,14 +10,14 @@
 
 using namespace Easing;
 
-PhotoCamera* PhotoCamera::instance_ = nullptr;
 
-//シングルトンインスタンス
-PhotoCamera* PhotoCamera::GetInstance() {
-	if (instance_ == nullptr) {
-		instance_ = new PhotoCamera();
-	}
-	return instance_;
+PhotoCamera::PhotoCamera()
+{
+}
+
+PhotoCamera::~PhotoCamera()
+{
+	Finalize();
 }
 
 // MAPクラスとのループキャストに注意

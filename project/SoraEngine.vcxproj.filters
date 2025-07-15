@@ -131,7 +131,9 @@
       <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\application\player">
+
       <UniqueIdentifier>{135e8192-a6ff-4c69-a037-f13579ce1cea}</UniqueIdentifier>
+
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -273,8 +275,10 @@
     <ClCompile Include="application\scene\GamePlayScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
+
     <ClCompile Include="application\player\Player.cpp">
       <Filter>ソース ファイル\application\player</Filter>
+
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -430,9 +434,6 @@
     <ClInclude Include="application\3d\Block.h">
       <Filter>ヘッダー ファイル\application\3d</Filter>
     </ClInclude>
-    <ClInclude Include="application\player\Player.h">
-      <Filter>ヘッダー ファイル\application\3d</Filter>
-    </ClInclude>
     <ClInclude Include="application\uI\PauseMenu.h">
       <Filter>ヘッダー ファイル\application\ui</Filter>
     </ClInclude>
@@ -456,6 +457,15 @@
     </ClInclude>
     <ClInclude Include="application\3d\MapChipType.h">
       <Filter>ヘッダー ファイル\application\3d</Filter>
+    </ClInclude>
+
+    <ClInclude Include="application\player\Player.h">
+      <Filter>ヘッダー ファイル\application\player</Filter>
+
+    <ClInclude Include="application\3d\SkyDome.h">
+    <ClInclude Include="application\reset\Reset.h">
+      <Filter>ヘッダー ファイル</Filter>
+
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -510,5 +520,6 @@
     <None Include="MapData\mapp9.csv">
       <Filter>リソース ファイル</Filter>
     </None>
+    <None Include="Resources\Palyerparameter\PlayerParameter.csv" />
   </ItemGroup>
 </Project>

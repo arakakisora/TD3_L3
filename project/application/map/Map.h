@@ -33,6 +33,7 @@ public:
     static inline const uint32_t kNumBlockVirtical = 25;
     static inline const uint32_t kNumBlockHorizontal = 25;
 public:
+  
 	// 初期化
     void Initialize();
 	// 終了処理

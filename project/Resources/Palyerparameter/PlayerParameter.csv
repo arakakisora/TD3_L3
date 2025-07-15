@@ -1,0 +1,16 @@
+Parameter,Value
+kAccleration,0.05
+kAttenuation,0.2
+kLimitRunSpeed,0.2
+kGravityAccleration,0.05
+kLimitFallSpeed,1.0
+kJampAcceleration,0.5
+kJampBlockAcceleration,0.8
+kAccumulateJumpTime,0.2
+kWidth,0.8
+kHeight,0.8
+kBlank,2.0
+kCollisionsmallnumber,0.1
+kAttenuationLanding,0.1
+kAttenuationWall,1.0
+KtimeTurn,1.0
