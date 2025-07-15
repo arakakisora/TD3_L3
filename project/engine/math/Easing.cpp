@@ -1,4 +1,6 @@
 #include "Easing.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 namespace Easing {
     float Linear(float t) {
@@ -77,4 +79,29 @@ namespace Easing {
         ans.z = a.z + t * (b.z - a.z);
         return ans;
     }
+ 
+	float EaseOutElastic(float t, float b, float c, float d, float amplitudeScale) {
+		if (t == 0) return b;
+		if ((t /= d) == 1) return b + c;
+		float p = d * 0.1f; // 伸縮の周期
+		float a = c * amplitudeScale; // 振幅をスケールダウン
+		float s = p / 4.0f;
+		return a * powf(2.0f, -10.0f * t) * sinf((t * d - s) * (2.0f * static_cast<float>(M_PI)) / p) + c + b;
+	}
+
+	float EaseOutBounce(float time, float start, float change, float duration) {
+		float t = time / duration;
+		if (t < (1 / 2.75f)) {
+			return change * (7.5625f * t * t) + start;
+		} else if (t < (2 / 2.75f)) {
+			t -= (1.5f / 2.75f);
+			return change * (7.5625f * t * t + 0.75f) + start;
+		} else if (t < (2.5 / 2.75)) {
+			t -= (2.25f / 2.75f);
+			return change * (7.5625f * t * t + 0.9375f) + start;
+		} else {
+			t -= (2.625f / 2.75f);
+			return change * (7.5625f * t * t + 0.984375f) + start;
+		}
+	}
 }
