@@ -131,9 +131,10 @@
       <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\application\player">
-
-      <UniqueIdentifier>{135e8192-a6ff-4c69-a037-f13579ce1cea}</UniqueIdentifier>
-
+      <UniqueIdentifier>{3216d041-6462-4601-9b55-9f3853691484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\player">
+      <UniqueIdentifier>{90f6c447-9bc3-4e0e-bce4-8f0de3d24ddd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +279,10 @@
 
     <ClCompile Include="application\player\Player.cpp">
       <Filter>ソース ファイル\application\player</Filter>
+
+    <ClCompile Include="application\3d\SkyDome.cpp">
+    <ClCompile Include="application\reset\Reset.cpp">
+      <Filter>ソース ファイル</Filter>
 
     </ClCompile>
   </ItemGroup>
