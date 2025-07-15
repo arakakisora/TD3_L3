@@ -111,7 +111,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="application\Resource\TitleResourceID.cpp" />
     <ClCompile Include="application\uI\BitmapFont.cpp" />
     <ClCompile Include="application\3d\Block.cpp" />
     <ClCompile Include="engine\math\Easing.cpp" />
@@ -159,7 +158,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="application\map\Map.cpp" />
     <ClCompile Include="application\operate\Operate.cpp" />
     <ClCompile Include="application\tutorial\Tutorial.cpp" />
-    <ClCompile Include="application\Resource\ResourceIDManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3d.PS.hlsl">
@@ -247,7 +245,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="application\3d\MapChipType.h" />
     <ClInclude Include="application\operate\Operate.h" />
     <ClInclude Include="application\tutorial\Tutorial.h" />
-    <ClInclude Include="application\Resource\ResourceIDManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

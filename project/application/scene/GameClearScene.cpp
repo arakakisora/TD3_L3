@@ -28,7 +28,8 @@ void GameClearScene::Initialize()
 {
 	// カメラマネージャの初期化
 	CameraManager::GetInstans()->Initialize();
-    // 使用テクスチャ一覧
+
+	// 使用テクスチャ一覧
     std::vector<TextureID> textureIDs = {
         TextureID::Title,
         TextureID::NextStage,

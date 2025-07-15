@@ -279,12 +279,6 @@
     <ClCompile Include="application\scene\GamePlayScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="application\Resource\ResourceIDManager.cpp">
-      <Filter>ソース ファイル\application\resource</Filter>
-    </ClCompile>
-    <ClCompile Include="application\Resource\TitleResourceID.cpp">
-      <Filter>ソース ファイル\application\resource</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3d.VS.hlsl">
@@ -467,9 +461,6 @@
       <Filter>ヘッダー ファイル\application\3d</Filter>
     </ClInclude>
     <ClInclude Include="application\resource\TitleResourceID.h">
-      <Filter>ヘッダー ファイル\application\resource</Filter>
-    </ClInclude>
-    <ClInclude Include="application\Resource\ResourceIDManager.h">
       <Filter>ヘッダー ファイル\application\resource</Filter>
     </ClInclude>
     <ClInclude Include="application\resource\GameClearResourceID.h">

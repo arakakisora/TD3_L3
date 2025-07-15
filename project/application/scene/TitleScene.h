@@ -1,11 +1,23 @@
 #pragma once
-#include "Camera.h"	
-#include "Model.h"
-#include"Sprite.h"
-#include "Object3D.h"
-#include "Audio.h"
-#include "BaseScene.h"
-#include "FadeManager.h"
+#include <Camera.h>	
+#include <Model.h>
+#include <Sprite.h>
+#include <Object3D.h>
+#include <Audio.h>
+#include <BaseScene.h>
+#include <FadeManager.h>
+#include <TitleResourceID.h>
+
+// オブジェクトパラメータ
+struct ObjectInitData {
+    ModelID modelID;
+    Vector3 translate = {};
+    Vector3 rotate = {};
+    Vector3 scale = {1.0f, 1.0f, 1.0f};
+    bool lighting = false;
+    bool directionalLight = false;
+    Vector3 directionalDir = {};
+};
 
 class TitleScene :public BaseScene
 {
@@ -54,8 +66,13 @@ private:
 	void UpdateStartTrigger();
 	// アニメーションフェーズの更新処理
 	void UpdatePhase();
-	// デバッグ用の ImGui 描画
+	// デバッグ用の ImGui 描画S
 	void DebugimgGui();
+private:
+	// 2dリソースのIDを読み込む
+	void LoadTextures(const std::vector<TextureID>& textureIDs);
+	// 3dリソースのIDを読み込む
+	void LoadModels(const std::vector<ModelID>& modelIDs);
 private:
 	// ポインタ
 	FadeManager fadeManager_;	// 背景
