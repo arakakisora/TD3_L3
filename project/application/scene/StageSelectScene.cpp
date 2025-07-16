@@ -91,19 +91,19 @@ void StageSelectScene::Initialize(){
 	for (uint32_t i = 0; i < 4; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
 		if (i == 0) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_stick_l.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Operate/xbox_stick_l.png");
 			newSprite->SetPosition(Vector2(15.0f, 650.0f));
 			newSprite->SetSize(Vector2(70, 60));
 		} else if (i == 1) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/idou.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Operate/idou.png");
 			newSprite->SetPosition(Vector2(100.0f, 660.0f));
 			newSprite->SetSize(Vector2(60, 50));
 		} else if (i == 2) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_color_a.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Operate/xbox_button_color_a.png");
 			newSprite->SetPosition(Vector2(180.0f, 648.0f));
 			newSprite->SetSize(Vector2(70, 70));
 		} else if (i == 3) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/kettei.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Operate/kettei.png");
 			newSprite->SetPosition(Vector2(270.0f, 660.0f));
 			newSprite->SetSize(Vector2(60, 50));
 		}
@@ -118,7 +118,7 @@ void StageSelectScene::Initialize(){
 			newSprite->SetPosition(Vector2(15.0f, 15.0f));
 			newSprite->SetSize(Vector2(150, 50));
 		} else if (i == 1) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/xbox_button_menu.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Operate/xbox_button_menu.png");
 			newSprite->SetPosition(Vector2(170.0f, 5.0f));
 			newSprite->SetSize(Vector2(70, 70));
 		}

@@ -33,9 +33,9 @@ void Tutorial::Initialize() {
 
     //ブロックスプライト
     const std::array<SpriteData, 3> spriteList = { {
-        { "Resources/ncopy.png",        {275, 121}, {45, 45} },
-        { "Resources/jumpsprite.png",   {276, 214}, {45, 45} },
-        { "Resources/timersprite.png",  {275, 121}, {45, 45} },
+        { "Resources/GamePlay/ncopy.png",        {275, 121}, {45, 45} },
+        { "Resources/GamePlay/jumpsprite.png",   {276, 214}, {45, 45} },
+        { "Resources/GamePlay/timersprite.png",  {275, 121}, {45, 45} },
     } };
 
     for (size_t i = 0; i < blockSprites.size(); ++i) {

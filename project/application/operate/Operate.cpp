@@ -4,20 +4,20 @@
 void Operate::Initialize() {
 
 	const std::array<UiSpriteData, 14>spriteData = { {
-		{ "Resources/xbox_stick_l.png",  {43, 655}, {70, 70} },
-		{ "Resources/xbox_button_color_b.png",  {416, 655}, {70, 70} },
-		{"Resources/xbox_button_color_a.png",  {228, 655}, {70, 70} },
-		{"Resources/xbox_button_color_x.png",  {628, 655}, {70, 70} },
-		{"Resources/xbox_button_color_y.png",  {792, 655}, {70, 70} },
-		{"Resources/xbox_lb.png",  {964, 655}, {70, 60} },
-		{"Resources/xbox_rb.png",  {1090, 655}, {70, 60} },
-		{ "Resources/idou.png",  {135, 655}, {60, 60} },
-		{ "Resources/kirikae.png",  {507, 655}, {100, 60} },
-		{ "Resources/toru.png",  {712, 655}, {60, 60} },
-		{ "Resources/haiti.png",  {882, 655}, {60, 60} },
-		{"Resources/zyanpu.png",  {326, 655}, {60, 60} },
-		{ "Resources/reset.png",  {1167, 655}, {70, 60} },
-		{ "Resources/plus.png",  {1031, 655}, {60, 60} },
+		{ "Resources/Operate/xbox_stick_l.png",  {43, 655}, {70, 70} },
+		{ "Resources/Operate/xbox_button_color_b.png",  {416, 655}, {70, 70} },
+		{"Resources/Operate/xbox_button_color_a.png",  {228, 655}, {70, 70} },
+		{"Resources/Operate/xbox_button_color_x.png",  {628, 655}, {70, 70} },
+		{"Resources/Operate/xbox_button_color_y.png",  {792, 655}, {70, 70} },
+		{"Resources/Operate/xbox_lb.png",  {964, 655}, {70, 60} },
+		{"Resources/Operate/xbox_rb.png",  {1090, 655}, {70, 60} },
+		{ "Resources/Operate/idou.png",  {135, 655}, {60, 60} },
+		{ "Resources/Operate/kirikae.png",  {507, 655}, {100, 60} },
+		{ "Resources/Operate/toru.png",  {712, 655}, {60, 60} },
+		{ "Resources/Operate/haiti.png",  {882, 655}, {60, 60} },
+		{"Resources/Operate/zyanpu.png",  {326, 655}, {60, 60} },
+		{ "Resources/Operate/reset.png",  {1167, 655}, {70, 60} },
+		{ "Resources/Operate/plus.png",  {1031, 655}, {60, 60} },
 } };
 
 	for (size_t i = 0; i < operationSprites.size(); ++i) {
