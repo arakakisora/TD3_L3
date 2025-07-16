@@ -45,15 +45,15 @@ namespace {
 
 // MapChipType に対応するモデル名
 static const std::unordered_map<MapChipType, std::string> modelTable = {
-	{ MapChipType::kBlank, "nullBlock.obj" },
-	{ MapChipType::kNCopyBlock, "ncopyblock.obj" },
-	{ MapChipType::kCopyBlock, "block.obj" },
-	{ MapChipType::kGoalUp, "goalup.obj" },
-	{ MapChipType::kGoalDown, "gall.obj" },
-	{ MapChipType::kFallBlock, "fallblock.obj" },
-	{ MapChipType::kFixedTimeBlock, "Timer.obj" },
-	{ MapChipType::kPutFixedTimeBlock, "putTimer.obj" },
-	{ MapChipType::kjumpBlock, "jump.obj" },
+	{ MapChipType::kBlank, "GamePlay/nullBlock.obj" },
+	{ MapChipType::kNCopyBlock, "GamePlay/ncopyblock.obj" },
+	{ MapChipType::kCopyBlock, "GamePlay/block.obj" },
+	{ MapChipType::kGoalUp, "GamePlay/goalup.obj" },
+	{ MapChipType::kGoalDown, "GamePlay/gall.obj" },
+	{ MapChipType::kFallBlock, "GamePlay/fallblock.obj" },
+	{ MapChipType::kFixedTimeBlock, "GamePlay/Timer.obj" },
+	{ MapChipType::kPutFixedTimeBlock, "GamePlay/putTimer.obj" },
+	{ MapChipType::kjumpBlock, "GamePlay/jump.obj" },
 };
 
 static const std::unordered_set<MapChipType> simpleUpdateTypes = {
