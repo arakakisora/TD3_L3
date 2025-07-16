@@ -31,7 +31,7 @@ void Player::Initialize(const Vector3& position) {
 	jumpSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Jump.wav");
 	// 決定用サウンド
 	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
-
+	// プレイヤーのパラメータを読み込む
 	playerParameter_ = LoadPlayerParameters("Resources/Palyerparameter/PlayerParameter.csv");
 
 }
