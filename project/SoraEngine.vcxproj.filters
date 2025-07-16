@@ -273,10 +273,6 @@
     <ClCompile Include="application\scene\GamePlayScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="application\3d\SkyDome.cpp">
-    <ClCompile Include="application\reset\Reset.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3d.VS.hlsl">
@@ -457,10 +453,6 @@
     </ClInclude>
     <ClInclude Include="application\3d\MapChipType.h">
       <Filter>ヘッダー ファイル\application\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="application\3d\SkyDome.h">
-    <ClInclude Include="application\reset\Reset.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
