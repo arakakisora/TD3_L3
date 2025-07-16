@@ -100,17 +100,11 @@
     <Filter Include="ソース ファイル\application\ui">
       <UniqueIdentifier>{113fb3b7-dfed-41d0-b589-f5a2f82eda49}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\application\3d">
-      <UniqueIdentifier>{098c6e1e-60c1-44e5-aa80-b4a3044feb12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\application\camera">
       <UniqueIdentifier>{fe18197c-92c2-415f-8dcb-b38d3d753e0f}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\application\map">
       <UniqueIdentifier>{055aac1a-d404-47e8-82e8-9e5466842207}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\application\3d">
-      <UniqueIdentifier>{e9d47399-4131-49af-89ac-ce0bd42b143e}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\application\ui">
       <UniqueIdentifier>{6b3c7636-909e-4337-aeac-142a8d520d9a}</UniqueIdentifier>
@@ -129,6 +123,18 @@
 　　</Filter>
     <Filter Include="リソース ファイル\shader">
       <UniqueIdentifier>{0c47dbd9-9e80-400a-b82b-968df2ccdf01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\plyer">
+      <UniqueIdentifier>{05ba3d79-27bc-4d9a-a8b2-a54358bb1bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\player">
+      <UniqueIdentifier>{9497b822-780a-4d82-80d9-107bbe47add3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\skyDome">
+      <UniqueIdentifier>{c368c8f5-cf76-45b4-a98b-d19242baf218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\skydome">
+      <UniqueIdentifier>{8acac0f4-ef63-4c98-bbf0-80b1598e903f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -246,12 +252,6 @@
     <ClCompile Include="application\map\Map.cpp">
       <Filter>ソース ファイル\application\map</Filter>
     </ClCompile>
-    <ClCompile Include="application\3d\Block.cpp">
-      <Filter>ソース ファイル\application\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="application\player\Player.cpp">
-      <Filter>ソース ファイル\application\3d</Filter>
-    </ClCompile>
     <ClCompile Include="application\uI\PauseMenu.cpp">
       <Filter>ソース ファイル\application\ui</Filter>
     </ClCompile>
@@ -272,6 +272,18 @@
     </ClCompile>
     <ClCompile Include="application\scene\GamePlayScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="application\player\Player.cpp">
+      <Filter>ソース ファイル\application\plyer</Filter>
+    </ClCompile>
+    <ClCompile Include="application\3d\Block.cpp">
+      <Filter>ソース ファイル\application\map</Filter>
+    </ClCompile>
+    <ClCompile Include="application\reset\Reset.cpp">
+      <Filter>ソース ファイル\application\operate</Filter>
+    </ClCompile>
+    <ClCompile Include="application\3d\SkyDome.cpp">
+      <Filter>ソース ファイル\application\skyDome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -424,12 +436,6 @@
     <ClInclude Include="application\map\Map.h">
       <Filter>ヘッダー ファイル\application\map</Filter>
     </ClInclude>
-    <ClInclude Include="application\3d\Block.h">
-      <Filter>ヘッダー ファイル\application\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="application\player\Player.h">
-      <Filter>ヘッダー ファイル\application\3d</Filter>
-    </ClInclude>
     <ClInclude Include="application\uI\PauseMenu.h">
       <Filter>ヘッダー ファイル\application\ui</Filter>
     </ClInclude>
@@ -451,17 +457,26 @@
     <ClInclude Include="application\scene\GameClearScene.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
+    <ClInclude Include="application\player\Player.h">
+      <Filter>ヘッダー ファイル\application\player</Filter>
+    </ClInclude>
+    <ClInclude Include="application\3d\Block.h">
+      <Filter>ヘッダー ファイル\application\map</Filter>
+    </ClInclude>
     <ClInclude Include="application\3d\MapChipType.h">
-      <Filter>ヘッダー ファイル\application\3d</Filter>
+      <Filter>ヘッダー ファイル\application\map</Filter>
+    </ClInclude>
+    <ClInclude Include="application\reset\Reset.h">
+      <Filter>ヘッダー ファイル\application\operate</Filter>
+    </ClInclude>
+    <ClInclude Include="application\3d\SkyDome.h">
+      <Filter>ヘッダー ファイル\application\skydome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Object3d.hlsli">
       <Filter>リソース ファイル\shader</Filter>
     </None>
-    <None Include="MapData\Map1_1.csv" />
-    <None Include="MapData\blocks.csv" />
-    <None Include="MapData\map050.csv" />
     <None Include="MapData\mapp6.csv">
       <Filter>リソース ファイル</Filter>
     </None>
@@ -505,6 +520,15 @@
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="MapData\mapp9.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\blocks.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\Map1_1.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="MapData\map050.csv">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>
