@@ -31,8 +31,10 @@ void Player::Initialize(const Vector3& position) {
 	jumpSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Jump.wav");
 	// 決定用サウンド
 	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
+
 	// プレイヤーのパラメータを読み込む
 	playerParameter_ = LoadPlayerParameters("Resources/Palyerparameter/PlayerParameter.csv");
+
 
 }
 
@@ -86,14 +88,14 @@ void Player::PrayerMove() {
 #endif // _DEBUG
 			Input::GetInstance()->GetGamePadStickX() > 0) {
 			if (velocity_.x < 0.0f) {
-				velocity_.x *= (1.0f - playerParameter_.kAttenuation);
+				velocity_.x *= (1.0f - kAttenuation);
 			}
 			if (lrDirection_ != LRDirecion::kright) {
 				lrDirection_ = LRDirecion::kright;
 				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
-				turnTimer_ = playerParameter_.KtimeTurn;
+				turnTimer_ = KtimeTurn;
 			}
-			accceleration.x += playerParameter_.kAccleration;
+			accceleration.x += kAccleration;
 
 			// パーティクルのフラグを設定（右移動）
 			playermoveright = true;
@@ -104,14 +106,14 @@ void Player::PrayerMove() {
 #endif // _DEBUG
 			Input::GetInstance()->GetGamePadStickX() < 0) {
 			if (velocity_.x > 0.0f) {
-				velocity_.x *= (1.0f - playerParameter_.kAttenuation);
+				velocity_.x *= (1.0f - kAttenuation);
 			}
 			if (lrDirection_ != LRDirecion::kLeft) {
 				lrDirection_ = LRDirecion::kLeft;
 				turnFirstRotationY_ = object3D_->GetTransform().rotate.y;
-				turnTimer_ = playerParameter_.KtimeTurn;
+				turnTimer_ = KtimeTurn;
 			}
-			accceleration.x -= playerParameter_.kAccleration;
+			accceleration.x -= kAccleration;
 
 			// パーティクルのフラグを設定（左移動）
 			playermoveleft = true;
@@ -119,9 +121,9 @@ void Player::PrayerMove() {
 		}
 
 		velocity_.x += accceleration.x;
-		velocity_.x = std::clamp(velocity_.x, -playerParameter_.kLimitRunSpeed, playerParameter_.kLimitRunSpeed);
+		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
 	} else {
-		velocity_.x *= (1.0f - playerParameter_.kAttenuation);
+		velocity_.x *= (1.0f - kAttenuation);
 
 		// スティックが真ん中なら両方falseにする
 		playermoveright = false;
@@ -139,13 +141,13 @@ void Player::PrayerMove() {
 			// ジャンプサウンド開始
 			Audio::GetInstance()->SoundPlayWave(jumpSound);
 
-			velocity_.y = playerParameter_.kJampAcceleration; // += ではなく = にすることで、ジャンプの初速を一定にする
+			velocity_.y = kJampAcceleration; // += ではなく = にすることで、ジャンプの初速を一定にする
 		}
 	} else
 	{
 		// 重力適用
-		velocity_.y += -playerParameter_.kGravityAccleration;
-		velocity_.y = std::max(velocity_.y, -playerParameter_.kLimitFallSpeed);
+		velocity_.y += -kGravityAccleration;
+		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 	}
 
 }
@@ -237,10 +239,9 @@ bool Player::CheckCollisionPoints(const std::array<Vector3, 2>& posList, Collisi
 
 		if (chip == MapChipType::kjumpBlock) {
 			if (type == CollisionType::Bottom) {
-				hit = true;
-				velocity_.y = playerParameter_.kJampBlockAcceleration;
+				velocity_.y = kJampBlockAcceleration;
 				onGround_ = false;
-				
+				return false; // 地面に着地して跳ねたら他の処理不要
 			} else {
 				hit = true; // 天井や壁からは跳ね返すだけ
 			}
@@ -261,19 +262,19 @@ bool Player::CheckCollisionPoints(const std::array<Vector3, 2>& posList, Collisi
 
 		switch (type) {
 		case CollisionType::Top:
-			info.move.y = std::max(0.0f, rect.bottom - position.y - (playerParameter_.kHeight / 2.0f + playerParameter_.kBlank));
+			info.move.y = std::max(0.0f, rect.bottom - position.y - (kHeight / 2.0f + kBlank));
 			info.ceiling = true;
 			break;
 		case CollisionType::Bottom:
-			info.move.y = std::min(0.0f, rect.top - position.y + (playerParameter_.kHeight / 2.0f + playerParameter_.kBlank));
+			info.move.y = std::min(0.0f, rect.top - position.y + (kHeight / 2.0f + kBlank));
 			info.landing = true;
 			break;
 		case CollisionType::Right:
-			info.move.x = std::max(0.0f, rect.left - position.x - (playerParameter_.kWidth / 2.0f + playerParameter_.kBlank));
+			info.move.x = std::max(0.0f, rect.left - position.x - (kWidth / 2.0f + kBlank));
 			info.hitWall = true;
 			break;
 		case CollisionType::Left:
-			info.move.x = std::min(0.0f, rect.right - position.x + (playerParameter_.kWidth / 2.0f + playerParameter_.kBlank));
+			info.move.x = std::min(0.0f, rect.right - position.x + (kWidth / 2.0f + kBlank));
 			info.hitWall = true;
 			break;
 		}
@@ -312,7 +313,7 @@ void Player::MapCollision(CollisionMapInfo& info) {
 		info,
 		CollisionType::Right,
 		{ kRightTop, kRightBottom },
-		Vector3(playerParameter_.kCollisionsmallnumber, 0, 0),
+		Vector3(kCollisionsmallnumber, 0, 0),
 		[](const CollisionMapInfo& i) { return i.move.x > 0; }
 	);
 
@@ -320,7 +321,7 @@ void Player::MapCollision(CollisionMapInfo& info) {
 		info,
 		CollisionType::Left,
 		{ kLeftTop, kLeftBottom },
-		Vector3(-playerParameter_.kCollisionsmallnumber, 0, 0),
+		Vector3(-kCollisionsmallnumber, 0, 0),
 		[](const CollisionMapInfo& i) { return i.move.x < 0; }
 	);
 
@@ -345,53 +346,13 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 	Vector3 offseetTable[kNumCorner] = {
 
-		{+playerParameter_.kWidth / 2.0f, -playerParameter_.kHeight / 2.0f, 0},
-		{-playerParameter_.kWidth / 2.0f, -playerParameter_.kHeight / 2.0f, 0},
-		{+playerParameter_.kWidth / 2.0f, +playerParameter_.kHeight / 2.0f, 0},
-		{-playerParameter_.kWidth / 2.0f, +playerParameter_.kHeight / 2.0f, 0}
+		{+kWidth / 2.0f, -kHeight / 2.0f, 0},
+		{-kWidth / 2.0f, -kHeight / 2.0f, 0},
+		{+kWidth / 2.0f, +kHeight / 2.0f, 0},
+		{-kWidth / 2.0f, +kHeight / 2.0f, 0}
 	};
 
 	return center + offseetTable[static_cast<uint32_t>(corner)];
-
-}
-
-PlayerParameter Player::LoadPlayerParameters(const std::string& filePath)
-{
-	PlayerParameter param;
-	std::unordered_map<std::string, float*> table = {
-		{"kAccleration", &param.kAccleration},
-		{"kAttenuation", &param.kAttenuation},
-		{"kLimitRunSpeed", &param.kLimitRunSpeed},
-		{"kGravityAccleration", &param.kGravityAccleration},
-		{"kLimitFallSpeed", &param.kLimitFallSpeed},
-		{"kJampAcceleration", &param.kJampAcceleration},
-		{"kJampBlockAcceleration", &param.kJampBlockAcceleration},
-		{"kAccumulateJumpTime", &param.kAccumulateJumpTime_},
-		{"kWidth", &param.kWidth},
-		{"kHeight", &param.kHeight},
-		{"kBlank", &param.kBlank},
-		{"kCollisionsmallnumber", &param.kCollisionsmallnumber},
-		{"kAttenuationLanding", &param.kAttenuationLanding},
-		{"kAttenuationWall", &param.kAttenuationWall},
-		{"KtimeTurn", &param.KtimeTurn},
-	};
-
-	std::ifstream file(filePath);
-	assert(file.is_open());
-
-	std::string line;
-	std::getline(file, line); // ヘッダー行スキップ
-	while (std::getline(file, line)) {
-		std::stringstream ss(line);
-		std::string key, valueStr;
-		if (std::getline(ss, key, ',') && std::getline(ss, valueStr)) {
-			if (table.contains(key)) {
-				*table[key] = std::stof(valueStr);
-			}
-		}
-	}
-
-	return param;
 
 }
 
@@ -439,7 +400,7 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 
 			// 左点の判定
 			IndexSet indexSet;
-			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom] + Vector3(0, -playerParameter_.kCollisionsmallnumber, 0));
+			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom] + Vector3(0, -kCollisionsmallnumber, 0));
 			mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 			if (mapChipType == MapChipType::kCopyBlock) {
 				hit = true;
@@ -449,7 +410,7 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kjumpBlock) {
 
-				velocity_.y = playerParameter_.kJampBlockAcceleration;
+				velocity_.y = kJampBlockAcceleration;
 				onGround_ = false;
 				return;
 			} else if (mapChipType == MapChipType::kGoalUp) {
@@ -463,7 +424,7 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 			}
 
 			// 右点の判定
-			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom] + Vector3(0, -playerParameter_.kCollisionsmallnumber, 0));
+			indexSet = mapChipFild_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom] + Vector3(0, -kCollisionsmallnumber, 0));
 			mapChipType = mapChipFild_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 			if (mapChipType == MapChipType::kCopyBlock) {
 				hit = true;
@@ -472,7 +433,7 @@ void Player::OnGroundSwitching(CollisionMapInfo& info) {
 			} else if (mapChipType == MapChipType::kNCopyBlock) {
 				hit = true;
 			} else if (mapChipType == MapChipType::kjumpBlock) {
-				velocity_.y = playerParameter_.kJampBlockAcceleration;
+				velocity_.y = kJampBlockAcceleration;
 				onGround_ = false;
 				return;
 			} else if (mapChipType == MapChipType::kGoalUp) {
@@ -509,7 +470,7 @@ void Player::HitWallCollisionMove(const CollisionMapInfo& info) {
 
 	if (info.hitWall) {
 
-		velocity_.x *= (1.0f - playerParameter_.kAttenuationWall);
+		velocity_.x *= (1.0f - kAttenuationWall);
 	}
 }
 

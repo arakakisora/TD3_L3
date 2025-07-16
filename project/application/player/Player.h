@@ -43,37 +43,13 @@ enum class CollisionType {
 	Right
 };
 
-struct PlayerParameter {
-	//プレイヤーパラメータ
-//speedパラメータ
-	float kAccleration = 0.05f;  // 定数加速度
-	float kAttenuation = 0.2f;   // 速度減衰率
-	float kLimitRunSpeed = 0.2f; // 最大速度制限
-	//jannpパラメータ
-	float kGravityAccleration = 0.05f; // 重力加速度
-	float kLimitFallSpeed = 1.0f;      // 最大落下速度
-	float kJampAcceleration = 0.5f;    // ジャンプ初速
-	float kJampBlockAcceleration = 0.8f;//ジャンプブロックのジャンプ初速
-	float kAccumulateJumpTime_ = 0.2f;   //溜め時間
-	//当たり判定パラメータ
-	float kWidth = 0.8f;//当たり判定の幅
-	float kHeight = 0.8f;//当たり判定の高さ
-	float kBlank = 2.0;//当たり判定の余裕
-	float kCollisionsmallnumber = 0.1f;//当たり判定の余裕
-	//減衰パラメータ
-	float kAttenuationLanding = 0.1f;//着地時の減衰率
-	float kAttenuationWall = 1.0f;//壁に当たった時の減衰率
-	// 振り向きパラメータ
-	float KtimeTurn = 1.0f; // 角度補間タイム
-};
-
 class Enemy;
 //class Map;
 class Player {
 
 public:
 
-	
+
 
 
 	// 初期化
@@ -110,7 +86,7 @@ public:
 		const Vector3& offset,
 		std::function<bool(const CollisionMapInfo&)> moveCondition
 	);
-
+	
 	void MapCollision(CollisionMapInfo& info); //ポインタ関数std::functionを使って、当たり判定の方向を指定する
 
 
@@ -124,7 +100,7 @@ public:
 	bool SetCameraMode(bool cameraMode) { return cameraMode = cameraMode_; }
 
 	Vector3 CornerPosition(const Vector3& centor, Corner corner);// 4つの角の位置を計算yo
-
+	
 
 	//アクセッサ
 	//死ぬ系
@@ -156,8 +132,7 @@ public:
 	bool GetPrayerMoveLeft() { return playermoveleft; }
 	void SetPrayerMoveRight(bool right) { playermoveright = right; }
 	void SetPrayerMoveLeft(bool left) { playermoveleft = left; }
-	// プレイヤーパラメータの読み込み
-	PlayerParameter LoadPlayerParameters(const std::string& filePath);
+
 
 	Object3D* GetObject3D() { return object3D_.get(); } // Object3D取得
 
@@ -166,22 +141,36 @@ private:
 	//objec3D
 	std::unique_ptr<Object3D> object3D_ = nullptr; // Object3D
 
+
+	Vector3 velocity_ = {};                          // 速度
+	static inline const float kAccleration = 0.05f;  // 定数加速度
+	static inline const float kAttenuation = 0.2f;   // 速度減衰率
+	static inline const float kLimitRunSpeed = 0.2f; // 最大速度制限
 	float deltaTime_ = 1.0f / 60.0f;
-
-
-	PlayerParameter playerParameter_; // プレイヤーパラメータ
-
-	Vector3 velocity_ = {}; // 速度
 	// ジャンプ
-	bool onGround_ = true; // 接点状態フラグ
+	bool onGround_ = true;                                 // 接点状態フラグ
+	static inline const float kGravityAccleration = 0.05f; // 重力加速度
+	static inline const float kLimitFallSpeed = 1.0f;      // 最大落下速度
+	static inline const float kJampAcceleration = 0.5f;    // ジャンプ初速
+	static inline const float kJampBlockAcceleration = 0.8f;//ジャンプブロックのジャンプ初速
 	bool isAccumulateJump_ = false;                         //ジャンプ準備
 	float AccumulateJumpTimer_ = 0.0f;
-	// マップ
+	static inline const float kAccumulateJumpTime_ = 0.2f;   //溜め時間
+	// 当たり判定
 	Map* mapChipFild_ = nullptr;
+	static inline const float kWidth = 0.8f;//当たり判定の幅
+	static inline const float kHeight = 0.8f;//当たり判定の高さ
+	static inline const float kBlank = 2.0;//当たり判定の余裕
+	static inline const float kAttenuationLanding = 0.1f;//着地時の減衰率
+	static inline const float kCollisionsmallnumber = 0.1f;//当たり判定の余裕
+	static inline const float kAttenuationWall = 1.0f;//壁に当たった時の減衰率
+
 	// 振り向き
 	LRDirecion lrDirection_ = LRDirecion::kright;
 	float turnFirstRotationY_ = 0.0f;           // 現在の向き
 	float turnTimer_ = 0.0f;                    // 振り向き時間
+	static inline const float KtimeTurn = 1.0f; // 角度補間タイム
+
 	//死んだ
 	bool isDead_ = false;
 	//落下死高さ
@@ -193,6 +182,7 @@ private:
 	// プレイヤー移動フラグ
 	bool playermoveright = false;
 	bool playermoveleft = false;
+
 	// ジャンプサウンド
 	SoundData jumpSound;
 	// 決定サウンド
