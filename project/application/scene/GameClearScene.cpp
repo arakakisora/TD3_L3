@@ -83,14 +83,11 @@ void GameClearScene::Initialize()
 	ArroTextUI_->SetRotation(0.0f);
 	ArroTextUI_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 
-
-
-	// 背景
-	skydome_ = std::make_unique<Object3D>();
-	skydome_->Initialize(Object3DCommon::GetInstance());
+	// スカイドームの生成
+	skydome_ = std::make_unique<SkyDome>();
+	skydome_->Initialize();
 	skydome_->SetTranslate(Vector3{ 15.0f, 5.0f, 100.0f });
 	skydome_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
-	skydome_->SetModel("backPlane.obj");
 
 	// ラストステージならフラグを立てる
 	if (nextStage == MaxStageIndex_) {
@@ -118,7 +115,6 @@ void GameClearScene::Update()
 	Audio::GetInstance()->SetVolume(&ButtonSound, 3.0f);
 #ifdef _DEBUG
 
-
 	if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Text("gameClearScene");
@@ -126,9 +122,7 @@ void GameClearScene::Update()
 		{
 			SceneManager::GetInstance()->ChangeScene("TITELE");
 		}
-
 	}
-
 
 #endif // _DEBUG
 

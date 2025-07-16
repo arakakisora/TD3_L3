@@ -25,20 +25,14 @@ void StageSelectScene::Initialize(){
 
 	// モデル名
 	const std::vector<std::string> modelNames = {
-	"axis",
-	"plane",
-	"sphere",
-	"terrain",
-	"playercharacter",
-	"Pause",
-	"StageSelect/title","StageSelect/explanation","StageSelect/return",
-	"SelectSceneBackPlane",
+	"StageSelect/playercharacter",
+	"StageSelect/SelectSceneBackPlane",
 	};
 	// ステージモデル名
 	const std::vector<std::string> stageNames = {
-	"Stage01","Stage02","Stage03","Stage04","Stage05",
-	"Stage06","Stage07","Stage08","Stage09","Stage10",
-	"Stage11","Stage12","Stage13",
+	"StageSelect/Stage01","StageSelect/Stage02","StageSelect/Stage03","StageSelect/Stage04","StageSelect/Stage05",
+	"StageSelect/Stage06","StageSelect/Stage07","StageSelect/Stage08","StageSelect/Stage09","StageSelect/Stage10",
+	"StageSelect/Stage11","StageSelect/Stage12","StageSelect/Stage13",
 	};
 	// モデルの読み込み
 	ModelManager::GetInstans()->LoadAllModels(modelNames);
@@ -48,7 +42,7 @@ void StageSelectScene::Initialize(){
 	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");	// 決定用サウンド
 	
 	// フェードインの初期化
-	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.Initialize("Resources/StageSelect/white.png");
 	fadeManager_.StartFadeIn(0.5);
 
 	// ステージのインデックスを取得
@@ -68,7 +62,7 @@ void StageSelectScene::Initialize(){
 
 	Player_ = std::make_unique<Object3D>();
 	Player_->Initialize(Object3DCommon::GetInstance());
-	Player_->SetModel("playercharacter.obj");
+	Player_->SetModel("StageSelect/playercharacter.obj");
 	Vector3 initialPos = Vector3(9.0f * currentIndex_, -2.5f, 0.0f);
 	Player_->SetTranslate(initialPos);
 	Player_->SetLighting(true);
@@ -120,7 +114,7 @@ void StageSelectScene::Initialize(){
 	for (uint32_t i = 0; i < 2; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
 		if (i == 0) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Pause.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/PauseMenu/Pause.png");
 			newSprite->SetPosition(Vector2(15.0f, 15.0f));
 			newSprite->SetSize(Vector2(150, 50));
 		} else if (i == 1) {
@@ -140,7 +134,7 @@ void StageSelectScene::Initialize(){
 	// 背景
 	skydome_ = std::make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetModel("SelectSceneBackPlane.obj");
+	skydome_->SetModel("StageSelect/SelectSceneBackPlane.obj");
 	Vector3 planePos = { -8.0f,0.0f,135.0f };
 	planePos.x =  -8.0f + initialPos.x;
 	Vector3 planeScale = { 1.0f,0.55f,1.0f };
@@ -148,7 +142,7 @@ void StageSelectScene::Initialize(){
 	skydome_->SetScale(planeScale);
 
 	// プレイヤーに追従するパーティクルの設定
-	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/block.png", "block.obj");
+	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/StageSelect/block.png", "StageSelect/block.obj");
 	playeremitter_ = std::make_unique<ParticleEmitter>(
 		Vector3{ 0.0f,0.0f,0.0f },
 		5.0f,

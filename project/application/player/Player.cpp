@@ -10,15 +10,16 @@
 #include "Object3DCommon.h"
 #include <SceneManager.h>
 #include "Easing.h"
+#include"ModelManager.h"
 
 using namespace Easing;
 
 void Player::Initialize(const Vector3& position) {
-
+	ModelManager::GetInstans()->LoadModel("Player/playercharacter.obj"); // プレイヤーのモデルを読み込む
 	// モデルの初期化
 	object3D_ = std::make_unique<Object3D>();
 	object3D_->Initialize(Object3DCommon::GetInstance());
-	object3D_->SetModel("playercharacter.obj");
+	object3D_->SetModel("Player/playercharacter.obj");
 	object3D_->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	object3D_->SetLighting(true);
 	object3D_->SetDirectionalLightEnable(true);

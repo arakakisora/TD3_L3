@@ -28,7 +28,7 @@ void PhotoCamera::Initialize(Map* map)
 	object3D = make_unique<Object3D>();
 	object3D->Initialize(Object3DCommon::GetInstance());
 	// @枠組みのモデルを用意するように
-	object3D->SetModel("Frame.obj");
+	object3D->SetModel("GamePlay/Frame.obj");
 	// @値を後に調整する
 	object3D->SetScale(Vector3{ 1.0f,1.0f,1.0f });
 	position = Vector2{ 2,13 };
@@ -40,11 +40,11 @@ void PhotoCamera::Initialize(Map* map)
 	isFirstCopied = false;
 	isFirstPasted = false;
 
-	ModelManager::GetInstans()->LoadModel("shutterEffect.obj");
+	ModelManager::GetInstans()->LoadModel("GamePlay/shutterEffect.obj");
 	//sahtter演出用のオブジェクト
 	shuttertopObject = new Object3D();
 	shuttertopObject->Initialize(Object3DCommon::GetInstance());
-	shuttertopObject->SetModel("shutterEffect.obj");
+	shuttertopObject->SetModel("GamePlay/shutterEffect.obj");
 	//サイズは画面いっぱいにする
 	shuttertopObject->SetScale(Vector3{ 13.0f,6.0f,1.0f });
 	shuttertopObject->SetTranslate(Vector3(12.5f, 30.0f, -1.5f));
@@ -52,26 +52,21 @@ void PhotoCamera::Initialize(Map* map)
 	//bottm
 	shutterbottomObject = new Object3D();
 	shutterbottomObject->Initialize(Object3DCommon::GetInstance());
-	shutterbottomObject->SetModel("shutterEffect.obj");
+	shutterbottomObject->SetModel("GamePlay/shutterEffect.obj");
 	//サイズは画面いっぱいにする
 	shutterbottomObject->SetScale(Vector3{ 13.0f,6.0f,1.0f });
 	shutterbottomObject->SetTranslate(Vector3(12.5f, -30.0f, -1.5f));
 	shutterbottomObject->SetRotate(Vector3{ 0,0,0 });
 	
-
-	
-
-
-
 	// 残りシャッター枚数表示画像
-	TextureManager::GetInstance()->LoadTexture("Resources/shutter.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/GamePlay/shutter.png");
 
 	// フォトカメラのシャッター回数
 	shutterLimitCountMax = this->map->GetShutterCount();
 	// 残りシャッター枚数表示スプライト
 	for (int i = 0; i < (int)shutterLimitCountMax; ++i) {
 		auto shutter_ = make_unique<Sprite>();
-		shutter_->Initialize(SpriteCommon::GetInstance(), "Resources/shutter.png");
+		shutter_->Initialize(SpriteCommon::GetInstance(), "Resources/GamePlay/shutter.png");
 		shutter_->SetSize({ 80.0f,80.0f });
 		shutter_->SetRotation(0.0f);
 		shutter_->SetPosition({ 50.0f,20.0f });

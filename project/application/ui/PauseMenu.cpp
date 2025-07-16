@@ -3,6 +3,7 @@
 #ifdef _DEBUG
 #include <imgui.h>
 #endif // _DEBUG
+#include <ModelManager.h>
 
 double easeInOutCirc(double x) {
 	return (x < 0.5)
@@ -13,12 +14,16 @@ double easeInOutCirc(double x) {
 //初期化
 void PauseMenu::Initialize(Object3DCommon* object3dcommon, PauseType type){
 	object3dcommon_ = object3dcommon;
-	pauseType_ = type;
+	pauseType_ = type;		
+	ModelManager::GetInstans()->LoadModel("PauseMenu/Pause.obj");
+	ModelManager::GetInstans()->LoadModel("PauseMenu/return.obj");
+	ModelManager::GetInstans()->LoadModel("PauseMenu/StageSelect.obj");
+	ModelManager::GetInstans()->LoadModel("PauseMenu/title.obj");
 
 	transform.translate = { -2.6f,1.5f,0.0f };
 	object = std::make_unique<Object3D>();
 	object->Initialize(object3dcommon_);
-	object->SetModel("Pause.obj");
+	object->SetModel("PauseMenu/Pause.obj");
 	object->SetScale({ 1.0f,2.0f,1.0f });
 	input = Input::GetInstance();
 
@@ -27,12 +32,12 @@ void PauseMenu::Initialize(Object3DCommon* object3dcommon, PauseType type){
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
 		newObject->Initialize(Object3DCommon::GetInstance());
 		if (i == 0) {
-			newObject->SetModel("StageSelect/return.obj");
+			newObject->SetModel("PauseMenu/return.obj");
 		} else if (i == 1) {
 			if (pauseType_ == PauseType::GamePlayScene) {
-				newObject->SetModel("StageSelect/StageSelect.obj");
+				newObject->SetModel("PauseMenu/StageSelect.obj");
 			} else if(pauseType_ == PauseType::StageSelectScene){
-				newObject->SetModel("StageSelect/title.obj");
+				newObject->SetModel("PauseMenu/title.obj");
 			}
 		}
 

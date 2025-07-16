@@ -28,14 +28,13 @@ void GamePlayScene::Initialize()
 
 	// デフォルトカメラを設定
 	CameraManager::GetInstans()->SetActiveCamera("maincam");
-
+	//        GamePlay/
 	// モデル名
 	const std::vector<std::string> modelNames = {
-	 "axis","plane", "sphere", "cube", "jump", "playercharacter",
-	"block", "Timer", "fallblock", "ncopyblock", "GoalBase", "GoreFag",
-	"gall", "goalup", "nullBlock", "putTimer", "PlaySceneBackPlane",
-	"Frame", "Pause", "resetnotice",
-	"StageSelect/return", "StageSelect/title", "StageSelect/explanation","StageSelect/StageSelect",
+	"GamePlay/jump", 
+	"GamePlay/block", "GamePlay/Timer", "GamePlay/fallblock", "GamePlay/ncopyblock", "GamePlay/GoalBase", "GamePlay/GoreFag",
+	"GamePlay/gall", "GamePlay/goalup", "GamePlay/nullBlock", "GamePlay/putTimer", "GamePlay/PlaySceneBackPlane",
+	"GamePlay/Frame", "GamePlay/resetnotice",
 	"tutorial/tutorial1",	"tutorial/tutorial2",	"tutorial/tutorial3",	"tutorial/tutorial4",	"tutorial/tutorial5",
 	"tutorial/tutorial6",	"tutorial/tutorial7",	"tutorial/tutorial8",	"tutorial/tutorial9",	"tutorial/tutorial10",
 	"tutorial/tutorial11",	"tutorial/tutorial12",	"tutorial/tutorial13",
@@ -55,12 +54,11 @@ void GamePlayScene::Initialize()
 	// スカイドームの生成
 	skydome_ = std::make_unique<SkyDome>();
 	skydome_->Initialize();
-	
+	// マップの生成
 	map = new Map;
 	map->LoadMapChipCsv(stagePath);
 	map->Initialize();
 
-	//6,3
 	//playerの生成
 	player = std::make_unique<Player>();
 	player->SetMapChipField(map);
@@ -75,7 +73,7 @@ void GamePlayScene::Initialize()
 	for (uint32_t i = 0; i < 2; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
 		if (i == 0) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Pause.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/PauseMenu/Pause.png");
 			newSprite->SetPosition(Vector2(1050.0f, 15.0f));
 			newSprite->SetSize(Vector2(150, 50));
 		} else if (i == 1) {
@@ -111,11 +109,11 @@ void GamePlayScene::Initialize()
 	pauseMenu->Initialize(Object3DCommon::GetInstance(), PauseType::GamePlayScene);
 	pauseMenu->SetCamera(CameraManager::GetInstans()->GetCamera("maincam"));
 
-	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.Initialize("Resources/GamePlay/white.png");
 	fadeManager_.StartFadeIn();
 
-	ParticleMnager::GetInstance()->CreateParticleGroup("Goal", "Resources/white.png", "block.obj");
-	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/white.png", "block.obj");
+	ParticleMnager::GetInstance()->CreateParticleGroup("Goal", "Resources/GamePlay/white.png", "GamePlay/block.obj");
+	ParticleMnager::GetInstance()->CreateParticleGroup("Player", "Resources/GamePlay/white.png", "GamePlay/block.obj");
 
 	// パーティクル発生器
 	emitter_ = new ParticleEmitter(
@@ -274,7 +272,7 @@ void GamePlayScene::Draw()
 
 	// ゲームカメラ
 	photoCamera->Draw3DObject();
-	////プレイヤー
+	//プレイヤー
 	player->Draw();
 
 	//チュートリアルテキスト
@@ -282,7 +280,7 @@ void GamePlayScene::Draw()
 
 	//リセットお知らせ描画
 	reset->DrawResetNotice();
-
+	// マップの描画
 	map->Draw();
 
 	//ポーズメニュー

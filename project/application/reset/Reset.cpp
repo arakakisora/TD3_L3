@@ -9,14 +9,14 @@ void Reset::Initialize() {
 	//リセット
 	resetNotice = std::make_unique<Object3D>();
 	resetNotice->Initialize(Object3DCommon::GetInstance());
-	resetNotice->SetModel("resetnotice.obj");
+	resetNotice->SetModel("GamePlay/resetnotice.obj");
 	resetNotice->SetScale(Vector3(0.5f, 0.5f, 0.5f));
 	resetNotice->SetRotate(Vector3(17.3f, 12.56f, 0.0f));
 	resetNotice->SetTranslate(Vector3(12.46f, 23.25f, -1.0f));
 	resetNotice->SetLighting(false);
 	//リセットメーター
 	resetMeter = std::make_unique<Sprite>();
-	resetMeter->Initialize(SpriteCommon::GetInstance(), "Resources/resetmeter.png");
+	resetMeter->Initialize(SpriteCommon::GetInstance(), "Resources/GamePlay/resetmeter.png");
 	resetMeter->SetPosition(Vector2(325, 70));
 	resetMeter->SetSize(Vector2(200, 45));
 }
