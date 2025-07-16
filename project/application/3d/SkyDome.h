@@ -18,7 +18,19 @@ public:
 	void Draw();
 	// 終了処理
 	void Finalize();
-
+	// 位置設定
+	void SetTranslate(const Vector3& pos) {
+		skyDomePosition = pos;
+		if (skyDomeObject) {
+			skyDomeObject->SetTranslate(pos);
+		}
+	}
+	// 拡縮設定
+	void SetScale(const Vector3& scale) {
+		if (skyDomeObject) {
+			skyDomeObject->SetScale(scale);
+		}
+	}
 private:
 	std::unique_ptr<Object3D> skyDomeObject; // 天球の3Dオブジェクト	
 	Vector3 skyDomePosition;

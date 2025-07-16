@@ -114,7 +114,7 @@ void StageSelectScene::Initialize(){
 	for (uint32_t i = 0; i < 2; ++i) {
 		std::unique_ptr<Sprite> newSprite = std::make_unique<Sprite>();
 		if (i == 0) {
-			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/Pause.png");
+			newSprite->Initialize(SpriteCommon::GetInstance(), "Resources/PauseMenu/Pause.png");
 			newSprite->SetPosition(Vector2(15.0f, 15.0f));
 			newSprite->SetSize(Vector2(150, 50));
 		} else if (i == 1) {
