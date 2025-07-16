@@ -33,6 +33,7 @@ void Player::Initialize(const Vector3& position) {
 	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");
 
 	playerParameter_ = LoadPlayerParameters("Resources/Palyerparameter/PlayerParameter.csv");
+
 }
 
 Player::~Player()
