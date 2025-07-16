@@ -460,10 +460,13 @@
     <ClInclude Include="application\3d\MapChipType.h">
       <Filter>ヘッダー ファイル\application\3d</Filter>
     </ClInclude>
+    <ClInclude Include="application\resource\GameClearResourceID.h">
+      <Filter>ヘッダー ファイル\application\resource</Filter>
+    </ClInclude>
     <ClInclude Include="application\resource\TitleResourceID.h">
       <Filter>ヘッダー ファイル\application\resource</Filter>
     </ClInclude>
-    <ClInclude Include="application\resource\GameClearResourceID.h">
+    <ClInclude Include="application\resource\StageSelectResourceID.h">
       <Filter>ヘッダー ファイル\application\resource</Filter>
     </ClInclude>
   </ItemGroup>

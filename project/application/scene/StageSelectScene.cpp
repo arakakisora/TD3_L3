@@ -18,37 +18,38 @@
 using namespace Easing;
 
 void StageSelectScene::Initialize(){
+	using TextureID = StageSelectID::TextureID;
+	using ModelID = StageSelectID::ModelID;		
+	using AudioID = StageSelectID::AudioID;
+
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetTranslate({ 0,0,-50, });//カメラの位置
 	CameraManager::GetInstans()->AddCamera("maincam", camera_.get());
-
-	// モデル名
-	const std::vector<std::string> modelNames = {
-	"axis",
-	"plane",
-	"sphere",
-	"terrain",
-	"playercharacter",
-	"Pause",
-	"StageSelect/title","StageSelect/explanation","StageSelect/return",
-	"SelectSceneBackPlane",
+	
+	// 使用モデル一覧
+	std::vector<ModelID> modelIDs = {
+		ModelID::playercharacter,
+		ModelID::SelectSceneBackPlane,
 	};
-	// ステージモデル名
-	const std::vector<std::string> stageNames = {
-	"Stage01","Stage02","Stage03","Stage04","Stage05",
-	"Stage06","Stage07","Stage08","Stage09","Stage10",
-	"Stage11","Stage12","Stage13",
+
+	// ステージ名に対応するID
+	std::vector<ModelID> stageModelIDs = {
+		ModelID::Stage01, ModelID::Stage02, ModelID::Stage03, ModelID::Stage04,
+		ModelID::Stage05, ModelID::Stage06, ModelID::Stage07, ModelID::Stage08,
+		ModelID::Stage09, ModelID::Stage10, ModelID::Stage11, ModelID::Stage12,
+		ModelID::Stage13	
 	};
 	// モデルの読み込み
-	ModelManager::GetInstans()->LoadAllModels(modelNames);
-	ModelManager::GetInstans()->LoadAllModels(stageNames);
+    LoadModels(modelIDs);	    
+	LoadModels(stageModelIDs);
+
 	// サウンドの読み込み
 	selectSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Select.wav");    // セレクト用サウンド
 	ButtonSound = Audio::GetInstance()->SoundLoadWave("Resources/Audio/Button.wav");	// 決定用サウンド
 	
 	// フェードインの初期化
-	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.Initialize("Resources/StageSelect/white.png");
 	fadeManager_.StartFadeIn(0.5);
 
 	// ステージのインデックスを取得
@@ -56,19 +57,22 @@ void StageSelectScene::Initialize(){
 	currentIndex_ = stageIndex;	// 現在のステージを設定	 (ステージ1)
 
 	// ステージオブジェクトの生成
-	for (size_t i = 0; i < std::min(stages_.size(), stageNames.size()); ++i) {
-		// 共通の処理
+	for (size_t i = 0; i < StageType::Count; ++i) {
 		stages_[i] = std::make_unique<Object3D>();
 		stages_[i]->Initialize(Object3DCommon::GetInstance());
-		stages_[i]->SetModel(stageNames[i] + ".obj");
+
+		StageSelectID::ModelID modelID = static_cast<StageSelectID::ModelID>(i);
+		std::string modelPath = StageSelectResourceID::GetModelPath(modelID);
+		stages_[i]->SetModel(modelPath);
+
 		stages_[i]->SetLighting(false);
 		stages_[i]->SetScale(Vector3(2.0f, 1.5f, 1.5f));
-		stages_[i]->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f)); // X座標を変更して配置
+		stages_[i]->SetTranslate(Vector3(9.0f * i, 0.0f, 0.0f));
 	}
 
 	Player_ = std::make_unique<Object3D>();
 	Player_->Initialize(Object3DCommon::GetInstance());
-	Player_->SetModel("playercharacter.obj");
+	Player_->SetModel(StageSelectResourceID::GetModelPath(ModelID::playercharacter));
 	Vector3 initialPos = Vector3(9.0f * currentIndex_, -2.5f, 0.0f);
 	Player_->SetTranslate(initialPos);
 	Player_->SetLighting(true);
@@ -140,7 +144,7 @@ void StageSelectScene::Initialize(){
 	// 背景
 	skydome_ = std::make_unique<Object3D>();
 	skydome_->Initialize(Object3DCommon::GetInstance());
-	skydome_->SetModel("SelectSceneBackPlane.obj");
+	skydome_->SetModel((StageSelectResourceID::GetModelPath(ModelID::SelectSceneBackPlane)));
 	Vector3 planePos = { -8.0f,0.0f,135.0f };
 	planePos.x =  -8.0f + initialPos.x;
 	Vector3 planeScale = { 1.0f,0.55f,1.0f };
@@ -534,4 +538,24 @@ void StageSelectScene::UpdatePlayerParticle() {
 		playeremitter_->SetPosition(pos + offset);
 		playeremitter_->PlayerEmit();
 	}
+}
+
+void StageSelectScene::LoadTextures(const std::vector<StageSelectID::TextureID>& textureIDs) {
+	//std::vector<std::string> textureNames;
+ //   textureNames.reserve(textureIDs.size());
+ //   for (const auto& id : textureIDs) {
+	//	// IDに対応した.pngファイルパスを登録
+ //       textureNames.push_back(StageSelectResourceID::GetTexturePath(id));
+ //   }
+ //   TextureManager::GetInstance()->LoadAllTextures(textureNames);
+}
+
+void StageSelectScene::LoadModels(const std::vector<StageSelectID::ModelID>& modelIDs) {
+    std::vector<std::string> modelNames;
+    modelNames.reserve(modelIDs.size());
+    for (const auto& id : modelIDs) {
+       		// IDに対応した.objファイルパスを登録
+		modelNames.push_back(StageSelectResourceID::GetModelPath(id));
+    }
+    ModelManager::GetInstans()->LoadAllModels(modelNames);
 }

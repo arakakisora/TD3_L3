@@ -15,7 +15,11 @@
 // 省略
 using namespace Easing;
 
-void TitleScene::Initialize() {
+void TitleScene::Initialize() {	
+	using TextureID = TitleID::TextureID;
+	using ModelID = TitleID::ModelID;		
+	using AudioID = TitleID::AudioID;
+
 	// カメラの初期化
 	CameraManager::GetInstans()->Initialize();
 
@@ -337,8 +341,8 @@ void TitleScene::UpdatePhase() {
 	}
 }
 
-void TitleScene::LoadTextures(const std::vector<TextureID>& textureIDs) {
-    std::vector<std::string> textureNames;
+void TitleScene::LoadTextures(const std::vector<TitleID::TextureID>& textureIDs) {
+	std::vector<std::string> textureNames;
     textureNames.reserve(textureIDs.size());
     for (const auto& id : textureIDs) {
 		// IDに対応した.pngファイルパスを登録
@@ -347,7 +351,7 @@ void TitleScene::LoadTextures(const std::vector<TextureID>& textureIDs) {
     TextureManager::GetInstance()->LoadAllTextures(textureNames);
 }
 
-void TitleScene::LoadModels(const std::vector<ModelID>& modelIDs) {
+void TitleScene::LoadModels(const std::vector<TitleID::ModelID>& modelIDs) {
     std::vector<std::string> modelNames;
     modelNames.reserve(modelIDs.size());
     for (const auto& id : modelIDs) {

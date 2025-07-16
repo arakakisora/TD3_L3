@@ -10,7 +10,7 @@
 
 // オブジェクトパラメータ
 struct ObjectInitData {
-    ModelID modelID;
+    TitleID::ModelID modelID;
     Vector3 translate = {};
     Vector3 rotate = {};
     Vector3 scale = {1.0f, 1.0f, 1.0f};
@@ -70,9 +70,9 @@ private:
 	void DebugimgGui();
 private:
 	// 2dリソースのIDを読み込む
-	void LoadTextures(const std::vector<TextureID>& textureIDs);
+	void LoadTextures(const std::vector<TitleID::TextureID>& textureIDs);
 	// 3dリソースのIDを読み込む
-	void LoadModels(const std::vector<ModelID>& modelIDs);
+	void LoadModels(const std::vector<TitleID::ModelID>& modelIDs);
 private:
 	// ポインタ
 	FadeManager fadeManager_;	// 背景
