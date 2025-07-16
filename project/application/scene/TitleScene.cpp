@@ -19,20 +19,18 @@ void TitleScene::Initialize() {
 	CameraManager::GetInstans()->Initialize();
 
 	// テクスチャ名
-	const std::vector<std::string> textureNames = { "WhiteRooms" };
+	const std::vector<std::string> textureNames = { "Title/WhiteRooms" };
 	// テクスチャの読み込み
 	TextureManager::GetInstance()->LoadAllTextures(textureNames);
 
 	// モデル名
 	const std::vector<std::string> modelNames = {
-	 "Text_Title",
-	 "UI_Title_Stsrt",
-	 "UI_Title_A",
-	 "plane",
-	 "playercharacter",
-	 "backPlane",
-	 "WhiteRooms",
-	 "shutterEffect"
+	 "Title/Text_Title",
+	 "Title/UI_Title_Stsrt",
+	 "Title/playercharacter",
+	 "Title/backPlane",
+	 "Title/WhiteRooms",
+	 "Title/shutterEffect"
 	};
 	// モデルの読み込み
 	ModelManager::GetInstans()->LoadAllModels(modelNames);
@@ -45,7 +43,7 @@ void TitleScene::Initialize() {
 	Audio::GetInstance()->StopAudio();
 
 	// フェードインの初期化
-	fadeManager_.Initialize("Resources/white.png");
+	fadeManager_.Initialize("Resources/Title/white.png");
 	fadeManager_.StartFadeIn();
 
 	// ステージを0からに初期化
@@ -63,13 +61,13 @@ void TitleScene::Initialize() {
 		if (i == ObjectType::Title) {                                              	                     // タイトルの生成
 			objects_[i]->SetTranslate(Vector3(0.0f, 0.5f, 0.0f));
 			objects_[i]->SetRotate(Vector3(0.0f, 3.3f, 0.0f));
-			objects_[i]->SetModel("Text_Title.obj");
+			objects_[i]->SetModel("Title/Text_Title.obj");
 		} else if (i == ObjectType::Start) {                                                             // startの生成
 			objects_[i]->SetTranslate(Vector3(-0.53f, -0.5f, 0.0f));
 			objects_[i]->SetScale(Vector3(0.3f, 0.3f, 0.3f));
-			objects_[i]->SetModel("UI_Title_Stsrt.obj");
+			objects_[i]->SetModel("Title/UI_Title_Stsrt.obj");
 		} else if (i == ObjectType::Player) {                                            	             // プレイヤーの生成
-			objects_[i]->SetModel("playercharacter.obj");
+			objects_[i]->SetModel("Title/playercharacter.obj");
 			objects_[i]->SetLighting(true);
 			objects_[i]->SetDirectionalLightEnable(true);
 			objects_[i]->SetDirectionalLightDirection(Vector3{ -1.8f, -2.0f, -2.0f });
@@ -79,15 +77,15 @@ void TitleScene::Initialize() {
 		} else if (i == ObjectType::Skydome) {                                              	         // 背景の生成
 			objects_[i]->SetTranslate(Vector3{ 0.0f,0.0f,10.0f });
 			objects_[i]->SetScale(Vector3{ 1.5f, 1.0f, 1.0f });
-			objects_[i]->SetModel("WhiteRooms.obj");
+			objects_[i]->SetModel("Title/WhiteRooms.obj");
 		} else if (i == ObjectType::Shuttertop) {                                            	         // シャッター 上の生成
 			objects_[i]->SetScale(Vector3{ 2.0f,2.0f,1.0f });
 			objects_[i]->SetTranslate(Vector3(0.0f, 13.0f, -1.0f));
-			objects_[i]->SetModel("shutterEffect.obj");
+			objects_[i]->SetModel("Title/shutterEffect.obj");
 		} else if (i == ObjectType::Shutterbottom) {                                           	         // シャッター 下の生成
 			objects_[i]->SetScale(Vector3{ 2.0f,2.0f,1.0f });
 			objects_[i]->SetTranslate(Vector3(0.0f, -10.0f, -1.0f));
-			objects_[i]->SetModel("shutterEffect.obj");
+			objects_[i]->SetModel("Title/shutterEffect.obj");
 		}
 	}
 }
