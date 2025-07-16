@@ -10,6 +10,9 @@
 #include "CameraManager.h"
 #include <ModelManager.h>
 #include <TextureManager.h>
+#include <Easing.h>
+
+using namespace Easing;
 
 void GameClearScene::Initialize()
 {
