@@ -17,7 +17,8 @@ namespace Easing {
     float EaseOutCubic(float t);
     float EaseInOutCubic(float t);
     float EaseInOutBack(float t);
-
+    float EaseOutElastic(float t, float b, float c, float d, float amplitudeScale = 0.3f);
+    float EaseOutBounce(float time, float start, float change, float duration);
     // 線形補間（Lerp）
     float Lerp(float a, float b, float t);
 
