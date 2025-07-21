@@ -41,7 +41,7 @@ namespace {
 	６：重力の影響を受けるブロック（FallBlock）
 	７：一定時間経過したら消えるブロック（FixedTime）*/
 	};
-}
+} 
 
 // MapChipType に対応するモデル名
 static const std::unordered_map<MapChipType, std::string> modelTable = {
