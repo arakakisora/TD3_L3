@@ -138,8 +138,6 @@ void Block::Update(const bool cameraMode) {
 
 
 void Block::Draw() {
-
-
 	if (drawTypes.count(type) || (cameraMode_ && type == MapChipType::kBlank)) {
 		object3D->Draw();
 	}
