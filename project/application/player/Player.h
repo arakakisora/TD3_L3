@@ -91,7 +91,7 @@ public:
 
 	void PlayerTurn(); // 自機の向き
 
-	void PlayerDebug(); // 自機の死亡処理
+	void PlayerDebug(); // 
 
 	void PlayerMode(); // 自機のモード
 
